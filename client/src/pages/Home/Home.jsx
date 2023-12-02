@@ -145,9 +145,9 @@ const handleSelection = () => {
     const selectedText = selection.toString();
     const start = selection.anchorOffset;
     const end = selection.focusOffset;
-    console.log(`Selected text: ${selectedText}`);
-    console.log(`Start index: ${start}`);
-    console.log(`End index: ${end}`);
+    // console.log(`Selected text: ${selectedText}`);
+    // console.log(`Start index: ${start}`);
+    // console.log(`End index: ${end}`);
 }
 // onMouseUp(handleSelection)
 

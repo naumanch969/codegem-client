@@ -1,0 +1,170 @@
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Create from './Create';
+import Typography from '@mui/material/Typography';
+import { Link } from 'react-router-dom';
+import { Add, Favorite, Filter, Search } from '@mui/icons-material';
+import { Tooltip } from '@mui/material';
+import Rightbar from './Rightbar';
+import { Path } from '../../utils/Components';
+import CollectionCard from './CollectionCard';
+import { getCollections, getUserCollections } from '../../redux/actions/collection';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import { Collection, User } from '../../interfaces';
+
+const Collections: React.FC = () => {
+    ////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////////
+    const dispatch = useDispatch()
+    const { collections, userCollections } = useSelector((state: RootState) => state.collection);
+    const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user);
+    const yourCollections = [
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+    ]
+    const otherCollections = [
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
+    ]
+    const segments = [
+        { name: 'Home', link: '/home' },
+        { name: 'Collections', link: '/collections' },
+    ];
+
+    ////////////////////////////////////////////// STATES ////////////////////////////////////////////////////
+    const [openCreateModal, setOpenCreateModal] = useState(false);
+    const [filter, setFilter] = useState<string>('all');
+    const [searchQuery, setSearchQuery] = useState<string>('');
+
+    ////////////////////////////////////////////// useEffects ////////////////////////////////////////////////////
+    useEffect(() => {
+        dispatch<any>(getCollections());
+        dispatch<any>(getUserCollections(loggedUser?._id as string));
+    }, []);
+
+    ////////////////////////////////////////////// FUNCTIONS ////////////////////////////////////////////////////
+    const handleFilterChange = (newFilter: string) => {
+        setFilter(newFilter);
+    };
+
+    const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(event.target.value);
+    };
+
+    return (
+        <div className="flex w-full ">
+            <Create open={openCreateModal} setOpen={setOpenCreateModal} />
+            <div className=" lg:w-[75%] w-full p-[1rem]">
+
+                <div className="flex justify-between items-center">
+                    <div className="flex flex-col">
+                        <Path segments={segments} />
+                        <h1 className="text-3xl font-bold mb-6 text-dark-slate-blue">Collection</h1>
+                    </div>
+                    <Tooltip title="Create Group" placement="top">
+                        <button
+                            onClick={() => setOpenCreateModal(true)}
+                            className="bg-teal-blue text-white rounded-full px-3 py-3 hover:bg-teal-blue-dark transition-colors duration-300 flex items-center"
+                        >
+                            <Add />
+                        </button>
+                    </Tooltip>
+                </div>
+
+                <div className="flex justify-between items-center mb-4">
+                    <div className="relative">
+                        <select
+                            value={filter}
+                            onChange={(e) => handleFilterChange(e.target.value)}
+                            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-blue-dark focus:border-transparent"
+                        >
+                            <option value="all">All Collection</option>
+                            <option value="joined">Joined Collection</option>
+                            <option value="available">Available Collection</option>
+                        </select>
+                        <span className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                            <Filter />
+                        </span>
+                    </div>
+                    <div className="relative">
+                        <input
+                            type="text"
+                            placeholder="Search collection..."
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-blue-dark focus:border-transparent"
+                        />
+                        <span className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                            <Search />
+                        </span>
+                    </div>
+                </div>
+
+                <div className="w-full flex flex-col gap-[2rem] ">
+                    {/* Your Collections */}
+                    <div className="flex flex-col">
+                        {/* <h2 className="text-3xl font-bold mb-6 text-dark-slate-blue">Your's</h2> */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {userCollections.map((collection: Collection, index: number) => (
+                                <CollectionCard collection={collection} key={index} />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Other Collections */}
+                    <div className="flex flex-col">
+                        <h2 className="text-3xl font-bold mb-6 text-dark-slate-blue">Suggested To You</h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {collections.map((collection: Collection, index: number) => (
+                                <Card
+                                    key={index}
+                                    className="bg-cool-gray-light p-[1rem] rounded shadow-md transition-transform transform hover:scale-105"
+                                >
+                                    <CardContent>
+                                        <Typography variant="h6" component="h3" className="text-dark-slate-blue">
+                                            <Favorite fontSize="small" style={{ verticalAlign: 'middle', marginRight: '0.5rem' }} />
+                                            {collection.name}
+                                        </Typography>
+                                        <Typography variant="body2" className="text-cool-gray-dark max-lines-10">
+                                            {collection.description}
+                                        </Typography>
+                                        <Link
+                                            to={`/collections/${collection._id}`}
+                                            className="cursor-pointer text-teal-blue hover:text-teal-blue-dark hover:underline transition-colors duration-300"
+                                        >
+                                            View Collection
+                                        </Link>
+                                    </CardContent>
+                                </Card>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="hidden lg:block w-[25%] bg-cool-gray-light p-4 rounded shadow">
+                <Rightbar />
+            </div>
+        </div>
+    );
+};
+
+export default Collections;

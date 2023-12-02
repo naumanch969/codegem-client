@@ -1,7 +1,7 @@
 import { FormatColorFill, Palette, Cancel, VideoCallRounded, PhotoRounded, EmojiEmotionsRounded, Close, Lock, Camera, Title, FormatSize, LocationCityOutlined, PersonPinCircle, ArrowDropDown, Clear } from '@mui/icons-material'
 import { image6 } from '../../assets'
 import { Avatar, Slider } from '../../utils/Components'
-import { LightenDarkenColor } from '../../utils/functions/function'
+import { lightenDarkenColor } from '../../utils/functions/function'
 import { useState, useEffect } from 'react'
 import TextareaAutosize from 'react-textarea-autosize'
 import { Modal } from '@mui/material'
@@ -16,7 +16,8 @@ import { createCode } from "../../redux/actions/code"
 
 const CreateCode = () => {
     ///////////////////////////// VARIABLES /////////////////////////////////////
-    const { users, isFetching } = useSelector(state => state.user)
+    const { users } = useSelector(state => state.user)
+    const { isFetching } = useSelector(state => state.code)
     const fileBase64Ref = useRef()
     const dispatch = useDispatch()
     const { showCodeCreateModal, setShowCodeCreateModal } = useStateContext()
@@ -28,9 +29,6 @@ const CreateCode = () => {
         code: '',
         tags: [],
         hashTags: [],
-        likes: [],
-        comments: [],
-        shares: [],
         visibility: 'private',
     }
     const [codeData, setCodeData] = useState(initialCode)
@@ -45,7 +43,10 @@ const CreateCode = () => {
 
     ///////////////////////////// FUNCTIONS //////////////////////////////////////
     const handleCreate = () => {
+        const { title, description, code, tags, hashTags, visibility, } = codeData
+        if (!title || !description || !code) return alert('Make sure to provide all the fields')
         dispatch(createCode(codeData, setShowCodeCreateModal))
+        setCodeData(initialCode)
     }
     const handleChange = (e) => {
         setCodeData(pre => ({ ...pre, [e.target.name]: e.target.value }))
@@ -94,7 +95,7 @@ const CreateCode = () => {
     const HashTag = ({ title }) => (
         <div className="flex gap-[8px] items-center justify-between rounded-[16px] py-[2px] px-[6px] bg-teal-blue w-auto " >
             <p className="text-white font-medium w-max text-[14px] " >{title}</p>
-            <Clear style={{ fontSize: '1rem' }} onClick={() => handleFilterHashTag(title)} className={`cursor-pointer text-white text-[1rem] bg-lightGray  rounded-full `} />
+            <Clear style={{ fontSize: '1rem' }} onClick={() => handleFilterHashTag(title)} className={`cursor-pointer text-white text-4 bg-lightGray  rounded-full `} />
         </div>
     )
 
@@ -103,17 +104,17 @@ const CreateCode = () => {
     return (
         <>
 
-            <div className='bg-white w-full min-h-[20rem] h-fit rounded-[8px] p-[1rem] ' >
+            <div className='bg-white w-full h-fit rounded-[8px] py-4 px-12 ' >
 
                 <div className='h-[12%] relative flex pb-[12px] ' >
-                    <h4 className='text-[22px] font-bold text-dark-slate-blue ' >Create Code</h4>
+                    <h4 className='text-2xl font-bold text-dark-slate-blue ' >Create Code</h4>
                 </div>
 
 
                 <div className='min-h-[82%] h-auto flex flex-col justify-between gap-[8px] ' >
 
                     {/* avatar */}
-                    <div className='flex gap-[1rem] ' >
+                    <div className='flex gap-4 ' >
                         <Avatar src={image6} />
                         <div className='flex flex-col ' >
                             <p className='font-semibold text-dark-slate-blue ' >Nauman Ch</p>
@@ -147,12 +148,12 @@ const CreateCode = () => {
 
 
                     <div className='flex flex-col gap-[8px] ' >
-                        <div className="flex gap-[1rem] ">
+                        <div className="flex gap-4 ">
                             <div className="flex flex-col gap-[4px] w-[55%] ">
                                 <label htmlFor="description" className='flex-[1] text-cool-gray ' >Description<span className='text-[18px] text-teal-blue-darken ' >*</span> :</label>
                                 <textarea
                                     rows={4}
-                                    name='decription'
+                                    name='description'
                                     placeholder='Write a short description of the code?....'
                                     value={codeData.description}
                                     onChange={handleChange}
@@ -229,7 +230,7 @@ const CreateCode = () => {
                         <div className="h-[90%] flex flex-col gap-[8px] overflow-y-scroll " >
                             {
                                 users.map((friend, index) => (
-                                    <div key={index} onClick={() => tagFriend(friend)} className={`${Boolean(codeData.tags.find(tag => tag.user == friend._id)) ? 'bg-gray-100' : ' '} flex justify-start items-center gap-[1rem] hover:bg-gray-100 cursor-pointer px-[8px] py-[4px] rounded-[8px] `} >
+                                    <div key={index} onClick={() => tagFriend(friend)} className={`${Boolean(codeData.tags.find(tag => tag.user == friend._id)) ? 'bg-gray-100' : ' '} flex justify-start items-center gap-4 hover:bg-gray-100 cursor-pointer px-[8px] py-[4px] rounded-[8px] `} >
                                         <Avatar />
                                         <div className="flex flex-col justify-start " >
                                             <p className="text-[14px] font-medium " >{friend.email}</p>

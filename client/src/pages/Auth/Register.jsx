@@ -6,22 +6,36 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 const Register = () => {
-    const initialUserState = { firstName: '', lastName: '', username: '', email: '', phone: '', password: '' }
-    const [userData, setUserData] = useState(initialUserState)
+    //////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const initialUserState = { firstName: '', lastName: '', username: '', email: '', password: '' }
     const { isFetching, error } = useSelector(state => state.user)
 
+    //////////////////////////////////////////////// STATES ////////////////////////////////////////////
+    const [userData, setUserData] = useState(initialUserState)
+
+    //////////////////////////////////////////////// USE EFFECTS ////////////////////////////////////////////
+
+    //////////////////////////////////////////////// FUNCTIONS ////////////////////////////////////////////
     const handleRegister = () => {
+        const { firstName, lastName, username, email, password } = userData
+        if (!firstName || !lastName || !email || !password) return alert('Make sure to provide all the fields')
         dispatch(register(userData, navigate))
     }
 
     return (
-        <div className="flex justify-center items-center w-full h-auto p-[3rem]">
+        <div className="flex flex-col justify-center items-center gap-4 w-full p-[3rem]">
+
+            <div className=" " >
+                <h2 style={{ fontFamily: 'cursive' }} className="font-bolder text-4xl font-bold " >CodeGem</h2>
+            </div>
+
             <div className="shadow-box w-fit bg-gray-800 p-6 rounded-lg overflow-hidden flex flex-col justify-between items-center gap-[1rem] ">
-                <div className="flex justify-center items-center w-20 h-20 rounded-full bg-teal-500">
+                <h2 className='text-white text-2xl font-medium ' >Register</h2>
+                {/* <div className="flex justify-center items-center w-20 h-20 rounded-full bg-teal-500">
                     <Person style={{ fontSize: '4rem' }} className="text-white" />
-                </div>
+                </div> */}
                 <div className="flex flex-col gap-[12px] w-full">
                     <div className="flex flex-col gap-[4px] ">
                         <label className="text-gray-300">First Name</label>
@@ -59,16 +73,6 @@ const Register = () => {
                             attribute="email"
                             type="email"
                             placeholder="Email"
-                            formData={userData}
-                            setFormData={setUserData}
-                        />
-                    </div>
-                    <div className="flex flex-col gap-[4px] ">
-                        <label className="text-gray-300">Phone</label>
-                        <Input
-                            attribute="phone"
-                            type="tel"
-                            placeholder="Phone..."
                             formData={userData}
                             setFormData={setUserData}
                         />

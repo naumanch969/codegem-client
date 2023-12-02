@@ -1,7 +1,7 @@
 import { FormatColorFill, Palette, Cancel, VideoCallRounded, PhotoRounded, EmojiEmotionsRounded, Close, Lock, Camera, Title, FormatSize, LocationCityOutlined, PersonPinCircle, ArrowDropDown } from '@mui/icons-material'
 import { image6 } from '../../assets'
 import { Avatar, Slider } from '../../utils/Components'
-import { LightenDarkenColor } from '../../utils/functions/function'
+import { lightenDarkenColor } from '../../utils/functions/function'
 import { useState, useEffect } from 'react'
 import TextareaAutosize from 'react-textarea-autosize'
 import { Modal } from '@mui/material'
@@ -84,8 +84,8 @@ const CreateCode = () => {
     }
 
     const handleCreateCode = () => {
-        const { content, images, tags, hashTags, likes, comments, shares, styles, visibility } = codeData
-        dispatch(createCode({ content, images, tags, hashTags, likes, comments, shares, styles, visibility }))
+        const { content, images, tags, hashTags, likes, comments, shares , styles, visibility } = codeData
+        dispatch(createCode({ content, images, tags, hashTags, likes, comments, shares , styles, visibility }))
         closeModal()
     }
 
