@@ -24,11 +24,11 @@ const codeSlice = createSlice({
   reducers: {
     start: (state) => { state.isFetching = true; },
     end: (state) => { state.isFetching = false; },
-    error: (state, action: PayloadAction<string>) => { state.isFetching = false; state.error = (action.payload || 'Something went wrong!') },
+    error: (state, action: PayloadAction<string>) => { state.isFetching = false; state.error = action.payload },
 
     like: (state, action: PayloadAction<string>) => {
       const codeId = action.payload
-      const stringifiedUser = Cookie.get('codegem_profile')
+      const stringifiedUser = Cookie.get('code.connect')
       const user = stringifiedUser ? JSON.parse(stringifiedUser) : null
       state.filteredCodes = state.filteredCodes.map(code => code = code?._id == codeId ? { ...code, likes: [...code?.likes, user._id] } : code)
     },
@@ -84,7 +84,7 @@ const codeSlice = createSlice({
       state.codes = state.codes.map(code => code = code._id == action.payload.code._id ? { ...code, groups: [...code.groups, ...action.payload.groupObjs] } : code)
     },
     likeCodeReducer: (state, action: PayloadAction<string>) => {
-      const stringifiedUser = Cookie.get('codegem_profile')
+      const stringifiedUser = Cookie.get('code.connect')
       const loggedUser = stringifiedUser ? JSON.parse(stringifiedUser) : null
       const codeId = action.payload
       state.codes = state.codes.map((code) =>

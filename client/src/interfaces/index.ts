@@ -1,18 +1,18 @@
 export interface User {
-    _id: string
+    _id?: string
     firstName: string
     lastName: string
     username: string
     email: string
-    phone: number
-    password: string
-    profilePicture: string
-    saved: string[]
-    friends: string[]
-    sentRequests: string[]
-    receivedRequests: string[]
-    createdAt: Date
-    mutualFriends: number // for friends section
+    phone?: number
+    password?: string
+    profilePicture?: string
+    saved?: string[] | []
+    friends?: string[] | []
+    sentRequests?: string[] | []
+    receivedRequests?: string[] | []
+    createdAt?: Date
+    mutualFriends?: number // for friends section
 }
 
 export interface Code {

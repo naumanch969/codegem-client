@@ -9,7 +9,7 @@ export const getCollection = (collectionId: string) => async (dispatch: Dispatch
         dispatch(getCollectionReducer(data));
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 
@@ -20,7 +20,7 @@ export const getUserCollections = (userId:string) => async (dispatch: Dispatch) 
         dispatch(getUserCollectionsReducer(data));
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 export const getCollections = () => async (dispatch: Dispatch) => {
@@ -30,7 +30,7 @@ export const getCollections = () => async (dispatch: Dispatch) => {
         dispatch(getCollectionsReducer(data));
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 
@@ -42,7 +42,7 @@ export const createCollection = (collectionData: any, setOpen: React.Dispatch<Re
         setOpen(false);
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 
@@ -54,7 +54,7 @@ export const updateCollection = (collectionId: string, collectionData: any, setO
         setOpen(false);
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 
@@ -65,6 +65,6 @@ export const deleteCollection = (collectionId: string) => async (dispatch: Dispa
         dispatch(deleteCollectionReducer(data));
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };

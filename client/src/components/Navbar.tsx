@@ -49,6 +49,7 @@ const Navbar = () => {
             <button onClick={handleAccountClick} className="w-full flex hover:bg-cool-gray-light hover:text-teal-blue p-[6px] rounded-[6px] gap-2" ><AccountCircle /> <span className="" >Account</span> </button>
             <button className="w-full flex hover:bg-cool-gray-light hover:text-teal-blue p-[6px] rounded-[6px] gap-2" ><DashboardOutlined /> <span className="" >Dashboard</span> </button>
             <button className="w-full flex hover:bg-cool-gray-light hover:text-teal-blue p-[6px] rounded-[6px] gap-2" ><SavedSearch /> <span className="" >Saved</span> </button>
+            <Link to='/auth/change_password' className="w-full flex hover:bg-cool-gray-light hover:text-teal-blue p-[6px] rounded-[6px] gap-2" ><SavedSearch /> <span className="" >Change Password</span> </Link>
             <button onClick={handleLogout} className="w-full flex hover:bg-cool-gray-light hover:text-teal-blue p-[6px] rounded-[6px] gap-2" ><Logout /> <span className="" >Logout</span> </button>
         </motion.div>
     )

@@ -1,13 +1,13 @@
 import axios from 'axios'
 import Cookie from 'js-cookie'
-import { Code, Collection, Group } from '../../interfaces'
+import { Code, Collection, Group, User } from '../../interfaces'
 import { baseURL } from '../../constant'
 
 const API = axios.create({ baseURL })
 API.interceptors.request.use((req) => {
-    const stringifiedUser = Cookie.get('codegem_profile')
+    const stringifiedUser = Cookie.get('code.connect')
     if (stringifiedUser) {
-        const { token } = JSON.parse(stringifiedUser)
+        const token = JSON.parse(stringifiedUser)
         if (req.headers) {
             req.headers.authtoken = token;
         }
@@ -30,8 +30,13 @@ export const getReceivedRequests = () => API.get('/friend/received-requests')
 // users
 export const getAllUsers = () => API.get(`/user/get/all`)
 export const getUser = (userId: string) => API.get(`/user/get/single/${userId}`)
-export const register = (userData: { username: string, email: string, password: string }) => API.post('/auth/register', userData)
-export const login = (userData: { email: string, password: string }) => API.put('/auth/login', userData)
+export const register = (userData: User) => API.post('/auth/register', userData)
+export const verifyRegisterationEmail = ({ email, otp }: { email: string, otp: string }) => API.post('/auth/verify_register_otp', { email, otp })
+export const login = (userData: { username: string, password: string }) => API.put('/auth/login', userData)
+export const sendOTP = (email: string) => API.put('/auth/send_otp', { email })
+export const verifyOTP = ({ email, otp }: { email: string, otp: string }) => API.put('/auth/verify_otp', { email, otp })
+export const setNewPassword = ({ email, password }: { email: string, password: string }) => API.put('/auth/newpassword', { email, password })
+export const changePassword = (userData: any) => API.put('/auth/change_password', userData)
 
 // CODE 
 export const getCode = (id: string) => API.get(`/code/get/single/${id}`)

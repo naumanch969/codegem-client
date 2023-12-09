@@ -2,12 +2,14 @@ import express from "express"
 import mongoose from "mongoose" 
 import cors from "cors"
 import dotenv from 'dotenv'
+import cookieParser from 'cookie-parser'
 dotenv.config()
 
 const app = express()
 
 import authRoutes from "./routes/auth.js"
 import userRoutes from "./routes/user.js"
+import friendRoutes from "./routes/friend.js"
 import notificationRoutes from "./routes/notification.js"
 import codeRoutes from "./routes/code.js"
 import groupRoutes from "./routes/group.js"
@@ -18,9 +20,11 @@ const CONNECTION_URL = process.env.ATLAS_URL
 
 app.use(cors())
 app.use(express.json());
+app.use(cookieParser());
 
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
+app.use('/friend', friendRoutes);
 app.use('/notification', notificationRoutes);
 app.use('/group', groupRoutes);
 app.use('/collection', collectionRoutes);

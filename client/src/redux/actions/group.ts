@@ -10,7 +10,7 @@ export const getGroup = (groupId: string) => async (dispatch: Dispatch) => {
         dispatch(getGroupReducer(data));
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 
@@ -21,7 +21,7 @@ export const getUserGroups = (userId: string) => async (dispatch: Dispatch) => {
         dispatch(getUserGroupsReducer(data));
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 export const getGroups = () => async (dispatch: Dispatch) => {
@@ -31,7 +31,7 @@ export const getGroups = () => async (dispatch: Dispatch) => {
         dispatch(getGroupsReducer(data));
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 
@@ -43,7 +43,7 @@ export const createGroup = (groupData: any, setOpen: React.Dispatch<React.SetSta
         setOpen(false);
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 
@@ -55,7 +55,7 @@ export const updateGroup = (groupId: string, groupData: any, setOpen: React.Disp
         setOpen(false);
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 export const joinGroup = (groupId: string, loggedUserId: string) => async (dispatch: Dispatch) => {
@@ -65,7 +65,7 @@ export const joinGroup = (groupId: string, loggedUserId: string) => async (dispa
         dispatch(joinGroupReducer({ groupId, loggedUserId }));
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 export const leaveGroup = (groupId: string, loggedUserId: string) => async (dispatch: Dispatch) => {
@@ -75,7 +75,7 @@ export const leaveGroup = (groupId: string, loggedUserId: string) => async (disp
         dispatch(leaveGroupReducer({ groupId, loggedUserId }));
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 
@@ -87,6 +87,6 @@ export const deleteGroup = (groupId: string, navigate: ReturnType<typeof useNavi
         dispatch(deleteGroupReducer(data));
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };

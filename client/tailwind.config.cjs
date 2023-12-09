@@ -37,6 +37,9 @@ module.exports = {
         // Background and Text Colors
         'light-gray': '#F5F5F5',        // Overall background, form fields
         'white': '#FFFFFF',             // Clean content areas, headings
+        
+        'link-blue': '#0070F3',             // Clean content areas, headings
+
       },
     },
   },

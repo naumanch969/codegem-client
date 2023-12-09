@@ -13,3 +13,5 @@ export { default as Facebook } from "./facebook.png"
 export { default as Twitter } from "./twitter.png"
 export { default as Whatsapp } from "./whatsapp.png"
 export { default as Linkedin } from "./linkedin.png"
+
+export { default as logo } from "./logo.png"

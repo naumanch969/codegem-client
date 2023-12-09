@@ -1,18 +1,25 @@
-import { Schema, model } from "mongoose"
+import { Schema, model, Document, Types } from "mongoose";
 
-const userSchema = Schema({
-    firstName: { type: String, },
-    lastName: { type: String, },
+// Define the schema for the User model
+const userSchema = new Schema({
+    firstName: { type: String },
+    lastName: { type: String },
     username: { type: String, unique: true },
     email: { type: String, unique: true },
-    phone: { type: Number, unique: true },
-    password: { type: String, },
+    phone: { type: Number, default: null, required: false },
+    verified: { type: Boolean, default: false },
+    password: { type: String },
     profilePicture: { type: String, default: '' },
-    saved: { type: [{ type: Schema.Types.ObjectId, ref: 'Code' }], default: [] },
-    friends: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
-    sentRequests: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },       // jin logo ko friend request bheji h 
-    receivedRequests: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },       // jin logo ko friend request bheji h 
-})
+    shares: { type: [{ from: { type: Schema.Types.ObjectId, ref: 'User', }, code: { type: Schema.Types.ObjectId, ref: 'Code', }, sharedAt: { type: Date, default: Date.now } }], default: [] },
+    friends: [{ type: Types.ObjectId, ref: 'User' }],
+    sentRequests: [{ type: Types.ObjectId, ref: 'User' }],
+    receivedRequests: [{ type: Types.ObjectId, ref: 'User' }],
+    notifications: [{ type: Types.ObjectId, ref: 'Notification' }],
+});
 
-const user = new model("User", userSchema)
-export default user
+
+
+// Create a model with the specified document type
+const User = model("User", userSchema);
+
+export default User;

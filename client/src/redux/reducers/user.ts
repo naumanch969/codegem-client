@@ -13,7 +13,7 @@ interface InitialState {
     accounts: User | [],
 }
 
-const stringifiedUser = Cookie.get('codegem_profile')
+const stringifiedUser = Cookie.get('code.connect')
 const stringifiedAccounts = Cookie.get('accounts')
 
 
@@ -34,13 +34,16 @@ const userSlice = createSlice({
     reducers: {
         start: (state) => { state.isFetching = true },
         end: (state) => { state.isFetching = false },
-        error: (state, action: PayloadAction<string>) => { state.isFetching = false; state.error = (action.payload || 'Something went wrong!') },
+        error: (state, action: PayloadAction<string>) => { state.isFetching = false; state.error = action.payload  },
 
         getAllUsersReducer: (state, action: PayloadAction<User[]>) => { state.users = action.payload },
         getUserReducer: (state, action: PayloadAction<User>) => { state.currentUser = action.payload },
         getProfileReducer: (state, action: PayloadAction<User>) => { state.loggedUser = action.payload },
         registerReducer: (state, action: PayloadAction<User>) => { state.users = [...state.users, action.payload] },
         loginReducer: (state, action: PayloadAction<User>) => { state.loggedUser = action.payload },
+        changePasswordReducer: (state) => { return state; },
+        sendForgetPasswordOTPReducer: (state) => { return state; },
+        setNewPasswordReducer: (state) => { return state; },
         logoutReducer: (state) => { state.loggedUser = null },
 
     }
@@ -58,4 +61,7 @@ export const {
     registerReducer,
     loginReducer,
     logoutReducer,
+    changePasswordReducer,
+    sendForgetPasswordOTPReducer,
+    setNewPasswordReducer,
 } = userSlice.actions

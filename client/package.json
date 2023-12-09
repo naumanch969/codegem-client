@@ -37,6 +37,7 @@
     "react-draggable": "^4.4.5",
     "react-file-base64": "^1.0.3",
     "react-loader-spinner": "^5.4.5",
+    "react-otp-input": "^3.1.0",
     "react-redux": "^8.0.7",
     "react-router-dom": "^6.4.2",
     "react-scroll": "^1.8.9",

@@ -25,7 +25,7 @@ const collectionSlice = createSlice({
     reducers: {
         start: (state) => { state.isFetching = true; },
         end: (state) => { state.isFetching = false; },
-        error: (state, action: PayloadAction<string>) => { state.isFetching = false; state.error = (action.payload || 'Something went wrong!') },
+        error: (state, action: PayloadAction<string>) => { state.isFetching = false; state.error = action.payload },
 
 
         getCollectionReducer: (state, action: PayloadAction<Collection>) => {

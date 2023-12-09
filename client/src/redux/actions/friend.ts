@@ -10,7 +10,7 @@ export const getSuggestedUsers = (): AsyncAction => async (dispatch) => {
         dispatch(end())
     }
     catch (err: any) {
-        dispatch(error(err.message))
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message))
     }
 }
 
@@ -23,7 +23,7 @@ export const getFriends = (): AsyncAction => async (dispatch) => {
         dispatch(end())
     }
     catch (err: any) {
-        dispatch(error(err.message))
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message))
     }
 }
 
@@ -35,7 +35,7 @@ export const getSentRequests = (): AsyncAction => async (dispatch) => {
         dispatch(end())
     }
     catch (err: any) {
-        dispatch(error(err.message))
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message))
     }
 }
 
@@ -47,7 +47,7 @@ export const getReceivedRequests = (): AsyncAction => async (dispatch) => {
         dispatch(end())
     }
     catch (err: any) {
-        dispatch(error(err.message))
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message))
     }
 }
 

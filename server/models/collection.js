@@ -10,4 +10,4 @@ const collectionSchema = new Schema({
 
 const Collection = model('Collection', collectionSchema);
 
-module.exports = Collection;
+export default Collection

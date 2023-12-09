@@ -12,7 +12,7 @@ export const getCode = (codeId: string) => async (dispatch: Dispatch) => {
         dispatch(getCodeReducer(data));
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 
@@ -23,7 +23,7 @@ export const getCodes = () => async (dispatch: Dispatch) => {
         dispatch(getCodesReducer(data));
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 export const getSavedCodes = () => async (dispatch: Dispatch) => {
@@ -33,7 +33,7 @@ export const getSavedCodes = () => async (dispatch: Dispatch) => {
         dispatch(getCodesReducer(data));
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 
@@ -44,7 +44,7 @@ export const getUserCodes = (userId:string) => async (dispatch: Dispatch) => {
         dispatch(getUserCodesReducer(data));
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 
@@ -61,7 +61,7 @@ export const createCode = (codeData: any, setOpen: React.Dispatch<React.SetState
         setOpen(false);
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 
@@ -73,7 +73,7 @@ export const updateCode = (codeId: string, codeData: any, setOpen: React.Dispatc
         setOpen(false);
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 export const shareCode = (code: Code, shareWith: string[], loggedUserId: string, setOpen: any) => async (dispatch: Dispatch) => {
@@ -83,7 +83,7 @@ export const shareCode = (code: Code, shareWith: string[], loggedUserId: string,
         dispatch(shareCodeReducer({ code, shareWith: formatedShareWith }));
         setOpen(false)
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 export const shareCodeInGroups = (code: Code, groupIds: string[], loggedUserId: string, setOpen: any) => async (dispatch: Dispatch) => {
@@ -93,7 +93,7 @@ export const shareCodeInGroups = (code: Code, groupIds: string[], loggedUserId: 
         dispatch(shareCodeInGroupsReducer({ code, groupObjs: formatedGroupObjs }));
         setOpen(false)
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 export const saveCode = (code: Code) => async (dispatch: Dispatch) => {
@@ -101,7 +101,7 @@ export const saveCode = (code: Code) => async (dispatch: Dispatch) => {
         await api.saveCode(code._id as string);
         dispatch(saveCodeReducer({ code }));
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 export const saveCodeInCollections = (code: Code, collections: string[], setOpen: any) => async (dispatch: Dispatch) => {
@@ -110,7 +110,7 @@ export const saveCodeInCollections = (code: Code, collections: string[], setOpen
         dispatch(saveCodeInCollectionsReducer({ code, collectionIds: collections }));
         setOpen(false)
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 export const likeCode = (codeId: string) => async (dispatch: Dispatch) => {
@@ -118,7 +118,7 @@ export const likeCode = (codeId: string) => async (dispatch: Dispatch) => {
         const { data } = await api.likeCode(codeId);
         dispatch(likeCodeReducer(codeId));
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 
@@ -129,7 +129,7 @@ export const commentCode = (codeId: string, comment: string) => async (dispatch:
         dispatch(commentCodeReducer(data));
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
 
@@ -140,6 +140,6 @@ export const deleteCode = (codeId: string) => async (dispatch: Dispatch) => {
         dispatch(deleteCodeReducer(data));
         dispatch(end());
     } catch (err: any) {
-        dispatch(error(err.message));
+        err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
