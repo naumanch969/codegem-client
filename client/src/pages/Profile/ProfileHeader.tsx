@@ -3,9 +3,11 @@ import { useSelector } from 'react-redux';
 import { ArrowDownward } from '@mui/icons-material';
 import { User } from '../../interfaces';
 import { RootState } from '../../redux/store';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {
 
+    const navigate = useNavigate()
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
 
     return (
@@ -32,7 +34,7 @@ const ProfilePage = () => {
                 </div>
                 {/* Edit profile button */}
                 <div className="flex items-end gap-[1rem]">
-                    <button className="p-[.5rem] rounded-[5px] bg-light-gray hover:bg-light-blue">
+                    <button onClick={() => navigate('/profile/edit')} className="p-[.5rem] rounded-[5px] bg-light-gray hover:bg-light-blue">
                         Edit Profile
                     </button>
                     <button className="p-[.5rem] rounded-[5px] bg-light-gray hover:bg-light-blue">

@@ -17,6 +17,10 @@ API.interceptors.request.use((req) => {
 
 
 
+// GENERAL
+export const uploadImage = (formData: FormData) => API.post(`/upload_image`, formData)
+export const deleteImage = (filename: string) => API.delete(`/delete_image/${filename}`)
+
 // friends
 export const sendFriendRequest = (receiverId: string) => API.put(`/friend/request/send/${receiverId}`)
 export const rejectFriendRequest = (receiverId: string) => API.put(`/friend/request/reject/${receiverId}`)
@@ -30,6 +34,7 @@ export const getReceivedRequests = () => API.get('/friend/received-requests')
 // users
 export const getAllUsers = () => API.get(`/user/get/all`)
 export const getUser = (userId: string) => API.get(`/user/get/single/${userId}`)
+export const getProfile = () => API.get(`/user/get/profile`)
 export const register = (userData: User) => API.post('/auth/register', userData)
 export const verifyRegisterationEmail = ({ email, otp }: { email: string, otp: string }) => API.post('/auth/verify_register_otp', { email, otp })
 export const login = (userData: { username: string, password: string }) => API.put('/auth/login', userData)

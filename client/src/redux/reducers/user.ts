@@ -8,12 +8,14 @@ interface InitialState {
     users: User[],
     liked: User[],
     saved: User[],
-    currentUser: User | null,
+    loggedUserToken: String | null,
     loggedUser: User | null,
+    currentUser: User | null,
     accounts: User | [],
 }
 
-const stringifiedUser = Cookie.get('code.connect')
+const stringifiedToken = Cookie.get('code.connect')
+const stringifiedUser = localStorage.getItem('profile')
 const stringifiedAccounts = Cookie.get('accounts')
 
 
@@ -24,6 +26,7 @@ const initialState: InitialState = {
     liked: [],
     saved: [],
     currentUser: null,
+    loggedUserToken: stringifiedToken ? JSON.parse(stringifiedToken) : null,
     loggedUser: stringifiedUser ? JSON.parse(stringifiedUser) : null,
     accounts: stringifiedAccounts ? JSON.parse(stringifiedAccounts) : [],
 }
@@ -34,8 +37,9 @@ const userSlice = createSlice({
     reducers: {
         start: (state) => { state.isFetching = true },
         end: (state) => { state.isFetching = false },
-        error: (state, action: PayloadAction<string>) => { state.isFetching = false; state.error = action.payload  },
+        error: (state, action: PayloadAction<string>) => { state.isFetching = false; state.error = action.payload },
 
+        setLoggedUserToken: (state, action: PayloadAction<any>) => { state.loggedUserToken = action.payload },
         getAllUsersReducer: (state, action: PayloadAction<User[]>) => { state.users = action.payload },
         getUserReducer: (state, action: PayloadAction<User>) => { state.currentUser = action.payload },
         getProfileReducer: (state, action: PayloadAction<User>) => { state.loggedUser = action.payload },
@@ -64,4 +68,5 @@ export const {
     changePasswordReducer,
     sendForgetPasswordOTPReducer,
     setNewPasswordReducer,
+    setLoggedUserToken,
 } = userSlice.actions

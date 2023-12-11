@@ -104,7 +104,7 @@ export const login = async (req, res, next) => {
                 // expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
             })
             .status(200)
-            .json({ message: 'Login successfully.', token });   // token is being passed just for development version
+            .json({ message: 'Login successfully.', result: findedUser, token });   // token is being passed just for development version
 
 
     } catch (err) {

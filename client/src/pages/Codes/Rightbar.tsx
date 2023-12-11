@@ -66,6 +66,13 @@ const RightSidebar = () => {
 
     return (
         <div className="flex flex-col gap-4 w-full">
+            {/* Create */}
+            <div className="bg-white p-4 rounded-lg shadow-md w-full flex flex-col gap-2 ">
+                <button className='w-full rounded-lg py-2 text-center border border-teal-blue text-teal-blue ' >Create Code</button>
+                <button className='w-full rounded-lg py-2 text-center border border-teal-blue text-teal-blue ' >Create Streak</button>
+                <button className='w-full rounded-lg py-2 text-center border border-teal-blue text-teal-blue ' >Create Challenge</button>
+            </div>
+
             {/* Suggested to You */}
             <div className="bg-white p-4 rounded-lg shadow-md w-full ">
                 <h2 className="text-lg font-semibold mb-2 text-dark-slate-blue">

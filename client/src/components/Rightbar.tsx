@@ -1,14 +1,15 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import { ArrowForward, Cancel, Search, ArrowRightAlt } from "@mui/icons-material"
 import { IconButton } from "@mui/material"
 import { Link } from "react-scroll"
 import { useSelector } from "react-redux"
+import { RootState } from "../redux/store"
 
 
 const Rightbar = () => {
 
     ////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////
-    const { codes } = useSelector(state => state.code)
+    const { codes } = useSelector((state:RootState) => state.code)
     const codesPerPage = 10
     const currentPage = 1
     const totalDocs = codes.length

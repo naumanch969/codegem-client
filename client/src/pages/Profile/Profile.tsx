@@ -21,11 +21,10 @@ import { User } from '../../interfaces';
 const ProfilePage = () => {
 
     const dispatch = useDispatch()
-    const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user);
     const [activeMenuItem, setActiveMenuItem] = useState('about');
 
     useEffect(() => {
-        dispatch<any>(getProfile(loggedUser?._id as string))
+        dispatch<any>(getProfile())
     }, [])
 
 

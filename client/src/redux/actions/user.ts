@@ -5,6 +5,7 @@ import {
     start,
     end,
     error,
+    setLoggedUserToken,
     getAllUsersReducer,
     getUserReducer,
     registerReducer,
@@ -39,10 +40,11 @@ export const getUser = (userId: string): AsyncAction => async (dispatch) => {
         err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message))
     }
 }
-export const getProfile = (loggedUserId: string): AsyncAction => async (dispatch) => {
+export const getProfile = (): AsyncAction => async (dispatch) => {
     try {
         dispatch(start())
-        const { data } = await api.getUser(loggedUserId)
+        const { data } = await api.getProfile() 
+        localStorage.setItem('profile', JSON.stringify(data))
         dispatch(getProfileReducer(data))
         dispatch(end())
     } catch (err: any) {
@@ -59,7 +61,7 @@ export const register = (userData: User, navigate: ReturnType<typeof useNavigate
         const { data: { token, message }, } = await api.register(userData)
         setSnackbarText(message)
         Cookie.set('code.connect', JSON.stringify(token))   // just for development
-        localStorage.setItem('email', JSON.stringify({ email: userData.email }))
+        localStorage.setItem('email', JSON.stringify({ email: userData.email }))    // for verifyRegisterationEmail
         navigate('/auth/verify_register_otp')
         dispatch(end())
     } catch (err: any) {
@@ -70,7 +72,7 @@ export const register = (userData: User, navigate: ReturnType<typeof useNavigate
 export const verifyRegisterationEmail = (otp: string, navigate: ReturnType<typeof useNavigate>, setSnackbarText: any): AsyncAction => async (dispatch) => {
     try {
         dispatch(start())
-        const email = JSON.parse(localStorage.getItem('email') || '{}')
+        const email = JSON.parse(localStorage.getItem('email') || '{}') // setup during registeration
         const userData = { email: email?.email, otp }
         const { data: { message } } = await api.verifyRegisterationEmail(userData)
         setSnackbarText(message)
@@ -91,9 +93,10 @@ export const login = (userData: { username: string, password: string }, navigate
     try {
         dispatch(start())
         const { data } = await api.login(userData)
-        const { token, message, ...result } = data
+        const { token, message, result } = data
         setSnackbarText(message)
-        Cookie.set('code.connect', JSON.stringify(token))
+        Cookie.set('code.connect', JSON.stringify(token))   // just for development
+        localStorage.setItem('profile', JSON.stringify(result)) // to keep track of user data
         dispatch(loginReducer(result))
         navigate('/')
         dispatch(end())
@@ -175,6 +178,8 @@ export const logout = (navigate: ReturnType<typeof useNavigate>): AsyncAction =>
         dispatch(start())
         dispatch(logoutReducer())
         Cookie.remove('code.connect')
+        setLoggedUserToken(null)    // to remove token from the state
+        localStorage.removeItem('profile')
         navigate('/auth/login')
         dispatch(end())
     } catch (err: any) {

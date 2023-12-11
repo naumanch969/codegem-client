@@ -3,10 +3,11 @@ import mongoose from "mongoose"
 import cors from "cors"
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
-dotenv.config()
 
-const app = express()
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
+import generalRoutes from "./routes/general.js"
 import authRoutes from "./routes/auth.js"
 import userRoutes from "./routes/user.js"
 import friendRoutes from "./routes/friend.js"
@@ -15,6 +16,12 @@ import codeRoutes from "./routes/code.js"
 import groupRoutes from "./routes/group.js"
 import collectionRoutes from "./routes/collection.js"
 import settingRoutes from "./routes/setting.js"
+
+import { upload } from "./multer.js"
+
+
+dotenv.config()
+const app = express()
 const PORT = process.env.PORT
 const CONNECTION_URL = process.env.ATLAS_URL
 
@@ -22,6 +29,12 @@ app.use(cors())
 app.use(express.json());
 app.use(cookieParser());
 
+// serving static files | images
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+app.use('/uploads', express.static(join(__dirname, 'uploads')));
+
+app.use('/', generalRoutes);
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/friend', friendRoutes);

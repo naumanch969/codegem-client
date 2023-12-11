@@ -7,6 +7,7 @@ import friendReducer from './reducers/friend'
 import userReducer from './reducers/user'
 import collectionReducer from './reducers/collection'
 import groupReducer from './reducers/group'
+import generalReducer from './reducers/general'
 
 const reducer = combineReducers({
     friend: friendReducer,
@@ -14,6 +15,7 @@ const reducer = combineReducers({
     collection: collectionReducer,
     user: userReducer,
     group: groupReducer,
+    general: generalReducer,
 })
 
 export const store = configureStore({

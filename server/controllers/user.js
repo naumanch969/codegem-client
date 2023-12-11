@@ -9,7 +9,7 @@ export const getAllUsers = async (req, res, next) => {
         res.status(200).json(users)
 
     } catch (error) {
-        next(createError(res,500, error.message))
+        next(createError(res, 500, error.message))
     }
 }
 export const getUser = async (req, res, next) => {
@@ -19,7 +19,18 @@ export const getUser = async (req, res, next) => {
         res.status(200).json(user)
 
     } catch (error) {
-        next(createError(res,500, error.message))
+        next(createError(res, 500, error.message))
+    }
+}
+export const getProfile = async (req, res, next) => {
+    try {
+
+        const userId = req.user._id
+        const user = await User.findById(userId).populate('friends').populate('shares.from').populate('shares.code').exec()
+        res.status(200).json(user)
+
+    } catch (error) {
+        next(createError(res, 500, error.message))
     }
 }
 export const updateUser = async (req, res, next) => {
@@ -29,7 +40,7 @@ export const updateUser = async (req, res, next) => {
         return res.status(200).json(result)
     }
     catch (error) {
-        next(createError(res,500, error.message))
+        next(createError(res, 500, error.message))
     }
 }
 export const deleteUser = async (req, res, next) => {
@@ -37,13 +48,13 @@ export const deleteUser = async (req, res, next) => {
         const { email } = req.body;
 
         const user = await User.findOne({ email })
-        if (!user) return next(createError(res,'email not exist'))
+        if (!user) return next(createError(res, 'email not exist'))
 
         const result = await User.findByIdAndDelete(user._id)
         return res.status(200).json(result)
     }
     catch (error) {
-        next(createError(res,500, error.message))
+        next(createError(res, 500, error.message))
     }
 }
 export const deleteUserCollection = async (req, res, next) => {
@@ -53,7 +64,7 @@ export const deleteUserCollection = async (req, res, next) => {
         res.status(200).json(result)
 
     } catch (error) {
-        next(createError(res,500, error.message))
+        next(createError(res, 500, error.message))
     }
 }
 

@@ -1,11 +1,12 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useEffect } from 'react';
 import { Navbar, Sidebar } from './components';
-import { Login, Register, InputRegisterationOTP, Home, Friends, Groups, Collections, Notifications, Create, Profile, More, Codes, Collection, Group, UserProfile, ChangePassword, InputOTP, VerifyEmail, NewPassword } from "./pages";
+import { Login, Register, InputRegisterationOTP, Home, Friends, Groups, Collections, Notifications, Create, Profile, More, Codes, Collection, Group, UserProfile, ChangePassword, InputOTP, VerifyEmail, NewPassword, EditProfile } from "./pages";
 import { getAllUsers } from './redux/actions/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { useStateContext } from "./contexts/ContextProvider";
 import { AuthWrapper } from './wrappers'
+import Cookie from 'js-cookie'
 
 const Apps = () => {
 
@@ -13,8 +14,9 @@ const Apps = () => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const { showSidebar } = useStateContext();
-  const { loggedUser } = useSelector(state => state.user);
-
+  const { loggedUserToken, loggedUser } = useSelector(state => state.user);
+  console.log('this', Cookie.get('code.connect'))
+  console.log('loggedUser', loggedUserToken)
   /////////////////////////////////////////////// STATES /////////////////////////////////////////////////////
 
   /////////////////////////////////////////////// USE EFFECTS /////////////////////////////////////////////////////
@@ -24,13 +26,11 @@ const Apps = () => {
 
   /////////////////////////////////////////////// FUNCTIONS /////////////////////////////////////////////////////
 
-
-
   return (
     <div className="w-screen min-h-screen overflow-x-hidden flex bg-light-gray bg-light-grayD text-dark-slate-blue">
 
       {
-        !loggedUser
+        !loggedUserToken && !loggedUser
           ?
           <Routes>
             <Route exact path="/auth/register" element={<AuthWrapper><Register /></AuthWrapper>} />
@@ -78,6 +78,7 @@ const Apps = () => {
                         <Route path={`/create`} element={<Create />} />
                         <Route path={`/user/:userId`} element={<UserProfile />} />
                         <Route path={`/profile`} element={<Profile />} />
+                        <Route path="/profile/edit" element={<EditProfile />} />
                         <Route path={`/more`} element={<More />} />
                       </Routes>
                     </div>

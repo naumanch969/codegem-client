@@ -16,7 +16,8 @@ const Navbar = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { setShowSidebar } = useStateContext()
-    const { loggedUser } = useSelector((state: RootState) => state.user)
+    const { loggedUser, loggedUserToken } = useSelector((state: RootState) => state.user)
+    console.log('logged', loggedUser)
 
     ////////////////////////////////////////// STATES /////////////////////////////////////////////////////
     const [openAccountMenu, setOpenAccountMenu] = useState(false)
@@ -65,7 +66,7 @@ const Navbar = () => {
 
             <div className=" " >
                 {
-                    loggedUser ?
+                    loggedUserToken ?
                         <div className="relative flex gap-4 items-center " >
                             <div className="flex gap-[8px] items-center justify-center " >
                                 <h3 className="font-bolder text-[16px] " >Hello, {loggedUser?.username}</h3>
