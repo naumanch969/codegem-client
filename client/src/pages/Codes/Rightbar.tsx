@@ -47,7 +47,7 @@ const RightSidebar = () => {
                         className="w-full h-full object-cover"
                     />
                 ) : (
-                    <span className="w-10 h-10 rounded-full bg-teal-blue text-white text-lg capitalize flex items-center justify-center">
+                    <span className="w-10 h-10 rounded-full bg-teal-blue  text-white text-lg capitalize flex items-center justify-center">
                         {friend.username.charAt(0)}
                     </span>
                 )}

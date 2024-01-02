@@ -47,8 +47,7 @@ export const getCollection = async (req, res, next) => {
 export const createCollections = async (req, res, next) => {
     try {
 
-        console.log({ ...req.body, owner: req?.user?._id })
-        const collections = await Collection.create({ ...req.body, owner: req?.user?._id })
+         const collections = await Collection.create({ ...req.body, owner: req?.user?._id })
         res.status(200).json(collections)
 
     } catch (error) {

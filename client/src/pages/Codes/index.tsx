@@ -5,9 +5,9 @@ import Code from "./Code";
 import Rightbar from "./Rightbar";
 import Create from "./Create";
 import { useDispatch, useSelector } from "react-redux";
-import { CircularProgress } from "@mui/material";
-import { getCodes } from "../../redux/actions/code";
+ import { getCodes } from "../../redux/actions/code";
 import { RootState } from "../../redux/store";
+import { Loader } from "../../utils/Components";
 
 
 const Codes = () => {
@@ -37,7 +37,9 @@ const Codes = () => {
             {
               isFetching
                 ?
-                <CircularProgress />
+                <div className="flex justify-center items-center w-full h-full">
+                  <Loader />
+                </div>
                 :
                 <>
                   {

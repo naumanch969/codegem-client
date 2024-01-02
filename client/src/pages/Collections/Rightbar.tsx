@@ -33,7 +33,7 @@ const RightSidebar = () => {
           <Settings className="mr-2" />
           Account Settings
         </Link>
-        <Link to="/logout" className="text-red-500 hover:underline">
+        <Link to="/" className="text-red-500 hover:underline">
           <ExitToApp className="mr-2" />
           Logout
         </Link>

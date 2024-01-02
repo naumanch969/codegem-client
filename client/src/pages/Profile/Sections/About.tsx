@@ -9,6 +9,7 @@ const About = () => {
 
   const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
 
+
   return (
     <div className="bg-white p-4 rounded shadow-md">
       <div className="grid grid-cols-2 gap-4">
@@ -42,7 +43,7 @@ const About = () => {
             <Tooltip placement='top' title="Bio" arrow>
               <Info className="text-cool-gray mr-2" />
             </Tooltip>
-            <p className="text-cool-gray">Web developer and tech enthusiast.</p>
+            <p className="text-cool-gray">{loggedUser?.title}.</p>
           </div>
         </div>
         <div className="col-span-1">

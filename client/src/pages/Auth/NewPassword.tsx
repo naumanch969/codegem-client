@@ -6,7 +6,7 @@ import { setNewPassword } from '../../redux/actions/user';
 import { logo } from "../../assets";
 import { RootState } from "../../redux/store";
 
-const NewPassword = ({ snackbarText, setSnackbarText }: { snackbarText: string, setSnackbarText: any }) => {
+const NewPassword = ({ snackbarText, setSnackbarText }: { snackbarText?: string, setSnackbarText?: any }) => {
 
   //////////////////////////////////////////////////// VARIABLES /////////////////////////////////////////////////////
   const { isFetching } = useSelector((state: RootState) => state.user)

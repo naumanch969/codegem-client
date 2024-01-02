@@ -11,21 +11,21 @@ interface ChangePasswordProps {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ChangePassword = ({ open, setOpen, setSnackbarText, snackbarText }: { open: boolean, setOpen: any, setSnackbarText: any, snackbarText: string }) => {
-    
+const ChangePassword = ({ open, setOpen, setSnackbarText, snackbarText }: { open?: boolean, setOpen?: any, setSnackbarText?: any, snackbarText?: string }) => {
+
     ////////////////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////////
     const PasswordButtonInitialStyle = { opacity: 0 };
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { isFetching, error } = useSelector((state: any) => state.user);
-    
+
     ////////////////////////////////////////////////////// STATES //////////////////////////////////////////////////////
     const [passwordData, setPasswordData] = useState({ newPassword: "", oldPassword: "" });
     const [inputError, setInputError] = useState({ newPassword: "", oldPassword: "" });
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordButton, setShowPasswordButton] = useState(PasswordButtonInitialStyle);
     const [showSnackbar, setShowSnackbar] = useState(false);
-    
+
     ////////////////////////////////////////////////////// FUNCTIONS //////////////////////////////////////////////////////
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPasswordData((prev) => ({ ...prev, [e.target.name]: e.target.value }));

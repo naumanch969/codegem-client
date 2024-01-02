@@ -159,8 +159,7 @@ export const verifyOTP = async (req, res) => {
 
         res.status(200).json({ message: 'OTP Verified' }) // send link to set new password
     }
-    catch (error) {
-        console.log('error', error)
+    catch (error) { 
         res.status(404).json({ message: 'error in changePassword - controllers/user.js', error, success: false })
     }
 }
@@ -177,8 +176,7 @@ export const setNewPassword = async (req, res) => {
         return res.status(200).json({ message: 'password updated successfully' })
 
     }
-    catch (error) {
-        console.log('error', error)
+    catch (error) { 
         res.status(404).json({ message: 'error in changePassword - controllers/user.js', error, success: false })
     }
 }

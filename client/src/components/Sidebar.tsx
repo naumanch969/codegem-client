@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import {
     HomeOutlined, PersonOutlined, GroupOutlined, CollectionsBookmarkOutlined, NotificationsNoneOutlined, AddBoxOutlined, AccountCircleOutlined, DensityMediumOutlined,
-    Home, Person, Group, CollectionsBookmark, NotificationsNone, AddBox, AccountCircle, DensityMedium, Code, CodeOutlined
+    Home, Person, Group, CollectionsBookmark, NotificationsNone, AddBox, AccountCircle, DensityMedium, Code, CodeOutlined,
+    FormatAlignCenterSharp
 } from "@mui/icons-material"
 import { lowercase } from '../utils/functions/function'
 import { Tooltip } from '@mui/material'
@@ -33,7 +34,7 @@ const Sidebar = () => {
                                 <Link
                                     key={index}
                                     to={`/${lowercase(item.name)}`}
-                                    onClick={() => setRoute(['', lowercase(item.name)])}
+                                    onClick={() => setRoute(['', lowercase(item.name)!])}
                                     className={`${route[1] == lowercase(item.name) && 'font-extrabold bg-dark-slate-blue-lighten text-teal-blue '} hover:bg-dark-slate-blue-lighten hover:text-white flex gap-[12px] py-[10px] px-[6px] w-full capitalize rounded-[4px] cursor-pointer `}
                                 >
                                     {
@@ -56,8 +57,8 @@ const Sidebar = () => {
                                     placement='right' title={item.name}
                                 >
                                     <Link
-                                        to={`/${lowercase(item.name).split('/')}`}
-                                        onClick={() => setRoute(['', lowercase(item.name)])}
+                                        to={`/${lowercase(item.name)!.split('/')}`}
+                                        onClick={() => setRoute(['', lowercase(item.name)!])}
                                         className={`py-[4px] px-[6px] w-full rounded-[4px]   cursor-pointer flex justify-center items-center `}
                                     >
                                         {
@@ -91,9 +92,19 @@ const sidebarLinks = [
         iconOutlined: HomeOutlined
     },
     {
+        name: 'Streaks',
+        iconFilled: Home,
+        iconOutlined: HomeOutlined
+    },
+    {
         name: 'Codes',
         iconFilled: Code,
         iconOutlined: CodeOutlined
+    },
+    {
+        name: 'Challenges',
+        iconFilled: FormatAlignCenterSharp,
+        iconOutlined: HomeOutlined
     },
     {
         name: 'Friends',

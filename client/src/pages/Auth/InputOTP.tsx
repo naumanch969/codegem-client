@@ -8,7 +8,7 @@ import { logo } from "../../assets";
 import { ArrowBack } from "@mui/icons-material";
 import { RootState } from "../../redux/store";
 
-const InputOTP = ({ snackbarText, setSnackbarText }: { snackbarText: string, setSnackbarText: any }) => {
+const InputOTP = ({ snackbarText, setSnackbarText }: { snackbarText?: string, setSnackbarText?: any }) => {
 
     /////////////////////////////////// VARIABLES /////////////////////////////////
     const { isFetching } = useSelector((state: RootState) => state.user)
@@ -24,12 +24,12 @@ const InputOTP = ({ snackbarText, setSnackbarText }: { snackbarText: string, set
     const handleSubmit = (e: any) => {
         e.preventDefault();
         if (otp.length != 5) return alert('Please enter a valid OTP')
-        dispatch<any>(verifyOTP(otp, navigate,setSnackbarText));
+        dispatch<any>(verifyOTP(otp, navigate, setSnackbarText));
     }
     const goBack = () => {
         navigate(-1)
     }
-    const handleResend = (e:any) => {
+    const handleResend = (e: any) => {
         e.preventDefault();
         dispatch<any>(resendOTP(setSnackbarText))
     }
@@ -62,7 +62,7 @@ const InputOTP = ({ snackbarText, setSnackbarText }: { snackbarText: string, set
                             <div className="flex justify-center items-center w-full">
                                 <OTPInput
                                     value={otp}
-                                    onChange={(o) => { setOtp(o); console.log(o) }}
+                                    onChange={(o) => setOtp(o)}
                                     numInputs={5}
                                     inputType="number"
                                     renderSeparator={<span className="mx-1"> </span>}

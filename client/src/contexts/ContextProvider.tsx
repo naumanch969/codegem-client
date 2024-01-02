@@ -32,6 +32,10 @@ interface StateContextProps {
     setShowFriendSidebar: React.Dispatch<React.SetStateAction<boolean>>;
     showCodeCreateModal: boolean;
     setShowCodeCreateModal: React.Dispatch<React.SetStateAction<boolean>>;
+    showStreakCreateModal: boolean;
+    setShowStreakCreateModal: React.Dispatch<React.SetStateAction<boolean>>;
+    showChallengeCreateModal: boolean;
+    setShowChallengeCreateModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const StateContext = createContext<StateContextProps | undefined>(undefined);
@@ -59,6 +63,8 @@ export const ContextProvider: React.FC<{ children: ReactNode }> = ({ children })
     const [showSidebar, setShowSidebar] = useState(true);
     const [showFriendSidebar, setShowFriendSidebar] = useState(true);
     const [showCodeCreateModal, setShowCodeCreateModal] = useState(false);
+    const [showStreakCreateModal, setShowStreakCreateModal] = useState(false);
+    const [showChallengeCreateModal, setShowChallengeCreateModal] = useState(false);
 
     const contextValues: StateContextProps = {
         Months,
@@ -83,6 +89,8 @@ export const ContextProvider: React.FC<{ children: ReactNode }> = ({ children })
         setShowFriendSidebar,
         showCodeCreateModal,
         setShowCodeCreateModal,
+        showStreakCreateModal, setShowStreakCreateModal,
+        showChallengeCreateModal, setShowChallengeCreateModal
     };
 
     return <StateContext.Provider value={contextValues}>{children}</StateContext.Provider>;

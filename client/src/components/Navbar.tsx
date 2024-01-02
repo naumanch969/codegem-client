@@ -17,7 +17,6 @@ const Navbar = () => {
     const navigate = useNavigate()
     const { setShowSidebar } = useStateContext()
     const { loggedUser, loggedUserToken } = useSelector((state: RootState) => state.user)
-    console.log('logged', loggedUser)
 
     ////////////////////////////////////////// STATES /////////////////////////////////////////////////////
     const [openAccountMenu, setOpenAccountMenu] = useState(false)

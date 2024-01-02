@@ -20,7 +20,6 @@ const ShareCode = ({ open, setOpen, code }: { open: boolean, setOpen: any, code:
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
     const { isFetching }: { isFetching: boolean } = useSelector((state: RootState) => state.code)
     const joinedGroups = groups.filter(group => group.members.findIndex(memberId => memberId === loggedUser?._id) != -1);
-    console.log('groups', groups, joinedGroups)
     /////////////////////////////////////////////// STATES ///////////////////////////////////////////////////
     const [selectedFriends, setSelectedFriends] = useState<string[]>([])
     const [selectedGroups, setSelectedGroups] = useState<string[]>([])
@@ -53,8 +52,7 @@ const ShareCode = ({ open, setOpen, code }: { open: boolean, setOpen: any, code:
             dispatch<any>(shareCode(code, selectedFriends, loggedUser?._id as string, setOpen))
         }
         else {
-            console.log('selectedGroups', selectedGroups)
-            if (selectedGroups.length == 0) return alert('Please select someone to share post.')
+             if (selectedGroups.length == 0) return alert('Please select someone to share post.')
             dispatch<any>(shareCodeInGroups(code, selectedGroups, loggedUser?._id as string, setOpen))
         }
     }
@@ -65,7 +63,7 @@ const ShareCode = ({ open, setOpen, code }: { open: boolean, setOpen: any, code:
             <div className="w-10 flex items-center rounded-full overflow-hidden">
                 {friend.profilePicture ? (
                     <img
-                        src={friend.profilePicture}
+                        src={friend.profilePicture as string}
                         alt={friend.username}
                         className="w-full h-full object-cover"
                     />

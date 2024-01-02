@@ -8,7 +8,7 @@ import { logo } from "../../assets";
 import { ArrowBack } from "@mui/icons-material";
 import { RootState } from "../../redux/store";
 
-const InputRegisterationOTP = ({ snackbarText, setSnackbarText }: { snackbarText: string, setSnackbarText: any }) => {
+const InputRegisterationOTP = ({ snackbarText, setSnackbarText }: { snackbarText?: string, setSnackbarText?: any }) => {
 
     /////////////////////////////////// VARIABLES /////////////////////////////////
     const { isFetching } = useSelector((state: RootState) => state.user)
@@ -62,7 +62,7 @@ const InputRegisterationOTP = ({ snackbarText, setSnackbarText }: { snackbarText
                             <div className="flex justify-center items-center w-full">
                                 <OTPInput
                                     value={otp}
-                                    onChange={(o) => { setOtp(o); console.log(o) }}
+                                    onChange={(o) => setOtp(o)}
                                     numInputs={5}
                                     inputType="number"
                                     renderSeparator={<span className="mx-1"> </span>}

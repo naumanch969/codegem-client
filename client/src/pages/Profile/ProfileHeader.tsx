@@ -9,11 +9,10 @@ const ProfilePage = () => {
 
     const navigate = useNavigate()
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
-
     return (
         <div className="flex flex-col w-full">
             <div className="w-full h-[20rem] rounded-[6px] overflow-hidden " >
-                <img src="https://via.placeholder.com/50" alt="" className="w-full h-full" />
+                <img src={loggedUser?.coverImage ? loggedUser?.coverImage : "https://via.placeholder.com/50"} alt="" className="w-full h-full" />
             </div>
             <div className="flex justify-between items-center gap-4 my-[1rem] px-[2rem]">
                 {/* Profile image and username */}

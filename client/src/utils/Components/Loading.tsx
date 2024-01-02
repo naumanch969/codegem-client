@@ -1,6 +1,7 @@
+import React from 'react'
 import { CircularProgress } from '@mui/material'
 
-const Loading = ({ title }) => {
+const Loading = ({ title }: { title: string }) => {
     return (
         <div className="w-full h-full flex flex-col justify-center items-center " >
             <CircularProgress style={{ width: '60px', height: '60px', color: '#751ACF' }} className="text-orange  " />

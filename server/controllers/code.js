@@ -167,8 +167,7 @@ export const shareCodeInGroups = async (req, res, next) => {
         await Promise.all(
             codesForGroups.map(async (codeObj, index) => {
                 const updated = await Group.findByIdAndUpdate(groupIds[index], { $push: { sharedCodes: codeObj } }, { new: true });
-                console.log('udpated', groupIds[index], updated)
-            })
+             })
         );
 
         res.status(200).json({ message: 'Code shared successfully.' });

@@ -15,7 +15,7 @@ interface UserState {
     password: string;
 }
 
-const Register = ({ snackbarText, setSnackbarText }: { snackbarText: string, setSnackbarText: any }) => {
+const Register = ({ snackbarText, setSnackbarText }: { snackbarText?: string, setSnackbarText?: any }) => {
 
     ///////////////////////////////////////////////////////// VARIABLES /////////////////////////////////////////////////////
     const navigate = useNavigate();
