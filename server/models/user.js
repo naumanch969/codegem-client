@@ -21,13 +21,15 @@ const userSchema = new Schema({
     },
   },
   verified: { type: Boolean, default: false },
-  shares: {
+  receivedShares: {
     type: [
-      {
-        from: { type: Schema.Types.ObjectId, ref: "User" },
-        code: { type: Schema.Types.ObjectId, ref: "Code" },
-        sharedAt: { type: Date, default: Date.now },
-      },
+      { type: [{ type: Schema.Types.ObjectId, ref: "Share" }], default: null },
+    ],
+    default: [],
+  },
+  sentShares: {
+    type: [
+      { type: [{ type: Schema.Types.ObjectId, ref: "Share" }], default: null },
     ],
     default: [],
   },

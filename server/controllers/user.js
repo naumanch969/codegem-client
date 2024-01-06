@@ -4,7 +4,7 @@ import { isUndefined, createError } from "../utils/functions.js";
 
 export const getAllUsers = async (req, res, next) => {
   try {
-    const users = await User.find();
+    const users = await User.find(); 
     res.status(200).json(users);
   } catch (error) {
     next(createError(res, 500, error.message));
@@ -13,11 +13,7 @@ export const getAllUsers = async (req, res, next) => {
 export const getUser = async (req, res, next) => {
   try {
     const { userId } = req.params;
-    const user = await User.findById(userId)
-      .populate("friends")
-      .populate("shares.from")
-      .populate("shares.code")
-      .exec();
+    const user = await User.findById(userId).populate("friends").exec();
     res.status(200).json(user);
   } catch (error) {
     next(createError(res, 500, error.message));
@@ -28,9 +24,9 @@ export const getProfile = async (req, res, next) => {
     const userId = req.user._id;
     const user = await User.findById(userId)
       .populate("friends")
-      .populate("shares.from")
-      .populate("shares.code")
+      .populate("shares")
       .exec();
+    console.log(user);
     res.status(200).json(user);
   } catch (error) {
     next(createError(res, 500, error.message));
@@ -43,7 +39,7 @@ export const updateProfile = async (req, res, next) => {
       { $set: { ...req.body } },
       { new: true }
     );
-     res.status(200).json(result);
+    res.status(200).json(result);
   } catch (error) {
     next(createError(res, 500, error.message));
   }

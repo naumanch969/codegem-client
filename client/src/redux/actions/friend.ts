@@ -27,18 +27,20 @@ export const getSuggestedUsers = (): AsyncAction => async (dispatch) => {
   }
 };
 
-export const getFriends = (): AsyncAction => async (dispatch) => {
-  try {
-    dispatch(start());
-    const { data } = await api.getFriends();
-    dispatch(getFriendsReducer(data));
-    dispatch(end());
-  } catch (err: any) {
-    err.response?.data?.message
-      ? dispatch(error(err.response.data.message))
-      : dispatch(error(err.message));
-  }
-};
+export const getFriends =
+  (loading: boolean = false): AsyncAction =>
+  async (dispatch) => {
+    try {
+      loading && dispatch(start());
+      const { data } = await api.getFriends();
+      dispatch(getFriendsReducer(data));
+      dispatch(end());
+    } catch (err: any) {
+      err.response?.data?.message
+        ? dispatch(error(err.response.data.message))
+        : dispatch(error(err.message));
+    }
+  };
 
 export const getSentRequests = (): AsyncAction => async (dispatch) => {
   try {

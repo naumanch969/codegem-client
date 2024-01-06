@@ -13,7 +13,7 @@ const FriendsPage = () => {
   const { friends, isFetching }: { friends: User[], isFetching: boolean } = useSelector((state: RootState) => state.friend)
 
   useEffect(() => {
-    dispatch<any>(getFriends())
+    dispatch<any>(getFriends(friends.length == 0))
   }, [])
 
   return (

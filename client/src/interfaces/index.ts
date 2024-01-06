@@ -17,13 +17,15 @@ export interface User {
     linkedin: string;
   };
   verified?: boolean;
-  saved?: string[] | [];
-  friends?: string[] | [];
-  sentRequests?: string[] | [];
-  receivedRequests?: string[] | [];
+  saved?: string[];
+  friends?: string[];
+  sentShares: (string | Share)[]; // if populated, array of Share otherwise of string
+  receivedShares: (string | Share)[]; // if populated, array of Share otherwise of string
+  sentRequests?: string[];
+  receivedRequests?: string[];
   notifications: Notification[];
   mutualFriends?: number; // for friends section
-  createdAt?: Date;
+  createdAt?: Date | string;
 }
 
 export interface Code {
@@ -35,11 +37,11 @@ export interface Code {
   tags: { name: string; user: string }[];
   hashTags: string[];
   likes: string[];
-  comments: { user: string; content: string; createdAt: string }[];
-  shares: { from: string; to: string; sharedAt: string }[];
-  groups?: { from: string; group: string; sharedAt: string }[];
+  comments: (string | Comment)[];
+  shares: (string | Share)[]; // if populated, array of Share otherwise of string
+  groups?: string;
   visibility: string;
-  createdAt?: Date;
+  createdAt?: Date | string;
 }
 
 export interface Challenge {
@@ -52,11 +54,11 @@ export interface Challenge {
   tags: { name: string; user: string }[];
   hashTags: string[];
   likes: string[];
-  comments: { user: string; content: string; createdAt: string }[];
-  shares: { from: string; to: string; sharedAt: string }[];
-  groups?: { from: string; group: string; sharedAt: string }[];
+  comments: (string | Comment)[];
+  shares: (string | Share)[]; // if populated, array of Share otherwise of string
+  groups?: string;
   visibility: string;
-  createdAt?: Date;
+  createdAt?: Date | string;
 }
 
 export interface Streak {
@@ -67,19 +69,21 @@ export interface Streak {
   streak: { description: string; code: string }[];
   tags: { name: string; user: string }[];
   hashTags: string[];
-  likes?: string[] | [];
-  comments?: { user: string; content: string; createdAt: string }[] | [];
-  shares?: { from: string; to: string; sharedAt: string }[] | [];
+  likes: string[];
+  comments?: (string | Comment)[];
+  shares: (string | Share)[]; // if populated, array of Share otherwise of string
   group?: string;
   visibility: string;
-  createdAt?: Date;
+  createdAt?: Date | string;
 }
 
 export interface Collection {
   _id: string;
   name: string;
   description: string;
-  codes: Code[] | [];
+  codes: Code[];
+  streaks: Streak[];
+  challenges: Challenge[];
   owner: User | string;
   visibility: string;
 }
@@ -87,12 +91,30 @@ export interface Collection {
 export interface Group {
   _id?: string;
   name: string;
-  createdAt?: Date;
+  createdAt?: Date | string;
   avatar: string;
   description: string;
-  members: string[] | [];
+  members: string[];
   categories: [] | string[];
   admin: User | string;
-  sharedCodes: { from: User | string; code: Code; sharedAt: Date }[] | [];
-  codes: Code[] | [];
+  shares: (string | Share)[]; // if populated, array of Share otherwise of string
+  codes: Code[];
+}
+
+export interface Share {
+  _id?: string;
+  from: string;
+  to: string;
+  postId: string;
+  postType: "code" | "streak" | "challenge";
+  sharedTo: "friend" | "group";
+  createdAt: Date | string;
+}
+
+export interface Comment {
+  _id?: string;
+  postId: string;
+  user: string | User;
+  content: string;
+  createdAt?: Date | string;
 }

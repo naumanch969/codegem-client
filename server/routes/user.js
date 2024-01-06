@@ -13,7 +13,7 @@ import express from "express";
 
 const router = express.Router();
 
-router.get("/get/all", getAllUsers);
+router.get("/get/all", verifyToken, getAllUsers);
 router.get("/get/single/:userId", getUser);
 router.get("/get/profile", verifyToken, getProfile);
 router.put("/update/profile", verifyToken, updateProfile);

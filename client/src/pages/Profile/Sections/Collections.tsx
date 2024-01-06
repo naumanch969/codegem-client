@@ -1,15 +1,9 @@
 import React, { useEffect } from 'react'
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import { Link } from 'react-router-dom';
-import { Add, Favorite, Folder, Search } from '@mui/icons-material';
-import { Tooltip } from '@mui/material';
 import CollectionCard from '../../Collections/CollectionCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import { Collection, User } from '../../../interfaces';
-import { getCollections, getUserCollections } from '../../../redux/actions/collection';
+import { getUserCollections } from '../../../redux/actions/collection';
 import { Loader } from '../../../utils/Components';
 
 const Collections = () => {

@@ -30,7 +30,7 @@ const RightSidebar = () => {
 
     //////////////////////////////////////////////////// USE EFFECTS ///////////////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getFriends())
+        dispatch<any>(getFriends(friends.length == 0))
         dispatch<any>(getSuggestedUsers())
     }, [])
 
@@ -42,7 +42,7 @@ const RightSidebar = () => {
             <div className="w-10 flex items-center rounded-full overflow-hidden">
                 {friend.profilePicture ? (
                     <img
-                        src={friend.profilePicture}
+                        src={friend.profilePicture as string}
                         alt={friend.username}
                         className="w-full h-full object-cover"
                     />
@@ -79,7 +79,7 @@ const RightSidebar = () => {
                     Suggested to You
                 </h2>
                 <ul>
-                    {suggestedUsers.slice(0,4).map((friend, index) => (
+                    {suggestedUsers.slice(0, 4).map((friend, index) => (
                         <Friend friend={friend} key={index} />
                     ))}
                 </ul>

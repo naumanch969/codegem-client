@@ -28,7 +28,7 @@ const Groups = () => {
 
     /////////////////////////////////// USE EFFECTS /////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getGroups())
+        dispatch<any>(getGroups(groups.length == 0))
     }, [])
     // the longer you know somebody, the more curse you are to see them as human
 

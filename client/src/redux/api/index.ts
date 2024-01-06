@@ -78,16 +78,16 @@ export const createCode = (codeData: Code) =>
   API.post(`/code/create`, codeData);
 export const updateCode = (id: string, codeData: Code) =>
   API.put(`/code/update/${id}`, codeData);
-export const shareCode = (codeId: string, shareWith: string[]) =>
-  API.put(`/code/share/${codeId}`, { shareWith });
+export const shareCode = (codeId: string, friendIds: string[]) =>
+  API.put(`/code/share/${codeId}`, { friendIds });
 export const shareCodeInGroups = (codeId: string, groupIds: string[]) =>
   API.put(`/code/share-in-groups/${codeId}`, { groupIds });
 export const saveCode = (codeId: string) => API.put(`/code/save/${codeId}`);
 export const saveCodeInCollections = (codeId: string, collections: string[]) =>
   API.put(`/code/save-in-collections/${codeId}`, { collections });
 export const likeCode = (id: string) => API.put(`/code/like/${id}`);
-export const commentCode = (id: string, comment: any) =>
-  API.put(`/code/comment/${id}`, comment);
+export const commentCode = (id: string, content: string) =>
+  API.put(`/code/comment/${id}`, { content });
 export const deleteCode = (id: string) => API.delete(`/code/delete/${id}`);
 
 // CHALLENGE
@@ -102,8 +102,8 @@ export const createChallenge = (challengeData: Code) =>
   API.post(`/challenge/create`, challengeData);
 export const updateChallenge = (id: string, challengeData: Code) =>
   API.put(`/challenge/update/${id}`, challengeData);
-export const shareChallenge = (challengeId: string, shareWith: string[]) =>
-  API.put(`/challenge/share/${challengeId}`, { shareWith });
+export const shareChallenge = (challengeId: string, friendIds: string[]) =>
+  API.put(`/challenge/share/${challengeId}`, { friendIds });
 export const shareChallengeInGroups = (
   challengeId: string,
   groupIds: string[]
@@ -131,8 +131,8 @@ export const createStreak = (streakData: Code) =>
   API.post(`/streak/create`, streakData);
 export const updateStreak = (id: string, streakData: Code) =>
   API.put(`/streak/update/${id}`, streakData);
-export const shareStreak = (streakId: string, shareWith: string[]) =>
-  API.put(`/streak/share/${streakId}`, { shareWith });
+export const shareStreak = (streakId: string, friendIds: string[]) =>
+  API.put(`/streak/share/${streakId}`, { friendIds });
 export const shareStreakInGroups = (streakId: string, groupIds: string[]) =>
   API.put(`/streak/share-in-groups/${streakId}`, { groupIds });
 export const saveStreak = (streakId: string) =>

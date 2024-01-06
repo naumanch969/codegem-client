@@ -4,7 +4,7 @@ import { IconButton, Tooltip } from '@mui/material';
 import { image1 } from '../../assets';
 import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
-import { likeCode, saveCode } from '../../redux/actions/code';
+import { commentCode, likeCode, saveCode } from '../../redux/actions/code';
 import { format } from 'timeago.js'
 import DeleteModal from './Delete';
 import UpdateModal from './Update';
@@ -23,6 +23,8 @@ const CodeComponent = ({ code }: { code: Code }) => {
   const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user);
   const { userCollections }: { userCollections: Collection[] } = useSelector((state: RootState) => state.collection);
   const savedCollection = userCollections.filter(collection => collection.name == 'Saved')
+  const userId = loggedUser?._id
+  const isCodeLiked = code?.likes?.find((id) => id === userId)
   const isCodeSaved = savedCollection[0]?.codes?.findIndex(c => c._id == code?._id) != -1
   const dispatch = useDispatch();
 
@@ -33,11 +35,19 @@ const CodeComponent = ({ code }: { code: Code }) => {
   const [openShareModal, setOpenShareModal] = useState(false)
   const [openSaveModal, setOpenSaveModal] = useState(false)
   const [showMenu, setShowMenu] = useState(false);
+  const [showComments, setShowComments] = useState(false);
   const [copy, setCopy] = useState(false);
+  const [commentContent, setCommentContent] = useState<string>('')
 
   /////////////////////////////////////// FUNCTIONS ////////////////////////////////////////
   const handleLikeCode = () => {
-    dispatch<any>(likeCode(code?._id as string));
+    dispatch<any>(likeCode(code?._id as string, userId!));
+    // TODO
+    // if (isCodeLiked) {
+    //   code.likes = code?.likes.filter((id) => id !== userId)
+    // } else {
+    //   code.likes = [...code?.likes!, userId!]
+    // }
   };
   const handleCopyCode = () => {
     navigator.clipboard.writeText(code?.code);
@@ -57,7 +67,7 @@ const CodeComponent = ({ code }: { code: Code }) => {
     setOpenDeleteModal(true)
   }
   const handleSave = () => {
-    dispatch<any>(saveCode(code))
+    dispatch<any>(saveCode(code, isCodeSaved ? 'unsave' : 'save'))
   }
   const hanldeCopy = (code: string) => {
     navigator.clipboard.writeText(code)
@@ -65,6 +75,9 @@ const CodeComponent = ({ code }: { code: Code }) => {
     setTimeout(() => {
       setCopy(false)
     }, 3000);
+  }
+  const handleComment = () => {
+    dispatch<any>(commentCode(code?._id!, commentContent, loggedUser!))
   }
 
   /////////////////////////////////////// COMPONENTS ////////////////////////////////////////
@@ -154,31 +167,70 @@ const CodeComponent = ({ code }: { code: Code }) => {
       {/* likes, share, comments */}
       <div className='flex justify-between items-center'>
         <div>
-          <IconButton onClick={handleLikeCode}>
-            {code?.likes?.includes(loggedUser?._id as string) ? <ThumbUp /> : <ThumbUpOutlined />}
+          <IconButton onClick={handleLikeCode} size='medium' >
+            {code?.likes?.includes(loggedUser?._id as string) ? <ThumbUp fontSize="inherit" /> : <ThumbUpOutlined fontSize="inherit" />}
           </IconButton>
           <span className='text-[14px]'>{code?.likes?.length} people</span>
         </div>
         <div className='flex gap-[4px]'>
-          <IconButton onClick={() => setOpenShareModal(true)} className='relative'>
-            <Share />
+          <IconButton onClick={() => setOpenShareModal(true)} size='medium' className='relative'>
+            <Share fontSize="inherit" />
             <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-teal-blue-lighten text-white'>{code?.shares?.length}</span>
           </IconButton>
-          <IconButton onClick={handleSave} className='relative'>
+          <IconButton onClick={handleSave} size='medium' className='relative'>
             {
               isCodeSaved
                 ?
-                <Bookmark />
+                <Bookmark fontSize="inherit" />
                 :
-                <BookmarkBorderOutlined />
+                <BookmarkBorderOutlined fontSize="inherit" />
             }
           </IconButton>
-          <IconButton className='relative'>
-            <Comment />
+          <IconButton size='medium' className='relative' onClick={() => setShowComments((pre) => !pre)}>
+            <Comment fontSize="inherit" />
             <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-teal-blue-lighten text-white'>{code?.comments?.length}</span>
           </IconButton>
         </div>
       </div>
+
+      {/* Comment Section */}
+      {
+        showComments &&
+        <div className="flex flex-col mt-4">
+          <div className='flex items-center space-x-3 mb-2'>
+            <img src={image1} alt="user image" className='w-10 h-10 rounded-full object-cover' />
+            <input
+              type="text"
+              value={commentContent}
+              onChange={(e) => setCommentContent(e.target.value)}
+              placeholder="Write a comment..."
+              className="flex-1 p-2 border rounded-lg outline-none focus:border-teal-blue-lighten"
+            />
+            <button onClick={handleComment} className="p-2 bg-teal-blue-lighten text-white rounded-lg hover:bg-teal-blue">Send</button>
+          </div>
+
+          <div className='space-y-2'>
+            {code?.comments?.map((comment, index) => {
+              // Check if the comment is a string or a Comment object
+              const isString = typeof comment === 'string';
+              if (isString) return null
+              return (
+                <div key={index} className="flex items-start space-x-2">
+                  <img src={image1} alt="user image" className='w-8 h-8 rounded-full object-cover' />
+                  <div className='flex flex-col'>
+                    <span className='text-sm font-semibold'>{(comment.user as User).username}</span>
+                    <span className='text-sm'>{comment.content}</span>
+                    <span className='text-xs text-gray-500'>{format(comment?.createdAt!)}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+        </div>
+      }
+
+
     </div>
   );
 };

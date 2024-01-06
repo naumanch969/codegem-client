@@ -19,32 +19,7 @@ const Collections: React.FC = () => {
     const dispatch = useDispatch()
     const { collections, userCollections } = useSelector((state: RootState) => state.collection);
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user);
-    const yourCollections = [
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-    ]
-    const otherCollections = [
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-        { _id: '4', name: 'likes', description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil, nobis repudiandae cum ducimus neque inventore sequi ad pariatur laborum odio, quo consequuntur omnis tempora dolor modi. Itaque quos aliquid debitis!' },
-    ]
+
     const segments = [
         { name: 'Home', link: '/home' },
         { name: 'Collections', link: '/collections' },

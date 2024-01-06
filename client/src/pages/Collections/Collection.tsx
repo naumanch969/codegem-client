@@ -68,6 +68,9 @@ const SingleCollectionView = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
+                <span>Codes: {currentCollection?.codes.length}</span>
+                <span>Challenges: {currentCollection?.challenges.length}</span>
+                <span>Streaks: {currentCollection?.streaks.length}</span>
                 {currentCollection?.codes?.map((code, index) => (
                     <CodeComponent code={code} key={index} />
                 ))}

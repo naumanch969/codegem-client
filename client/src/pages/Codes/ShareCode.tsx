@@ -27,8 +27,8 @@ const ShareCode = ({ open, setOpen, code }: { open: boolean, setOpen: any, code:
 
     /////////////////////////////////////////////// USE EFFECTS ///////////////////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getFriends())
-        dispatch<any>(getGroups())
+        dispatch<any>(getFriends(friends.length == 0))
+        dispatch<any>(getGroups(groups.length == 0))
     }, [])
 
     /////////////////////////////////////////////// FUNCTIONS ///////////////////////////////////////////////////
@@ -52,14 +52,14 @@ const ShareCode = ({ open, setOpen, code }: { open: boolean, setOpen: any, code:
             dispatch<any>(shareCode(code, selectedFriends, loggedUser?._id as string, setOpen))
         }
         else {
-             if (selectedGroups.length == 0) return alert('Please select someone to share post.')
+            if (selectedGroups.length == 0) return alert('Please select someone to share post.')
             dispatch<any>(shareCodeInGroups(code, selectedGroups, loggedUser?._id as string, setOpen))
         }
     }
 
     /////////////////////////////////////////////// COMPONENTS ///////////////////////////////////////////////////
     const Friend = ({ friend }: { friend: User }) => (
-        <li onClick={() => handleToggleFriend(friend._id)} className={`${selectedFriends.includes(friend._id) ? 'bg-gray-100 ' : ''} flex gap-2 items-center mb-4 hover:bg-gray-100 rounded-md p-1 cursor-pointer`}>
+        <li onClick={() => handleToggleFriend(friend?._id!)} className={`${selectedFriends.includes(friend?._id!) ? 'bg-gray-100 ' : ''} flex gap-2 items-center mb-4 hover:bg-gray-100 rounded-md p-1 cursor-pointer`}>
             <div className="w-10 flex items-center rounded-full overflow-hidden">
                 {friend.profilePicture ? (
                     <img

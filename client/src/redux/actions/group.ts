@@ -24,9 +24,9 @@ export const getUserGroups = (userId: string) => async (dispatch: Dispatch) => {
         err.response?.data?.message ? dispatch(error(err.response.data.message)) : dispatch(error(err.message));
     }
 };
-export const getGroups = () => async (dispatch: Dispatch) => {
+export const getGroups = (loading:boolean = false) => async (dispatch: Dispatch) => {
     try {
-        dispatch(start());
+        loading && dispatch(start());
         const { data } = await api.getGroups();
         dispatch(getGroupsReducer(data));
         dispatch(end());

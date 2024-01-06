@@ -58,6 +58,20 @@ const collectionSlice = createSlice({
               : collection)
       );
     },
+    unsaveCodeReducer: (state, action: PayloadAction<{ code: Code }>) => {
+      state.userCollections = state.userCollections.map(
+        (collection) =>
+          (collection =
+            collection.name == "Saved"
+              ? {
+                  ...collection,
+                  codes: collection.codes.filter(
+                    (ch) => ch._id != action.payload.code._id
+                  ),
+                }
+              : collection)
+      );
+    },
     saveCodeInCollectionsReducer: (
       state,
       action: PayloadAction<{ code: Code; collectionIds: string[] }>
@@ -72,19 +86,98 @@ const collectionSlice = createSlice({
             : collection)
       );
     },
-    saveStreakReducer: (state, action: PayloadAction<{ streak: Streak }>) => {},
+    saveStreakReducer: (state, action: PayloadAction<{ streak: Streak }>) => {
+      state.userCollections = state.userCollections.map(
+        (collection) =>
+          (collection =
+            collection.name == "Saved"
+              ? {
+                  ...collection,
+                  streaks: [action.payload.streak, ...collection.streaks],
+                }
+              : collection)
+      );
+    },
+    unsaveStreakReducer: (state, action: PayloadAction<{ streak: Streak }>) => {
+      state.userCollections = state.userCollections.map(
+        (collection) =>
+          (collection =
+            collection.name == "Saved"
+              ? {
+                  ...collection,
+                  streaks: collection.streaks.filter(
+                    (ch) => ch._id != action.payload.streak._id
+                  ),
+                }
+              : collection)
+      );
+    },
     saveStreakInCollectionsReducer: (
       state,
       action: PayloadAction<{ streak: Streak; collectionIds: string[] }>
-    ) => {},
+    ) => {
+      state.userCollections = state.userCollections.map(
+        (collection) =>
+          (collection = action.payload.collectionIds.includes(collection._id)
+            ? {
+                ...collection,
+                streaks: [action.payload.streak, ...collection.streaks],
+              }
+            : collection)
+      );
+    },
     saveChallengeReducer: (
       state,
       action: PayloadAction<{ challenge: Challenge }>
-    ) => {},
+    ) => {
+      state.userCollections = state.userCollections.map(
+        (collection) =>
+          (collection =
+            collection.name == "Saved"
+              ? {
+                  ...collection,
+                  challenges: [
+                    action.payload.challenge,
+                    ...collection.challenges,
+                  ],
+                }
+              : collection)
+      );
+    },
+    unsaveChallengeReducer: (
+      state,
+      action: PayloadAction<{ challenge: Challenge }>
+    ) => {
+      state.userCollections = state.userCollections.map(
+        (collection) =>
+          (collection =
+            collection.name == "Saved"
+              ? {
+                  ...collection,
+                  challenges: collection.challenges.filter(
+                    (ch) => ch._id != action.payload.challenge._id
+                  ),
+                }
+              : collection)
+      );
+    },
     saveChallengeInCollectionsReducer: (
       state,
       action: PayloadAction<{ challenge: Challenge; collectionIds: string[] }>
-    ) => {},
+    ) => {
+      state.userCollections = state.userCollections.map(
+        (collection) =>
+          (collection = action.payload.collectionIds.includes(collection._id)
+            ? {
+                ...collection,
+                challenges: [
+                  action.payload.challenge,
+                  ...collection.challenges,
+                ],
+              }
+            : collection)
+      );
+    },
     updateCollectionReducer: (state, action: PayloadAction<Collection>) => {
       state.userCollections = state.userCollections.map(
         (collection) =>
@@ -108,12 +201,19 @@ export const {
   getCollectionReducer,
   getCollectionsReducer,
   getUserCollectionsReducer,
+
   saveCodeReducer,
+  unsaveCodeReducer,
   saveCodeInCollectionsReducer,
+
   saveStreakReducer,
+  unsaveStreakReducer,
   saveStreakInCollectionsReducer,
+
   saveChallengeReducer,
   saveChallengeInCollectionsReducer,
+  unsaveChallengeReducer,
+
   createCollectionReducer,
   updateCollectionReducer,
   deleteCollectionReducer,
