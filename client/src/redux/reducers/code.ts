@@ -89,6 +89,18 @@ const codeSlice = createSlice({
     getUserCodesReducer: (state, action: PayloadAction<Code[]>) => {
       state.codes = action.payload;
     },
+    getCommentsReducer: (
+      state,
+      action: PayloadAction<{ codeId: string; comments: Comment[] }>
+    ) => {
+      state.codes = state.codes.map(
+        (code) =>
+          (code =
+            code._id == action.payload.codeId
+              ? { ...code, comments: action.payload.comments }
+              : code)
+      );
+    },
     createCodeReducer: (state, action: PayloadAction<Code>) => {
       state.codes = [action.payload, ...state.codes];
     },
@@ -152,12 +164,12 @@ const codeSlice = createSlice({
               : code)
       );
     },
-    commentCodeReducer: (state, action: PayloadAction<Comment>) => { 
+    commentCodeReducer: (state, action: PayloadAction<Comment>) => {
       state.codes = state.codes.map(
         (code) =>
           (code =
             code._id == action.payload.postId
-              ? { ...code, comments: code.comments.concat(action.payload) }
+              ? { ...code, comments: [action.payload, ...code.comments] }
               : code)
       );
     },
@@ -187,4 +199,5 @@ export const {
   likeCodeReducer,
   commentCodeReducer,
   deleteCodeReducer,
+  getCommentsReducer,
 } = codeSlice.actions;

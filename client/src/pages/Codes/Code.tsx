@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MoreVert, ThumbUpOutlined, Share, Comment, Save, CopyAll, Report, Delete, Update, ThumbUp, BookmarkBorderOutlined, Bookmark, CopyAllOutlined } from '@mui/icons-material';
 import { IconButton, Tooltip } from '@mui/material';
 import { image1 } from '../../assets';
@@ -15,6 +15,8 @@ import { RootState } from '../../redux/store';
 import SaveCode from './SaveCode';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import { getComments } from '../../redux/actions/comment';
+import { Loader } from '../../utils/Components';
 
 
 const CodeComponent = ({ code }: { code: Code }) => {
@@ -38,6 +40,19 @@ const CodeComponent = ({ code }: { code: Code }) => {
   const [showComments, setShowComments] = useState(false);
   const [copy, setCopy] = useState(false);
   const [commentContent, setCommentContent] = useState<string>('')
+  const [commentsLoading, setCommentsLoading] = useState<boolean>(false)
+
+  /////////////////////////////////////// USE EFFECTS ////////////////////////////////////////
+  useEffect(() => {
+    if (!showComments) return
+    if (code.comments.length == 0) return
+    const refetch = code.comments.every(comment => typeof comment == 'string')
+    if (refetch) {
+      dispatch<any>(getComments(code?._id!, 'code', setCommentsLoading))
+    }
+  }, [showComments])
+
+
 
   /////////////////////////////////////// FUNCTIONS ////////////////////////////////////////
   const handleLikeCode = () => {
@@ -77,7 +92,10 @@ const CodeComponent = ({ code }: { code: Code }) => {
     }, 3000);
   }
   const handleComment = () => {
+    if (!commentContent) return
     dispatch<any>(commentCode(code?._id!, commentContent, loggedUser!))
+    dispatch<any>(getComments(code?._id!, 'code', setCommentsLoading))
+    setCommentContent('')
   }
 
   /////////////////////////////////////// COMPONENTS ////////////////////////////////////////
@@ -196,7 +214,7 @@ const CodeComponent = ({ code }: { code: Code }) => {
       {/* Comment Section */}
       {
         showComments &&
-        <div className="flex flex-col mt-4">
+        <div className="flex flex-col mt-4 min-h-[8rem] max-h-[16rem] overflow-auto px-1">
           <div className='flex items-center space-x-3 mb-2'>
             <img src={image1} alt="user image" className='w-10 h-10 rounded-full object-cover' />
             <input
@@ -208,23 +226,42 @@ const CodeComponent = ({ code }: { code: Code }) => {
             />
             <button onClick={handleComment} className="p-2 bg-teal-blue-lighten text-white rounded-lg hover:bg-teal-blue">Send</button>
           </div>
-
-          <div className='space-y-2'>
-            {code?.comments?.map((comment, index) => {
-              // Check if the comment is a string or a Comment object
-              const isString = typeof comment === 'string';
-              if (isString) return null
-              return (
-                <div key={index} className="flex items-start space-x-2">
-                  <img src={image1} alt="user image" className='w-8 h-8 rounded-full object-cover' />
-                  <div className='flex flex-col'>
-                    <span className='text-sm font-semibold'>{(comment.user as User).username}</span>
-                    <span className='text-sm'>{comment.content}</span>
-                    <span className='text-xs text-gray-500'>{format(comment?.createdAt!)}</span>
-                  </div>
+          <div className='space-y-2 h-full '>
+            {
+              commentsLoading
+                ?
+                <div className='flex justify-center items-center h-full ' >
+                  <Loader />
                 </div>
-              );
-            })}
+                :
+                <>
+                  {
+                    code.comments.length == 0
+                      ?
+                      <div className="flex justify-center items-center w-full h-full ">
+                        <span className=''>No Comments to Show.</span>
+                      </div>
+                      :
+                      <>
+                        {code?.comments?.map((comment, index) => {
+                          // Check if the comment is a string or a Comment object
+                          const isString = typeof comment === 'string';
+                          if (isString) return null
+                          return (
+                            <div key={index} className="flex items-start space-x-2">
+                              <img src={image1} alt="user image" className='w-8 h-8 rounded-full object-cover' />
+                              <div className='flex flex-col'>
+                                <span className='text-sm font-semibold'>{(comment.user as User).username}</span>
+                                <span className='text-sm'>{comment.content}</span>
+                                <span className='text-xs text-gray-500'>{format(comment?.createdAt!)}</span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </>
+                  }
+                </>
+            }
           </div>
 
         </div>

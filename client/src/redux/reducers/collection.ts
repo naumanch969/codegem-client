@@ -37,6 +37,31 @@ const collectionSlice = createSlice({
     getCollectionReducer: (state, action: PayloadAction<Collection>) => {
       state.currentCollection = action.payload;
     },
+    getCollectionCodesReducer: (state, action: PayloadAction<Code[]>) => {
+      state.currentCollection = {
+        ...state.currentCollection!,
+        codes: action.payload,
+      };
+      console.log({
+        ...state.currentCollection!,
+        codes: action.payload,
+      });
+    },
+    getCollectionStreaksReducer: (state, action: PayloadAction<Streak[]>) => {
+      state.currentCollection = {
+        ...state.currentCollection!,
+        streaks: action.payload,
+      };
+    },
+    getCollectionChallengesReducer: (
+      state,
+      action: PayloadAction<Challenge[]>
+    ) => {
+      state.currentCollection = {
+        ...state.currentCollection!,
+        challenges: action.payload,
+      };
+    },
     getCollectionsReducer: (state, action: PayloadAction<Collection[]>) => {
       state.collections = action.payload;
     },
@@ -45,6 +70,27 @@ const collectionSlice = createSlice({
     },
     createCollectionReducer: (state, action: PayloadAction<Collection>) => {
       state.userCollections = [action.payload, ...state.userCollections];
+    },
+    createCollectionCodeReducer: (state, action: PayloadAction<Code>) => {
+      state.currentCollection = {
+        ...state.currentCollection!,
+        codes: [action.payload, ...state.currentCollection?.codes!],
+      };
+    },
+    createCollectionStreakReducer: (state, action: PayloadAction<Streak>) => {
+      state.currentCollection = {
+        ...state.currentCollection!,
+        streaks: [action.payload, ...state.currentCollection?.streaks!],
+      };
+    },
+    createCollectionChallengeReducer: (
+      state,
+      action: PayloadAction<Challenge>
+    ) => {
+      state.currentCollection = {
+        ...state.currentCollection!,
+        challenges: [action.payload, ...state.currentCollection?.challenges!],
+      };
     },
     saveCodeReducer: (state, action: PayloadAction<{ code: Code }>) => {
       state.userCollections = state.userCollections.map(
@@ -199,6 +245,9 @@ export const {
   end,
   error,
   getCollectionReducer,
+  getCollectionCodesReducer,
+  getCollectionStreaksReducer,
+  getCollectionChallengesReducer,
   getCollectionsReducer,
   getUserCollectionsReducer,
 
@@ -215,6 +264,10 @@ export const {
   unsaveChallengeReducer,
 
   createCollectionReducer,
+  createCollectionCodeReducer,
+  createCollectionStreakReducer,
+  createCollectionChallengeReducer,
+
   updateCollectionReducer,
   deleteCollectionReducer,
 } = collectionSlice.actions;

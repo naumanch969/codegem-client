@@ -14,7 +14,6 @@ export const getCodes = async (req, res, next) => {
       .sort({ createdAt: -1 })
       .populate("user")
       .populate("shares")
-      .populate("comments")
       .exec();
     res.status(200).json(result);
   } catch (error) {

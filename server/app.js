@@ -18,6 +18,7 @@ import collectionRoutes from "./routes/collection.js";
 import settingRoutes from "./routes/setting.js";
 import streakRoutes from "./routes/streak.js";
 import challengeRoutes from "./routes/challenge.js";
+import commentRoutes from "./routes/comment.js";
 
 import { upload } from "./multer.js";
 
@@ -46,6 +47,7 @@ app.use("/setting", settingRoutes);
 app.use("/code", codeRoutes);
 app.use("/streak", streakRoutes);
 app.use("/challenge", challengeRoutes);
+app.use("/comment", commentRoutes);
 
 app.use((err, req, res, next) => {
   const messae = err.messae || "Something went wrong.";

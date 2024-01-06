@@ -26,8 +26,7 @@ export const getProfile = async (req, res, next) => {
       .populate("friends")
       .populate("shares")
       .exec();
-    console.log(user);
-    res.status(200).json(user);
+     res.status(200).json(user);
   } catch (error) {
     next(createError(res, 500, error.message));
   }

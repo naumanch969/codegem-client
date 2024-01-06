@@ -1,19 +1,20 @@
 import React, { ChangeEvent, useState } from 'react';
 import { Cancel, Close, Lock, ArrowDropDown, Clear } from '@mui/icons-material';
 import TextareaAutosize from 'react-textarea-autosize';
-import { Modal } from '@mui/material';
+import { CircularProgress, Modal } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { createCode } from '../../redux/actions/code';
 import { RootState } from '../../redux/store';
-import { Avatar } from '../../utils/Components';
+import { Avatar, Loader } from '../../utils/Components';
 import { Code, User } from '../../interfaces';
 import { image6 } from '../../assets';
 import { useStateContext } from '../../contexts/ContextProvider';
 
-const CreateCode = ({ groupId }: { groupId?: string }) => {
-    const { users, isFetching } = useSelector((state: RootState) => state.user);
+const CreateCode = ({ groupId, open, setOpen, handleSubmit }: { groupId?: string, open: boolean, setOpen: any, handleSubmit?: (data: any) => void }) => {    // handleSubmit is passed through collection create code
+    const { users } = useSelector((state: RootState) => state.user);
+    const { isFetching: isFetching1 } = useSelector((state: RootState) => state.code)   // for original code create
+    const { isFetching: isFetching2 } = useSelector((state: RootState) => state.collection) // for collection code create
     const dispatch = useDispatch();
-    const { showCodeCreateModal, setShowCodeCreateModal } = useStateContext();
 
     const initialCode: Code = {
         title: '',
@@ -35,11 +36,21 @@ const CreateCode = ({ groupId }: { groupId?: string }) => {
     const [showhashTagModal, setShowhashTagModal] = useState(false);
 
     const handleCreate = () => {
+        let { title, description, tags, code, visibility } = codeData;
+        if (!title || !description || !code) return alert('Make sure to provide all the fields')
+        const data = { title, description, tags, code, visibility };
+
+        // FOR COLLECTION CODE CREATE
+        if (handleSubmit) {
+            handleSubmit(data)
+            return
+        }
+
         if (groupId) {
-            dispatch<any>(createCode({ ...codeData, groupId }, setShowCodeCreateModal));
+            dispatch<any>(createCode({ ...codeData, groupId }, setOpen));
         }
         else {
-            dispatch<any>(createCode(codeData, setShowCodeCreateModal));
+            dispatch<any>(createCode(codeData, setOpen));
         }
         setCodeData(initialCode)
     };
@@ -91,12 +102,12 @@ const CreateCode = ({ groupId }: { groupId?: string }) => {
     return (
         <>
 
-            <Modal open={showCodeCreateModal} onClose={() => setShowCodeCreateModal(false)} className='flex justify-center items-center ' >
+            <Modal open={open} onClose={() => setOpen(false)} className='flex justify-center items-center ' >
                 <div className='bg-white w-[50vw] min-h-[20rem] h-fit max-h-[90vh] overflow-y-scroll rounded-[8px] p-[1rem] ' >
 
                     <div className='h-[12%] relative flex justify-center items-center pb-[12px] ' >
                         <h4 className='text-[22px] font-bold text-dark-slate-blue ' >Create Code</h4>
-                        <button onClick={() => setShowCodeCreateModal(false)} className='absolute right-0 w-[2rem] h-[2rem] rounded-full bg-transparent ' ><Close className='text-cool-gray' /></button>
+                        <button onClick={() => setOpen(false)} className='absolute right-0 w-[2rem] h-[2rem] rounded-full bg-transparent ' ><Close className='text-cool-gray' /></button>
                     </div>
 
                     <hr className='h-[2px] w-full py-[12px] text-warm-gray  ' />
@@ -200,8 +211,11 @@ const CreateCode = ({ groupId }: { groupId?: string }) => {
                             <div className='flex flex-col gap-[8px] ' >
                                 {/* code button */}
                                 <div className='flex justify-end ' >
-                                    <button onClick={handleCreate} disabled={!codeData.code} className={` ${!codeData.code ? 'cursor-not-allowed ' : 'cursor-pointer '}  w-[6rem] rounded-[4px] p-[4px] bg-teal-blue text-white font-medium text-[18px] `} >
-                                        {isFetching ? 'Creating...' : 'Create'}
+                                    <button
+                                        onClick={handleCreate}
+                                        disabled={!codeData.code}
+                                        className={` ${!codeData.code ? 'cursor-not-allowed ' : 'cursor-pointer '} flex justify-center items-center w-[6rem] rounded-[4px] p-[4px] bg-teal-blue text-white font-medium text-[18px] `} >
+                                        {(isFetching1 || isFetching2) ? <CircularProgress style={{ width: '28px', height: '28px', color: '#fff' }} /> : 'Create'}
                                     </button>
                                 </div>
                             </div>

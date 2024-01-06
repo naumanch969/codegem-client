@@ -1,12 +1,9 @@
 import React from 'react'
 import { CircularProgress } from '@mui/material'
 
-const Loading = ({ title }: { title: string }) => {
+const Loading = () => {
     return (
-        <div className="w-full h-full flex flex-col justify-center items-center " >
-            <CircularProgress style={{ width: '60px', height: '60px', color: '#751ACF' }} className="text-orange  " />
-            <p className="text-[20px] text-white " >{title ? title : 'Fetching Data...'}</p>
-        </div>
+        <CircularProgress style={{ width: '60px', height: '60px', color: '#751ACF' }} className="text-orange  " />
     )
 }
 export default Loading;

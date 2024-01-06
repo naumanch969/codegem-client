@@ -1,6 +1,13 @@
 import axios from "axios";
 import Cookie from "js-cookie";
-import { Code, Collection, Group, User } from "../../interfaces";
+import {
+  Challenge,
+  Code,
+  Collection,
+  Group,
+  Streak,
+  User,
+} from "../../interfaces";
 import { baseURL } from "../../constant";
 
 // const API = axios.create({ baseURL: process.env.REACT_APP_BASEURL })
@@ -115,8 +122,8 @@ export const saveChallengeInCollections = (
   collections: string[]
 ) => API.put(`/challenge/save-in-collections/${challengeId}`, { collections });
 export const likeChallenge = (id: string) => API.put(`/challenge/like/${id}`);
-export const commentChallenge = (id: string, comment: any) =>
-  API.put(`/challenge/comment/${id}`, comment);
+export const commentChallenge = (id: string, content: string) =>
+  API.put(`/challenge/comment/${id}`, { content });
 export const deleteChallenge = (id: string) =>
   API.delete(`/challenge/delete/${id}`);
 
@@ -142,9 +149,15 @@ export const saveStreakInCollections = (
   collections: string[]
 ) => API.put(`/streak/save-in-collections/${streakId}`, { collections });
 export const likeStreak = (id: string) => API.put(`/streak/like/${id}`);
-export const commentStreak = (id: string, comment: any) =>
-  API.put(`/streak/comment/${id}`, comment);
+export const commentStreak = (id: string, content: any) =>
+  API.put(`/streak/comment/${id}`, { content });
 export const deleteStreak = (id: string) => API.delete(`/streak/delete/${id}`);
+
+// Collections
+export const getComments = (
+  id: string,
+  postType: "code" | "streak" | "challenge"
+) => API.get(`/comment/${id}?postType=${postType}`);
 
 // Collections
 export const getCollections = () => API.get(`/collection/get/all`);
@@ -152,8 +165,24 @@ export const getUserCollections = (userId: string) =>
   API.get(`/collection/get/user/${userId}`);
 export const getCollection = (collectionId: string) =>
   API.get(`/collection/get/single/${collectionId}`);
+export const getCollectionCodes = (collectionId: string) =>
+  API.get(`/collection/get/codes/${collectionId}`);
+export const getCollectionStreaks = (collectionId: string) =>
+  API.get(`/collection/get/streaks/${collectionId}`);
+export const getCollectionChallenges = (collectionId: string) =>
+  API.get(`/collection/get/challenges/${collectionId}`);
 export const createCollection = (collectionData: Collection) =>
   API.post(`/collection/create`, collectionData);
+export const createCollectionCode = (collectionId: string, codeData: Code) =>
+  API.post(`/collection/code/create/${collectionId}`, codeData);
+export const createCollectionStreak = (
+  collectionId: string,
+  streakData: Streak
+) => API.post(`/collection/streak/create/${collectionId}`, streakData);
+export const createCollectionChallenge = (
+  collectionId: string,
+  challengeData: Challenge
+) => API.post(`/collection/challenge/create/${collectionId}`, challengeData);
 export const updateCollection = (
   collectionId: string,
   collectionData: Collection

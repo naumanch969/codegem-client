@@ -15,7 +15,6 @@ const groupSchema = Schema(
     codes: { type: [Schema.Types.ObjectId], ref: "Code", default: [] },
     shares: {
       type: [{ type: Schema.Types.ObjectId, ref: "Share" }],
-      default: null,
     }, // this post is being shared among which people/group
   },
   { timestamps: true }

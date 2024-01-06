@@ -6,7 +6,7 @@ const userSchema = new Schema({
   lastName: { type: String },
   username: { type: String, unique: true },
   email: { type: String, unique: true },
-  phone: { type: Number, default: null, required: false },
+  phone: { type: Number, required: false },
   password: { type: String },
   profilePicture: { type: String },
   coverImage: { type: String },
@@ -22,15 +22,11 @@ const userSchema = new Schema({
   },
   verified: { type: Boolean, default: false },
   receivedShares: {
-    type: [
-      { type: [{ type: Schema.Types.ObjectId, ref: "Share" }], default: null },
-    ],
+    type: [{ type: [{ type: Schema.Types.ObjectId, ref: "Share" }] }],
     default: [],
   },
   sentShares: {
-    type: [
-      { type: [{ type: Schema.Types.ObjectId, ref: "Share" }], default: null },
-    ],
+    type: [{ type: [{ type: Schema.Types.ObjectId, ref: "Share" }] }],
     default: [],
   },
   friends: [{ type: Types.ObjectId, ref: "User" }],

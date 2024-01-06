@@ -70,7 +70,7 @@ export interface Streak {
   tags: { name: string; user: string }[];
   hashTags: string[];
   likes: string[];
-  comments?: (string | Comment)[];
+  comments: (string | Comment)[];
   shares: (string | Share)[]; // if populated, array of Share otherwise of string
   group?: string;
   visibility: string;

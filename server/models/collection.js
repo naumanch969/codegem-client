@@ -6,15 +6,12 @@ const collectionSchema = new Schema(
     description: { type: String, required: false },
     codes: {
       type: [{ type: Schema.Types.ObjectId, ref: "Code" }],
-      default: null,
     },
     challenges: {
       type: [{ type: Schema.Types.ObjectId, ref: "Challenge" }],
-      default: null,
     },
     streaks: {
       type: [{ type: Schema.Types.ObjectId, ref: "Streak" }],
-      default: null,
     },
     owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
     visibility: {
