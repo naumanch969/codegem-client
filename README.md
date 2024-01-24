@@ -24,7 +24,7 @@ Follow these steps to get CodeGem up and running on your local machine:
 
 1. **Clone the Repository:**
    
-`git clone https://github.com/your-username/codegem.git`
+`git clone https://github.com/naumanch969/codegem.git`
 `cd codegem`
 
 
