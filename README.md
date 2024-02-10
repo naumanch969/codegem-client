@@ -18,6 +18,10 @@ CodeGem is an evolving social media platform designed to aid programmers in codi
   - Customize your profile settings to reflect your coding preferences and expertise.
   - Showcase your coding achievements and contributions on your profile.
 
+## Live Link
+
+Check out Codegem in action [here](https://codegem.netlify.app).
+
 ## Getting Started
 
 Follow these steps to get CodeGem up and running on your local machine:
