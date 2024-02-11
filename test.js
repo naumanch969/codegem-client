@@ -1,1 +1,1 @@
-console.log('test updated')
+console.log('test')
