@@ -87,7 +87,6 @@ export const getCollectionStreaks = async (req, res, next) => {
     })
       .populate("streaks")
       .exec();
-    console.log(collection);
     res.status(200).json(collection.streaks);
   } catch (error) {
     next(createError(res, 500, error.message));

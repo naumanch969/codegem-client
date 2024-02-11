@@ -42,10 +42,6 @@ const collectionSlice = createSlice({
         ...state.currentCollection!,
         codes: action.payload,
       };
-      console.log({
-        ...state.currentCollection!,
-        codes: action.payload,
-      });
     },
     getCollectionStreaksReducer: (state, action: PayloadAction<Streak[]>) => {
       state.currentCollection = {

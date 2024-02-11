@@ -18,7 +18,6 @@ const RelatedCollectionSlider = () => {
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
 
     useEffect(() => {
-        console.log('collections', userCollections)
         if (userCollections.length == 0) {
             dispatch<any>(getUserCollections(loggedUser?._id!))
         }
