@@ -1,25 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Check, Delete, Visibility, Clear } from '@mui/icons-material';
 import NotificationCard from './NotificationCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import { Notification as TNotification, User } from '../../interfaces';
+import { deleteNotifications, getNotifications, markAllAsRead } from '../../redux/actions/notification';
 
 const Notification = () => {
-    // Sample notifications
-    const [notifications, setNotifications] = useState([
-        { id: 1, text: 'Your post got 10 likes', timestamp: '5 hours ago', isRead: true },
-        { id: 2, text: 'New message from User123', timestamp: '2 hours ago', isRead: false },
-        { id: 3, text: 'New message from User456', timestamp: '2 hours ago', isRead: false },
-        // Add more sample notifications
-    ]);
 
-  
+    const dispatch = useDispatch()
+    const { notifications }: { notifications: TNotification[] } = useSelector((state: RootState) => state.notification)
+    const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
+
+
+    useEffect(() => {
+        dispatch<any>(getNotifications())
+    }, [])
+
     const handleMarkAllAsRead = () => {
-        setNotifications(prevNotifications =>
-            prevNotifications.map(notification => ({ ...notification, isRead: true }))
-        );
+        dispatch<any>(markAllAsRead(loggedUser?._id!))
     };
 
     const handleDismissAll = () => {
-        setNotifications([]);
+        dispatch<any>(deleteNotifications())
     };
 
     return (

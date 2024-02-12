@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Code, Group, Streak } from "../../interfaces";
+import { Challenge, Code, Group, Streak } from "../../interfaces";
 
 interface InitialState {
   isFetching: boolean;
@@ -43,37 +43,52 @@ const groupSlice = createSlice({
     getUserGroupsReducer: (state, action: PayloadAction<Group[]>) => {
       state.userGroups = action.payload;
     },
+    getGroupCodesReducer: (state, action: PayloadAction<Code[]>) => {
+      state.currentGroup = {
+        ...state.currentGroup!,
+        codes: action.payload,
+      };
+      console.log({
+        ...state.currentGroup!,
+        codes: action.payload,
+      });
+    },
+    getGroupStreaksReducer: (state, action: PayloadAction<Streak[]>) => {
+      state.currentGroup = {
+        ...state.currentGroup!,
+        streaks: action.payload,
+      };
+    },
+    getGroupChallengesReducer: (state, action: PayloadAction<Challenge[]>) => {
+      state.currentGroup = {
+        ...state.currentGroup!,
+        challenges: action.payload,
+      };
+    },
     createGroupReducer: (state, action: PayloadAction<Group>) => {
       state.groups = [action.payload, ...state.groups];
     },
-    createGroupCodeReducer: (
-      state,
-      action: PayloadAction<{ groupId: string; code: Code }>
-    ) => {
-      if (
-        state.currentGroup?._id?.toString() == action.payload.groupId.toString()
-      ) {
-        state.currentGroup = {
-          ...state.currentGroup,
-          codes: [action.payload.code, ...state.currentGroup.codes],
-        };
-      }
-      state.groups = state.groups.map(
-        (group) =>
-          (group =
-            group._id == action.payload.groupId
-              ? { ...group, codes: [action.payload.code, ...group.codes] }
-              : group)
-      );
+    createGroupCodeReducer: (state, action: PayloadAction<Code>) => {
+      state.currentGroup = {
+        ...state.currentGroup!,
+        codes: [action.payload, ...state.currentGroup?.codes!],
+      };
     },
-    createGroupStreakReducer: (
-      state,
-      action: PayloadAction<{ groupId: string; streak: Streak }>
-    ) => {},
+    createGroupStreakReducer: (state, action: PayloadAction<Streak>) => {
+      state.currentGroup = {
+        ...state.currentGroup!,
+        streaks: [action.payload, ...state.currentGroup?.streaks!],
+      };
+    },
     createGroupChallengeReducer: (
       state,
-      action: PayloadAction<{ groupId: string; challenge: Streak }>
-    ) => {},
+      action: PayloadAction<Challenge>
+    ) => {
+      state.currentGroup = {
+        ...state.currentGroup!,
+        challenges: [action.payload, ...state.currentGroup?.challenges!],
+      };
+    },
     updateGroupReducer: (state, action: PayloadAction<Group>) => {
       if (state.currentGroup?._id == action.payload._id) {
         state.currentGroup = action.payload;
@@ -149,6 +164,9 @@ export const {
   getGroupReducer,
   getGroupsReducer,
   getUserGroupsReducer,
+  getGroupCodesReducer,
+  getGroupStreaksReducer,
+  getGroupChallengesReducer,
   createGroupCodeReducer,
   createGroupStreakReducer,
   createGroupChallengeReducer,

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { ChangeEvent, useState } from "react"
 import { ArrowForward, Cancel, Search, ArrowRightAlt } from "@mui/icons-material"
 import { IconButton } from "@mui/material"
 import { Link } from "react-scroll"
@@ -9,7 +9,7 @@ import { RootState } from "../redux/store"
 const Rightbar = () => {
 
     ////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////
-    const { codes } = useSelector((state:RootState) => state.code)
+    const { codes } = useSelector((state: RootState) => state.code)
     const codesPerPage = 10
     const currentPage = 1
     const totalDocs = codes.length
@@ -23,7 +23,7 @@ const Rightbar = () => {
     ////////////////////////////////////////// USE EFFECTS ////////////////////////////////////////////////
 
     ////////////////////////////////////////// FUNCTIONS ///////////////////////////////////////////////////
-    const handleChange = (e) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchInput(e.target.value)
     }
 

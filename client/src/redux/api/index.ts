@@ -187,6 +187,10 @@ export const updateCollection = (
   collectionId: string,
   collectionData: Collection
 ) => API.put(`/collection/update/${collectionId}`, collectionData);
+export const shareCollection = (collectionId: string, friendIds: string[]) =>
+  API.put(`/collection/share/${collectionId}`, { friendIds });
+export const starCollection = (collectionId: string) =>
+  API.put(`/collection/star/${collectionId}`);
 export const deleteCollection = (collectionId: string) =>
   API.delete(`/collection/delete/${collectionId}`);
 
@@ -195,8 +199,22 @@ export const getUserGroups = (userId: string) =>
   API.get(`/group/get/user/${userId}`);
 export const getGroup = (groupId: string) =>
   API.get(`/group/get/single/${groupId}`);
+export const getGroupCodes = (groupId: string) =>
+  API.get(`/group/get/codes/${groupId}`);
+export const getGroupStreaks = (groupId: string) =>
+  API.get(`/group/get/streaks/${groupId}`);
+export const getGroupChallenges = (groupId: string) =>
+  API.get(`/group/get/challenges/${groupId}`);
 export const createGroup = (groupData: Group) =>
   API.post(`/group/create`, groupData);
+export const createGroupCode = (groupid: string, codeData: Code) =>
+  API.post(`/group/code/create/${groupid}`, codeData);
+export const createGroupStreak = (groupId: string, streakData: Streak) =>
+  API.post(`/group/streak/create/${groupId}`, streakData);
+export const createGroupChallenge = (
+  groupId: string,
+  challengeData: Challenge
+) => API.post(`/group/challenge/create/${groupId}`, challengeData);
 export const updateGroup = (groupId: string, groupData: Group) =>
   API.put(`/group/update/${groupId}`, groupData);
 export const joinGroup = (groupId: string) => API.put(`/group/join/${groupId}`);
@@ -204,3 +222,16 @@ export const leaveGroup = (groupId: string) =>
   API.put(`/group/leave/${groupId}`);
 export const deleteGroup = (groupId: string) =>
   API.delete(`/group/delete/${groupId}`);
+
+// NOTIFICATIONS
+export const getNotifications = () => API.get(`/notification/get/all`);
+export const getNotification = (notifiationId: string) =>
+  API.get(`/notification/get/single/${notifiationId}`);
+export const createNotification = (notificationData: Notification) =>
+  API.post(`/notification/create`, notificationData);
+export const markAsRead = (notificationId: string) =>
+  API.post(`/notification/mark_read/${notificationId}`);
+export const markAllAsRead = () => API.post(`/notification/mark_read/all`);
+export const deleteNotification = (notificationId: string) =>
+  API.delete(`/notification/delete/single/${notificationId}`);
+export const deleteNotifications = () => API.delete(`/notification/delete/all`);

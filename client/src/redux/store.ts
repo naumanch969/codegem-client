@@ -10,6 +10,7 @@ import groupReducer from "./reducers/group";
 import generalReducer from "./reducers/general";
 import streakReducer from "./reducers/streak";
 import challengeReducer from "./reducers/challenge";
+import notificationReducer from "./reducers/notification";
 
 const reducer = combineReducers({
   friend: friendReducer,
@@ -20,6 +21,7 @@ const reducer = combineReducers({
   general: generalReducer,
   streak: streakReducer,
   challenge: challengeReducer,
+  notification: notificationReducer,
 });
 
 export const store = configureStore({

@@ -13,6 +13,8 @@ const collectionSchema = new Schema(
     streaks: {
       type: [{ type: Schema.Types.ObjectId, ref: "Streak" }],
     },
+    shares: { type: [{ type: Schema.Types.ObjectId, ref: "Share" }] }, // this collection is being shared among which people/group
+    stars: { type: [{ type: Schema.Types.ObjectId, ref: "User" }] },
     owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
     visibility: {
       type: String,

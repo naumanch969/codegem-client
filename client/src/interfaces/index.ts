@@ -6,8 +6,10 @@ export interface User {
   email: string;
   phone?: number;
   password?: string;
-  profilePicture?: string | { name: string };
-  coverImage?: string | { name: string };
+  // profilePicture?: string | { name: string };
+  profilePicture?: string;
+  // coverImage?: string | { name: string };
+  coverImage?: string;
   bio?: string;
   title?: string;
   socialLinks: {
@@ -83,6 +85,8 @@ export interface Collection {
   description: string;
   codes: Code[];
   streaks: Streak[];
+  shares: (string | Share)[];
+  stars: string[];
   challenges: Challenge[];
   owner: User | string;
   visibility: string;
@@ -99,6 +103,8 @@ export interface Group {
   admin: User | string;
   shares: (string | Share)[]; // if populated, array of Share otherwise of string
   codes: Code[];
+  streaks: Streak[];
+  challenges: Challenge[];
 }
 
 export interface Share {
@@ -117,4 +123,13 @@ export interface Comment {
   user: string | User;
   content: string;
   createdAt?: Date | string;
+}
+
+export interface Notification {
+  _id: string;
+  user: string | User;
+  title: string;
+  description: string;
+  type: "GENERAL" | "POST_CREATE" | "FRIEND_REQUEST";
+  isRead: boolean;
 }

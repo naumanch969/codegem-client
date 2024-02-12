@@ -5,7 +5,7 @@ export const uploadImage = async (req, res, next) => {
   try {
     if (!req.file) return next(createError(res, 400, "No image to upload"));
 
-    const imageUrl = `${process.env.MAIN_URL}/uploads/${req.file.filename}`;
+    const imageUrl = `${process.env.BACKEND_URL}/uploads/${req.file.filename}`;
     res.status(200).json({ result: imageUrl });
   } catch (error) {
     next(createError(res, 500, error.message));

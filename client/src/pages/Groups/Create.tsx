@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from 'react';
-import { Modal } from '@mui/material';
+import { CircularProgress, Modal } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { createGroup } from '../../redux/actions/group';
 import { RootState } from '../../redux/store';
@@ -13,7 +13,7 @@ const CreateGroup = ({ open, setOpen }: { open: boolean, setOpen: any }) => {
     ///////////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////////
     const dispatch = useDispatch();
     const { loggedUser: user, isFetching }: { loggedUser: User | null, isFetching: boolean } = useSelector((state: RootState) => state.user);
- 
+
 
     const initialGroup: Group = {
         name: "",
@@ -23,7 +23,9 @@ const CreateGroup = ({ open, setOpen }: { open: boolean, setOpen: any }) => {
         categories: [],
         members: [],
         codes: [],
-        sharedCodes: [],
+        streaks: [],
+        challenges: [],
+        shares: [],
     }
     // Behind my smile, there is something you can never understand.
 
@@ -140,8 +142,11 @@ const CreateGroup = ({ open, setOpen }: { open: boolean, setOpen: any }) => {
                         <div className='flex flex-col gap-[8px] ' >
                             {/* group button */}
                             <div className='flex justify-end ' >
-                                <button onClick={handleCreate} disabled={!groupData.name} className={` ${!groupData.name ? 'cursor-not-allowed ' : 'cursor-pointer '}  w-[6rem] rounded-[4px] p-[4px] bg-teal-blue text-white font-medium text-[18px] `} >
-                                    {isFetching ? 'Creating...' : 'Create'}
+                                <button
+                                    onClick={handleCreate}
+                                    disabled={!groupData.name}
+                                    className={` ${!groupData.name ? 'cursor-not-allowed ' : 'cursor-pointer '} flex justify-center items-center w-[6rem] rounded-[4px] p-[4px] bg-teal-blue text-white font-medium text-[18px] `} >
+                                    {isFetching ? <CircularProgress style={{ width: '28px', height: '28px', color: '#fff' }} /> : 'Create'}
                                 </button>
                             </div>
                         </div>

@@ -15,9 +15,77 @@ const Sidebar = () => {
     //////////////////////////////// VARIABLES //////////////////////////////////////
     const location = useLocation()
     const { showSidebar, setShowSidebar } = useStateContext()
-
+    const { pathname } = useLocation()
+    const sidebarLinks = [
+        {
+            name: 'Home',
+            iconFilled: Home,
+            iconOutlined: HomeOutlined,
+            active: pathname.includes('/home') || pathname == '/'
+        },
+        {
+            name: 'Streaks',
+            iconFilled: Home,
+            iconOutlined: HomeOutlined,
+            active: pathname.includes('/streaks')
+        },
+        {
+            name: 'Codes',
+            iconFilled: Code,
+            iconOutlined: CodeOutlined,
+            active: pathname.includes('/codes')
+        },
+        {
+            name: 'Challenges',
+            iconFilled: FormatAlignCenterSharp,
+            iconOutlined: HomeOutlined,
+            active: pathname.includes('/challenges')
+        },
+        {
+            name: 'Friends',
+            iconFilled: Person,
+            iconOutlined: PersonOutlined,
+            active: pathname.includes('/friends')
+        },
+        {
+            name: 'Groups',
+            iconFilled: Group,
+            iconOutlined: GroupOutlined,
+            active: pathname.includes('/groups')
+        },
+        {
+            name: 'Collections',
+            iconFilled: CollectionsBookmark,
+            iconOutlined: CollectionsBookmarkOutlined,
+            active: pathname.includes('/collections')
+        },
+        {
+            name: 'Notifications',
+            iconFilled: NotificationsNone,
+            iconOutlined: NotificationsNoneOutlined,
+            active: pathname.includes('/notifications')
+        },
+        {
+            name: 'Create',
+            iconFilled: AddBox,
+            iconOutlined: AddBoxOutlined,
+            active: pathname.includes('/create')
+        },
+        {
+            name: 'Profile',
+            iconFilled: AccountCircle,
+            iconOutlined: AccountCircleOutlined,
+            active: pathname.includes('/profile')
+        },
+        {
+            name: 'More',
+            iconFilled: DensityMedium,
+            iconOutlined: DensityMediumOutlined,
+            active: pathname.includes('/more')
+        },
+    ]
     //////////////////////////////// STATES /////////////////////////////////////////
-    const [route, setRoute] = useState(location.pathname.split('/'))
+
     //////////////////////////////// USE EFFECTS ////////////////////////////////////
 
 
@@ -34,17 +102,18 @@ const Sidebar = () => {
                                 <Link
                                     key={index}
                                     to={`/${lowercase(item.name)}`}
-                                    onClick={() => setRoute(['', lowercase(item.name)!])}
-                                    className={`${route[1] == lowercase(item.name) && 'font-extrabold bg-dark-slate-blue-lighten text-teal-blue '} hover:bg-dark-slate-blue-lighten hover:text-white flex gap-[12px] py-[10px] px-[6px] w-full capitalize rounded-[4px] cursor-pointer `}
+                                    className={`${item.active && 'font-extrabold bg-dark-slate-blue-lighten text-teal-blue '} hover:bg-dark-slate-blue-lighten group hover:text-white flex gap-[12px] py-[10px] px-[6px] w-full capitalize rounded-[4px] cursor-pointer `}
                                 >
                                     {
-                                        route[1] == lowercase(item.name)
+                                        item.active
                                             ?
                                             <item.iconFilled className='' />
                                             :
                                             <item.iconOutlined className='' />
                                     }
-                                    <span className={`${route[1] == lowercase(item.name) && 'font-bold bg-dark-slate-blue-lighten text-teal-blue '} hover:bg-dark-slate-blue-lighten hover:text-white  text-[18px] font-medium `} >{item.name}</span>
+                                    <span className={`${item.active && 'font-bold bg-dark-slate-blue-lighten text-teal-blue '} hover:bg-dark-slate-blue-lighten group-hover:text-white  text-[18px] font-medium `} >
+                                        {item.name}
+                                    </span>
                                 </Link>))
                         }
                     </div>
@@ -58,17 +127,16 @@ const Sidebar = () => {
                                 >
                                     <Link
                                         to={`/${lowercase(item.name)!.split('/')}`}
-                                        onClick={() => setRoute(['', lowercase(item.name)!])}
                                         className={`py-[4px] px-[6px] w-full rounded-[4px]   cursor-pointer flex justify-center items-center `}
                                     >
                                         {
-                                            route[2] == lowercase(item.name)
+                                            item.active
                                                 ?
-                                                <button className={`${route[2] == lowercase(item.name) && 'font-extrabold bg-dark-slate-blue-lighten text-teal-blue '} hover:bg-dark-slate-blue-lighten hover:text-white w-[40px] h-[40px] rounded-full `} >
+                                                <button className={`${item.active && 'font-extrabold bg-dark-slate-blue-lighten text-teal-blue '} hover:bg-dark-slate-blue-lighten hover:text-white w-[40px] h-[40px] rounded-full `} >
                                                     <item.iconFilled className={``} />
                                                 </button>
                                                 :
-                                                <button className={`${route[2] == lowercase(item.name) && 'font-extrabold bg-dark-slate-blue-lighten text-teal-blue '} hover:bg-dark-slate-blue-lighten hover:text-white w-[40px] h-[40px] rounded-full `} >
+                                                <button className={`${item.active && 'font-extrabold bg-dark-slate-blue-lighten text-teal-blue '} hover:bg-dark-slate-blue-lighten hover:text-white w-[40px] h-[40px] rounded-full `} >
                                                     <item.iconOutlined className={``} />
                                                 </button>
                                         }
@@ -85,60 +153,3 @@ export default Sidebar
 
 
 
-const sidebarLinks = [
-    {
-        name: 'Home',
-        iconFilled: Home,
-        iconOutlined: HomeOutlined
-    },
-    {
-        name: 'Streaks',
-        iconFilled: Home,
-        iconOutlined: HomeOutlined
-    },
-    {
-        name: 'Codes',
-        iconFilled: Code,
-        iconOutlined: CodeOutlined
-    },
-    {
-        name: 'Challenges',
-        iconFilled: FormatAlignCenterSharp,
-        iconOutlined: HomeOutlined
-    },
-    {
-        name: 'Friends',
-        iconFilled: Person,
-        iconOutlined: PersonOutlined
-    },
-    {
-        name: 'Groups',
-        iconFilled: Group,
-        iconOutlined: GroupOutlined
-    },
-    {
-        name: 'Collections',
-        iconFilled: CollectionsBookmark,
-        iconOutlined: CollectionsBookmarkOutlined
-    },
-    {
-        name: 'Notifications',
-        iconFilled: NotificationsNone,
-        iconOutlined: NotificationsNoneOutlined
-    },
-    {
-        name: 'Create',
-        iconFilled: AddBox,
-        iconOutlined: AddBoxOutlined
-    },
-    {
-        name: 'Profile',
-        iconFilled: AccountCircle,
-        iconOutlined: AccountCircleOutlined
-    },
-    {
-        name: 'More',
-        iconFilled: DensityMedium,
-        iconOutlined: DensityMediumOutlined
-    },
-]

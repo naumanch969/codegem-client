@@ -20,12 +20,11 @@ import streakRoutes from "./routes/streak.js";
 import challengeRoutes from "./routes/challenge.js";
 import commentRoutes from "./routes/comment.js";
 
-import { upload } from "./multer.js";
-
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
 const CONNECTION_URL = process.env.ATLAS_URL;
+// const CONNECTION_URL = process.env.COMPASS_URL;
 
 app.use(cors());
 app.use(express.json());

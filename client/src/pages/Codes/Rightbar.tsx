@@ -66,11 +66,18 @@ const RightSidebar = () => {
 
     return (
         <div className="flex flex-col gap-4 w-full">
-            {/* Create */}
-            <div className="bg-white p-4 rounded-lg shadow-md w-full flex flex-col gap-2 ">
-                <button className='w-full rounded-lg py-2 text-center border border-teal-blue text-teal-blue ' >Create Code</button>
-                <button className='w-full rounded-lg py-2 text-center border border-teal-blue text-teal-blue ' >Create Streak</button>
-                <button className='w-full rounded-lg py-2 text-center border border-teal-blue text-teal-blue ' >Create Challenge</button>
+
+            {/* Trending */}
+            <div className="bg-white p-4 rounded-lg shadow-md w-full ">
+                <h2 className="text-lg font-semibold mb-2 text-dark-slate-blue">
+                    Trending
+                </h2>
+                <ul>
+                    <li className="text-cool-gray mb-2">Trend#1</li>
+                    <li className="text-cool-gray mb-2">Trend#2</li>
+                    <li className="text-cool-gray mb-2">Trend#3</li>
+                    <li className="text-cool-gray mb-2">Trend#4</li>
+                </ul>
             </div>
 
             {/* Suggested to You */}
@@ -81,21 +88,6 @@ const RightSidebar = () => {
                 <ul>
                     {suggestedUsers.slice(0, 4).map((friend, index) => (
                         <Friend friend={friend} key={index} />
-                    ))}
-                </ul>
-            </div>
-
-            {/* Latest Activities */}
-            <div className="bg-white p-4 rounded-lg shadow-md w-full ">
-                <h2 className="text-lg font-semibold mb-2 text-dark-slate-blue">
-                    Latest Activities
-                </h2>
-                <ul>
-                    {latestActivities.map((activity) => (
-                        <li key={activity.id} className="text-cool-gray mb-2">
-                            <Update className="text-cool-gray mr-2" />
-                            {activity.activityText}
-                        </li>
                     ))}
                 </ul>
             </div>

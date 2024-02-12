@@ -1,2 +1,58 @@
 TODO: MESSAGE SYSTEM
-COLLECTION LIKE FAVORITE
+TODO: ADD CICCULAR_LOADING TO ALL ASYNCHRNOUS BUTTONS
+
+TODO: ADD NOTIFICTAIONS TO EACH PROCESS, POST CREATE, FRIEND REQUEST ETC
+TODO: UPDATE THE DESIGN OF GROUP TO MAKE IT MORE CONJUSTED
+TODO: ENABLE THE SETTINGS
+TODO: CREATE HOME PAGE
+TOOD: Certainly! Here's a more detailed list of actions that can trigger notifications in a social media application:
+
+1. **User Account Related:**
+   - Registration successful: "Welcome to [App Name]!"
+   - Password change confirmation: "Your password has been changed successfully."
+
+2. **Post Interactions:**
+   - New post created: "New Post: [Post Title]."
+   - Post liked: "[User] liked your post: [Post Title]."
+   - Post commented: "[User] commented on your post: [Post Title]."
+   - Post shared: "[User] shared your post: [Post Title]."
+
+3. **Friendship and Connections:**
+   - Friend request sent: "[User] sent you a friend request."
+   - Friend request accepted: "[User] accepted your friend request."
+   - Friend request declined: "[User] declined your friend request."
+
+4. **Messaging:**
+   - New message received: "New message from [User]."
+   - Message read receipt: "[User] has read your message."
+
+5. **Mentions and Tags:**
+   - Mentioned in a post or comment: "[User] mentioned you in a post/comment."
+   - Tagged in a photo or post: "[User] tagged you in a [Photo/Post]."
+
+6. **Events:**
+   - Event invitation: "[User] invited you to [Event Name]."
+   - Event RSVP update: "[User] has [RSVP'd/Not RSVP'd] to your event."
+
+7. **Profile Interactions:**
+   - New follower: "[User] is now following you."
+   - Profile picture liked: "[User] liked your profile picture."
+
+8. **Achievements:**
+   - Reached X followers: "Congratulations! You now have [X] followers."
+   - Milestone reached: "You've reached a new milestone!"
+
+9. **System Announcements:**
+   - Important announcements: "[App Name] has an important announcement."
+
+10. **Activity Reminders:**
+    - Pending friend requests: "You have pending friend requests."
+    - Unread messages: "You have unread messages."
+
+11. **Trending Topics:**
+    - Trending post or topic: "[Post/Topic] is trending in your network."
+
+12. **Notification Preferences:**
+    - Remind users to update notification preferences: "Customize your notification preferences in settings."
+
+Make sure to adapt these notifications to fit the tone and style of your social media platform. Additionally, consider implementing notification grouping and smart scheduling to prevent overwhelming users with too many notifications at once.

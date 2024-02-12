@@ -231,6 +231,34 @@ const collectionSlice = createSlice({
             collection._id == action.payload._id ? action.payload : collection)
       );
     },
+    shareCollectionReducer: (
+      state,
+      action: PayloadAction<{ collection: Collection; friendIds: string[] }>
+    ) => {
+      state.collections = state.collections.map(
+        (c) =>
+          (c =
+            c._id == action.payload.collection._id
+              ? {
+                  ...c,
+                  shares: [...c.shares, ...action.payload.friendIds],
+                }
+              : c)
+      );
+    },
+    starCollectionReducer: (
+      state,
+      action: PayloadAction<{ collectionId: string; loggedUserId: string }>
+    ) => {
+      // TODO: also update userCollections - may be
+      const codeId = action.payload.collectionId;
+      state.currentCollection = {
+        ...state.currentCollection!,
+        stars: state.currentCollection!.stars.includes(action.payload.loggedUserId)
+          ? state.currentCollection!.stars.filter((l) => l != action.payload.loggedUserId)
+          : state.currentCollection!.stars.concat(action.payload.loggedUserId),
+      }
+    },
     deleteCollectionReducer: (state, action: PayloadAction<Collection>) => {
       state.userCollections = state.userCollections.filter(
         (collection) => collection._id != action.payload._id
@@ -269,5 +297,7 @@ export const {
   createCollectionChallengeReducer,
 
   updateCollectionReducer,
+  shareCollectionReducer,
+  starCollectionReducer,
   deleteCollectionReducer,
 } = collectionSlice.actions;

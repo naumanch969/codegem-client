@@ -1,4 +1,6 @@
 import Collection from "../models/collection.js";
+import User from "../models/user.js";
+import Share from "../models/submodels/share.js";
 import Streak from "../models/streak.js";
 import Challenge from "../models/challenge.js";
 import Code from "../models/code.js";
@@ -72,7 +74,7 @@ export const getCollectionCodes = async (req, res, next) => {
       .populate("codes")
       .exec();
 
-    res.status(200).json(collection.codes);
+    res.status(200).json(collection?.codes || []);
   } catch (error) {
     next(createError(res, 500, error.message));
   }
@@ -88,7 +90,7 @@ export const getCollectionStreaks = async (req, res, next) => {
       .populate("streaks")
       .exec();
     console.log(collection);
-    res.status(200).json(collection.streaks);
+    res.status(200).json(collection?.streaks || []);
   } catch (error) {
     next(createError(res, 500, error.message));
   }
@@ -104,7 +106,7 @@ export const getCollectionChallenges = async (req, res, next) => {
       .populate("challenges")
       .exec();
 
-    res.status(200).json(collection.challenges);
+    res.status(200).json(collection?.challenges || []);
   } catch (error) {
     next(createError(res, 500, error.message));
   }
@@ -211,6 +213,106 @@ export const updateCollections = async (req, res, next) => {
       { new: true }
     );
     res.status(200).json(collections);
+  } catch (error) {
+    next(createError(res, 500, error.message));
+  }
+};
+
+export const shareCollection = async (req, res, next) => {
+  try {
+    const { collectionId } = req.params;
+
+    let { friendIds } = req.body; // ids of users
+
+    // Validate that friendIds is an array of valid user IDs
+    if (
+      !Array.isArray(friendIds) ||
+      friendIds.some((userId) => typeof userId !== "string")
+    ) {
+      return res.status(400).json({ error: "Invalid friendIds format" });
+    }
+    let collection = await Collection.findById(collectionId);
+    if (!collection) {
+      return res.status(404).json({ error: "Collection not found" });
+    }
+
+    const shares = await Promise.all(
+      friendIds.map(async (id) => {
+        const shareObj = await Share.create({
+          from: req.user._id,
+          to: id,
+          post: collectionId,
+          postType: "collection",
+          sharedTo: "friend", // friend/group
+        });
+        return shareObj._id;
+      })
+    );
+
+    ////// sharing includes updating sender, receiver and the post being shared //////
+    // updating code, adding user to shares array
+    await Promise.all(
+      shares.map(async (shareId) => {
+        await Collection.findByIdAndUpdate(
+          collectionId,
+          { $push: { shares: shareId } },
+          { new: true }
+        );
+      })
+    );
+
+    // updating each friend, adding shares to receiver
+    await Promise.all(
+      shares.map(async (shareId, index) => {
+        await User.findByIdAndUpdate(
+          friendIds[index],
+          { $addToSet: { receivedShares: shareId } },
+          { new: true }
+        );
+      })
+    );
+
+    // updating current user, adding shares to sender
+    await Promise.all(
+      shares.map(async (shareId) => {
+        await User.findByIdAndUpdate(
+          req.user._id,
+          { $addToSet: { sentShares: shareId } },
+          { new: true }
+        );
+      })
+    );
+
+    res.status(200).json({ message: "Collection shared successfully." });
+  } catch (error) {
+    next(createError(res, 500, error.message));
+  }
+};
+export const starCollection = async (req, res, next) => {
+  try {
+    const { collectionId } = req.params;
+
+    const collection = await Collection.findById(collectionId);
+    if (!collection)
+      return next(createError(res, 403, "Collection not exist."));
+
+    const userHasStared = collection.stars.includes(req.user?._id);
+
+    if (userHasStared) {
+      await Collection.findByIdAndUpdate(
+        collectionId,
+        { $pull: { stars: req.user?._id } },
+        { new: true }
+      );
+      res.status(200).json({ message: "Removed star successfully" });
+    } else {
+      await Collection.findByIdAndUpdate(
+        collectionId,
+        { $addToSet: { stars: req.user?._id } },
+        { new: true }
+      );
+      res.status(200).json({ message: "Stared successfully" });
+    }
   } catch (error) {
     next(createError(res, 500, error.message));
   }

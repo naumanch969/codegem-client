@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { Modal } from '@mui/material';
+import { CircularProgress, Modal } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { createGroup, updateGroup } from '../../redux/actions/group';
 import { RootState } from '../../redux/store';
@@ -8,12 +8,12 @@ import { Avatar } from '../../utils/Components';
 import { image6 } from '../../assets';
 import { Group, User } from '../../interfaces';
 
-const CreateGroup = ({ open, setOpen }: { open: boolean, setOpen: any }) => {
+const UpdateGroup = ({ open, setOpen }: { open: boolean, setOpen: any }) => {
 
     ///////////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////////
     const dispatch = useDispatch();
-    const { loggedUser: user, isFetching }: { loggedUser: User | null, isFetching: boolean } = useSelector((state: RootState) => state.user);
-    const { currentGroup }: { currentGroup: Group | null } = useSelector((state: RootState) => state.group);
+    const { loggedUser: user }: { loggedUser: User | null } = useSelector((state: RootState) => state.user);
+    const { currentGroup, isFetching }: { currentGroup: Group | null, isFetching: boolean } = useSelector((state: RootState) => state.group);
 
     const initialGroup: Group = {
         name: "",
@@ -23,7 +23,9 @@ const CreateGroup = ({ open, setOpen }: { open: boolean, setOpen: any }) => {
         categories: [],
         members: [],
         codes: [],
-        sharedCodes: [],
+        streaks: [],
+        challenges: [],
+        shares: [],
     }
     // Behind my smile, there is something you can never understand.
 
@@ -49,7 +51,7 @@ const CreateGroup = ({ open, setOpen }: { open: boolean, setOpen: any }) => {
     };
 
     const handleFilterHashTag = (techToDelete: string) => {
-        setGroupData({ ...groupData, categories: groupData?.categories.filter((t) => t !== techToDelete) });
+        setGroupData({ ...groupData, categories: groupData?.categories?.filter((t) => t !== techToDelete) });
     };
 
     const handleAddHashTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -124,7 +126,7 @@ const CreateGroup = ({ open, setOpen }: { open: boolean, setOpen: any }) => {
                             </div>
                             <div className="flex flex-col gap-2 ">
                                 <label htmlFor="categories" className='flex-[1] text-cool-gray ' >Categories<span className='text-[18px] text-teal-blue-darken ' >*</span> :</label>
-                                <div className={`${groupData?.categories.length && 'py-[8px] '} min-h-[54px] max-h-[12rem] overflow-y-scroll px-[8px] flex flex-wrap gap-[8px] w-full bg-light-gray text-cool-gray border-[1px] border-cool-gray rounded-[4px] `} >
+                                <div className={`${groupData?.categories?.length && 'py-[8px] '} min-h-[54px] max-h-[12rem] overflow-y-scroll px-[8px] flex flex-wrap gap-[8px] w-full bg-light-gray text-cool-gray border-[1px] border-cool-gray rounded-[4px] `} >
                                     <input
                                         className="border-none resize-none h-[40px] py-[8px] bg-inherit outline-none text-[14px] text-cool-gray w-full rounded-[4px] "
                                         placeholder="Technologies - separated by enter"
@@ -133,7 +135,7 @@ const CreateGroup = ({ open, setOpen }: { open: boolean, setOpen: any }) => {
                                         onKeyDown={handleAddHashTag}
                                     />
                                     {
-                                        groupData?.categories.map((category, index) => (
+                                        groupData?.categories?.map((category, index) => (
                                             <Category title={category} key={index} />
                                         ))
                                     }
@@ -145,8 +147,11 @@ const CreateGroup = ({ open, setOpen }: { open: boolean, setOpen: any }) => {
                         <div className='flex flex-col gap-[8px] ' >
                             {/* group button */}
                             <div className='flex justify-end ' >
-                                <button onClick={handleUpdate} disabled={!groupData?.name} className={` ${!groupData?.name ? 'cursor-not-allowed ' : 'cursor-pointer '}  w-[6rem] rounded-[4px] p-[4px] bg-teal-blue text-white font-medium text-[18px] `} >
-                                    {isFetching ? 'Updating...' : 'Update'}
+                                <button
+                                    onClick={handleUpdate}
+                                    disabled={!groupData?.name}
+                                    className={` ${!groupData?.name ? 'cursor-not-allowed ' : 'cursor-pointer '} flex justify-center items-center w-[6rem] rounded-[4px] p-[4px] bg-teal-blue text-white font-medium text-[18px] `} >
+                                    {isFetching ? <CircularProgress style={{ width: '28px', height: '28px', color: '#fff' }} /> : 'Update'}
                                 </button>
                             </div>
                         </div>
@@ -159,4 +164,4 @@ const CreateGroup = ({ open, setOpen }: { open: boolean, setOpen: any }) => {
     );
 };
 
-export default CreateGroup;
+export default UpdateGroup;

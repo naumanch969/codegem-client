@@ -1,20 +1,21 @@
 import { Visibility } from '@mui/icons-material';
 import React from 'react'
+import { Notification } from '../../interfaces';
+import { useDispatch } from 'react-redux';
+import { deleteNotification, markAsRead } from '../../redux/actions/notification';
 
-const NotificationCard = ({ notification }) => {
+const NotificationCard = ({ notification }: { notification: Notification }) => {
 
-    const handleMarkAsRead = (id) => {
-        setNotifications(prevNotifications =>
-            prevNotifications.map(notification =>
-                notification.id === id ? { ...notification, isRead: true } : notification
-            )
-        );
+
+    const dispatch = useDispatch()
+
+    const handleMarkAsRead = () => {
+        dispatch<any>(markAsRead(notification._id))
+
     };
 
-    const handleDeleteNotification = (id) => {
-        setNotifications(prevNotifications =>
-            prevNotifications.filter(notification => notification.id !== id)
-        );
+    const handleDeleteNotification = () => {
+        dispatch<any>(deleteNotification(notification._id))
     };
 
 
@@ -25,18 +26,18 @@ const NotificationCard = ({ notification }) => {
         >
             <p className={`text-lg font-semibold ${notification.isRead ? 'text-gray-800' : 'text-teal-blue'
                 } mb-3`}>
-                {notification.text}
+                {notification.title}
             </p>
             <p className={`text-gray-500 ${notification.isRead ? 'text-gray-600' : 'text-teal-blue'
                 } mb-3`}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac dolor vitae risus cursus vestibulum.
+                {notification.description}
             </p>
             <div className="flex justify-between items-center">
-                <button onClick={() => handleDeleteNotification(notification.id)} className="text-red-500 hover:text-red-700">
+                <button onClick={handleDeleteNotification} className="text-red-500 hover:text-red-700">
                     Delete
                 </button>
                 {!notification.isRead && (
-                    <button onClick={() => handleMarkAsRead(notification.id)} className="text-teal-blue hover:text-teal-blue-dark">
+                    <button onClick={handleMarkAsRead} className="text-teal-blue hover:text-teal-blue-dark">
                         Mark as Read
                     </button>
                 )}

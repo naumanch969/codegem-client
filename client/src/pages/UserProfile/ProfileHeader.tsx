@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { ArrowDownward } from '@mui/icons-material';
 import { User } from '../../interfaces';
 import { RootState } from '../../redux/store';
+import { SampleProfileCoverImage, image4 } from '../../assets';
 
 const ProfilePage = () => {
 
@@ -11,7 +12,7 @@ const ProfilePage = () => {
     return (
         <div className="flex flex-col w-full">
             <div className="w-full h-[20rem] rounded-[6px] overflow-hidden " >
-                <img src="https://via.placeholder.com/50" alt="" className="w-full h-full" />
+                <img src={SampleProfileCoverImage} alt="" className="w-full h-full" />
             </div>
             <div className="flex justify-between items-center gap-4 my-[1rem] px-[2rem]">
                 {/* Profile image and username */}
@@ -19,7 +20,7 @@ const ProfilePage = () => {
                     <div className="relative w-[10rem]">
                         <div className="w-[10rem] h-[10rem] absolute bottom-[-1rem] rounded-full border-[1px] border-gray-500">
                             <img
-                                src={currentUser?.profilePicture ? currentUser?.profilePicture : "https://via.placeholder.com/50"}
+                                src={currentUser?.profilePicture ? currentUser?.profilePicture : image4}
                                 className="w-full h-full object-cover rounded-full"
                                 alt="Profile"
                             />

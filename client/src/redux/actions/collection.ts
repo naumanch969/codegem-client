@@ -13,11 +13,13 @@ import {
   createCollectionChallengeReducer,
   createCollectionReducer,
   createCollectionCodeReducer,
+  shareCollectionReducer,
   updateCollectionReducer,
   deleteCollectionReducer,
+  starCollectionReducer,
 } from "../reducers/collection";
 import * as api from "../api";
-import { Challenge, Code, Streak } from "../../interfaces";
+import { Challenge, Code, Collection, Streak } from "../../interfaces";
 
 export const getCollection =
   (collectionId: string) => async (dispatch: Dispatch) => {
@@ -188,7 +190,45 @@ export const updateCollection =
         : dispatch(error(err.message));
     }
   };
-
+export const shareCollection =
+  (collection: Collection, friendIds: string[], setOpen: any) =>
+  async (dispatch: Dispatch) => {
+    try {
+      dispatch(shareCollectionReducer({ collection, friendIds }));
+      await api.shareCollection(collection._id as string, friendIds);
+    } catch (err: any) {
+      err.response?.data?.message
+        ? dispatch(error(err.response.data.message))
+        : dispatch(error(err.message));
+    } finally {
+      setOpen(false);
+    }
+  };
+export const starCollection =
+  (collectionId: string, loggedUserId: string) =>
+  async (dispatch: Dispatch) => {
+    try {
+      dispatch(starCollectionReducer({ collectionId, loggedUserId }));
+      await api.starCollection(collectionId as string);
+    } catch (err: any) {
+      err.response?.data?.message
+        ? dispatch(error(err.response.data.message))
+        : dispatch(error(err.message));
+    }
+  };
+export const shareCollectionInGroups =
+  (code: Collection, groupIds: string[], loggedUserId: string, setOpen: any) =>
+  async (dispatch: Dispatch) => {
+    // try {
+    //   dispatch(shareCollectionInGroupsReducer({ code, groupIds }));
+    //   await api.shareCodeInGroups(code._id as string, groupIds);
+    //   setOpen(false);
+    // } catch (err: any) {
+    //   err.response?.data?.message
+    //     ? dispatch(error(err.response.data.message))
+    //     : dispatch(error(err.message));
+    // }
+  };
 export const deleteCollection =
   (collectionId: string) => async (dispatch: Dispatch) => {
     try {

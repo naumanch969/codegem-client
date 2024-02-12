@@ -1,4 +1,5 @@
 import Share from "../models/submodels/share.js";
+import Notification from "../models/notification.js";
 import Comment from "../models/submodels/comment.js";
 import Code from "../models/code.js";
 import Challenge from "../models/challenge.js";
@@ -6,7 +7,11 @@ import Streak from "../models/streak.js";
 import Group from "../models/group.js";
 import User from "../models/user.js";
 import Collection from "../models/collection.js";
-import { createError, isUndefined } from "../utils/functions.js";
+import {
+  createError,
+  createNotification,
+  isUndefined,
+} from "../utils/functions.js";
 
 export const getCodes = async (req, res, next) => {
   try {
@@ -62,6 +67,7 @@ export const createCode = async (req, res, next) => {
       );
 
     const userId = req.user._id;
+    const findedUser = await User.findById(req.user._id);
 
     var result;
     if (groupId) {
@@ -72,10 +78,26 @@ export const createCode = async (req, res, next) => {
         groups: groupId ? [groupId] : [],
         ...rest,
       });
-      await Group.findByIdAndUpdate(
+      const group = await Group.findByIdAndUpdate(
         groupId,
         { $addToSet: { codes: result._id } },
         { new: true }
+      );
+      // Notifiying user who created the post
+      await Notification.create({
+        title: `New Post: ${title}`,
+        description: `You just created a code post in group: ${group.name}`,
+        user: req.user._id,
+      });
+      // Notifying group members
+      await Promise.all(
+        group.members.map(async (memberId) => {
+          await Notification.create({
+            title: `New Post: ${title}`,
+            description: `${findedUser.name} has just created a new post: ${title}. Check it out and give your thought!`,
+            user: memberId,
+          });
+        })
       );
     } else {
       result = await Code.create({
@@ -85,6 +107,22 @@ export const createCode = async (req, res, next) => {
         groups: groupId ? [groupId] : [],
         ...rest,
       });
+      // Notifying user who created the post
+      await Notification.create({
+        title: "New Code",
+        description: "Your post has been created successfully.",
+        user: req.user._id,
+      });
+      // Notifying friends
+      await Promise.all(
+        findedUser.friends.map(async (friendId) => {
+          await Notification.create({
+            title: `New Post: ${title}`,
+            description: `${findedUser.name} has just created a new post: ${title}. Check it out and give your thought!`,
+            user: friendId,
+          });
+        })
+      );
     }
 
     res.status(200).json(result);
@@ -102,6 +140,8 @@ export const updateCode = async (req, res, next) => {
       { $set: req.body },
       { new: true }
     );
+
+    await createNotification("Code Update", "You updated your post.");
 
     res.status(200).json(result);
   } catch (error) {

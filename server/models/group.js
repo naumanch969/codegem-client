@@ -13,6 +13,8 @@ const groupSchema = Schema(
     categories: { type: [String], default: [] },
     admin: { type: Schema.Types.ObjectId, ref: "User", required: true },
     codes: { type: [Schema.Types.ObjectId], ref: "Code", default: [] },
+    challenges: { type: [Schema.Types.ObjectId], ref: "Challenge", default: [] },
+    streaks: { type: [Schema.Types.ObjectId], ref: "Streak", default: [] },
     shares: {
       type: [{ type: Schema.Types.ObjectId, ref: "Share" }],
     }, // this post is being shared among which people/group

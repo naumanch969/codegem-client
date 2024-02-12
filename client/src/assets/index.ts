@@ -13,5 +13,6 @@ export { default as Facebook } from "./facebook.png"
 export { default as Twitter } from "./twitter.png"
 export { default as Whatsapp } from "./whatsapp.png"
 export { default as Linkedin } from "./linkedin.png"
+export { default as SampleProfileCoverImage } from "./sample_cover_image.jpg"
 
 export { default as logo } from "./logo.png"
