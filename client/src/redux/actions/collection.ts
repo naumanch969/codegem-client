@@ -107,16 +107,12 @@ export const getCollections = () => async (dispatch: Dispatch) => {
 };
 
 export const createCollection =
-  (
-    collectionData: any,
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  ) =>
-  async (dispatch: Dispatch) => {
+  (collectionData: any, onClose: () => void) => async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       const { data } = await api.createCollection(collectionData);
       dispatch(createCollectionReducer(data));
-      setOpen(false);
+      onClose();
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
@@ -172,17 +168,13 @@ export const createCollectionChallenge =
   };
 
 export const updateCollection =
-  (
-    collectionId: string,
-    collectionData: any,
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  ) =>
+  (collectionId: string, collectionData: any, onClose: () => void) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       const { data } = await api.updateCollection(collectionId, collectionData);
       dispatch(updateCollectionReducer(data));
-      setOpen(false);
+      onClose();
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message

@@ -44,7 +44,7 @@ const RightSidebar = () => {
                     <img
                         src={friend.profilePicture as string}
                         alt={friend.username}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover "
                     />
                 ) : (
                     <span className="w-10 h-10 rounded-full bg-teal-blue  text-white text-lg capitalize flex items-center justify-center">

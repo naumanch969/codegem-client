@@ -5,15 +5,18 @@ import { CircularProgress, Modal } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { createCode } from '../../redux/actions/code';
 import { RootState } from '../../redux/store';
-import { Avatar, Loader } from '../../utils/Components';
+import { Avatar } from '../../utils/Components';
 import { Code, User } from '../../interfaces';
 import { image6 } from '../../assets';
-import { useStateContext } from '../../contexts/ContextProvider';
+import { useCodeModal } from '../../hooks/useCodeModal';
 
-const CreateCode = ({ groupId, open, setOpen, handleSubmit }: { groupId?: string, open: boolean, setOpen: any, handleSubmit?: (data: any) => void }) => {    // handleSubmit is passed through collection create code
+const CreateCode = ({ groupId, handleSubmit }: { groupId?: string, handleSubmit?: (data: any) => void }) => {    // handleSubmit is passed through collection create code
+
     const { users } = useSelector((state: RootState) => state.user);
-    const { isFetching: isFetching1 } = useSelector((state: RootState) => state.code)   // for original code create
-    const { isFetching: isFetching2 } = useSelector((state: RootState) => state.collection) // for collection code create
+    const { isOpen, onClose } = useCodeModal()
+
+    const { isFetching: codeLoading } = useSelector((state: RootState) => state.code)   // for original code create
+    const { isFetching: collectionLoading } = useSelector((state: RootState) => state.collection) // for collection code create
     const dispatch = useDispatch();
 
     const initialCode: Code = {
@@ -47,10 +50,10 @@ const CreateCode = ({ groupId, open, setOpen, handleSubmit }: { groupId?: string
         }
 
         if (groupId) {
-            dispatch<any>(createCode({ ...codeData, groupId }, setOpen));
+            dispatch<any>(createCode({ ...codeData, groupId }, onClose));
         }
         else {
-            dispatch<any>(createCode(codeData, setOpen));
+            dispatch<any>(createCode(codeData, onClose));
         }
         setCodeData(initialCode)
     };
@@ -102,12 +105,12 @@ const CreateCode = ({ groupId, open, setOpen, handleSubmit }: { groupId?: string
     return (
         <>
 
-            <Modal open={open} onClose={() => setOpen(false)} className='flex justify-center items-center ' >
+            <Modal open={isOpen} onClose={onClose} className='flex justify-center items-center ' >
                 <div className='bg-white w-[50vw] min-h-[20rem] h-fit max-h-[90vh] overflow-y-scroll rounded-[8px] p-[1rem] ' >
 
                     <div className='h-[12%] relative flex justify-center items-center pb-[12px] ' >
                         <h4 className='text-[22px] font-bold text-dark-slate-blue ' >Create Code</h4>
-                        <button onClick={() => setOpen(false)} className='absolute right-0 w-[2rem] h-[2rem] rounded-full bg-transparent ' ><Close className='text-cool-gray' /></button>
+                        <button onClick={onClose} className='absolute right-0 w-[2rem] h-[2rem] rounded-full bg-transparent ' ><Close className='text-cool-gray' /></button>
                     </div>
 
                     <hr className='h-[2px] w-full py-[12px] text-warm-gray  ' />
@@ -215,7 +218,7 @@ const CreateCode = ({ groupId, open, setOpen, handleSubmit }: { groupId?: string
                                         onClick={handleCreate}
                                         disabled={!codeData.code}
                                         className={` ${!codeData.code ? 'cursor-not-allowed ' : 'cursor-pointer '} flex justify-center items-center w-[6rem] rounded-[4px] p-[4px] bg-teal-blue text-white font-medium text-[18px] `} >
-                                        {(isFetching1 || isFetching2) ? <CircularProgress style={{ width: '28px', height: '28px', color: '#fff' }} /> : 'Create'}
+                                        {(codeLoading || collectionLoading) ? <CircularProgress style={{ width: '28px', height: '28px', color: '#fff' }} /> : 'Create'}
                                     </button>
                                 </div>
                             </div>

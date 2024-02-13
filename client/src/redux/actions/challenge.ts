@@ -81,11 +81,7 @@ export const getUserChallenges =
   };
 
 export const createChallenge =
-  (
-    challengeData: any,
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  ) =>
-  async (dispatch: Dispatch) => {
+  (challengeData: any, onClose: () => void) => async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       const { data } = await api.createChallenge(challengeData);
@@ -99,7 +95,7 @@ export const createChallenge =
       } else {
         dispatch(createChallengeReducer(data));
       }
-      setOpen(false);
+      onClose();
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
@@ -109,17 +105,13 @@ export const createChallenge =
   };
 
 export const updateChallenge =
-  (
-    challengeId: string,
-    challengeData: any,
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  ) =>
+  (challengeId: string, challengeData: any, onClose: () => void) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       const { data } = await api.updateChallenge(challengeId, challengeData);
       dispatch(updateChallengeReducer(data));
-      setOpen(false);
+      onClose();
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
@@ -128,12 +120,7 @@ export const updateChallenge =
     }
   };
 export const shareChallenge =
-  (
-    challenge: Challenge,
-    friendIds: string[],
-    loggedUserId: string,
-    setOpen: any
-  ) =>
+  (challenge: Challenge, friendIds: string[], setOpen: any) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch(shareChallengeReducer({ challenge, friendIds }));
@@ -210,7 +197,7 @@ export const likeChallenge =
     }
   };
 
-  export const commentChallenge=
+export const commentChallenge =
   (codeId: string, content: string, loggedUser: User) =>
   async (dispatch: Dispatch) => {
     try {
@@ -224,7 +211,6 @@ export const likeChallenge =
         : dispatch(error(err.message));
     }
   };
-
 
 export const deleteChallenge =
   (challengeId: string) => async (dispatch: Dispatch) => {

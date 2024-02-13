@@ -19,6 +19,11 @@ const StreakStreaks = ({ filters }: { filters: any }) => {
 
       {
         streaks.map((streak: Streak, index: number) => (
+          <StreakComponent.Skeleton key={index} />
+        ))
+      }
+      {
+        streaks.map((streak: Streak, index: number) => (
           <StreakComponent key={index} streak={streak} />
         ))
       }

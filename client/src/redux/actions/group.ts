@@ -107,13 +107,12 @@ export const getGroupChallenges =
   };
 
 export const createGroup =
-  (groupData: any, setOpen: React.Dispatch<React.SetStateAction<boolean>>) =>
-  async (dispatch: Dispatch) => {
+  (groupData: any, onClose: () => void) => async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       const { data } = await api.createGroup(groupData);
       dispatch(createGroupReducer(data));
-      setOpen(false);
+      onClose();
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
@@ -122,13 +121,13 @@ export const createGroup =
     }
   };
 export const createGroupCode =
-  (groupId: string, codeData: Code, setOpen: any) =>
+  (groupId: string, codeData: Code, onClose: () => void) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       await api.createGroupCode(groupId, codeData);
-      dispatch(createGroupCodeReducer(codeData));
-      setOpen(false); // TODO: shift all setOpen to finally block - in all files
+      dispatch(createGroupCodeReducer({ code: codeData }));
+      onClose(); // TODO: shift all setOpen to finally block - in all files
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
@@ -137,13 +136,13 @@ export const createGroupCode =
     }
   };
 export const createGroupStreak =
-  (groupId: string, streakData: Streak, setOpen: any) =>
+  (groupId: string, streakData: Streak, onClose: () => void) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       await api.createGroupStreak(groupId, streakData);
-      dispatch(createGroupStreakReducer(streakData));
-      setOpen(false);
+      dispatch(createGroupStreakReducer({ streak: streakData }));
+      onClose();
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
@@ -152,13 +151,13 @@ export const createGroupStreak =
     }
   };
 export const createGroupChallenge =
-  (groupId: string, challengeData: Challenge, setOpen: any) =>
+  (groupId: string, challengeData: Challenge, onClose: () => void) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       await api.createGroupChallenge(groupId, challengeData);
-      dispatch(createGroupChallengeReducer(challengeData));
-      setOpen(false);
+      dispatch(createGroupChallengeReducer({ challenge: challengeData }));
+      onClose();
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
@@ -168,17 +167,13 @@ export const createGroupChallenge =
   };
 
 export const updateGroup =
-  (
-    groupId: string,
-    groupData: any,
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  ) =>
+  (groupId: string, groupData: any, onClose: () => void) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       const { data } = await api.updateGroup(groupId, groupData);
       dispatch(updateGroupReducer(data));
-      setOpen(false);
+      onClose();
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message

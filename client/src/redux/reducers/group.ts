@@ -68,25 +68,34 @@ const groupSlice = createSlice({
     createGroupReducer: (state, action: PayloadAction<Group>) => {
       state.groups = [action.payload, ...state.groups];
     },
-    createGroupCodeReducer: (state, action: PayloadAction<Code>) => {
+    createGroupCodeReducer: (
+      state,
+      action: PayloadAction<{ code: Code; groupId?: string }>
+    ) => {
       state.currentGroup = {
         ...state.currentGroup!,
-        codes: [action.payload, ...state.currentGroup?.codes!],
+        codes: [action.payload.code, ...state.currentGroup?.codes!],
       };
     },
-    createGroupStreakReducer: (state, action: PayloadAction<Streak>) => {
+    createGroupStreakReducer: (
+      state,
+      action: PayloadAction<{ streak: Streak; groupId?: string }>
+    ) => {
       state.currentGroup = {
         ...state.currentGroup!,
-        streaks: [action.payload, ...state.currentGroup?.streaks!],
+        streaks: [action.payload.streak, ...state.currentGroup?.streaks!],
       };
     },
     createGroupChallengeReducer: (
       state,
-      action: PayloadAction<Challenge>
+      action: PayloadAction<{ challenge: Challenge; groupId?: string }>
     ) => {
       state.currentGroup = {
         ...state.currentGroup!,
-        challenges: [action.payload, ...state.currentGroup?.challenges!],
+        challenges: [
+          action.payload.challenge,
+          ...state.currentGroup?.challenges!,
+        ],
       };
     },
     updateGroupReducer: (state, action: PayloadAction<Group>) => {

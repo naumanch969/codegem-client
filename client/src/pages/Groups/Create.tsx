@@ -3,17 +3,18 @@ import { CircularProgress, Modal } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { createGroup } from '../../redux/actions/group';
 import { RootState } from '../../redux/store';
-import { Close, Lock, ArrowDropDown, Clear } from '@mui/icons-material';
+import { Close, Clear } from '@mui/icons-material';
 import { Avatar } from '../../utils/Components';
 import { image6 } from '../../assets';
 import { Group, User } from '../../interfaces';
+import { useGroupModal } from '../../hooks/useGroupModal';
 
-const CreateGroup = ({ open, setOpen }: { open: boolean, setOpen: any }) => {
+const CreateGroup = () => {
 
     ///////////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////////
     const dispatch = useDispatch();
+    const { isOpen, onClose } = useGroupModal()
     const { loggedUser: user, isFetching }: { loggedUser: User | null, isFetching: boolean } = useSelector((state: RootState) => state.user);
-
 
     const initialGroup: Group = {
         name: "",
@@ -27,7 +28,6 @@ const CreateGroup = ({ open, setOpen }: { open: boolean, setOpen: any }) => {
         challenges: [],
         shares: [],
     }
-    // Behind my smile, there is something you can never understand.
 
     ///////////////////////////////////////////////////// STATES ////////////////////////////////////////////////////
     const [groupData, setGroupData] = useState(initialGroup);
@@ -37,7 +37,7 @@ const CreateGroup = ({ open, setOpen }: { open: boolean, setOpen: any }) => {
     const handleCreate = () => {
         const { name, description } = groupData
         if (!name || !description) return alert('Make sure to provide all the fields.')
-        dispatch<any>(createGroup(groupData, setOpen));
+        dispatch<any>(createGroup(groupData, onClose));
         setGroupData(initialGroup)
     };
 
@@ -74,12 +74,12 @@ const CreateGroup = ({ open, setOpen }: { open: boolean, setOpen: any }) => {
 
 
     return (
-        <Modal open={open} onClose={() => setOpen(false)} className='flex justify-center items-center '>
+        <Modal open={isOpen} onClose={onClose} className='flex justify-center items-center '>
             <div className='bg-white w-[35rem] min-h-[20rem] h-fit max-h-[90vh] overflow-y-scroll rounded-[8px] p-[1rem] ' >
 
                 <div className='h-[12%] relative flex justify-center items-center pb-[12px] ' >
                     <h4 className='text-[22px] font-bold text-dark-slate-blue ' >Create Group</h4>
-                    <button onClick={() => setOpen(false)} className='absolute right-0 w-[2rem] h-[2rem] rounded-full bg-transparent ' ><Close className='text-cool-gray' /></button>
+                    <button onClick={onClose} className='absolute right-0 w-[2rem] h-[2rem] rounded-full bg-transparent ' ><Close className='text-cool-gray' /></button>
                 </div>
 
                 <hr className='h-[2px] w-full py-[12px] text-warm-gray  ' />

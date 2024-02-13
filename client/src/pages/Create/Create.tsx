@@ -1,15 +1,27 @@
-import { AccountTree, ChaletOutlined, CodeOff, CodeOutlined, Collections, CollectionsTwoTone, Group, GroupAdd, Person, SyncProblem } from '@mui/icons-material';
+import { CodeOff, CodeOutlined, CollectionsTwoTone, Group, Person, SyncProblem } from '@mui/icons-material';
 import React from 'react';
+import { useCodeModal } from '../../hooks/useCodeModal';
+import { useStreakModal } from '../../hooks/useStreakModal';
+import { useChallengeModal } from '../../hooks/useChallengeModal';
+import { useCollectionModal } from '../../hooks/useCollectionModal';
+import { useGroupModal } from '../../hooks/useGroupModal';
 
-const CreateCode = ({ open, setOpen }: { open?: boolean, setOpen?: any }) => {
+const Create = () => {
+
     ///////////////////////////// VARIABLES /////////////////////////////////////
+    const { onOpen: onCodeOpen } = useCodeModal()
+    const { onOpen: onStreakOpen } = useStreakModal()
+    const { onOpen: onChallengeOpen } = useChallengeModal()
+    const { onOpen: onCollectionOpen } = useCollectionModal()
+    const { onOpen: onGroupOpen } = useGroupModal()
+
     const arr = [
-        { name: 'Create Code', icon: CodeOutlined },
-        { name: 'Create Streak', icon: CodeOff },
-        { name: 'Create Challenge', icon: SyncProblem },
-        { name: 'Create Collection', icon: CollectionsTwoTone },
-        { name: 'Create Group', icon: Group },
-        { name: 'Create Account', icon: Person },
+        { onClick: onCodeOpen, name: 'Create Code', icon: CodeOutlined },
+        { onClick: onStreakOpen, name: 'Create Streak', icon: CodeOff },
+        { onClick: onChallengeOpen, name: 'Create Challenge', icon: SyncProblem },
+        { onClick: onCollectionOpen, name: 'Create Collection', icon: CollectionsTwoTone },
+        { onClick: onGroupOpen, name: 'Create Group', icon: Group },
+        { onClick: onCodeOpen, name: 'Create Account', icon: Person },
     ];
 
     ///////////////////////////// STATES ////////////////////////////////////////
@@ -19,7 +31,7 @@ const CreateCode = ({ open, setOpen }: { open?: boolean, setOpen?: any }) => {
         <div className='bg-gray-100 w-full p-8 grid grid-cols-3 gap-8'>
             {
                 arr.map((item, index) => (
-                    <div key={index} className={`flex flex-col justify-center items-center p-4 border rounded shadow-xl bg-white group hover:text-teal-blue '
+                    <div onClick={item.onClick} key={index} className={`flex flex-col justify-center items-center p-4 border rounded shadow-xl bg-white group hover:text-teal-blue '
                         } hover:scale-105 transition-all duration-300 border border-gray-800 hover:border-teal-blue cursor-pointer `}>
                         <div className="flex flex-col items-center gap-4 mb-3">
                             <item.icon style={{ fontSize: '5rem' }} />
@@ -34,4 +46,4 @@ const CreateCode = ({ open, setOpen }: { open?: boolean, setOpen?: any }) => {
     );
 };
 
-export default CreateCode;
+export default Create;

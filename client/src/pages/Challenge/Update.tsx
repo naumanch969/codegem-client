@@ -8,12 +8,13 @@ import { RootState } from '../../redux/store';
 import { Avatar } from '../../utils/Components';
 import { Challenge, User } from '../../interfaces';
 import { image6 } from '../../assets';
-import { useStateContext } from '../../contexts/ContextProvider';
+import { useChallengeModal } from '../../hooks/useChallengeModal';
 
-const UpdateChallenge = ({ groupId, open, setOpen }: { groupId?: string, open?: boolean, setOpen?: any }) => {
+const UpdateChallenge = ({ groupId, }: { groupId?: string, }) => {
     ////////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////////
     const { users, isFetching } = useSelector((state: RootState) => state.user);
     const { currentChallenge } = useSelector((state: RootState) => state.challenge)
+    const { isOpen, onClose } = useChallengeModal()
     const dispatch = useDispatch();
 
     const initialChallenge: Challenge = {
@@ -48,10 +49,10 @@ const UpdateChallenge = ({ groupId, open, setOpen }: { groupId?: string, open?: 
         if (!title || !description || !challenge || !solution) return alert('Make sure to provide all the fields')
         const data = { title, description, tags, challenge, visibility, solution };
         if (groupId) {
-            dispatch<any>(updateChallenge(challengeData?._id!, { ...data, groupId }, setOpen));
+            dispatch<any>(updateChallenge(challengeData?._id!, { ...data, groupId }, onClose));
         }
         else {
-            dispatch<any>(updateChallenge(challengeData?._id!, data, setOpen));
+            dispatch<any>(updateChallenge(challengeData?._id!, data, onClose));
         }
         setChallengeData(initialChallenge)
     };
@@ -103,12 +104,12 @@ const UpdateChallenge = ({ groupId, open, setOpen }: { groupId?: string, open?: 
     return (
         <>
 
-            <Modal open={open!} onClose={() => setOpen(false)} className='flex justify-center items-center ' >
+            <Modal open={isOpen} onClose={onClose} className='flex justify-center items-center ' >
                 <div className='bg-white w-[50vw] min-h-[20rem] h-fit max-h-[90vh] overflow-y-scroll rounded-[8px] p-[1rem] ' >
 
                     <div className='h-[12%] relative flex justify-center items-center pb-[12px] ' >
                         <h4 className='text-[22px] font-bold text-dark-slate-blue ' >Update Challenge</h4>
-                        <button onClick={() => setOpen(false)} className='absolute right-0 w-[2rem] h-[2rem] rounded-full bg-transparent ' ><Close className='text-cool-gray' /></button>
+                        <button onClick={onClose} className='absolute right-0 w-[2rem] h-[2rem] rounded-full bg-transparent ' ><Close className='text-cool-gray' /></button>
                     </div>
 
                     <hr className='h-[2px] w-full py-[12px] text-warm-gray  ' />
@@ -250,59 +251,6 @@ const UpdateChallenge = ({ groupId, open, setOpen }: { groupId?: string, open?: 
             </Modal>
 
 
-            {/* showTaggedModal */}
-            <Modal open={showTaggedModal} onClose={() => setShowTaggedModal(false)} className="flex justify-center items-center " >
-                <div className="w-[20rem] h-[24rem] rounded-[8px] bg-neutral-800 " >
-                    <div className="h-[24rem] p-[8px] " >
-                        <h5 className="h-[10%] font-semibold " >Tag your friends:</h5>
-                        <div className="h-[90%] flex flex-col gap-[8px] overflow-y-scroll " >
-                            {
-                                users.map((friend: User, index: number) => (
-                                    <div key={index} onClick={() => tagFriend(friend)} className={`${Boolean(challengeData?.tags) ? 'bg-gray-100' : ' '} flex justify-start items-center gap-[1rem] hover:bg-gray-100 cursor-pointer px-[8px] py-[4px] rounded-[8px] `} >
-                                        <Avatar />
-                                        <div className="flex flex-col justify-start " >
-                                            <p className="text-[14px] font-medium " >{friend.email}</p>
-                                            <p className="text-[14px] text-text-emerald " >{friend.username}</p>
-                                        </div>
-                                    </div>
-                                ))
-                            }
-                        </div>
-                    </div>
-                </div>
-            </Modal>
-
-
-
-            {/* showhashTagModal */}
-            <Modal open={showhashTagModal} onClose={() => setShowhashTagModal(false)} className="flex justify-center items-center " >
-                <div className="w-[20rem] min-h-[10rem] max-h-[20rem] h-auto rounded-[8px] bg-neutral-800 " >
-                    <div className="h-[15rem] p-[12px] flex flex-col gap-[12px] " >
-                        <h5 className="h-[10%] font-semibold " >Add hashTags:</h5>
-                        <div className="h-[10rem] flex flex-wrap gap-[8px] overflow-y-scroll  " >
-                            {
-                                challengeData?.hashTags.map((hashTag, index) => (
-                                    <div key={index} className="h-fit " >
-                                        <div className="w-fit flex gap-2 items-center justify-between rounded-[15px] py-[3px] px-[7px] bg-emerald-900 " >
-                                            <span className="text-emerald-100 capitalize text-[12px] " >{hashTag}</span>
-                                            <Cancel onClick={() => filterTag(hashTag)} style={{ fontSize: '12px' }} className={`cursor-pointer text-emerald-100 text-[12px] bg-emerald-900 rounded-full `} />
-                                        </div>
-                                    </div>
-                                ))
-                            }
-                        </div>
-                        <input
-                            placeholder={`Type here`}
-                            value={tagValue}
-                            onChange={(e) => setTagValue(e.target.value)}
-                            onKeyDown={(e) => (e as React.KeyboardEvent<HTMLInputElement>).key === 'Enter' && addTag((e.target as HTMLInputElement).value)}
-                            className={`outline-none w-full  p-[2px] rounded-[4px] bg-gray-100 `}
-                        />
-                    </div>
-                </div>
-            </Modal>
-
-
         </>
     )
 
@@ -312,12 +260,6 @@ const UpdateChallenge = ({ groupId, open, setOpen }: { groupId?: string, open?: 
 }
 
 export default UpdateChallenge
-
-
-
-
-
-
 
 const menu = [
     'private',

@@ -7,11 +7,13 @@ import { Close, Lock, ArrowDropDown } from '@mui/icons-material';
 import { Avatar } from '../../utils/Components';
 import { image6 } from '../../assets';
 import { User } from '../../interfaces';
+import { useCollectionModal } from '../../hooks/useCollectionModal';
 
-const CreateCollection = ({ open, setOpen }: { open: boolean, setOpen: any }) => {
+const CreateCollection = () => {
 
     ///////////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////////
     const dispatch = useDispatch();
+    const { isOpen, onClose } = useCollectionModal()
     const { loggedUser: user, isFetching }: { loggedUser: User | null, isFetching: boolean } = useSelector((state: RootState) => state.user);
     const menu = [
         'private',
@@ -35,7 +37,7 @@ const CreateCollection = ({ open, setOpen }: { open: boolean, setOpen: any }) =>
     const handleCreate = () => {
         const { name, description } = collectionData
         if (!name || !description) return alert('Make sure to provide all the fields.')
-        dispatch<any>(createCollection(collectionData, setOpen));
+        dispatch<any>(createCollection(collectionData, onClose));
         setCollectionData(initialCollection)
     };
 
@@ -46,12 +48,12 @@ const CreateCollection = ({ open, setOpen }: { open: boolean, setOpen: any }) =>
 
 
     return (
-        <Modal open={open} onClose={() => setOpen(false)} className='flex justify-center items-center '>
+        <Modal open={isOpen} onClose={onClose} className='flex justify-center items-center '>
             <div className='bg-white w-[35rem] min-h-[20rem] h-fit max-h-[90vh] overflow-y-scroll rounded-[8px] p-[1rem] ' >
 
                 <div className='h-[12%] relative flex justify-center items-center pb-[12px] ' >
                     <h4 className='text-[22px] font-bold text-dark-slate-blue ' >Create Collection</h4>
-                    <button onClick={() => setOpen(false)} className='absolute right-0 w-[2rem] h-[2rem] rounded-full bg-transparent ' ><Close className='text-cool-gray' /></button>
+                    <button onClick={onClose} className='absolute right-0 w-[2rem] h-[2rem] rounded-full bg-transparent ' ><Close className='text-cool-gray' /></button>
                 </div>
 
                 <hr className='h-[2px] w-full py-[12px] text-warm-gray  ' />

@@ -7,7 +7,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { commentStreak, likeStreak, saveStreak } from '../../redux/actions/streak';
 import { format } from 'timeago.js'
 import DeleteModal from './Delete';
-import UpdateModal from './Update';
 import { getStreakReducer } from '../../redux/reducers/streak';
 import ShareStreak from './ShareStreak';
 import { Streak, Collection, User } from '../../interfaces';
@@ -17,6 +16,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { Loader } from '../../utils/Components';
 import { getComments } from '../../redux/actions/comment';
+import { useStreakModal } from '../../hooks/useStreakModal';
 
 
 const StreakComponent = ({ streak }: { streak: Streak }) => {
@@ -27,13 +27,12 @@ const StreakComponent = ({ streak }: { streak: Streak }) => {
   const { userCollections }: { userCollections: Collection[] } = useSelector((state: RootState) => state.collection);
   const savedCollection = userCollections.filter(collection => collection.name == 'Saved')
   const isStreakSaved = savedCollection[0]?.streaks?.findIndex(c => c._id == streak?._id) != -1
-  const hasLikedStreak = streak?.likes?.find((id) => id === userId)
+  const { onOpen, onSetStreak } = useStreakModal()
   const dispatch = useDispatch();
 
 
   /////////////////////////////////////// STATES ////////////////////////////////////////
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
-  const [openUpdateModal, setOpenUpdateModal] = useState(false)
   const [openShareModal, setOpenShareModal] = useState(false)
   const [openSaveModal, setOpenSaveModal] = useState(false)
   const [showMenu, setShowMenu] = useState(false);
@@ -70,7 +69,8 @@ const StreakComponent = ({ streak }: { streak: Streak }) => {
   const handleOpenUpdateModal = () => {
     setShowMenu(false);
     dispatch(getStreakReducer(streak))
-    setOpenUpdateModal(true)
+    onSetStreak(streak)
+    onOpen()
   }
   const handleOpenSaveModal = () => {
     setShowMenu(false);
@@ -117,7 +117,6 @@ const StreakComponent = ({ streak }: { streak: Streak }) => {
     <div className='w-full flex flex-col p-[1rem] bg-light-gray text-cool-gray-dark rounded-[6px]'>
 
       <DeleteModal open={openDeleteModal} setOpen={setOpenDeleteModal} streakId={streak?._id as string} />
-      <UpdateModal open={openUpdateModal} setOpen={setOpenUpdateModal} />
       {openShareModal && <ShareStreak open={openShareModal} setOpen={setOpenShareModal} streak={streak} />}
       {openSaveModal && <SaveStreak open={openSaveModal} setOpen={setOpenSaveModal} streak={streak} />}
 
@@ -146,7 +145,7 @@ const StreakComponent = ({ streak }: { streak: Streak }) => {
       <div className='flex flex-col gap-[8px]'>
         {/* title, description, tags */}
         <div className='flex flex-col gap-[2px]'>
-          <h3 className='font-semibold text-[20px] capitalize text-white ' >{streak?.title}</h3>
+          <h3 className='font-semibold text-[20px] capitalize text-warm-gray-dark ' >{streak?.title}</h3>
           <p className='text-[14px]'>{streak?.description}</p>
           <div className='flex gap-[6px]'>
             {
@@ -281,3 +280,46 @@ const StreakComponent = ({ streak }: { streak: Streak }) => {
 };
 
 export default StreakComponent;
+
+StreakComponent.Skeleton = function () {
+  return (
+    <div className='w-full flex flex-col p-[1rem] bg-light-gray text-cool-gray-dark rounded-[6px] animate-pulse '>
+
+      <div className='flex justify-start items-center gap-x-2 w-full'>
+        <div className='w-[3rem] h-[3rem] bg-warm-gray-dark rounded-full' />
+        <span className='w-24 h-4 bg-warm-gray-dark rounded ' />
+      </div>
+
+      <hr className='w-full h-[1px] bg-cool-gray-light border-none my-2 ' />
+
+
+      <div className='w-full flex flex-col gap-y-4 '>
+        <span className='w-full h-6 rounded bg-warm-gray-dark' />
+        <div className='flex flex-col gap-2'>
+          <span className='w-full h-4 bg-warm-gray-dark rounded' />
+          <span className='w-full h-4 bg-warm-gray-dark rounded' />
+          <span className='w-1/2 h-4 bg-warm-gray-dark rounded' />
+        </div>
+        <div className='flex gap-2'>
+          <span className='w-10 h-5 bg-warm-gray-dark rounded' />
+          <span className='w-10 h-5 bg-warm-gray-dark rounded' />
+          <span className='w-10 h-5 bg-warm-gray-dark rounded' />
+          <span className='w-10 h-5 bg-warm-gray-dark rounded' />
+          <span className='w-10 h-5 bg-warm-gray-dark rounded' />
+        </div>
+      </div>
+
+      <hr className='w-full h-[1px] bg-cool-gray-light border-none my-2 ' />
+
+      <div className='flex flex-col items-center gap-y-2 '>
+        <span className='w-full h-48 bg-warm-gray-dark rounded' />
+        <div className='flex justify-end gap-2 w-full '>
+          <span className="w-16 h-8 rounded bg-warm-gray-dark " />
+          <span className="w-16 h-8 rounded bg-warm-gray-dark " />
+          <span className="w-16 h-8 rounded bg-warm-gray-dark " />
+        </div>
+      </div>
+
+    </div>
+  )
+}

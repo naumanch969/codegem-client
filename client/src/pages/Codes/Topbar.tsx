@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import { Add, Search } from '@mui/icons-material'
-import { useStateContext } from "../../contexts/ContextProvider";
-import CreateCode from "./Create";
+import { useCodeModal } from "../../hooks/useCodeModal";
 
 const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
+
     const filterButtons = ["All", "Recommended", "Related", "Latest", "Famous"];
+    const codeModal = useCodeModal()
 
     const [searchValue, setSearchValue] = useState('');
-    const [open, setOpen] = useState<boolean>(false)
 
 
     return (
         <div className="w-full flex flex-col gap-[1rem] ">
-            <CreateCode open={open} setOpen={setOpen} />
 
             <div className="flex justify-between items-center " >
                 <h1 className="text-[3rem] text-dark-slate-blue font-bold ">Code</h1>
@@ -29,7 +28,7 @@ const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
                         <button className="absolute right-0 top-[50%] transform translate-y-[-50%] w-[36px] h-[99%] bg-teal-blue text-white " > <Search className="text-white" /> </button>
                     </div>
 
-                    <button onClick={() => setOpen(true)} className="flex justify-center items-center bg-teal-blue text-white w-[48px] h-[48px] text-[32px] rounded-full " ><Add /></button>
+                    <button onClick={() => codeModal.onOpen()} className="flex justify-center items-center bg-teal-blue text-white w-[48px] h-[48px] text-[32px] rounded-full " ><Add /></button>
                 </div>
             </div>
 

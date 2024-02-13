@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getChallenges } from "../../redux/actions/challenge";
 import { RootState } from "../../redux/store";
 import { Loader } from "../../utils/Components";
+import UpdateModal from "../Codes/Update";
+import CreateChallenge from "./Create";
 
 
 const Challenges = () => {
@@ -29,6 +31,10 @@ const Challenges = () => {
 
   return (
     <div className="flex w-full  ">
+
+      <CreateChallenge />
+      <UpdateModal />
+
       <div className={`lg:w-[75%] w-full h-full p-[1rem] flex justify-center `}>
         <div className="w-[48rem] flex flex-col h-full">
           <Topbar filters={filters} setFilters={setFilters} />
@@ -37,17 +43,13 @@ const Challenges = () => {
             {
               isFetching
                 ?
-                <div className="flex justify-center items-center w-full h-full">
-                  <Loader />
-                </div>
+                Array(7).fill("")?.map((_, index) => (
+                  <Challenge.Skeleton key={index} />
+                ))
                 :
-                <>
-                  {
-                    challenges?.map((challenge, index) => (
-                      <Challenge key={index} challenge={challenge} />
-                    ))
-                  }
-                </>
+                challenges?.map((challenge, index) => (
+                  <Challenge key={index} challenge={challenge} />
+                ))
             }
           </div>
         </div>

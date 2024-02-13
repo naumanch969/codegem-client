@@ -17,6 +17,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { getComments } from '../../redux/actions/comment';
 import { Loader } from '../../utils/Components';
+import { useChallengeModal } from '../../hooks/useChallengeModal';
 
 
 const ChallengeComponent = ({ challenge }: { challenge: Challenge }) => {
@@ -26,12 +27,11 @@ const ChallengeComponent = ({ challenge }: { challenge: Challenge }) => {
   const { userCollections }: { userCollections: Collection[] } = useSelector((state: RootState) => state.collection);
   const savedCollection = userCollections.filter(collection => collection.name == 'Saved')
   const isChallengeSaved = savedCollection[0]?.challenges?.findIndex(c => c._id == challenge?._id) != -1
-
+  const { isOpen, onOpen } = useChallengeModal()
   const dispatch = useDispatch();
 
   /////////////////////////////////////// STATES ////////////////////////////////////////
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
-  const [openUpdateModal, setOpenUpdateModal] = useState(false)
   const [openShareModal, setOpenShareModal] = useState(false)
   const [openSaveModal, setOpenSaveModal] = useState(false)
   const [showMenu, setShowMenu] = useState(false);
@@ -68,7 +68,7 @@ const ChallengeComponent = ({ challenge }: { challenge: Challenge }) => {
   const handleOpenUpdateModal = () => {
     setShowMenu(false);
     dispatch(getChallengeReducer(challenge))
-    setOpenUpdateModal(true)
+    onOpen()
   }
   const handleOpenSaveModal = () => {
     setShowMenu(false);
@@ -115,7 +115,6 @@ const ChallengeComponent = ({ challenge }: { challenge: Challenge }) => {
     <div className='w-full flex flex-col p-[1rem] bg-light-gray text-cool-gray-dark rounded-[6px]'>
 
       <DeleteModal open={openDeleteModal} setOpen={setOpenDeleteModal} challengeId={challenge?._id as string} />
-      <UpdateModal open={openUpdateModal} setOpen={setOpenUpdateModal} />
       {openShareModal && <ShareChallenge open={openShareModal} setOpen={setOpenShareModal} challenge={challenge} />}
       {openSaveModal && <SaveChallenge open={openSaveModal} setOpen={setOpenSaveModal} challenge={challenge} />}
 
@@ -144,7 +143,7 @@ const ChallengeComponent = ({ challenge }: { challenge: Challenge }) => {
       <div className='flex flex-col gap-[8px]'>
         {/* title, description, tags */}
         <div className='flex flex-col gap-[2px]'>
-          <h3 className='font-semibold text-[20px] capitalize text-white ' >{challenge?.title}</h3>
+          <h3 className='font-semibold text-[20px] capitalize text-warm-gray-dark ' >{challenge?.title}</h3>
           <p className='text-[14px]'>{challenge?.description}</p>
           <div className='flex gap-[6px]'>
             {
@@ -282,3 +281,47 @@ const ChallengeComponent = ({ challenge }: { challenge: Challenge }) => {
 };
 
 export default ChallengeComponent;
+
+
+ChallengeComponent.Skeleton = function () {
+  return (
+    <div className='w-full flex flex-col p-[1rem] bg-light-gray text-cool-gray-dark rounded-[6px] animate-pulse '>
+
+      <div className='flex justify-start items-center gap-x-2 w-full'>
+        <div className='w-[3rem] h-[3rem] bg-warm-gray-dark rounded-full' />
+        <span className='w-24 h-4 bg-warm-gray-dark rounded ' />
+      </div>
+
+      <hr className='w-full h-[1px] bg-cool-gray-light border-none my-2 ' />
+
+
+      <div className='w-full flex flex-col gap-y-4 '>
+        <span className='w-full h-6 rounded bg-warm-gray-dark' />
+        <div className='flex flex-col gap-2'>
+          <span className='w-full h-4 bg-warm-gray-dark rounded' />
+          <span className='w-full h-4 bg-warm-gray-dark rounded' />
+          <span className='w-1/2 h-4 bg-warm-gray-dark rounded' />
+        </div>
+        <div className='flex gap-2'>
+          <span className='w-10 h-5 bg-warm-gray-dark rounded' />
+          <span className='w-10 h-5 bg-warm-gray-dark rounded' />
+          <span className='w-10 h-5 bg-warm-gray-dark rounded' />
+          <span className='w-10 h-5 bg-warm-gray-dark rounded' />
+          <span className='w-10 h-5 bg-warm-gray-dark rounded' />
+        </div>
+      </div>
+
+      <hr className='w-full h-[1px] bg-cool-gray-light border-none my-2 ' />
+
+      <div className='flex flex-col items-center gap-y-2 '>
+        <span className='w-full h-48 bg-warm-gray-dark rounded' />
+        <div className='flex justify-end gap-2 w-full '>
+          <span className="w-16 h-8 rounded bg-warm-gray-dark " />
+          <span className="w-16 h-8 rounded bg-warm-gray-dark " />
+          <span className="w-16 h-8 rounded bg-warm-gray-dark " />
+        </div>
+      </div>
+
+    </div>
+  )
+}

@@ -77,8 +77,7 @@ export const getUserCodes = (userId: string) => async (dispatch: Dispatch) => {
 };
 
 export const createCode =
-  (codeData: any, setOpen: React.Dispatch<React.SetStateAction<boolean>>) =>
-  async (dispatch: Dispatch) => {
+  (codeData: any, onClose: () => void) => async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       const { data } = await api.createCode(codeData);
@@ -92,7 +91,7 @@ export const createCode =
       } else {
         dispatch(createCodeReducer(data));
       }
-      setOpen(false);
+      onClose();
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
@@ -102,17 +101,13 @@ export const createCode =
   };
 
 export const updateCode =
-  (
-    codeId: string,
-    codeData: any,
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  ) =>
+  (codeId: string, codeData: any, onClose: () => void) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       const { data } = await api.updateCode(codeId, codeData);
       dispatch(updateCodeReducer(data));
-      setOpen(false);
+      onClose();
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message

@@ -1,23 +1,20 @@
-import { FormatColorFill, Palette, Cancel, VideoCallRounded, PhotoRounded, EmojiEmotionsRounded, Close, Lock, Camera, Title, FormatSize, LocationCityOutlined, PersonPinCircle, ArrowDropDown, Clear } from '@mui/icons-material'
+import React, { ChangeEvent } from 'react'
+import { Cancel, Close, Lock, ArrowDropDown, Clear } from '@mui/icons-material'
 import { image6 } from '../../assets'
-import { Avatar, Slider } from '../../utils/Components'
-import { lightenDarkenColor } from '../../utils/functions/function'
+import { Avatar } from '../../utils/Components'
 import { useState, useEffect } from 'react'
 import TextareaAutosize from 'react-textarea-autosize'
 import { Modal } from '@mui/material'
-import { useStateContext } from '../../contexts/ContextProvider'
-import FileBase64 from 'react-file-base64'
-import { useRef } from 'react'
-import { Image } from "@mui/icons-material"
-import { Tooltip } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux"
-import { motion } from "framer-motion"
-import { createCode, updateCode } from "../../redux/actions/code"
+import { updateCode } from "../../redux/actions/code"
+import { useCodeModal } from '../../hooks/useCodeModal'
+import { RootState } from '../../redux/store'
+import { Code, User } from '../../interfaces'
 
-const UpdateModal = ({ open, setOpen }) => {
+const UpdateModal = () => {
     ///////////////////////////// VARIABLES /////////////////////////////////////
-    const { users, isFetching } = useSelector(state => state.user)
-    const { currentCode } = useSelector(state => state.code)
+    const { isFetching } = useSelector((state: RootState) => state.user)
+    const { isOpen, onClose, code } = useCodeModal()
     const dispatch = useDispatch()
     const menu = [
         'private',
@@ -28,68 +25,34 @@ const UpdateModal = ({ open, setOpen }) => {
     ]
 
     ///////////////////////////// STATES ////////////////////////////////////////
-    const [codeData, setCodeData] = useState(currentCode)
+    const [codeData, setCodeData] = useState(code)
     const [showVisibilityMenu, setShowVisibilityMenu] = useState(false)
-    const [showTaggedModal, setShowTaggedModal] = useState(false)
-    const [tagValue, setTagValue] = useState(``)
     const [hashTagValue, setHashTagValue] = useState('')
-    const [showhashTagModal, setShowhashTagModal] = useState(false)
 
     ///////////////////////////// USE EFFECTS ///////////////////////////////////
-    useEffect(() => {
-        setCodeData(currentCode)
-    }, [currentCode])
 
     ///////////////////////////// FUNCTIONS //////////////////////////////////////
     const handleUpdate = () => {
-        dispatch(updateCode(codeData?._id, codeData, setOpen))
+        dispatch<any>(updateCode(codeData?._id as string, codeData, onClose))
     }
-    const handleChange = (e) => {
-        setCodeData(pre => ({ ...pre, [e.target.name]: e.target.value }))
+    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        setCodeData((pre) => ({ ...(pre as Code), [e.target.name]: e.target.value }))
     }
-
-    const tagFriend = (friend) => {
-        if (Boolean(codeData?.tags.find(tag => tag.user == friend._id))) {
-            codeData.tags = codeData?.tags.filter(tag => tag.user != friend._id)
-            setCodeData({ ...codeData })
-        }
-        else {
-            codeData.tags = codeData?.tags.concat({ name: friend.name, user: friend._id })
-            setCodeData({ ...codeData })
-        }
+    const handleFilterHashTag = (techToDelete: string) => {
+        if (!codeData) return
+        setCodeData({ ...codeData, hashTags: codeData.hashTags.filter((t) => t !== techToDelete) })
     }
-
-    const filterTag = (tagToDelete) => {
-        codeData.tags = codeData?.tags.filter(tag => tag !== tagToDelete)
-        setCodeData({ ...setCodeData })
-    }
-
-    const handleFilterHashTag = (techToDelete) => {
-        setCodeData({ ...codeData, hashTags: codeData?.hashTags.filter((t) => t !== techToDelete) })
-    }
-    const handleAddHashTag = (e) => {
+    const handleAddHashTag = (e: any) => {
+        if (!codeData) return
         if (!(e.key == 'Enter')) return
         const value = e.target.value
         if (!value.trim()) return
-        setCodeData({ ...codeData, hashTags: codeData?.hashTags.concat(value) })
+        setCodeData({ ...codeData, hashTags: codeData.hashTags?.concat(value) })
         e.target.value = ""
         setHashTagValue('')
     }
 
-    const addTag = (value) => {
-        if (!value.trim()) return
-        const isAlreadyAdded = codeData?.hashTags.find(tag => tag == value)
-        if (!isAlreadyAdded) {
-            codeData.hashTags = [...codeData?.hashTags, value]
-            setTagValue(``)
-            setCodeData({ ...codeData })
-        }
-    }
-
-
-
-
-    const HashTag = ({ title }) => (
+    const HashTag = ({ title }: { title: string }) => (
         <div className="flex gap-[8px] items-center justify-between rounded-[16px] py-[2px] px-[6px] bg-teal-blue w-auto " >
             <p className="text-white font-medium w-max text-[14px] " >{title}</p>
             <Clear style={{ fontSize: '1rem' }} onClick={() => handleFilterHashTag(title)} className={`cursor-pointer text-white text-[1rem] bg-lightGray  rounded-full `} />
@@ -100,13 +63,12 @@ const UpdateModal = ({ open, setOpen }) => {
 
     return (
         <>
-
-            <Modal open={open} onClose={() => setOpen()} className='flex justify-center items-center ' >
+            <Modal open={isOpen} onClose={() => onClose()} className='flex justify-center items-center ' >
                 <div className='bg-white w-[50vw] min-h-[20rem] h-fit max-h-[90vh] overflow-y-scroll rounded-[8px] p-[1rem] ' >
 
                     <div className='h-[12%] relative flex justify-center items-center pb-[12px] ' >
                         <h4 className='text-[22px] font-bold text-dark-slate-blue ' >Update Code</h4>
-                        <button onClick={() => setOpen(false)} className='absolute right-0 w-[2rem] h-[2rem] rounded-full bg-transparent ' ><Close className='text-cool-gray' /></button>
+                        <button onClick={() => onClose()} className='absolute right-0 w-[2rem] h-[2rem] rounded-full bg-transparent ' ><Close className='text-cool-gray' /></button>
                     </div>
 
                     <hr className='h-[2px] w-full py-[12px] text-warm-gray  ' />
@@ -132,7 +94,11 @@ const UpdateModal = ({ open, setOpen }) => {
                                         <div className='w-full absolute top-full bg-white shadow-box flex flex-col items-start gap-[4px] rounded-b-[4px] ' >
                                             {
                                                 menu.filter(m => m != codeData?.visibility).map((item, index) => (
-                                                    <button key={index} onClick={() => { setShowVisibilityMenu(false); setCodeData({ ...codeData, visibility: item }) }} className='w-full gap-[2px] text-start hover:bg-teal-blue-lighten hover:text-white text-cool-gray capitalize p-[2px] ' >
+                                                    <button
+                                                        key={index}
+                                                        onClick={() => { setShowVisibilityMenu(false); setCodeData({ ...(codeData as Code), visibility: item }) }}
+                                                        className='w-full gap-[2px] text-start hover:bg-teal-blue-lighten hover:text-white text-cool-gray capitalize p-[2px] '
+                                                    >
                                                         <Lock style={{ fontSize: '16px' }} className='text-[16px] ' />
                                                         <span className='text-[12px] font-medium ' >{item}</span>
                                                     </button>
@@ -223,57 +189,9 @@ const UpdateModal = ({ open, setOpen }) => {
             </Modal>
 
 
-            {/* showTaggedModal */}
-            <Modal open={showTaggedModal} onClose={() => setShowTaggedModal(false)} className="flex justify-center items-center " >
-                <div className="w-[20rem] h-[24rem] rounded-[8px] bg-neutral-800 " >
-                    <div className="h-[24rem] p-[8px] " >
-                        <h5 className="h-[10%] font-semibold " >Tag your friends:</h5>
-                        <div className="h-[90%] flex flex-col gap-[8px] overflow-y-scroll " >
-                            {
-                                users.map((friend, index) => (
-                                    <div key={index} onClick={() => tagFriend(friend)} className={`${Boolean(codeData?.tags.find(tag => tag.user == friend._id)) ? 'bg-gray-100' : ' '} flex justify-start items-center gap-[1rem] hover:bg-gray-100 cursor-pointer px-[8px] py-[4px] rounded-[8px] `} >
-                                        <Avatar />
-                                        <div className="flex flex-col justify-start " >
-                                            <p className="text-[14px] font-medium " >{friend.email}</p>
-                                            <p className="text-[14px] text-text-emerald " >{friend.name}</p>
-                                        </div>
-                                    </div>
-                                ))
-                            }
-                        </div>
-                    </div>
-                </div>
-            </Modal>
 
 
 
-            {/* showhashTagModal */}
-            <Modal open={showhashTagModal} onClose={() => setShowhashTagModal(false)} className="flex justify-center items-center " >
-                <div className="w-[20rem] min-h-[10rem] max-h-[20rem] h-auto rounded-[8px] bg-neutral-800 " >
-                    <div className="h-[15rem] p-[12px] flex flex-col gap-[12px] " >
-                        <h5 className="h-[10%] font-semibold " >Add hashTags:</h5>
-                        <div className="h-[10rem] flex flex-wrap gap-[8px] overflow-y-scroll  " >
-                            {
-                                codeData?.hashTags.map((hashTag, index) => (
-                                    <div key={index} className="h-fit " >
-                                        <div className="w-fit flex gap-2 items-center justify-between rounded-[15px] py-[3px] px-[7px] bg-emerald-900 " >
-                                            <span className="text-emerald-100 capitalize text-[12px] " >{hashTag}</span>
-                                            <Cancel onClick={() => filterTag(hashTag)} style={{ fontSize: '12px' }} className={`cursor-pointer text-emerald-100 text-[12px] bg-emerald-900 rounded-full `} />
-                                        </div>
-                                    </div>
-                                ))
-                            }
-                        </div>
-                        <input
-                            placeholder={`Type here`}
-                            value={tagValue}
-                            onChange={(e) => setTagValue(e.target.value)}
-                            onKeyDown={(e) => e.key == `Enter` && addTag(e.target.value)}
-                            className={`outline-none w-full  p-[2px] rounded-[4px] bg-gray-100 `}
-                        />
-                    </div>
-                </div>
-            </Modal>
 
 
         </>

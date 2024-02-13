@@ -17,6 +17,10 @@ import ChallengeCreateModal from '../Challenge/Create';
 import ChallengeComponent from '../Challenge/Challenge';
 import StreakComponent from '../Streak/Streak';
 import CodeComponent from '../Codes/Code';
+import { useGroupModal } from '../../hooks/useGroupModal';
+import { useCodeModal } from '../../hooks/useCodeModal';
+import { useStreakModal } from '../../hooks/useStreakModal';
+import { useChallengeModal } from '../../hooks/useChallengeModal';
 
 
 const SingleGroup = () => {
@@ -28,9 +32,11 @@ const SingleGroup = () => {
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
     const isJoined = currentGroup?.members?.findIndex(memberId => memberId == loggedUser?._id) != -1
     const isAdmin = (currentGroup?.admin as User)?._id?.toString() == loggedUser?._id?.toString()
-    const groupName = (
-        currentGroup?.name ? currentGroup.name.charAt(0).toUpperCase() + currentGroup.name.slice(1).toLowerCase() : ''
-    );
+    const { onSetGroup, onOpen, onClose } = useGroupModal()
+    const { onOpen: onCodeOpen } = useCodeModal()
+    const { onOpen: onStreakOpen } = useStreakModal()
+    const { onOpen: onChallengeOpen } = useChallengeModal()
+    const groupName = (currentGroup?.name ? currentGroup.name.charAt(0).toUpperCase() + currentGroup.name.slice(1).toLowerCase() : '');
     const segments = [
         { name: 'Home', link: '/home' },
         { name: 'Groups', link: '/groups' },
@@ -79,7 +85,9 @@ const SingleGroup = () => {
         dispatch<any>(leaveGroup(groupId as string, loggedUser?._id as string))
     }
     const handleOpenUpdateModal = () => {
-        setOpenUpdateModal(true)
+        if (!currentGroup) return
+        onSetGroup(currentGroup as Group)
+        onOpen()
         setShowMenu(false)
     }
     const handleOpenDeleteModal = () => {
@@ -87,13 +95,24 @@ const SingleGroup = () => {
         setShowMenu(false)
     }
     const handleCreateCode = (codeData: any) => {
-        dispatch<any>(createGroupCode(groupId!, codeData, setOpenCreateModal))
+        dispatch<any>(createGroupCode(groupId!, codeData, onClose))
     }
     const handleCreateStreak = (streakData: any) => {
-        dispatch<any>(createGroupStreak(groupId!, streakData, setOpenCreateModal))
+        dispatch<any>(createGroupStreak(groupId!, streakData, onClose))
     }
     const handleCreateChallenge = (challengeData: any) => {
-        dispatch<any>(createGroupChallenge(groupId!, challengeData, setOpenCreateModal))
+        dispatch<any>(createGroupChallenge(groupId!, challengeData, onClose))
+    }
+    const handleOpen = () => {
+        if (activeMenuItem == 'codes') {
+            onCodeOpen()
+        }
+        else if (activeMenuItem == 'streaks') {
+            onStreakOpen()
+        }
+        else {
+            onChallengeOpen()
+        }
     }
     /////////////////////////////////////// COMPONENTS ////////////////////////////////////////
     const Menu = () => (
@@ -106,14 +125,11 @@ const SingleGroup = () => {
     return (
         <div className="container mx-auto p-4">
 
-            {activeMenuItem == 'codes' && <CodeCreateModal open={openCreateModal} setOpen={setOpenCreateModal} handleSubmit={handleCreateCode} />}
-            {activeMenuItem == 'streaks' && <StreakCreateModal open={openCreateModal} setOpen={setOpenCreateModal} handleSubmit={handleCreateStreak} />}
-            {activeMenuItem == 'challenges' && <ChallengeCreateModal open={openCreateModal} setOpen={setOpenCreateModal} handleSubmit={handleCreateChallenge} />}
+            {activeMenuItem == 'codes' && <CodeCreateModal handleSubmit={handleCreateCode} />}
+            {activeMenuItem == 'streaks' && <StreakCreateModal handleSubmit={handleCreateStreak} />}
+            {activeMenuItem == 'challenges' && <ChallengeCreateModal handleSubmit={handleCreateChallenge} />}
 
-            <Update open={openUpdateModal} setOpen={setOpenUpdateModal} />
             <Delete open={openDeleteModal} setOpen={setOpenDeleteModal} />
-
-
 
             {
                 isFetching
@@ -195,7 +211,7 @@ const SingleGroup = () => {
                                 </div>
                             </div>
                             <button
-                                onClick={() => setOpenCreateModal(true)}
+                                onClick={handleOpen}
                                 className="absolute top-0 right-4 flex justify-center items-center gap-1 bg-teal-blue hover:bg-teal-blue-lighten text-white py-2 px-2 rounded-lg shadow-md capitalize "
                             >
                                 <Add /> Add {activeMenuItem.slice(0, -1)}
@@ -213,8 +229,8 @@ const SingleGroup = () => {
                                     :
                                     <>
                                         {/* {[...(currentGroup?.codes || []), ...(currentGroup?.shares.map(codeObj => codeObj.code) || [])].map((code, index) => (
-                    <Code key={index} code={code} />
-                ))} */}
+                                            <Code key={index} code={code} />
+                                        ))} */}
                                         <>
                                             {
                                                 activeMenuItem == 'codes'

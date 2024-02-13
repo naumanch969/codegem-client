@@ -9,11 +9,13 @@ import { Avatar } from '../../utils/Components';
 import { Streak, User } from '../../interfaces';
 import { image6 } from '../../assets';
 import { useStateContext } from '../../contexts/ContextProvider';
+import { useStreakModal } from '../../hooks/useStreakModal';
 
-const UpdateStreak = ({ groupId, open, setOpen }: { groupId?: string, open?: boolean, setOpen?: any }) => {
+const UpdateStreak = ({ groupId, }: { groupId?: string, }) => {
     ////////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////////
     const { users, isFetching } = useSelector((state: RootState) => state.user);
     const { currentStreak } = useSelector((state: RootState) => state.streak)
+    const { isOpen, onClose } = useStreakModal()
     const dispatch = useDispatch();
 
     const initialStreak: Streak = {
@@ -48,10 +50,10 @@ const UpdateStreak = ({ groupId, open, setOpen }: { groupId?: string, open?: boo
         if (!title || !description || streak.length == 0) return alert('Make sure to provide all the fields')
         const data = { title, description, tags, streak, visibility };
         if (groupId) {
-            dispatch<any>(updateStreak(streakData?._id!, { ...data, groupId }, setOpen));
+            dispatch<any>(updateStreak(streakData?._id!, { ...data, groupId }, onClose));
         }
         else {
-            dispatch<any>(updateStreak(streakData?._id!, data, setOpen));
+            dispatch<any>(updateStreak(streakData?._id!, data, onClose));
         }
         setStreakData(initialStreak)
     };
@@ -103,12 +105,12 @@ const UpdateStreak = ({ groupId, open, setOpen }: { groupId?: string, open?: boo
     return (
         <>
 
-            <Modal open={open!} onClose={() => setOpen(false)} className='flex justify-center items-center ' >
+            <Modal open={isOpen} onClose={onClose} className='flex justify-center items-center ' >
                 <div className='bg-white w-[50vw] min-h-[20rem] h-fit max-h-[90vh] overflow-y-scroll rounded-[8px] p-[1rem] ' >
 
                     <div className='h-[12%] relative flex justify-center items-center pb-[12px] ' >
                         <h4 className='text-[22px] font-bold text-dark-slate-blue ' >Update Streak</h4>
-                        <button onClick={() => setOpen(false)} className='absolute right-0 w-[2rem] h-[2rem] rounded-full bg-transparent ' ><Close className='text-cool-gray' /></button>
+                        <button onClick={onClose} className='absolute right-0 w-[2rem] h-[2rem] rounded-full bg-transparent ' ><Close className='text-cool-gray' /></button>
                     </div>
 
                     <hr className='h-[2px] w-full py-[12px] text-warm-gray  ' />

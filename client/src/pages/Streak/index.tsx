@@ -5,9 +5,11 @@ import Streak from "./Streak";
 import Rightbar from "./Rightbar";
 import Create from "./Create";
 import { useDispatch, useSelector } from "react-redux";
- import { getStreaks } from "../../redux/actions/streak";
+import { getStreaks } from "../../redux/actions/streak";
 import { RootState } from "../../redux/store";
 import { Loader } from "../../utils/Components";
+import UpdateModal from "../Codes/Update";
+import CreateStreak from "./Create";
 
 
 const Streaks = () => {
@@ -29,6 +31,11 @@ const Streaks = () => {
 
   return (
     <div className="flex w-full  ">
+
+      <CreateStreak />
+      <UpdateModal />
+
+
       <div className={`lg:w-[75%] w-full h-full p-[1rem] flex justify-center `}>
         <div className="w-[48rem] flex flex-col h-full">
           <Topbar filters={filters} setFilters={setFilters} />
@@ -36,17 +43,13 @@ const Streaks = () => {
             {
               isFetching
                 ?
-                <div className="flex justify-center items-center w-full h-full">
-                  <Loader />
-                </div>
+                Array(7).fill("")?.map((_, index) => (
+                  <Streak.Skeleton key={index} />
+                ))
                 :
-                <>
-                  {
-                    streaks?.map((streak, index) => (
-                      <Streak key={index} streak={streak} />
-                    ))
-                  }
-                </>
+                streaks?.map((streak, index) => (
+                  <Streak key={index} streak={streak} />
+                ))
             }
           </div>
         </div>

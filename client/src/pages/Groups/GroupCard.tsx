@@ -31,8 +31,8 @@ const GroupCard = ({ group }: { group: Group }) => {
             } hover:scale-105 transition-all duration-300`}>
             <Link to={`/groups/${group._id}`} className="block">
                 <div className="flex justify-between items-center mb-3">
-                    <p className={`text-lg font-semibold capitalize ${isJoined ? 'text-gray-800' : 'text-teal-blue'} `}>
-                        <GroupIcon className="mr-2" />
+                    <p className={`text-lg font-semibold capitalize flex items-center w-full ${isJoined ? 'text-gray-800' : 'text-teal-blue'} `}>
+                        <GroupIcon className="mr-2" style={{ fontSize: '2rem' }} />
                         {group.name}
                     </p>
                     <p className={`text-sm ${isJoined ? 'text-gray-600' : 'text-teal-blue'
@@ -67,3 +67,25 @@ const GroupCard = ({ group }: { group: Group }) => {
 };
 
 export default GroupCard;
+
+
+GroupCard.Skeleton = function () {
+    return (
+        <div className={`h-44 w-full animate-pulse flex flex-col justify-between p-4 border rounded shadow-lg bg-light-gray`}>
+            <div>
+                <div className="flex flex-col justify-between items-center mb-3 w-full h-full ">
+                    <div className={`flex justify-start items-center w-full `}>
+                        <GroupIcon className="mr-2" style={{ fontSize: '2rem' }} />
+                        <span className={`h-4 w-full bg-warm-gray-dark rounded `} />
+                    </div>
+                    <div className="flex flex-col gap-y-2 w-full ">
+                        <p className={`h-4 w-full bg-warm-gray-dark rounded `} />
+                        <p className={`h-4 w-full bg-warm-gray-dark rounded `} />
+                        <p className={`h-4 w-full bg-warm-gray-dark rounded `} />
+                        <p className={`h-4 w-[50%] bg-warm-gray-dark rounded `} />
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}

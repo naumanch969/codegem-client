@@ -5,9 +5,11 @@ import Code from "./Code";
 import Rightbar from "./Rightbar";
 import Create from "./Create";
 import { useDispatch, useSelector } from "react-redux";
- import { getCodes } from "../../redux/actions/code";
+import { getCodes } from "../../redux/actions/code";
 import { RootState } from "../../redux/store";
 import { Loader } from "../../utils/Components";
+import CreateCode from "./Create";
+import UpdateModal from "./Update";
 
 
 const Codes = () => {
@@ -29,6 +31,11 @@ const Codes = () => {
 
   return (
     <div className="flex w-full  ">
+
+      <CreateCode />
+      <UpdateModal />
+
+
       <div className={`lg:w-[75%] w-full h-full p-[1rem] flex justify-center `}>
         <div className="w-[48rem] flex flex-col h-full">
           <Topbar filters={filters} setFilters={setFilters} />
@@ -36,17 +43,13 @@ const Codes = () => {
             {
               isFetching
                 ?
-                <div className="flex justify-center items-center w-full h-full">
-                  <Loader />
-                </div>
+                Array(7).fill("")?.map((_, index) => (
+                  <Code.Skeleton key={index} />
+                ))
                 :
-                <>
-                  {
-                    codes?.map((code, index) => (
-                      <Code key={index} code={code} />
-                    ))
-                  }
-                </>
+                codes?.map((code, index) => (
+                  <Code key={index} code={code} />
+                ))
             }
           </div>
         </div>

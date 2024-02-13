@@ -78,8 +78,7 @@ export const getUserStreaks =
   };
 
 export const createStreak =
-  (streakData: any, setOpen: React.Dispatch<React.SetStateAction<boolean>>) =>
-  async (dispatch: Dispatch) => {
+  (streakData: any, onClose: () => void) => async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       const { data } = await api.createStreak(streakData);
@@ -93,7 +92,7 @@ export const createStreak =
       } else {
         dispatch(createStreakReducer(data));
       }
-      setOpen(false);
+      onClose();
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
@@ -106,14 +105,14 @@ export const updateStreak =
   (
     streakId: string,
     streakData: any,
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>
+    onClose: ()=> void
   ) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       const { data } = await api.updateStreak(streakId, streakData);
       dispatch(updateStreakReducer(data));
-      setOpen(false);
+      onClose();
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
@@ -187,7 +186,7 @@ export const likeStreak =
     }
   };
 
-  export const commentStreak =
+export const commentStreak =
   (codeId: string, content: string, loggedUser: User) =>
   async (dispatch: Dispatch) => {
     try {
@@ -201,7 +200,6 @@ export const likeStreak =
         : dispatch(error(err.message));
     }
   };
-
 
 export const deleteStreak =
   (streakId: string) => async (dispatch: Dispatch) => {

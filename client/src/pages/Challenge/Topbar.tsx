@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import { Add, Search } from '@mui/icons-material'
-import { useStateContext } from "../../contexts/ContextProvider";
-import CreateChallenge from "./Create";
+import { useChallengeModal } from "../../hooks/useChallengeModal";
 
 const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
     const filterButtons = ["All", "Recommended", "Related", "Latest", "Famous"];
-
+    const { onOpen } = useChallengeModal()
     const [searchValue, setSearchValue] = useState('');
-    const [open, setOpen] = useState(false)
 
     return (
         <div className="w-full flex flex-col gap-[1rem] ">
-            <CreateChallenge open={open} setOpen={setOpen} />
             <div className="flex justify-between items-center " >
                 <h1 className="text-[3rem] text-dark-slate-blue font-bold ">Challenge</h1>
 
@@ -27,7 +24,7 @@ const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
                         <button className="absolute right-0 top-[50%] transform translate-y-[-50%] w-[36px] h-[99%] bg-teal-blue  text-white " > <Search className="text-white" /> </button>
                     </div>
 
-                    <button onClick={() => setOpen(true)} className="flex justify-center items-center bg-teal-blue  text-white w-[48px] h-[48px] text-[32px] rounded-full " ><Add /></button>
+                    <button onClick={onOpen} className="flex justify-center items-center bg-teal-blue  text-white w-[48px] h-[48px] text-[32px] rounded-full " ><Add /></button>
                 </div>
             </div>
 

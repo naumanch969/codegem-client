@@ -1,28 +1,30 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { Button, Modal, Tooltip } from '@mui/material';
-import CreateGroupModal from './Create'; // Import your CreateGroupModal component
-import GroupCard from './GroupCard'; // Import your GroupCard component
-import { Add, Close, Filter, Search } from '@mui/icons-material';
+import { Tooltip } from '@mui/material';
+import CreateGroup from './Create';
+import GroupCard from './GroupCard';
+import { Add, Filter, Search } from '@mui/icons-material';
 import { Path } from '../../utils/Components';
 import { Group, User } from '../../interfaces';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { createGroup, getGroups } from '../../redux/actions/group';
+import { getGroups } from '../../redux/actions/group';
+import { useGroupModal } from '../../hooks/useGroupModal';
+import UpdateGroup from './Update';
 
 
 const Groups = () => {
 
     /////////////////////////////////// VARIABLES /////////////////////////////////////
-    const { groups }: { groups: Group[] } = useSelector((state: RootState) => state.group)
+    const { groups, isFetching }: { groups: Group[], isFetching: boolean } = useSelector((state: RootState) => state.group)
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
     const dispatch = useDispatch()
+    const { onOpen } = useGroupModal()
     const segments = [
         { name: 'Home', link: '/home' },
         { name: 'Groups', link: '/groups' },
     ];
 
     /////////////////////////////////// STATES /////////////////////////////////////
-    const [openCreateModal, setOpenCreateModal] = useState<boolean>(false);
     const [filter, setFilter] = useState<string>('all');
     const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -55,7 +57,8 @@ const Groups = () => {
     return (
         <div className="container mx-auto p-4">
 
-            <CreateGroupModal open={openCreateModal} setOpen={setOpenCreateModal} />
+            <CreateGroup />
+            <UpdateGroup />
 
             <div className="flex justify-between items-center">
                 <div className="flex flex-col">
@@ -64,7 +67,7 @@ const Groups = () => {
                 </div>
                 <Tooltip title="Create Group" placement="top">
                     <button
-                        onClick={() => setOpenCreateModal(true)}
+                        onClick={onOpen}
                         className="bg-teal-blue text-white rounded-full px-3 py-3 hover:bg-teal-blue-dark transition-colors duration-300 flex items-center"
                     >
                         <Add />
@@ -102,42 +105,20 @@ const Groups = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredGroups.map((group: Group, index: number) => (
-                    <GroupCard key={index} group={group} />
-                ))}
+                {
+                    isFetching
+                        ?
+                        Array(9).fill("")?.map((_, index) => (
+                            <GroupCard.Skeleton key={index} />
+                        ))
+                        :
+                        filteredGroups.map((group: Group, index: number) => (
+                            <GroupCard key={index} group={group} />
+                        ))
+                }
             </div>
         </div>
     );
 };
 
 export default Groups;
-
-
-
-{/* <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="#7B93A4"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
->
-    <circle cx="11" cy="11" r="8"></circle>
-    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-</svg> */}
-{/* <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="#7B93A4"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
->
-<polyline points="6 9 12 15 18 9"></polyline>
-</svg> */}

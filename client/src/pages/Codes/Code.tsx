@@ -17,6 +17,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { getComments } from '../../redux/actions/comment';
 import { Loader } from '../../utils/Components';
+import { useCodeModal } from '../../hooks/useCodeModal';
 
 
 const CodeComponent = ({ code }: { code: Code }) => {
@@ -26,14 +27,12 @@ const CodeComponent = ({ code }: { code: Code }) => {
   const { userCollections }: { userCollections: Collection[] } = useSelector((state: RootState) => state.collection);
   const savedCollection = userCollections.filter(collection => collection.name == 'Saved')
   const userId = loggedUser?._id
-  const isCodeLiked = code?.likes?.find((id) => id === userId)
   const isCodeSaved = savedCollection[0]?.codes?.findIndex(c => c._id == code?._id) != -1
   const dispatch = useDispatch();
-
+  const { onOpen, onSetCode } = useCodeModal()
 
   /////////////////////////////////////// STATES ////////////////////////////////////////
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
-  const [openUpdateModal, setOpenUpdateModal] = useState(false)
   const [openShareModal, setOpenShareModal] = useState(false)
   const [openSaveModal, setOpenSaveModal] = useState(false)
   const [showMenu, setShowMenu] = useState(false);
@@ -71,7 +70,8 @@ const CodeComponent = ({ code }: { code: Code }) => {
   const handleOpenUpdateModal = () => {
     setShowMenu(false);
     dispatch(getCodeReducer(code))
-    setOpenUpdateModal(true)
+    onSetCode(code)
+    onOpen()
   }
   const handleOpenSaveModal = () => {
     setShowMenu(false);
@@ -118,7 +118,6 @@ const CodeComponent = ({ code }: { code: Code }) => {
     <div className='w-full flex flex-col p-[1rem] bg-light-gray text-cool-gray-dark rounded-[6px]'>
 
       <DeleteModal open={openDeleteModal} setOpen={setOpenDeleteModal} codeId={code?._id as string} />
-      <UpdateModal open={openUpdateModal} setOpen={setOpenUpdateModal} />
       {openShareModal && <ShareCode open={openShareModal} setOpen={setOpenShareModal} code={code} />}
       {openSaveModal && <SaveCode open={openSaveModal} setOpen={setOpenSaveModal} code={code} />}
 
@@ -273,3 +272,46 @@ const CodeComponent = ({ code }: { code: Code }) => {
 };
 
 export default CodeComponent;
+
+CodeComponent.Skeleton = function () {
+  return (
+    <div className='w-full flex flex-col p-[1rem] bg-light-gray text-cool-gray-dark rounded-[6px] animate-pulse '>
+
+      <div className='flex justify-start items-center gap-x-2 w-full'>
+        <div className='w-[3rem] h-[3rem] bg-warm-gray-dark rounded-full' />
+        <span className='w-24 h-4 bg-warm-gray-dark rounded ' />
+      </div>
+
+      <hr className='w-full h-[1px] bg-cool-gray-light border-none my-2 ' />
+
+
+      <div className='w-full flex flex-col gap-y-4 '>
+        <span className='w-full h-6 rounded bg-warm-gray-dark' />
+        <div className='flex flex-col gap-2'>
+          <span className='w-full h-4 bg-warm-gray-dark rounded' />
+          <span className='w-full h-4 bg-warm-gray-dark rounded' />
+          <span className='w-1/2 h-4 bg-warm-gray-dark rounded' />
+        </div>
+        <div className='flex gap-2'>
+          <span className='w-10 h-5 bg-warm-gray-dark rounded' />
+          <span className='w-10 h-5 bg-warm-gray-dark rounded' />
+          <span className='w-10 h-5 bg-warm-gray-dark rounded' />
+          <span className='w-10 h-5 bg-warm-gray-dark rounded' />
+          <span className='w-10 h-5 bg-warm-gray-dark rounded' />
+        </div>
+      </div>
+
+      <hr className='w-full h-[1px] bg-cool-gray-light border-none my-2 ' />
+
+      <div className='flex flex-col items-center gap-y-2 '>
+        <span className='w-full h-48 bg-warm-gray-dark rounded' />
+        <div className='flex justify-end gap-2 w-full '>
+          <span className="w-16 h-8 rounded bg-warm-gray-dark " />
+          <span className="w-16 h-8 rounded bg-warm-gray-dark " />
+          <span className="w-16 h-8 rounded bg-warm-gray-dark " />
+        </div>
+      </div>
+
+    </div>
+  )
+}

@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { Add, Search } from '@mui/icons-material'
-import { useStateContext } from "../../contexts/ContextProvider";
-import CreateCode from "./Create";
+import CreateCode from "../Codes/Create";
+import { useCodeModal } from "../../hooks/useCodeModal";
 
 const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
     const filterButtons = ["All", "Recommended", "Related", "Latest", "Famous"];
 
+    const { onOpen } = useCodeModal()
     const [searchValue, setSearchValue] = useState('');
-    const [open, setOpen] = useState<boolean>(false)
 
 
     return (
         <div className="w-full flex flex-col gap-[1rem] ">
-            <CreateCode open={open} setOpen={setOpen} />
+            <CreateCode />
 
             <div className="flex justify-between items-center gap-x-12 " >
                 <div className="relative w-[75%] h-12 rounded-lg py-[4px] px-[8px] border border-warm-gray bg-light-gray " >
@@ -28,7 +28,7 @@ const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
                     </button>
                 </div>
 
-                <button onClick={() => setOpen(true)} className="flex justify-center items-center bg-teal-blue text-white h-12 text-lg rounded-lg px-4 gap-x-1 font-medium " >
+                <button onClick={() => onOpen()} className="flex justify-center items-center bg-teal-blue text-white h-12 text-lg rounded-lg px-4 gap-x-1 font-medium " >
                     <Add /> Add
                 </button>
             </div>
