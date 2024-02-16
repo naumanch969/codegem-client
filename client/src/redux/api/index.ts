@@ -38,10 +38,13 @@ export const removeFriendRequest = (receiverId: string) =>
   API.put(`/friend/request/remove/${receiverId}`);
 export const acceptFriendRequest = (senderId: string) =>
   API.put(`/friend/request/accept/${senderId}`);
-export const getSuggestedUsers = () => API.get(`/friend/suggested-users`);
-export const getFriends = () => API.get(`/friend/all`);
-export const getSentRequests = () => API.get(`/friend/sent-requests`);
-export const getReceivedRequests = () => API.get(`/friend/received-requests`);
+export const getSuggestedUsers = (query: string) =>
+  API.get(`/friend/suggested-users?${query}`);
+export const getFriends = (query: string) => API.get(`/friend/all?${query}`);
+export const getSentRequests = (query: string) =>
+  API.get(`/friend/sent-requests?${query}`);
+export const getReceivedRequests = (query: string) =>
+  API.get(`/friend/received-requests?${query}`);
 
 // users
 export const getAllUsers = () => API.get(`/user/get/all`);
@@ -76,7 +79,7 @@ export const changePassword = (userData: any) =>
 
 // CODE
 export const getCode = (id: string) => API.get(`/code/get/single/${id}`);
-export const getCodes = () => API.get(`/code/get/all`);
+export const getCodes = (query: string) => API.get(`/code/get/all${query}`);
 export const getUserCodes = (userId: string) =>
   API.get(`/code/get/user/${userId}`);
 export const getLikedCodes = () => API.get(`/code/get/liked`);
@@ -100,7 +103,8 @@ export const deleteCode = (id: string) => API.delete(`/code/delete/${id}`);
 // CHALLENGE
 export const getChallenge = (id: string) =>
   API.get(`/challenge/get/single/${id}`);
-export const getChallenges = () => API.get(`/challenge/get/all`);
+export const getChallenges = (query: string) =>
+  API.get(`/challenge/get/all?${query}`);
 export const getUserChallenges = (userId: string) =>
   API.get(`/challenge/get/user/${userId}`);
 export const getLikedChallenges = () => API.get(`/challenge/get/liked`);
@@ -129,7 +133,8 @@ export const deleteChallenge = (id: string) =>
 
 // STREAK
 export const getStreak = (id: string) => API.get(`/streak/get/single/${id}`);
-export const getStreaks = () => API.get(`/streak/get/all`);
+export const getStreaks = (query: string) =>
+  API.get(`/streak/get/all?${query}`);
 export const getUserStreaks = (userId: string) =>
   API.get(`/streak/get/user/${userId}`);
 export const getLikedStreaks = () => API.get(`/streak/get/liked`);
@@ -160,7 +165,8 @@ export const getComments = (
 ) => API.get(`/comment/${id}?postType=${postType}`);
 
 // Collections
-export const getCollections = () => API.get(`/collection/get/all`);
+export const getCollections = (query: string) =>
+  API.get(`/collection/get/all?${query}`);
 export const getUserCollections = (userId: string) =>
   API.get(`/collection/get/user/${userId}`);
 export const getCollection = (collectionId: string) =>
@@ -194,7 +200,7 @@ export const starCollection = (collectionId: string) =>
 export const deleteCollection = (collectionId: string) =>
   API.delete(`/collection/delete/${collectionId}`);
 
-export const getGroups = () => API.get(`/group/get/all`);
+export const getGroups = (query: string) => API.get(`/group/get/all?${query}`);
 export const getUserGroups = (userId: string) =>
   API.get(`/group/get/user/${userId}`);
 export const getGroup = (groupId: string) =>

@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { Tooltip } from '@mui/material';
+import { Pagination, Tooltip } from '@mui/material';
 import CreateGroup from './Create';
 import GroupCard from './GroupCard';
 import { Add, Filter, Search } from '@mui/icons-material';
@@ -23,18 +23,29 @@ const Groups = () => {
         { name: 'Home', link: '/home' },
         { name: 'Groups', link: '/groups' },
     ];
+    const pageSize = 5;
+    const maxLength = 50;
+    const totalPages = Math.ceil(maxLength / pageSize);
 
     /////////////////////////////////// STATES /////////////////////////////////////
     const [filter, setFilter] = useState<string>('all');
     const [searchQuery, setSearchQuery] = useState<string>('');
+    const [page, setPage] = useState<number>(1)
 
     /////////////////////////////////// USE EFFECTS /////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getGroups(groups.length == 0))
+        dispatch<any>(getGroups(groups.length == 0, `?page=${page}&pageSize=${pageSize}`))
     }, [])
     // the longer you know somebody, the more curse you are to see them as human
+    useEffect(() => {
+        // TODO: if data of particular page is available then dont call api
+        fetchMore()
+    }, [page])
 
-    /////////////////////////////////// FUNCTIONS /////////////////////////////////////
+    /////////////////////////////////////// FUNCTIONS /////////////////////////////////////////
+    const fetchMore = async () => {
+        dispatch<any>(getGroups(groups.length == 0, `?page=${page}&pageSize=${pageSize}`))
+    }
     const handleFilterChange = (newFilter: string) => {
         setFilter(newFilter);
     };
@@ -112,9 +123,21 @@ const Groups = () => {
                             <GroupCard.Skeleton key={index} />
                         ))
                         :
-                        filteredGroups.map((group: Group, index: number) => (
-                            <GroupCard key={index} group={group} />
-                        ))
+                        <>
+                            {filteredGroups.map((group: Group, index: number) => (
+                                <GroupCard key={index} group={group} />
+                            ))}
+                            <div className="w-full flex justify-center">
+                                <Pagination
+                                    count={totalPages}
+                                    defaultPage={1}
+                                    page={page}
+                                    siblingCount={0}
+                                    onChange={(e: any, page: number) => setPage(page)}
+                                    size='large'
+                                />
+                            </div>
+                        </>
                 }
             </div>
         </div>

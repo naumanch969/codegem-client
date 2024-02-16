@@ -14,23 +14,22 @@ const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
         <div className="w-full flex flex-col gap-[1rem] ">
             <CreateCode />
 
-            <div className="flex justify-between items-center gap-x-12 " >
-                <div className="relative w-[75%] h-12 rounded-lg py-[4px] px-[8px] border border-warm-gray bg-light-gray " >
+            <div className="flex justify-between items-center gap-x-4 " >
+                <button onClick={() => onOpen()} className="w-48 flex justify-center items-center bg-teal-blue text-white h-12 text-lg rounded-lg gap-x-1 font-medium " >
+                    <Add /> <span className="" >Add Code</span>
+                </button>
+                <div className="relative w-full h-12 rounded-lg py-[4px] px-[8px] border border-warm-gray bg-light-gray " >
                     <input
                         type="text"
                         placeholder="Search here... "
                         value={searchValue}
                         onChange={(e) => setSearchValue(e.target.value)}
-                        className="w-full bg-inherit h-full outline-none border-none "
+                        className="w-full bg-inherit h-full outline-none border-none px-2 "
                     />
-                    <button className="absolute right-[1px] top-[50%] transform translate-y-[-50%] w-12 h-[96%] bg-teal-blue text-white rounded-lg " >
+                    <button className="absolute right-[2.52px] top-[50%] transform translate-y-[-50%] w-10 h-10 bg-teal-blue text-white rounded-lg" >
                         <Search className="text-white" />
                     </button>
                 </div>
-
-                <button onClick={() => onOpen()} className="flex justify-center items-center bg-teal-blue text-white h-12 text-lg rounded-lg px-4 gap-x-1 font-medium " >
-                    <Add /> Add
-                </button>
             </div>
 
             <div className="flex justify-between items-center gap-[2rem] ">

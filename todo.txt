@@ -5,6 +5,9 @@ TODO: ADD NOTIFICTAIONS TO EACH PROCESS, POST CREATE, FRIEND REQUEST ETC
 TODO: UPDATE THE DESIGN OF GROUP TO MAKE IT MORE CONJUSTED
 TODO: ENABLE THE SETTINGS
 TODO: CREATE HOME PAGE
+TODO: Add zustand
+TODO: create skeletons
+TODO: add search functionality
 TOOD: Certainly! Here's a more detailed list of actions that can trigger notifications in a social media application:
 
 1. **User Account Related:**

@@ -48,11 +48,11 @@ export const getUserGroups = (userId: string) => async (dispatch: Dispatch) => {
   }
 };
 export const getGroups =
-  (loading: boolean = false) =>
+  (loading: boolean = false, query: string) =>
   async (dispatch: Dispatch) => {
     try {
       loading && dispatch(start());
-      const { data } = await api.getGroups();
+      const { data } = await api.getGroups(query);
       dispatch(getGroupsReducer(data));
       dispatch(end());
     } catch (err: any) {

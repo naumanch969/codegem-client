@@ -40,11 +40,11 @@ export const getChallenge =
   };
 
 export const getChallenges =
-  (loading: boolean = false) =>
+  (loading: boolean = false, query:string) =>
   async (dispatch: Dispatch) => {
     try {
       loading && dispatch(start());
-      const { data } = await api.getChallenges();
+      const { data } = await api.getChallenges(query);
       dispatch(getChallengesReducer(data));
       dispatch(end());
     } catch (err: any) {

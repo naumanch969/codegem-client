@@ -14,25 +14,27 @@ import {
 } from "../reducers/friend";
 import { AsyncAction } from "../store";
 
-export const getSuggestedUsers = (): AsyncAction => async (dispatch) => {
-  try {
-    dispatch(start());
-    const { data } = await api.getSuggestedUsers();
-    dispatch(getSuggestedUsersReducer(data));
-    dispatch(end());
-  } catch (err: any) {
-    err.response?.data?.message
-      ? dispatch(error(err.response.data.message))
-      : dispatch(error(err.message));
-  }
-};
-
-export const getFriends =
-  (loading: boolean = false): AsyncAction =>
+export const getSuggestedUsers =
+  (loading: boolean = false, query: string): AsyncAction =>
   async (dispatch) => {
     try {
       loading && dispatch(start());
-      const { data } = await api.getFriends();
+      const { data } = await api.getSuggestedUsers(query);
+      dispatch(getSuggestedUsersReducer(data));
+      dispatch(end());
+    } catch (err: any) {
+      err.response?.data?.message
+        ? dispatch(error(err.response.data.message))
+        : dispatch(error(err.message));
+    }
+  };
+
+export const getFriends =
+  (loading: boolean = false, query: string): AsyncAction =>
+  async (dispatch) => {
+    try {
+      loading && dispatch(start());
+      const { data } = await api.getFriends(query);
       dispatch(getFriendsReducer(data));
       dispatch(end());
     } catch (err: any) {
@@ -42,31 +44,35 @@ export const getFriends =
     }
   };
 
-export const getSentRequests = (): AsyncAction => async (dispatch) => {
-  try {
-    dispatch(start());
-    const { data } = await api.getSentRequests();
-    dispatch(getSentRequestsReducer(data));
-    dispatch(end());
-  } catch (err: any) {
-    err.response?.data?.message
-      ? dispatch(error(err.response.data.message))
-      : dispatch(error(err.message));
-  }
-};
+export const getSentRequests =
+  (loading: boolean = false, query: string): AsyncAction =>
+  async (dispatch) => {
+    try {
+      loading && dispatch(start());
+      const { data } = await api.getSentRequests(query);
+      dispatch(getSentRequestsReducer(data));
+      dispatch(end());
+    } catch (err: any) {
+      err.response?.data?.message
+        ? dispatch(error(err.response.data.message))
+        : dispatch(error(err.message));
+    }
+  };
 
-export const getReceivedRequests = (): AsyncAction => async (dispatch) => {
-  try {
-    dispatch(start());
-    const { data } = await api.getReceivedRequests();
-    dispatch(getReceivedRequestsReducer(data));
-    dispatch(end());
-  } catch (err: any) {
-    err.response?.data?.message
-      ? dispatch(error(err.response.data.message))
-      : dispatch(error(err.message));
-  }
-};
+export const getReceivedRequests =
+  (loading: boolean = false, query: string): AsyncAction =>
+  async (dispatch) => {
+    try {
+      loading && dispatch(start());
+      const { data } = await api.getReceivedRequests(query);
+      dispatch(getReceivedRequestsReducer(data));
+      dispatch(end());
+    } catch (err: any) {
+      err.response?.data?.message
+        ? dispatch(error(err.response.data.message))
+        : dispatch(error(err.message));
+    }
+  };
 
 export const sendFriendRequest =
   (receiverId: string): AsyncAction =>

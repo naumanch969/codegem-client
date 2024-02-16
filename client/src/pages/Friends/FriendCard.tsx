@@ -40,14 +40,14 @@ const FriendCard = ({ friend, type }: { friend: User, type: string }) => {
             :
             <div className='w-full h-[160px] rounded-md mb-2 capitalize flex justify-center items-center bg-black text-white font-semibold text-[5rem] '>{friend?.username?.charAt(0)}</div>
         }
-        <p onClick={()=>navigate(`/user/${friend._id}`)}  className="cursor-pointer text-center text-sm font-medium text-dark-slate-blue-darken capitalize ">{friend?.firstName} {friend?.lastName}</p>
+        <p onClick={() => navigate(`/user/${friend._id}`)} className="cursor-pointer text-center text-sm font-medium text-dark-slate-blue-darken capitalize ">{friend?.firstName} {friend?.lastName}</p>
       </div>
       <div className="mt-2">
         <p className="text-cool-gray text-xs mb-1">
-          {friend?.mutualFriends > 0 ? `${friend?.mutualFriends} Mutual Friends` : 'No Mutual Friends'}
+          {friend?.mutualFriends as number > 0 ? `${friend?.mutualFriends} Mutual Friends` : 'No Mutual Friends'}
         </p>
         {type == 'friend' &&
-          <button onClick={()=>navigate(`/user/${friend._id}`)} className="w-full py-2 bg-teal-blue hover:bg-teal-blue-lighten text-white rounded-md mb-1 text-xs">
+          <button onClick={() => navigate(`/user/${friend._id}`)} className="w-full py-2 bg-teal-blue hover:bg-teal-blue-lighten text-white rounded-md mb-1 text-xs">
             View Profile
           </button>
         }
@@ -77,3 +77,18 @@ const FriendCard = ({ friend, type }: { friend: User, type: string }) => {
 };
 
 export default FriendCard;
+
+FriendCard.Skeleton = function () {
+  return (
+    <div className='w-full flex flex-col justify-start gap-x-2 p-[1rem] bg-light-gray text-cool-gray-dark rounded-[6px] animate-pulse mb-4 '>
+      <div className="flex w-full justify-center ">
+        <div className="w-full h-40 rounded-lg bg-warm-gray-dark" />
+      </div>
+      <div className="w-full flex flex-col justify-center items-center gap-y-2 mt-2 ">
+        <p className="w-[60%] h-5 bg-warm-gray-dark rounded" />
+        <p className="w-full h-4 bg-warm-gray-dark rounded" />
+      </div>
+      <p className="w-full h-8 bg-warm-gray-dark rounded mt-2 " />
+    </div>
+  )
+}

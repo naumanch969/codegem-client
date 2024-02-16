@@ -30,8 +30,8 @@ const RightSidebar = () => {
 
     //////////////////////////////////////////////////// USE EFFECTS ///////////////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getFriends(friends.length == 0))
-        dispatch<any>(getSuggestedUsers())
+        dispatch<any>(getFriends(friends.length == 0, `?page=${1}&pageSize=${10}`))
+        dispatch<any>(getSuggestedUsers(suggestedUsers.length == 0, `?page=${1}&pageSize=${10}`))
     }, [])
 
     //////////////////////////////////////////////////// FUNCTIONS ///////////////////////////////////////////////

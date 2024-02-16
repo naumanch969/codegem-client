@@ -4,7 +4,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import { Add, Favorite, Filter, Search } from '@mui/icons-material';
-import { Tooltip } from '@mui/material';
+import { Pagination, Tooltip } from '@mui/material';
 import Rightbar from './Rightbar';
 import { Path } from '../../utils/Components';
 import CollectionCard from './CollectionCard';
@@ -22,23 +22,34 @@ const Collections: React.FC = () => {
     const { collections, userCollections, isFetching } = useSelector((state: RootState) => state.collection);
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user);
     const { onOpen } = useCollectionModal()
-
     const segments = [
         { name: 'Home', link: '/home' },
         { name: 'Collections', link: '/collections' },
     ];
+    const pageSize = 5;
+    const maxLength = 50;
+    const totalPages = Math.ceil(maxLength / pageSize);
 
     ////////////////////////////////////////////// STATES ////////////////////////////////////////////////////
     const [filter, setFilter] = useState<string>('all');
     const [searchQuery, setSearchQuery] = useState<string>('');
+    const [page, setPage] = useState<number>(1)
 
     ////////////////////////////////////////////// useEffects ////////////////////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getCollections());
+        dispatch<any>(getCollections(`?page=${page}&pageSize=${pageSize}`));
         dispatch<any>(getUserCollections(loggedUser?._id as string));
     }, []);
+    useEffect(() => {
+        // TODO: if data of particular page is available then dont call api
+        fetchMore()
+    }, [page])
 
-    ////////////////////////////////////////////// FUNCTIONS ////////////////////////////////////////////////////
+    /////////////////////////////////////// FUNCTIONS /////////////////////////////////////////
+    const fetchMore = async () => {
+        dispatch<any>(getCollections(`?page=${page}&pageSize=${pageSize}`))
+    }
+
     const handleFilterChange = (newFilter: string) => {
         setFilter(newFilter);
     };
@@ -145,6 +156,16 @@ const Collections: React.FC = () => {
                                             </CardContent>
                                         </Card>
                                     ))}
+                                    <div className="w-full flex justify-center">
+                                        <Pagination
+                                            count={totalPages}
+                                            defaultPage={1}
+                                            page={page}
+                                            siblingCount={0}
+                                            onChange={(e: any, page: number) => setPage(page)}
+                                            size='large'
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>

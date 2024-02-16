@@ -13,15 +13,15 @@ const RightSidebar = () => {
     //////////////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const { friends, suggestedUsers }: { friends: User[], suggestedUsers: User[] } = useSelector((state: RootState) => state.friend)
+    const { friends, suggestedUsers, isFetching }: { friends: User[], suggestedUsers: User[], isFetching: boolean } = useSelector((state: RootState) => state.friend)
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
 
     //////////////////////////////////////////////////// STATES ///////////////////////////////////////////////
 
     //////////////////////////////////////////////////// USE EFFECTS ///////////////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getFriends(friends.length == 0))
-        dispatch<any>(getSuggestedUsers())
+        dispatch<any>(getFriends(friends.length == 0, `?page=${1}&pageSize=${10}`))
+        dispatch<any>(getSuggestedUsers(suggestedUsers.length == 0, `?page=${1}&pageSize=${10}`))
     }, [])
 
     //////////////////////////////////////////////////// FUNCTIONS ///////////////////////////////////////////////
@@ -51,8 +51,20 @@ const RightSidebar = () => {
                 </p>
             </div>
         </li>
-
     )
+    Friend.Skeleton = function () {
+        return (
+            <div className='w-full flex justify-start gap-x-2 p-[1rem] bg-light-gray text-cool-gray-dark rounded-[6px] animate-pulse mb-4 '>
+                <div className="flex">
+                    <div className="w-10 h-10 rounded-full bg-warm-gray-dark" />
+                </div>
+                <div className="w-full flex flex-col gap-y-2 ">
+                    <p className="w-[5rem] h-4 bg-warm-gray-dark rounded" />
+                    <p className="w-full h-4 bg-warm-gray-dark rounded" />
+                </div>
+            </div>
+        )
+    }
 
     return (
         <div className="flex flex-col gap-4 w-full">
@@ -68,10 +80,18 @@ const RightSidebar = () => {
                 <h2 className="text-lg font-semibold mb-2 text-dark-slate-blue">
                     Suggested to You
                 </h2>
-                <ul>
-                    {suggestedUsers.slice(0, 4).map((friend, index) => (
-                        <Friend friend={friend} key={index} />
-                    ))}
+                <ul >
+                    {
+                        isFetching
+                            ?
+                            Array(2).fill("").map((_, index) => (
+                                <Friend.Skeleton key={index} />
+                            ))
+                            :
+                            suggestedUsers.slice(0, 4).map((friend, index) => (
+                                <Friend friend={friend} key={index} />
+                            ))
+                    }
                 </ul>
             </div>
             {/* Your Friends */}
@@ -80,9 +100,17 @@ const RightSidebar = () => {
                     Your Friends
                 </h2>
                 <ul>
-                    {friends.map((friend, index) => (
-                        <Friend friend={friend} key={index} />
-                    ))}
+                    {
+                        isFetching
+                            ?
+                            Array(4).fill("").map((_, index) => (
+                                <Friend.Skeleton key={index} />
+                            ))
+                            :
+                            friends.map((friend, index) => (
+                                <Friend friend={friend} key={index} />
+                            ))
+                    }
                 </ul>
             </div>
         </div>

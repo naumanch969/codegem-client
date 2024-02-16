@@ -82,11 +82,7 @@ const UpdateChallenge = ({ groupId, }: { groupId?: string, }) => {
         e.currentTarget.value = '';
         setHashTagValue('');
     };
-
-    const addTag = (value: string) => {
-        if (!value.trim()) return;
-
-    };
+ 
 
     const HashTag: React.FC<{ title: string }> = ({ title }) => (
         <div className="flex gap-[8px] items-center justify-between rounded-[16px] py-[2px] px-[6px] bg-teal-blue  w-auto">

@@ -15,16 +15,28 @@ import {
 
 export const getCodes = async (req, res, next) => {
   try {
-    const result = await Code.find()
+    const { page, pageSize } = req.query;
+
+    let query = Code.find();
+
+    const pageNumber = parseInt(page, 10) || 1;
+    const size = parseInt(pageSize, 10) || 10;
+    const skip = (pageNumber - 1) * size;
+
+    query = query.skip(skip).limit(size);
+
+    const result = await query
       .sort({ createdAt: -1 })
       .populate("user")
       .populate("shares")
       .exec();
+
     res.status(200).json(result);
   } catch (error) {
     next(createError(res, 500, error.message));
   }
 };
+
 export const getUserCodes = async (req, res, next) => {
   try {
     const { userId } = req.params;

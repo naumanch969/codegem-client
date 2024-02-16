@@ -37,11 +37,11 @@ export const getStreak = (streakId: string) => async (dispatch: Dispatch) => {
 };
 
 export const getStreaks =
-  (loading: boolean = false) =>
+  (loading: boolean = false,query: string) =>
   async (dispatch: Dispatch) => {
     try {
       loading && dispatch(start());
-      const { data } = await api.getStreaks();
+      const { data } = await api.getStreaks(query);
       dispatch(getStreaksReducer(data));
       dispatch(end());
     } catch (err: any) {

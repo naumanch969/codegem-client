@@ -10,6 +10,7 @@ import { RootState } from "../../redux/store";
 import { Loader } from "../../utils/Components";
 import UpdateModal from "../Codes/Update";
 import CreateChallenge from "./Create";
+import { Pagination } from "@mui/material";
 
 
 const Challenges = () => {
@@ -17,17 +18,27 @@ const Challenges = () => {
   /////////////////////////////////////// VARIABLES //////////////////////////////////////////
   const dispatch = useDispatch()
   const { challenges, isFetching } = useSelector((state: RootState) => state.challenge)
+  const pageSize = 5;
+  const maxLength = 50;
+  const totalPages = Math.ceil(maxLength / pageSize);
 
   /////////////////////////////////////// STATES //////////////////////////////////////////
   const [filters, setFilters] = useState({ challenges: 'all', language: 'all' })
+  const [page, setPage] = useState<number>(1)
 
   /////////////////////////////////////// USE EFFECTS ///////////////////////////////////////
   useEffect(() => {
-    dispatch<any>(getChallenges(challenges.length == 0))
+    dispatch<any>(getChallenges(challenges.length == 0,`?page=${page}&pageSize=${pageSize}`))
   }, [])
+  useEffect(() => {
+    // TODO: if data of particular page is available then dont call api
+    fetchMore()
+  }, [page])
 
   /////////////////////////////////////// FUNCTIONS /////////////////////////////////////////
-
+  const fetchMore = async () => {
+    dispatch<any>(getChallenges(true, `?page=${page}&pageSize=${pageSize}`))
+  }
 
   return (
     <div className="flex w-full  ">
@@ -51,6 +62,17 @@ const Challenges = () => {
                   <Challenge key={index} challenge={challenge} />
                 ))
             }
+
+            <div className="w-full flex justify-center">
+              <Pagination
+                count={totalPages}
+                defaultPage={1}
+                page={page}
+                siblingCount={0}
+                onChange={(e: any, page: number) => setPage(page)}
+                size='large'
+              />
+            </div>
           </div>
         </div>
       </div>

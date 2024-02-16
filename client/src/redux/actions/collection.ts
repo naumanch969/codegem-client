@@ -93,10 +93,10 @@ export const getUserCollections =
         : dispatch(error(err.message));
     }
   };
-export const getCollections = () => async (dispatch: Dispatch) => {
+export const getCollections = (query:string) => async (dispatch: Dispatch) => {
   try {
     dispatch(start());
-    const { data } = await api.getCollections();
+    const { data } = await api.getCollections(query);
     dispatch(getCollectionsReducer(data));
     dispatch(end());
   } catch (err: any) {

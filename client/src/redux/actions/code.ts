@@ -37,11 +37,11 @@ export const getCode = (codeId: string) => async (dispatch: Dispatch) => {
 };
 
 export const getCodes =
-  (loading: boolean = false) =>
+  (loading: boolean = false, query: string) =>
   async (dispatch: Dispatch) => {
     try {
       loading && dispatch(start());
-      const { data } = await api.getCodes();
+      const { data } = await api.getCodes(query);
       dispatch(getCodesReducer(data));
       dispatch(end());
     } catch (err: any) {

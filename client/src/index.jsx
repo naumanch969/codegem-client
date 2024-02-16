@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom"
 import { GoogleOAuthProvider } from "@react-oauth/google"
 import { Provider } from "react-redux"
 
-import "./index.css"
+import "./globals.css"
 import App from "./App"
 import { ContextProvider } from "./contexts/ContextProvider"
 import {store} from './redux/store'
