@@ -1,20 +1,22 @@
 import React, { ChangeEvent } from 'react'
-import { Cancel, Close, Lock, ArrowDropDown, Clear } from '@mui/icons-material'
+import { Close, Lock, ArrowDropDown, Clear } from '@mui/icons-material'
 import { image6 } from '../../assets'
 import { Avatar } from '../../utils/Components'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import TextareaAutosize from 'react-textarea-autosize'
 import { Modal } from '@mui/material'
 import { useDispatch, useSelector } from "react-redux"
 import { updateCode } from "../../redux/actions/code"
 import { useCodeModal } from '../../hooks/useCodeModal'
 import { RootState } from '../../redux/store'
-import { Code, User } from '../../interfaces'
+import { Code } from '../../interfaces'
+import { useGroupModal } from '@/hooks/useGroupModal'
 
-const UpdateModal = () => {
+const UpdateCode = () => {
     ///////////////////////////// VARIABLES /////////////////////////////////////
     const { isFetching } = useSelector((state: RootState) => state.user)
-    const { isOpen, onClose, code } = useCodeModal()
+    const { onClose, code } = useCodeModal()
+    const { isOpen } = useGroupModal()
     const dispatch = useDispatch()
     const menu = [
         'private',
@@ -80,7 +82,7 @@ const UpdateModal = () => {
                             <Avatar src={image6} />
                             <div className='flex flex-col ' >
                                 <p className='font-semibold text-dark-slate-blue ' >Nauman Ch</p>
-                                <div className='relative flex flex-col justify-center items-start gap-[4px] cursor-pointer rounded-t-[4px] min-w-[9rem] bg-gray-100 ' >
+                                <div className='relative flex flex-col justify-center items-start gap-1cursor-pointer rounded-t-[4px] min-w-[9rem] bg-gray-100 ' >
 
                                     <button onClick={() => setShowVisibilityMenu(pre => !pre)} className='w-full flex justify-between items-center p-[2px] ' >
                                         <span className="flex justify-start gap-[2px] capitalize " >
@@ -91,7 +93,7 @@ const UpdateModal = () => {
                                     </button>
                                     {
                                         showVisibilityMenu &&
-                                        <div className='w-full absolute top-full bg-white shadow-box flex flex-col items-start gap-[4px] rounded-b-[4px] ' >
+                                        <div className='w-full absolute top-full bg-white shadow-box flex flex-col items-start gap-1rounded-b-[4px] ' >
                                             {
                                                 menu.filter(m => m != codeData?.visibility).map((item, index) => (
                                                     <button
@@ -115,7 +117,7 @@ const UpdateModal = () => {
 
                         <div className='flex flex-col gap-[8px] ' >
                             <div className="flex gap-[1rem] ">
-                                <div className="flex flex-col gap-[4px] w-[55%] ">
+                                <div className="flex flex-col gap-1w-[55%] ">
                                     <label htmlFor="description" className='flex-[1] text-cool-gray ' >Description<span className='text-[18px] text-teal-blue-darken ' >*</span> :</label>
                                     <textarea
                                         rows={4}
@@ -126,8 +128,8 @@ const UpdateModal = () => {
                                         className={`h-full px-[4px] py-[2px] flex w-full outline-cool-gray bg-light-gray text-cool-gray border-cool-gray border-[1px] resize-none text-[16px] rounded-[4px] `}
                                     />
                                 </div>
-                                <div className={`flex flex-col gap-[4px] w-[45%] `}  >
-                                    <div className='flex flex-col justify-start gap-[4px] w-full  ' >
+                                <div className={`flex flex-col gap-1w-[45%] `}  >
+                                    <div className='flex flex-col justify-start gap-1w-full  ' >
                                         <label htmlFor="title" className='flex-[1] text-cool-gray ' >Title:</label>
                                         <textarea
                                             name='title'
@@ -138,7 +140,7 @@ const UpdateModal = () => {
                                             className={`px-[4px] py-[2px] flex w-full outline-cool-gray bg-light-gray text-cool-gray border-cool-gray border-[1px] resize-none text-[16px] rounded-[4px] `}
                                         />
                                     </div>
-                                    <div className="flex flex-col gap-[4px] ">
+                                    <div className="flex flex-col gap-1">
                                         <h6 className={`capitalize w-full text-[16px] text-cool-gray  `}>Technologies:</h6>
                                         <div className={`${codeData?.hashTags?.length && 'py-[8px] '} min-h-[54px] max-h-[12rem] overflow-y-scroll px-[8px] flex flex-wrap gap-[8px] w-full bg-light-gray text-cool-gray border-[1px] border-cool-gray rounded-[4px] `} >
                                             <input
@@ -159,7 +161,7 @@ const UpdateModal = () => {
                             </div>
 
                             {/* code */}
-                            <div className='flex flex-col justify-start gap-[4px] ' >
+                            <div className='flex flex-col justify-start gap-1' >
                                 <label htmlFor="code" className='flex-[1] text-cool-gray ' >Code<span className='text-[18px] text-teal-blue-darken ' >*</span> :</label>
                                 <TextareaAutosize
                                     rows={10}
@@ -198,4 +200,4 @@ const UpdateModal = () => {
     )
 }
 
-export default UpdateModal
+export default UpdateCode

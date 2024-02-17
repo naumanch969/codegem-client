@@ -30,8 +30,8 @@ const RightSidebar = () => {
 
     //////////////////////////////////////////////////// USE EFFECTS ///////////////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getFriends(friends.length == 0))
-        dispatch<any>(getSuggestedUsers())
+        dispatch<any>(getFriends(friends.length == 0, `?page=${1}$pageSize=${20}`))
+        dispatch<any>(getSuggestedUsers(suggestedUsers.length == 0, `?page=${1}&pageSize=${20}`))
     }, [])
 
     //////////////////////////////////////////////////// FUNCTIONS ///////////////////////////////////////////////
@@ -66,12 +66,6 @@ const RightSidebar = () => {
 
     return (
         <div className="flex flex-col gap-4 w-full">
-            {/* Create */}
-            <div className="bg-white p-4 rounded-lg shadow-md w-full flex flex-col gap-2 ">
-                <button className='w-full rounded-lg py-2 text-center border border-teal-blue text-teal-blue ' >Create Streak</button>
-                <button className='w-full rounded-lg py-2 text-center border border-teal-blue text-teal-blue ' >Create Streak</button>
-                <button className='w-full rounded-lg py-2 text-center border border-teal-blue text-teal-blue ' >Create Challenge</button>
-            </div>
 
             {/* Suggested to You */}
             <div className="bg-white p-4 rounded-lg shadow-md w-full ">

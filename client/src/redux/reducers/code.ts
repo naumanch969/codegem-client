@@ -8,6 +8,7 @@ interface InitialState {
   codes: Code[];
   filteredCodes: Code[];
   currentCode: Code | null;
+  count: number;
 }
 
 const initialState: InitialState = {
@@ -16,6 +17,7 @@ const initialState: InitialState = {
   isFetching: false,
   error: "",
   currentCode: null,
+  count: 10,
 };
 
 const codeSlice = createSlice({
@@ -83,11 +85,19 @@ const codeSlice = createSlice({
     getCodeReducer: (state, action: PayloadAction<Code>) => {
       state.currentCode = action.payload;
     },
-    getCodesReducer: (state, action: PayloadAction<Code[]>) => {
-      state.codes = action.payload;
+    getCodesReducer: (
+      state,
+      action: PayloadAction<{ result: Code[]; count?: number }>
+    ) => {
+      state.codes = action.payload.result;
+      if (action.payload.count) state.count = action.payload.count;
     },
-    getUserCodesReducer: (state, action: PayloadAction<Code[]>) => {
-      state.codes = action.payload;
+    getUserCodesReducer: (
+      state,
+      action: PayloadAction<{ result: Code[]; count?: number }>
+    ) => {
+      state.codes = action.payload.result;
+      if (action.payload.count) state.count = action.payload.count;
     },
     getCommentsReducer: (
       state,

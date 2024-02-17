@@ -5,19 +5,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCodes } from "../../redux/actions/code";
 import { RootState } from "../../redux/store";
 import CodeComponent from "../Codes/Code";
-import { getCodes as getCodesApi } from '../../redux/api'
-import { getCodesReducer } from "@/redux/reducers/code";
 import Pagination from '@mui/material/Pagination';
+import { Code as TCode } from "@/interfaces";
 
 
 const Codes = () => {
 
   /////////////////////////////////////// VARIABLES //////////////////////////////////////////
   const dispatch = useDispatch()
-  const { codes, isFetching } = useSelector((state: RootState) => state.code)
-  const pageSize = 5;
-  const maxLength = 50;
-  const totalPages = Math.ceil(maxLength / pageSize);
+  const { codes, isFetching, count }: { codes: TCode[], isFetching: boolean, count: number } = useSelector((state: RootState) => state.code)
+  const pageSize = 20;
+  const totalPages = Math.ceil(count / pageSize);
 
   /////////////////////////////////////// STATES //////////////////////////////////////////
   const [filters, setFilters] = useState({ codes: 'all', language: 'all' })
@@ -40,7 +38,7 @@ const Codes = () => {
   return (
     <div className="flex w-full h-full ">
       <div className={`lg:w-[75%] w-full h-full p-[1rem] flex justify-center `}>
-        <div className="w-[48rem] flex flex-col h-full">
+        <div className="w-full flex flex-col h-full">
           <Topbar filters={filters} setFilters={setFilters} />
           <div className="w-full flex flex-col justify-between items-start gap-[2rem] mt-[1rem] " >
             {

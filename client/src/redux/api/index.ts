@@ -39,12 +39,12 @@ export const removeFriendRequest = (receiverId: string) =>
 export const acceptFriendRequest = (senderId: string) =>
   API.put(`/friend/request/accept/${senderId}`);
 export const getSuggestedUsers = (query: string) =>
-  API.get(`/friend/suggested-users?${query}`);
-export const getFriends = (query: string) => API.get(`/friend/all?${query}`);
+  API.get(`/friend/suggested-users${query}`);
+export const getFriends = (query: string) => API.get(`/friend/all${query}`);
 export const getSentRequests = (query: string) =>
-  API.get(`/friend/sent-requests?${query}`);
+  API.get(`/friend/sent-requests${query}`);
 export const getReceivedRequests = (query: string) =>
-  API.get(`/friend/received-requests?${query}`);
+  API.get(`/friend/received-requests${query}`);
 
 // users
 export const getAllUsers = () => API.get(`/user/get/all`);
@@ -104,7 +104,7 @@ export const deleteCode = (id: string) => API.delete(`/code/delete/${id}`);
 export const getChallenge = (id: string) =>
   API.get(`/challenge/get/single/${id}`);
 export const getChallenges = (query: string) =>
-  API.get(`/challenge/get/all?${query}`);
+  API.get(`/challenge/get/all${query}`);
 export const getUserChallenges = (userId: string) =>
   API.get(`/challenge/get/user/${userId}`);
 export const getLikedChallenges = () => API.get(`/challenge/get/liked`);
@@ -133,8 +133,7 @@ export const deleteChallenge = (id: string) =>
 
 // STREAK
 export const getStreak = (id: string) => API.get(`/streak/get/single/${id}`);
-export const getStreaks = (query: string) =>
-  API.get(`/streak/get/all?${query}`);
+export const getStreaks = (query: string) => API.get(`/streak/get/all${query}`);
 export const getUserStreaks = (userId: string) =>
   API.get(`/streak/get/user/${userId}`);
 export const getLikedStreaks = () => API.get(`/streak/get/liked`);
@@ -166,9 +165,9 @@ export const getComments = (
 
 // Collections
 export const getCollections = (query: string) =>
-  API.get(`/collection/get/all?${query}`);
-export const getUserCollections = (userId: string) =>
-  API.get(`/collection/get/user/${userId}`);
+  API.get(`/collection/get/all${query}`);
+export const getUserCollections = (userId: string, query: string) =>
+  API.get(`/collection/get/user/${userId}${query}`);
 export const getCollection = (collectionId: string) =>
   API.get(`/collection/get/single/${collectionId}`);
 export const getCollectionCodes = (collectionId: string) =>
@@ -200,7 +199,7 @@ export const starCollection = (collectionId: string) =>
 export const deleteCollection = (collectionId: string) =>
   API.delete(`/collection/delete/${collectionId}`);
 
-export const getGroups = (query: string) => API.get(`/group/get/all?${query}`);
+export const getGroups = (query: string) => API.get(`/group/get/all${query}`);
 export const getUserGroups = (userId: string) =>
   API.get(`/group/get/user/${userId}`);
 export const getGroup = (groupId: string) =>

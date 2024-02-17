@@ -1,3 +1,4 @@
+import { User } from "@/interfaces";
 import * as api from "../api";
 import {
   start,
@@ -34,8 +35,8 @@ export const getFriends =
   async (dispatch) => {
     try {
       loading && dispatch(start());
-      const { data } = await api.getFriends(query);
-      dispatch(getFriendsReducer(data));
+      const { data }: { data: { _id: string; friends: User[] } } = await api.getFriends(query);
+      dispatch(getFriendsReducer(data.friends));
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message

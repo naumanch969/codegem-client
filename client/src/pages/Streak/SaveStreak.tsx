@@ -21,7 +21,7 @@ const SaveStreak = ({ open, setOpen, streak }: { open: boolean, setOpen: any, st
 
     ///////////////////////////////////////////////////// STATES ////////////////////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getUserCollections(user?._id as string))
+        dispatch<any>(getUserCollections(userCollections.length == 0, user?._id as string, `?page=${1}&pageSize=${20}`))
     }, [])
 
     ///////////////////////////////////////////////////// FUNCTIONS ////////////////////////////////////////////////////

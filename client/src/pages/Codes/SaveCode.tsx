@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import { IconButton, Modal } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { createCollection, getUserCollections } from '../../redux/actions/collection';
-import {  saveCodeInCollections } from '../../redux/actions/code';
+import { saveCodeInCollections } from '../../redux/actions/code';
 import { RootState } from '../../redux/store';
 import { Close, Lock, ArrowDropDown } from '@mui/icons-material';
 import { Avatar } from '../../utils/Components';
@@ -21,7 +21,7 @@ const SaveCode = ({ open, setOpen, code }: { open: boolean, setOpen: any, code: 
 
     ///////////////////////////////////////////////////// STATES ////////////////////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getUserCollections(user?._id as string))
+        dispatch<any>(getUserCollections(userCollections.length == 0, user?._id as string, `?page=${1}&pageSize=${20}`))
     }, [])
 
     ///////////////////////////////////////////////////// FUNCTIONS ////////////////////////////////////////////////////

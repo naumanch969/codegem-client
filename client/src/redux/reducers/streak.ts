@@ -8,6 +8,7 @@ interface InitialState {
   streaks: Streak[];
   filteredStreaks: Streak[];
   currentStreak: Streak | null;
+  count: number;
 }
 
 const initialState: InitialState = {
@@ -16,6 +17,7 @@ const initialState: InitialState = {
   isFetching: false,
   error: "",
   currentStreak: null,
+  count: 20,
 };
 
 const streakSlice = createSlice({
@@ -89,11 +91,19 @@ const streakSlice = createSlice({
     getStreakReducer: (state, action: PayloadAction<Streak>) => {
       state.currentStreak = action.payload;
     },
-    getStreaksReducer: (state, action: PayloadAction<Streak[]>) => {
-      state.streaks = action.payload;
+    getStreaksReducer: (
+      state,
+      action: PayloadAction<{ result: Streak[]; count?: number }>
+    ) => {
+      state.streaks = action.payload.result;
+      if (action.payload.count) state.count = action.payload.count;
     },
-    getUserStreaksReducer: (state, action: PayloadAction<Streak[]>) => {
-      state.streaks = action.payload;
+    getUserStreaksReducer: (
+      state,
+      action: PayloadAction<{ result: Streak[]; count?: number }>
+    ) => {
+      state.streaks = action.payload.result;
+      if (action.payload.count) state.count = action.payload.count;
     },
     getCommentsReducer: (
       state,

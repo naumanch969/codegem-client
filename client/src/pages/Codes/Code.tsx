@@ -7,8 +7,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { commentCode, likeCode, saveCode } from '../../redux/actions/code';
 import { format } from 'timeago.js'
 import DeleteModal from './Delete';
-import UpdateModal from './Update';
-import { getCodeReducer } from '../../redux/reducers/code';
 import ShareCode from './ShareCode';
 import { Code, Collection, User } from '../../interfaces';
 import { RootState } from '../../redux/store';
@@ -18,18 +16,39 @@ import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { getComments } from '../../redux/actions/comment';
 import { Loader } from '../../utils/Components';
 import { useCodeModal } from '../../hooks/useCodeModal';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Separator } from '@/components/ui/separator';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Link } from 'react-router-dom';
 
 
 const CodeComponent = ({ code }: { code: Code }) => {
 
   /////////////////////////////////////// VARIABLES ////////////////////////////////////////
+  const { onOpen, onSetCode } = useCodeModal()
   const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user);
   const { userCollections }: { userCollections: Collection[] } = useSelector((state: RootState) => state.collection);
   const savedCollection = userCollections.filter(collection => collection.name == 'Saved')
   const userId = loggedUser?._id
   const isCodeSaved = savedCollection[0]?.codes?.findIndex(c => c._id == code?._id) != -1
   const dispatch = useDispatch();
-  const { onOpen, onSetCode } = useCodeModal()
 
   /////////////////////////////////////// STATES ////////////////////////////////////////
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
@@ -69,7 +88,6 @@ const CodeComponent = ({ code }: { code: Code }) => {
   };
   const handleOpenUpdateModal = () => {
     setShowMenu(false);
-    dispatch(getCodeReducer(code))
     onSetCode(code)
     onOpen()
   }
@@ -98,176 +116,178 @@ const CodeComponent = ({ code }: { code: Code }) => {
     setCommentContent('')
   }
 
-  /////////////////////////////////////// COMPONENTS ////////////////////////////////////////
-  const Menu = () => (
-    <motion.div animate={{ x: [100, 0], opacity: [0, 1] }} className="absolute z-[50] shadow-box top-[3rem] items-start right-0 w-[15rem] h-auto flex flex-col gap-[4px] p-[8px] border-[2px] bg-white text-dark-slate-blue border-warm-gray-dark rounded-[4px]">
-      <button onClick={handleOpenSaveModal} className="w-full flex hover:bg-cool-gray-light hover:text-teal-blue p-[6px] rounded-[6px] gap-2"><Save /><span className="">Save</span></button>
-      <button onClick={handleCopyCode} className="w-full flex hover:bg-cool-gray-light hover:text-teal-blue p-[6px] rounded-[6px] gap-2"><CopyAll /><span className="">Copy</span></button>
-      {/* String(loggedUser._id) == String(code?.user) && */}
-      {
-        <>
-          <button onClick={handleOpenUpdateModal} className="w-full flex hover:bg-cool-gray-light hover:text-teal-blue p-[6px] rounded-[6px] gap-2"><Update /><span className="">Update</span></button>
-          <button onClick={handleOpenDeleteModal} className="w-full flex hover:bg-cool-gray-light hover:text-teal-blue p-[6px] rounded-[6px] gap-2"><Delete /><span className="">Delete</span></button>
-        </>
-      }
-      <button onClick={() => { setShowMenu(false) }} className="w-full flex hover:bg-cool-gray-light hover:text-teal-blue p-[6px] rounded-[6px] gap-2"><Report /><span className="">Report</span></button>
-    </motion.div>
-  );
-
   return (
-    <div className='w-full flex flex-col p-[1rem] bg-light-gray text-cool-gray-dark rounded-[6px]'>
-
+    <>
       <DeleteModal open={openDeleteModal} setOpen={setOpenDeleteModal} codeId={code?._id as string} />
       {openShareModal && <ShareCode open={openShareModal} setOpen={setOpenShareModal} code={code} />}
       {openSaveModal && <SaveCode open={openSaveModal} setOpen={setOpenSaveModal} code={code} />}
 
-      {/* username */}
-      <div className='flex justify-between items-center'>
-        <div className='flex gap-[1rem]'>
-          <div className='w-[3rem] h-[3rem] rounded-full'>
-            <img src={image1} alt="image" className='w-full h-full rounded-full object-cover' />
-          </div>
-          <div className='flex flex-col items-start justify-center'>
-            <h5 className='text-[14px] font-semibold capitalize '>{code?.user?.firstName} {code?.user?.lastName}</h5>
-            <p className='text-[12px] font-light '>{code?.user?.username}</p>
-          </div>
-          <div className='flex items-center'>
-            <span className='text-teal-blue text-[14px] '>{format(code?.createdAt as Date)}</span>
-          </div>
-        </div>
-        <div className="relative">
-          <IconButton onClick={() => setShowMenu(prev => !prev)} className="bg-teal-blue cursor-pointer capitalize text-black"><MoreVert /></IconButton>
-          {showMenu && <Menu />}
-        </div>
-      </div>
+      <Card className='w-full flex flex-col bg-light-gray text-cool-gray-dark'>
 
-      <hr className='w-full h-[1px] bg-cool-gray-light border-none mt-[6px] mb-[6px]' />
-
-      <div className='flex flex-col gap-[8px]'>
-        {/* title, description, tags */}
-        <div className='flex flex-col gap-[2px]'>
-          {/* <h3 className='font-semibold text-[20px] capitalize '>{code?.title}</h3> */}
-          <p className='text-[14px]'>{code?.description}</p>
-          <div className='flex gap-[6px]'>
-            {
-              code?.tags?.map((tag, index) => (
-                <span key={index} className='text-teal-blue italic hover:underline cursor-pointer lowercase '>#{tag.name}</span>
-              ))
-            }
+        {/* username */}
+        <CardHeader className='flex flex-row justify-between items-center w-full p-4 pb-2 '>
+          <div className='flex gap-[1rem]'>
+            <Avatar>
+              <AvatarImage src={code?.user?.profilePicture} alt="Profile" />
+              <AvatarFallback>{code?.user?.firstName?.charAt(0)}</AvatarFallback>
+            </Avatar>
+            <CardTitle className='flex flex-col items-start justify-center'>
+              <Link to={`/user/${code?.user?._id}`} className='text-sm font-semibold capitalize hover:underline hover:text-teal-blue'>
+                {code?.user?.firstName} {code?.user?.lastName}
+              </Link>
+              <p className='text-xs font-light '>{code?.user?.username}</p>
+            </CardTitle>
+            <div className='flex items-center'>
+              <span className='text-teal-blue text-[14px] '>{format(code?.createdAt as Date)}</span>
+            </div>
           </div>
-        </div>
-        {/* code */}
-        <div className='relative rounded-[8px] text-[14px] bg-cool-gray-dark '>
-          <div className="flex justify-between items-center min-h-8 h-fit px-4 py-2 ">
-            <h3 className='font-semibold text-[20px] capitalize text-white ' >{code?.title}</h3>
-            {
-              copy
-                ?
-                <button className='w-16 h-8 rounded-full text-white ' >Copied!</button>
-                :
-                <Tooltip placement='top-start' title='Copy'  ><button onClick={() => hanldeCopy(code?.code)} className='w-8 h-8 rounded-full ' ><CopyAllOutlined className='text-white' /></button></Tooltip>
-            }
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <IconButton><MoreVert /></IconButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={handleOpenSaveModal} ><Save />Save</DropdownMenuItem>
+              <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={handleCopyCode}  ><CopyAll />Copy</DropdownMenuItem>
+              <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={handleOpenUpdateModal} ><Update />Update</DropdownMenuItem>
+              <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={handleOpenDeleteModal} ><Delete />Delete</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </CardHeader>
+
+        <Separator className='w-full h-[1px] bg-cool-gray-light border-none mt-[6px] mb-[6px]' />
+
+        <CardContent className='flex flex-col gap-[8px] p-4 pb-2 pt-2'>
+          {/* title, description, tags */}
+          <div className='flex flex-col gap-[2px]'>
+            {/* <h3 className='font-semibold text-[20px] capitalize '>{code?.title}</h3> */}
+            <CardDescription className='text-[14px]'>{code?.description}</CardDescription>
+            <div className='flex gap-[6px]'>
+              {
+                code?.tags?.map((tag, index) => (
+                  <span key={index} className='text-teal-blue italic hover:underline cursor-pointer lowercase '>#{tag.name}</span>
+                ))
+              }
+            </div>
           </div>
-          <SyntaxHighlighter
-            style={atomOneDark}
-            language="javascript"
-            wrapLongLines={true}
-            customStyle={{ borderBottomLeftRadius: '8px', borderBottomRightRadius: '8px', padding: '12px', maxHeight: '22rem' }}
-          >
-            {code?.code}
-          </SyntaxHighlighter>
-        </div>
-      </div>
-
-      <hr className='w-full h-[1px] bg-cool-gray-light border-none mb-[6px] mt-[6px]' />
-
-      {/* likes, share, comments */}
-      <div className='flex justify-between items-center'>
-        <div>
-          <IconButton onClick={handleLikeCode} size='medium' >
-            {code?.likes?.includes(loggedUser?._id as string) ? <ThumbUp fontSize="inherit" /> : <ThumbUpOutlined fontSize="inherit" />}
-          </IconButton>
-          <span className='text-[14px]'>{code?.likes?.length} people</span>
-        </div>
-        <div className='flex gap-[4px]'>
-          <IconButton onClick={() => setOpenShareModal(true)} size='medium' className='relative'>
-            <Share fontSize="inherit" />
-            <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-teal-blue-lighten text-white'>{code?.shares?.length}</span>
-          </IconButton>
-          <IconButton onClick={handleSave} size='medium' className='relative'>
-            {
-              isCodeSaved
-                ?
-                <Bookmark fontSize="inherit" />
-                :
-                <BookmarkBorderOutlined fontSize="inherit" />
-            }
-          </IconButton>
-          <IconButton size='medium' className='relative' onClick={() => setShowComments((pre) => !pre)}>
-            <Comment fontSize="inherit" />
-            <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-teal-blue-lighten text-white'>{code?.comments?.length}</span>
-          </IconButton>
-        </div>
-      </div>
-
-      {/* Comment Section */}
-      {
-        showComments &&
-        <div className="flex flex-col mt-4 min-h-[8rem] max-h-[16rem] overflow-auto px-1">
-          <div className='flex items-center space-x-3 mb-2'>
-            <img src={image1} alt="user image" className='w-10 h-10 rounded-full object-cover' />
-            <input
-              type="text"
-              value={commentContent}
-              onChange={(e) => setCommentContent(e.target.value)}
-              placeholder="Write a comment..."
-              className="flex-1 p-2 border rounded-lg outline-none focus:border-teal-blue-lighten"
-            />
-            <button onClick={handleComment} className="p-2 bg-teal-blue-lighten text-white rounded-lg hover:bg-teal-blue">Send</button>
+          {/* code */}
+          <div className='relative rounded-[8px] text-[14px] bg-cool-gray-dark '>
+            <div className="flex justify-between items-center min-h-8 h-fit px-4 py-2 ">
+              <h3 className='font-semibold text-[20px] capitalize text-white ' >{code?.title}</h3>
+              {
+                copy
+                  ?
+                  <button className='w-16 h-8 rounded-full text-white ' >Copied!</button>
+                  :
+                  <Tooltip placement='top-start' title='Copy'  ><button onClick={() => hanldeCopy(code?.code)} className='w-8 h-8 rounded-full ' ><CopyAllOutlined className='text-white' /></button></Tooltip>
+              }
+            </div>
+            <SyntaxHighlighter
+              style={atomOneDark}
+              language="javascript"
+              wrapLongLines={true}
+              customStyle={{ borderBottomLeftRadius: '8px', borderBottomRightRadius: '8px', padding: '12px', maxHeight: '22rem' }}
+            >
+              {code?.code}
+            </SyntaxHighlighter>
           </div>
-          <div className='space-y-2 h-full '>
-            {
-              commentsLoading
-                ?
-                <div className='flex justify-center items-center h-full ' >
-                  <Loader />
-                </div>
-                :
-                <>
-                  {
-                    code.comments.length == 0
-                      ?
-                      <div className="flex justify-center items-center w-full h-full ">
-                        <span className=''>No Comments to Show.</span>
-                      </div>
-                      :
-                      <>
-                        {code?.comments?.map((comment, index) => {
-                          // Check if the comment is a string or a Comment object
-                          const isString = typeof comment === 'string';
-                          if (isString) return null
-                          return (
-                            <div key={index} className="flex items-start space-x-2">
-                              <img src={image1} alt="user image" className='w-8 h-8 rounded-full object-cover' />
-                              <div className='flex flex-col'>
-                                <span className='text-sm font-semibold'>{(comment.user as User).username}</span>
-                                <span className='text-sm'>{comment.content}</span>
-                                <span className='text-xs text-gray-500'>{format(comment?.createdAt!)}</span>
+        </CardContent>
+
+        <Separator className='w-full h-[1px] bg-cool-gray-light border-none mb-[6px] mt-[6px]' />
+
+        {/* likes, share, comments */}
+        <CardFooter className={`flex justify-between items-center p-4 pt-1 ${showComments ? 'pb-0' : 'pb-2'} `}>
+          <div>
+            <IconButton onClick={handleLikeCode} size='medium' >
+              {code?.likes?.includes(loggedUser?._id as string) ? <ThumbUp fontSize="inherit" /> : <ThumbUpOutlined fontSize="inherit" />}
+            </IconButton>
+            <span className='text-[14px]'>{code?.likes?.length} people</span>
+          </div>
+          <div className='flex gap-[4px]'>
+            <IconButton onClick={() => setOpenShareModal(true)} size='medium' className='relative'>
+              <Share fontSize="inherit" />
+              <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-teal-blue-lighten text-white'>{code?.shares?.length}</span>
+            </IconButton>
+            <IconButton onClick={handleSave} size='medium' className='relative'>
+              {
+                isCodeSaved
+                  ?
+                  <Bookmark fontSize="inherit" />
+                  :
+                  <BookmarkBorderOutlined fontSize="inherit" />
+              }
+            </IconButton>
+            <IconButton size='medium' className='relative' onClick={() => setShowComments((pre) => !pre)}>
+              <Comment fontSize="inherit" />
+              <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-teal-blue-lighten text-white'>{code?.comments?.length}</span>
+            </IconButton>
+          </div>
+        </CardFooter>
+
+        {/* Comment Section */}
+        {
+          showComments &&
+          <div className="flex flex-col mt-4 min-h-[8rem] max-h-[16rem] overflow-auto px-4 pb-2 pt-1 ">
+            <div className='flex items-center space-x-3 mb-2'>
+              <Avatar>
+                <AvatarImage src={loggedUser?.profilePicture} alt="Profile" />
+                <AvatarFallback>{loggedUser?.firstName?.charAt(0)}</AvatarFallback>
+              </Avatar>
+              <Input
+                type="text"
+                value={commentContent}
+                onChange={(e) => setCommentContent(e.target.value)}
+                placeholder="Write a comment..."
+                className="flex-1 p-2 border rounded-lg "
+              />
+              <Button size='sm' onClick={handleComment} >Send</Button>
+            </div>
+            <div className='space-y-2 h-full '>
+              {
+                commentsLoading
+                  ?
+                  <div className='flex justify-center items-center h-full ' >
+                    <Loader />
+                  </div>
+                  :
+                  <>
+                    {
+                      code.comments.length == 0
+                        ?
+                        <div className="flex justify-center items-center w-full h-full ">
+                          <span className=''>No Comments to Show.</span>
+                        </div>
+                        :
+                        <>
+                          {code?.comments?.map((comment, index) => {
+                            // Check if the comment is a string or a Comment object
+                            const isString = typeof comment === 'string';
+                            if (isString) return null
+                            return (
+                              <div key={index} className="flex items-start space-x-2">
+                                <Avatar className='w-8 h-8' >
+                                  <AvatarImage src={(comment?.user as User)?.profilePicture} alt="Profile" className='w-8 h-8' />
+                                  <AvatarFallback>{(comment?.user as User)?.firstName?.charAt(0)}</AvatarFallback>
+                                </Avatar>
+                                <div className='flex flex-col'>
+                                  <span className='text-sm font-semibold'>{(comment.user as User).username}</span>
+                                  <span className='text-sm'>{comment.content}</span>
+                                  <span className='text-xs text-gray-500'>{format(comment?.createdAt!)}</span>
+                                </div>
                               </div>
-                            </div>
-                          );
-                        })}
-                      </>
-                  }
-                </>
-            }
+                            );
+                          })}
+                        </>
+                    }
+                  </>
+              }
+            </div>
+
           </div>
-
-        </div>
-      }
+        }
 
 
-    </div>
+      </Card>
+    </>
   );
 };
 

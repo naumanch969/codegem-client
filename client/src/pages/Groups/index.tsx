@@ -15,7 +15,7 @@ import UpdateGroup from './Update';
 const Groups = () => {
 
     /////////////////////////////////// VARIABLES /////////////////////////////////////
-    const { groups, isFetching }: { groups: Group[], isFetching: boolean } = useSelector((state: RootState) => state.group)
+    const { groups, isFetching, count }: { groups: Group[], isFetching: boolean, count: number } = useSelector((state: RootState) => state.group)
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
     const dispatch = useDispatch()
     const { onOpen } = useGroupModal()
@@ -23,9 +23,8 @@ const Groups = () => {
         { name: 'Home', link: '/home' },
         { name: 'Groups', link: '/groups' },
     ];
-    const pageSize = 5;
-    const maxLength = 50;
-    const totalPages = Math.ceil(maxLength / pageSize);
+    const pageSize = 20;
+    const totalPages = Math.ceil(count / pageSize);
 
     /////////////////////////////////// STATES /////////////////////////////////////
     const [filter, setFilter] = useState<string>('all');
@@ -34,7 +33,7 @@ const Groups = () => {
 
     /////////////////////////////////// USE EFFECTS /////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getGroups(groups.length == 0, `?page=${page}&pageSize=${pageSize}`))
+        dispatch<any>(getGroups(groups.length == 0, `?page=${page}&pageSize=${pageSize}&count=${true}`))
     }, [])
     // the longer you know somebody, the more curse you are to see them as human
     useEffect(() => {
@@ -66,11 +65,8 @@ const Groups = () => {
     });
 
     return (
-        <div className="container mx-auto p-4">
-
-            <CreateGroup />
-            <UpdateGroup />
-
+        <div className="container mx-auto p-4"> 
+        
             <div className="flex justify-between items-center">
                 <div className="flex flex-col">
                     <Path segments={segments} />
@@ -115,30 +111,30 @@ const Groups = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {
-                    isFetching
-                        ?
-                        Array(9).fill("")?.map((_, index) => (
-                            <GroupCard.Skeleton key={index} />
-                        ))
-                        :
-                        <>
-                            {filteredGroups.map((group: Group, index: number) => (
+            <div className='w-full flex flex-col gap-y-8'>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {
+                        isFetching
+                            ?
+                            Array(9).fill("")?.map((_, index) => (
+                                <GroupCard.Skeleton key={index} />
+                            ))
+                            :
+                            filteredGroups.map((group: Group, index: number) => (
                                 <GroupCard key={index} group={group} />
-                            ))}
-                            <div className="w-full flex justify-center">
-                                <Pagination
-                                    count={totalPages}
-                                    defaultPage={1}
-                                    page={page}
-                                    siblingCount={0}
-                                    onChange={(e: any, page: number) => setPage(page)}
-                                    size='large'
-                                />
-                            </div>
-                        </>
-                }
+                            ))
+                    }
+                </div>
+                <div className="w-full flex justify-center">
+                    <Pagination
+                        count={totalPages}
+                        defaultPage={1}
+                        page={page}
+                        siblingCount={0}
+                        onChange={(e: any, page: number) => setPage(page)}
+                        size='large'
+                    />
+                </div>
             </div>
         </div>
     );

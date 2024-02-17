@@ -8,6 +8,7 @@ interface InitialState {
   challenges: Challenge[];
   filteredChallenges: Challenge[];
   currentChallenge: Challenge | null;
+  count: number;
 }
 
 const initialState: InitialState = {
@@ -16,6 +17,7 @@ const initialState: InitialState = {
   isFetching: false,
   error: "",
   currentChallenge: null,
+  count: 20,
 };
 
 const challengeSlice = createSlice({
@@ -92,11 +94,19 @@ const challengeSlice = createSlice({
     getChallengeReducer: (state, action: PayloadAction<Challenge>) => {
       state.currentChallenge = action.payload;
     },
-    getChallengesReducer: (state, action: PayloadAction<Challenge[]>) => {
-      state.challenges = action.payload;
+    getChallengesReducer: (
+      state,
+      action: PayloadAction<{ result: Challenge[]; count?: number }>
+    ) => {
+      state.challenges = action.payload.result;
+      if (action.payload.count) state.count = action.payload.count;
     },
-    getUserChallengesReducer: (state, action: PayloadAction<Challenge[]>) => {
-      state.challenges = action.payload;
+    getUserChallengesReducer: (
+      state,
+      action: PayloadAction<{ result: Challenge[]; count?: number }>
+    ) => {
+      state.challenges = action.payload.result;
+      if (action.payload.count) state.count = action.payload.count;
     },
     getCommentsReducer: (
       state,

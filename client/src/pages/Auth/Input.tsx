@@ -20,7 +20,7 @@ const Input: FC<InputProps> = ({ type, placeholder, attribute, blurFunction, sho
   };
 
   return (
-    <div className="flex flex-col gap-[4px] w-full">
+    <div className="flex flex-col gap-1w-full">
       <div className="relative flex flex-col gap-[4px]">
         <input
           autoComplete="off"

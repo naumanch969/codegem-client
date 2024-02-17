@@ -20,7 +20,7 @@ import {
 } from "../reducers/group";
 import * as api from "../api";
 import { useNavigate } from "react-router-dom";
-import { Challenge, Code, Streak } from "../../interfaces";
+import { Challenge, Code, Group, Streak } from "../../interfaces";
 
 export const getGroup = (groupId: string) => async (dispatch: Dispatch) => {
   try {
@@ -34,26 +34,31 @@ export const getGroup = (groupId: string) => async (dispatch: Dispatch) => {
       : dispatch(error(err.message));
   }
 };
-
-export const getUserGroups = (userId: string) => async (dispatch: Dispatch) => {
-  try {
-    dispatch(start());
-    const { data } = await api.getUserGroups(userId);
-    dispatch(getUserGroupsReducer(data));
-    dispatch(end());
-  } catch (err: any) {
-    err.response?.data?.message
-      ? dispatch(error(err.response.data.message))
-      : dispatch(error(err.message));
-  }
-};
+export const getUserGroups =
+  (loading: boolean = false, query: string) =>
+  async (dispatch: Dispatch) => {
+    try {
+      loading && dispatch(start());
+      const { data }: { data: { result: Group[]; count: number } } =
+        await api.getUserGroups(query);
+      dispatch(
+        getUserGroupsReducer({ result: data.result, count: data.count })
+      );
+      dispatch(end());
+    } catch (err: any) {
+      err.response?.data?.message
+        ? dispatch(error(err.response.data.message))
+        : dispatch(error(err.message));
+    }
+  };
 export const getGroups =
   (loading: boolean = false, query: string) =>
   async (dispatch: Dispatch) => {
     try {
       loading && dispatch(start());
-      const { data } = await api.getGroups(query);
-      dispatch(getGroupsReducer(data));
+      const { data }: { data: { result: Group[]; count: number } } =
+        await api.getGroups(query);
+      dispatch(getGroupsReducer({ result: data.result, count: data.count }));
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message

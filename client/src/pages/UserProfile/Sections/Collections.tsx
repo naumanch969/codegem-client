@@ -13,7 +13,7 @@ const Collections = () => {
   const { currentUser }: { currentUser: User | null } = useSelector((state: RootState) => state.user)
 
   useEffect(() => {
-    dispatch<any>(getUserCollections(currentUser?._id as string))
+    dispatch<any>(getUserCollections(userCollections.length == 0, currentUser?._id as string, `?page=${1}&pageSize=${20}`))
   }, [])
 
   return (

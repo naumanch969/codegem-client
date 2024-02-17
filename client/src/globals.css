@@ -74,9 +74,6 @@
     @apply bg-background text-foreground;
   }
 }
- 
-
-
 
 /* Vertical scrollbar */
 ::-webkit-scrollbar {

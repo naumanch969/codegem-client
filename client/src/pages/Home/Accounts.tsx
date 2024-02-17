@@ -41,7 +41,7 @@ const Accounts = () => {
                                             <p className="text-[14px] text-text-emerald " >{account.name}</p>
                                         </div>
                                     </div>
-                                    <div className="flex justify-start items-center gap-[4px] " >
+                                    <div className="flex justify-start items-center gap-1" >
                                         <button onClick={() => switchAccount(account)} className="text-[14px] text-link-blue cursor-poiner hover:underline " >switch</button>
                                     </div>
                                 </div>

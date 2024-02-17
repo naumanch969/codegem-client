@@ -19,16 +19,15 @@ import { useCollectionModal } from '../../hooks/useCollectionModal';
 const Collections: React.FC = () => {
     ////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////////
     const dispatch = useDispatch()
-    const { collections, userCollections, isFetching } = useSelector((state: RootState) => state.collection);
+    const { collections, userCollections, isFetching, count } = useSelector((state: RootState) => state.collection);
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user);
     const { onOpen } = useCollectionModal()
     const segments = [
         { name: 'Home', link: '/home' },
         { name: 'Collections', link: '/collections' },
     ];
-    const pageSize = 5;
-    const maxLength = 50;
-    const totalPages = Math.ceil(maxLength / pageSize);
+    const pageSize = 20;
+    const totalPages = Math.ceil(count / pageSize);
 
     ////////////////////////////////////////////// STATES ////////////////////////////////////////////////////
     const [filter, setFilter] = useState<string>('all');
@@ -37,8 +36,8 @@ const Collections: React.FC = () => {
 
     ////////////////////////////////////////////// useEffects ////////////////////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getCollections(`?page=${page}&pageSize=${pageSize}`));
-        dispatch<any>(getUserCollections(loggedUser?._id as string));
+        dispatch<any>(getCollections(collections.length == 0, `?page=${page}&pageSize=${pageSize}&count=${true}`));
+        dispatch<any>(getUserCollections(userCollections.length == 0, loggedUser?._id as string, `?page=${page}&pageSize=${pageSize}&count=${true}`));
     }, []);
     useEffect(() => {
         // TODO: if data of particular page is available then dont call api
@@ -47,7 +46,7 @@ const Collections: React.FC = () => {
 
     /////////////////////////////////////// FUNCTIONS /////////////////////////////////////////
     const fetchMore = async () => {
-        dispatch<any>(getCollections(`?page=${page}&pageSize=${pageSize}`))
+        dispatch<any>(getCollections(collections.length == 0, `?page=${page}&pageSize=${pageSize}`))
     }
 
     const handleFilterChange = (newFilter: string) => {
@@ -59,10 +58,7 @@ const Collections: React.FC = () => {
     };
 
     return (
-        <div className="flex w-full ">
-
-            <CreateCollection />
-            <UpdateCollection />
+        <div className="flex w-full "> 
 
             <div className=" lg:w-[75%] w-full p-[1rem]">
 
@@ -110,66 +106,62 @@ const Collections: React.FC = () => {
                     </div>
                 </div>
 
-                {
-                    isFetching
-                        ?
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {
+                <div className="w-full flex flex-col gap-[2rem] ">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {
+                            isFetching
+                                ?
                                 Array(9).fill("")?.map((_, index) => (
                                     <CollectionCard.Skeleton key={index} />
                                 ))
-                            }
-                        </div>
-                        :
-                        <div className="w-full flex flex-col gap-[2rem] ">
-                            <div className="flex flex-col">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                    {userCollections.map((collection: Collection, index: number) => (
-                                        <CollectionCard collection={collection} key={index} />
-                                    ))}
-                                </div>
-                            </div>
+                                :
+                                userCollections.map((collection: Collection, index: number) => (
+                                    <CollectionCard collection={collection} key={index} />
+                                ))
+                        }
+                    </div>
 
-                            {/* Other Collections */}
-                            <div className="flex flex-col">
-                                <h2 className="text-3xl font-bold mb-6 text-dark-slate-blue">Suggested To You</h2>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                    {collections.map((collection: Collection, index: number) => (
-                                        <Card
-                                            key={index}
-                                            className="bg-cool-gray-light p-[1rem] rounded shadow-md transition-transform transform hover:scale-105"
-                                        >
-                                            <CardContent>
-                                                <Typography variant="h6" component="h3" className="text-dark-slate-blue">
-                                                    <Favorite fontSize="small" style={{ verticalAlign: 'middle', marginRight: '0.5rem' }} />
-                                                    {collection.name}
-                                                </Typography>
-                                                <Typography variant="body2" className="text-cool-gray-dark max-lines-10">
-                                                    {collection.description}
-                                                </Typography>
-                                                <Link
-                                                    to={`/collections/${collection._id}`}
-                                                    className="cursor-pointer text-teal-blue hover:text-teal-blue-dark hover:underline transition-colors duration-300"
-                                                >
-                                                    View Collection
-                                                </Link>
-                                            </CardContent>
-                                        </Card>
-                                    ))}
-                                    <div className="w-full flex justify-center">
-                                        <Pagination
-                                            count={totalPages}
-                                            defaultPage={1}
-                                            page={page}
-                                            siblingCount={0}
-                                            onChange={(e: any, page: number) => setPage(page)}
-                                            size='large'
-                                        />
-                                    </div>
-                                </div>
+                    {/* Suggested Collections */}
+                    <div className="flex flex-col">
+                        <h2 className="text-3xl font-bold mb-6 text-dark-slate-blue">Suggested To You</h2>
+                        <div className="flex flex-col gap-y-8">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {collections.map((collection: Collection, index: number) => (
+                                    <Card
+                                        key={index}
+                                        className="bg-cool-gray-light p-[1rem] rounded shadow-md transition-transform transform hover:scale-105"
+                                    >
+                                        <CardContent>
+                                            <Typography variant="h6" component="h3" className="text-dark-slate-blue">
+                                                <Favorite fontSize="small" style={{ verticalAlign: 'middle', marginRight: '0.5rem' }} />
+                                                {collection.name}
+                                            </Typography>
+                                            <Typography variant="body2" className="text-cool-gray-dark max-lines-10">
+                                                {collection.description}
+                                            </Typography>
+                                            <Link
+                                                to={`/collections/${collection._id}`}
+                                                className="cursor-pointer text-teal-blue hover:text-teal-blue-dark hover:underline transition-colors duration-300"
+                                            >
+                                                View Collection
+                                            </Link>
+                                        </CardContent>
+                                    </Card>
+                                ))}
+                            </div>
+                            <div className="w-full flex justify-center">
+                                <Pagination
+                                    count={totalPages}
+                                    defaultPage={1}
+                                    page={page}
+                                    siblingCount={0}
+                                    onChange={(e: any, page: number) => setPage(page)}
+                                    size='large'
+                                />
                             </div>
                         </div>
-                }
+                    </div>
+                </div>
             </div>
             <div className="hidden lg:block w-[25%] bg-cool-gray-light p-4 rounded shadow">
                 <Rightbar />

@@ -41,8 +41,9 @@ export const getCodes =
   async (dispatch: Dispatch) => {
     try {
       loading && dispatch(start());
-      const { data } = await api.getCodes(query);
-      dispatch(getCodesReducer(data));
+      const { data }: { data: { result: Code[]; count: number } } =
+        await api.getCodes(query);
+      dispatch(getCodesReducer({ result: data.result, count: data.count }));
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
@@ -62,22 +63,24 @@ export const getSavedCodes = () => async (dispatch: Dispatch) => {
       : dispatch(error(err.message));
   }
 };
-
-export const getUserCodes = (userId: string) => async (dispatch: Dispatch) => {
-  try {
-    dispatch(start());
-    const { data } = await api.getUserCodes(userId);
-    dispatch(getUserCodesReducer(data));
-    dispatch(end());
-  } catch (err: any) {
-    err.response?.data?.message
-      ? dispatch(error(err.response.data.message))
-      : dispatch(error(err.message));
-  }
-};
-
+export const getUserCodes =
+  (loading: boolean = false, query: string) =>
+  async (dispatch: Dispatch) => {
+    try {
+      loading && dispatch(start());
+      const { data }: { data: { result: Code[]; count: number } } =
+        await api.getUserCodes(query);
+      dispatch(getUserCodesReducer({ result: data.result, count: data.count }));
+      dispatch(end());
+    } catch (err: any) {
+      err.response?.data?.message
+        ? dispatch(error(err.response.data.message))
+        : dispatch(error(err.message));
+    }
+  };
 export const createCode =
-  (codeData: any, onClose: () => void) => async (dispatch: Dispatch) => {
+  (codeData: any, onClose: () => void, toast: any) =>
+  async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       const { data } = await api.createCode(codeData);
@@ -92,27 +95,31 @@ export const createCode =
         dispatch(createCodeReducer(data));
       }
       onClose();
+      toast.success(`Success! Code created.`);
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
         ? dispatch(error(err.response.data.message))
         : dispatch(error(err.message));
+      toast.error(err.response.data.message || "OOPS, Something went wrong!");
     }
   };
 
 export const updateCode =
-  (codeId: string, codeData: any, onClose: () => void) =>
+  (codeId: string, codeData: any, onClose: () => void, toast: any) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       const { data } = await api.updateCode(codeId, codeData);
       dispatch(updateCodeReducer(data));
       onClose();
+      toast.success("Success! Code updated.");
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
         ? dispatch(error(err.response.data.message))
         : dispatch(error(err.message));
+      toast.error(err.response.data.message || "OOPS, Something went wrong!");
     }
   };
 export const shareCode =

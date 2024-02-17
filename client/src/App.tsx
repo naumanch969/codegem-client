@@ -48,8 +48,8 @@ const Apps = () => {
   /////////////////////////////////////////////// USE EFFECTS /////////////////////////////////////////////////////
   useEffect(() => {
     // dispatch<any>(getAllUsers());
-     if (userCollections.length == 0) {
-       dispatch<any>(getUserCollections(loggedUser?._id!));
+    if (userCollections.length == 0) {
+      dispatch<any>(getUserCollections(userCollections.length == 0, loggedUser?._id!, `?page=${1}&pageSize=${10}`));
     }
   }, [userCollections]);
 
@@ -58,7 +58,6 @@ const Apps = () => {
   return (
     <div className={`   w-screen min-h-screen overflow-x-hidden flex bg-light-grayD text-dark-slate-blue`}>
       {!loggedUserToken ? (
-        // {!loggedUserToken && !loggedUser ? (
         <Routes>
           <Route path="/auth/register" element={<AuthWrapper><Register /></AuthWrapper>} />
           <Route path="/auth/verify_register_otp" element={<AuthWrapper><InputRegisterationOTP /></AuthWrapper>} />

@@ -21,7 +21,7 @@ const SaveChallenge = ({ open, setOpen, challenge }: { open: boolean, setOpen: a
 
     ///////////////////////////////////////////////////// STATES ////////////////////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getUserCollections(user?._id as string))
+        dispatch<any>(getUserCollections(userCollections.length == 0, user?._id as string, `?page=${1}&pageSize=${10}`))
     }, [])
 
     ///////////////////////////////////////////////////// FUNCTIONS ////////////////////////////////////////////////////

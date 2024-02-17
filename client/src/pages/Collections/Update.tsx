@@ -78,7 +78,7 @@ const UpdateCollection = () => {
                         <Avatar src={image6} />
                         <div className='flex flex-col ' >
                             <p className='font-semibold text-dark-slate-blue capitalize ' >{user?.firstName} {user?.lastName}</p>
-                            <div className='relative flex flex-col justify-center items-start gap-[4px] cursor-pointer rounded-t-[4px] min-w-[9rem] bg-gray-100 ' >
+                            <div className='relative flex flex-col justify-center items-start gap-1cursor-pointer rounded-t-[4px] min-w-[9rem] bg-gray-100 ' >
 
                                 <button onClick={() => setShowVisibilityMenu(pre => !pre)} className='w-full flex justify-between items-center p-[2px] ' >
                                     <span className="flex justify-start gap-[2px] capitalize " >
@@ -89,7 +89,7 @@ const UpdateCollection = () => {
                                 </button>
                                 {
                                     showVisibilityMenu &&
-                                    <div className='w-full absolute top-full bg-white shadow-box flex flex-col items-start gap-[4px] rounded-b-[4px] ' >
+                                    <div className='w-full absolute top-full bg-white shadow-box flex flex-col items-start gap-1rounded-b-[4px] ' >
                                         {
                                             menu.filter(m => m != collectionData?.visibility).map((item, index) => (
                                                 <button key={index} onClick={() => { setShowVisibilityMenu(false); setCollectionData({ ...collectionData, visibility: item }) }} className='w-full gap-[2px] text-start hover:bg-teal-blue-lighten hover:text-white text-cool-gray capitalize p-[2px] ' >

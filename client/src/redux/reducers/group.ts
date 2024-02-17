@@ -8,6 +8,7 @@ interface InitialState {
   userGroups: Group[];
   filteredGroups: Group[];
   currentGroup: Group | null;
+  count: number;
 }
 
 const initialState: InitialState = {
@@ -17,6 +18,7 @@ const initialState: InitialState = {
   isFetching: false,
   error: "",
   currentGroup: null,
+  count: 20, // no of docs in db collection
 };
 
 const groupSlice = createSlice({
@@ -37,21 +39,25 @@ const groupSlice = createSlice({
     getGroupReducer: (state, action: PayloadAction<Group>) => {
       state.currentGroup = action.payload;
     },
-    getGroupsReducer: (state, action: PayloadAction<Group[]>) => {
-      state.groups = action.payload;
+    getGroupsReducer: (
+      state,
+      action: PayloadAction<{ result: Group[]; count?: number }>
+    ) => {
+      state.groups = action.payload.result;
+      if (action.payload.count) state.count = action.payload.count;
     },
-    getUserGroupsReducer: (state, action: PayloadAction<Group[]>) => {
-      state.userGroups = action.payload;
+    getUserGroupsReducer: (
+      state,
+      action: PayloadAction<{ result: Group[]; count?: number }>
+    ) => {
+      state.userGroups = action.payload.result;
+      if (action.payload.count) state.count = action.payload.count;
     },
     getGroupCodesReducer: (state, action: PayloadAction<Code[]>) => {
       state.currentGroup = {
         ...state.currentGroup!,
         codes: action.payload,
       };
-      console.log({
-        ...state.currentGroup!,
-        codes: action.payload,
-      });
     },
     getGroupStreaksReducer: (state, action: PayloadAction<Streak[]>) => {
       state.currentGroup = {

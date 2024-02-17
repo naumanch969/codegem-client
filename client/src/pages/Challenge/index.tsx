@@ -11,16 +11,15 @@ import { Loader } from "../../utils/Components";
 import UpdateModal from "../Codes/Update";
 import CreateChallenge from "./Create";
 import { Pagination } from "@mui/material";
-
+import { Challenge as TChallenge } from "@/interfaces";
 
 const Challenges = () => {
 
   /////////////////////////////////////// VARIABLES //////////////////////////////////////////
   const dispatch = useDispatch()
-  const { challenges, isFetching } = useSelector((state: RootState) => state.challenge)
-  const pageSize = 5;
-  const maxLength = 50;
-  const totalPages = Math.ceil(maxLength / pageSize);
+  const { challenges, isFetching, count }: { challenges: TChallenge[], isFetching: boolean, count: number } = useSelector((state: RootState) => state.challenge)
+  const pageSize = 20;
+  const totalPages = Math.ceil(count / pageSize);
 
   /////////////////////////////////////// STATES //////////////////////////////////////////
   const [filters, setFilters] = useState({ challenges: 'all', language: 'all' })
@@ -28,7 +27,7 @@ const Challenges = () => {
 
   /////////////////////////////////////// USE EFFECTS ///////////////////////////////////////
   useEffect(() => {
-    dispatch<any>(getChallenges(challenges.length == 0,`?page=${page}&pageSize=${pageSize}`))
+    dispatch<any>(getChallenges(challenges.length == 0, `?page=${page}&pageSize=${pageSize}&count=${count}`))
   }, [])
   useEffect(() => {
     // TODO: if data of particular page is available then dont call api
@@ -41,13 +40,10 @@ const Challenges = () => {
   }
 
   return (
-    <div className="flex w-full  ">
-
-      <CreateChallenge />
-      <UpdateModal />
+    <div className="flex w-full  "> 
 
       <div className={`lg:w-[75%] w-full h-full p-[1rem] flex justify-center `}>
-        <div className="w-[48rem] flex flex-col h-full">
+        <div className="w-full flex flex-col h-full">
           <Topbar filters={filters} setFilters={setFilters} />
           <Create />
           <div className="w-full flex flex-col justify-between items-start gap-[2rem] mt-[1rem] " >

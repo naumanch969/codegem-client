@@ -40,12 +40,15 @@ export const getChallenge =
   };
 
 export const getChallenges =
-  (loading: boolean = false, query:string) =>
+  (loading: boolean = false, query: string) =>
   async (dispatch: Dispatch) => {
     try {
       loading && dispatch(start());
-      const { data } = await api.getChallenges(query);
-      dispatch(getChallengesReducer(data));
+      const { data }: { data: { result: Challenge[]; count: number } } =
+        await api.getChallenges(query);
+      dispatch(
+        getChallengesReducer({ result: data.result, count: data.count })
+      );
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
@@ -67,11 +70,15 @@ export const getSavedChallenges = () => async (dispatch: Dispatch) => {
 };
 
 export const getUserChallenges =
-  (userId: string) => async (dispatch: Dispatch) => {
+  (loading: boolean = false, query: string) =>
+  async (dispatch: Dispatch) => {
     try {
-      dispatch(start());
-      const { data } = await api.getUserChallenges(userId);
-      dispatch(getUserChallengesReducer(data));
+      loading && dispatch(start());
+      const { data }: { data: { result: Challenge[]; count: number } } =
+        await api.getUserChallenges(query);
+      dispatch(
+        getUserChallengesReducer({ result: data.result, count: data.count })
+      );
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
@@ -79,9 +86,9 @@ export const getUserChallenges =
         : dispatch(error(err.message));
     }
   };
-
 export const createChallenge =
-  (challengeData: any, onClose: () => void) => async (dispatch: Dispatch) => {
+  (challengeData: any, onClose: () => void, toast: any) =>
+  async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       const { data } = await api.createChallenge(challengeData);
@@ -96,27 +103,31 @@ export const createChallenge =
         dispatch(createChallengeReducer(data));
       }
       onClose();
+      toast.success("Success! Challenge created.");
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
         ? dispatch(error(err.response.data.message))
         : dispatch(error(err.message));
+      toast.error(err.response.data.message || "OOPS, Something went wrong!");
     }
   };
 
 export const updateChallenge =
-  (challengeId: string, challengeData: any, onClose: () => void) =>
+  (challengeId: string, challengeData: any, onClose: () => void, toast: any) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       const { data } = await api.updateChallenge(challengeId, challengeData);
       dispatch(updateChallengeReducer(data));
       onClose();
+      toast.success("Success! Challenge updated.");
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
         ? dispatch(error(err.response.data.message))
         : dispatch(error(err.message));
+      toast.error(err.response.data.message || "OOPS, Something went wrong!");
     }
   };
 export const shareChallenge =

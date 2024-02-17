@@ -11,7 +11,6 @@ const ProfilePage = () => {
     const navigate = useNavigate()
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
 
-    console.log('loggedUser', loggedUser)
 
     return (
         <div className="flex flex-col w-full">

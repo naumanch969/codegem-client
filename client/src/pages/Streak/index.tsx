@@ -11,16 +11,16 @@ import { Loader } from "../../utils/Components";
 import UpdateModal from "../Codes/Update";
 import CreateStreak from "./Create";
 import { Pagination } from "@mui/material";
+import { Streak as TStreak } from "@/interfaces";
 
 
 const Streaks = () => {
 
   /////////////////////////////////////// VARIABLES //////////////////////////////////////////
   const dispatch = useDispatch()
-  const { streaks, isFetching } = useSelector((state: RootState) => state.streak)
-  const pageSize = 5;
-  const maxLength = 50;
-  const totalPages = Math.ceil(maxLength / pageSize);
+  const { streaks, isFetching, count }: { streaks: TStreak[], isFetching: boolean, count: number } = useSelector((state: RootState) => state.streak)
+  const pageSize = 20;
+  const totalPages = Math.ceil(count / pageSize);
 
   /////////////////////////////////////// STATES //////////////////////////////////////////
   const [filters, setFilters] = useState({ streaks: 'all', language: 'all' })
@@ -28,7 +28,7 @@ const Streaks = () => {
 
   /////////////////////////////////////// USE EFFECTS ///////////////////////////////////////
   useEffect(() => {
-    dispatch<any>(getStreaks(streaks.length == 0, `?page=${page}&pageSize=${pageSize}`))
+    dispatch<any>(getStreaks(streaks.length == 0, `?page=${page}&pageSize=${pageSize}&count=${true}`))
   }, [])
   useEffect(() => {
     // TODO: if data of particular page is available then dont call api
@@ -43,12 +43,8 @@ const Streaks = () => {
   return (
     <div className="flex w-full  ">
 
-      <CreateStreak />
-      <UpdateModal />
-
-
       <div className={`lg:w-[75%] w-full h-full p-[1rem] flex justify-center `}>
-        <div className="w-[48rem] flex flex-col h-full">
+        <div className="w-full flex flex-col h-full">
           <Topbar filters={filters} setFilters={setFilters} />
           <div className="w-full flex flex-col justify-between items-start gap-[2rem] mt-[1rem] " >
             {

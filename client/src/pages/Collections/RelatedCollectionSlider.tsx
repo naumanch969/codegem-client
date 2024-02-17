@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { Collection, User } from '../../interfaces';
-import { getCollections, getUserCollections } from '../../redux/actions/collection';
+import { getUserCollections } from '../../redux/actions/collection';
 import { Loader } from '../../utils/Components';
 
 const RelatedCollectionSlider = () => {
@@ -19,9 +19,8 @@ const RelatedCollectionSlider = () => {
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
 
     useEffect(() => {
-        console.log('collections', userCollections)
-        if (userCollections.length == 0) {
-            dispatch<any>(getUserCollections(loggedUser?._id!))
+         if (userCollections.length == 0) {
+            dispatch<any>(getUserCollections(userCollections.length == 0, loggedUser?._id!, `?page=${1}&pageSize=${20}`))
         }
     }, [])
 

@@ -79,13 +79,16 @@ export const getCollectionChallenges =
       setLoading && setLoading(false);
     }
   };
-
-export const getUserCollections =
-  (userId: string) => async (dispatch: Dispatch) => {
+export const getCollections =
+  (loading: boolean = false, query: string) =>
+  async (dispatch: Dispatch) => {
     try {
-      dispatch(start());
-      const { data } = await api.getUserCollections(userId);
-      dispatch(getUserCollectionsReducer(data));
+      loading && dispatch(start());
+      const { data }: { data: { result: Collection[]; count: number } } =
+        await api.getCollections(query);
+      dispatch(
+        getCollectionsReducer({ result: data.result, count: data.count })
+      );
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
@@ -93,19 +96,23 @@ export const getUserCollections =
         : dispatch(error(err.message));
     }
   };
-export const getCollections = (query:string) => async (dispatch: Dispatch) => {
-  try {
-    dispatch(start());
-    const { data } = await api.getCollections(query);
-    dispatch(getCollectionsReducer(data));
-    dispatch(end());
-  } catch (err: any) {
-    err.response?.data?.message
-      ? dispatch(error(err.response.data.message))
-      : dispatch(error(err.message));
-  }
-};
-
+export const getUserCollections =
+  (loading: boolean = false, userId: string, query: string) =>
+  async (dispatch: Dispatch) => {
+    try {
+      loading && dispatch(start());
+      const { data }: { data: { result: Collection[]; count: number } } =
+        await api.getUserCollections(userId, query);
+      dispatch(
+        getUserCollectionsReducer({ result: data.result, count: data.count })
+      );
+      dispatch(end());
+    } catch (err: any) {
+      err.response?.data?.message
+        ? dispatch(error(err.response.data.message))
+        : dispatch(error(err.message));
+    }
+  };
 export const createCollection =
   (collectionData: any, onClose: () => void) => async (dispatch: Dispatch) => {
     try {

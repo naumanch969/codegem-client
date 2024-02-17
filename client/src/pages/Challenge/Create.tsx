@@ -9,6 +9,7 @@ import { Avatar, } from '../../utils/Components';
 import { Challenge, User } from '../../interfaces';
 import { image6 } from '../../assets';
 import { useChallengeModal } from '../../hooks/useChallengeModal';
+import toast from 'react-hot-toast';
 
 const CreateChallenge = ({ groupId, handleSubmit }: { groupId?: string, handleSubmit?: (data: any) => void }) => {
     ////////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////////
@@ -51,10 +52,10 @@ const CreateChallenge = ({ groupId, handleSubmit }: { groupId?: string, handleSu
         }
 
         if (groupId) {
-            dispatch<any>(createChallenge({ ...data, groupId }, onClose));
+            dispatch<any>(createChallenge({ ...data, groupId }, onClose, toast));
         }
         else {
-            dispatch<any>(createChallenge(data, onClose));
+            dispatch<any>(createChallenge(data, onClose, toast));
         }
         setChallengeData(initialChallenge)
     };

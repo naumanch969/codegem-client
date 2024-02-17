@@ -8,6 +8,7 @@ interface InitialState {
   userCollections: Collection[];
   filteredCollections: Collection[];
   currentCollection: Collection | null;
+  count: number;
 }
 
 const initialState: InitialState = {
@@ -17,6 +18,7 @@ const initialState: InitialState = {
   isFetching: false,
   error: "",
   currentCollection: null,
+  count: 20,
 };
 
 const collectionSlice = createSlice({
@@ -42,10 +44,6 @@ const collectionSlice = createSlice({
         ...state.currentCollection!,
         codes: action.payload,
       };
-      console.log({
-        ...state.currentCollection!,
-        codes: action.payload,
-      });
     },
     getCollectionStreaksReducer: (state, action: PayloadAction<Streak[]>) => {
       state.currentCollection = {
@@ -62,11 +60,19 @@ const collectionSlice = createSlice({
         challenges: action.payload,
       };
     },
-    getCollectionsReducer: (state, action: PayloadAction<Collection[]>) => {
-      state.collections = action.payload;
+    getCollectionsReducer: (
+      state,
+      action: PayloadAction<{ result: Collection[]; count?: number }>
+    ) => {
+      state.collections = action.payload.result;
+      if (action.payload.count) state.count = action.payload.count;
     },
-    getUserCollectionsReducer: (state, action: PayloadAction<Collection[]>) => {
-      state.userCollections = action.payload;
+    getUserCollectionsReducer: (
+      state,
+      action: PayloadAction<{ result: Collection[]; count?: number }>
+    ) => {
+      state.userCollections = action.payload.result;
+      if (action.payload.count) state.count = action.payload.count;
     },
     createCollectionReducer: (state, action: PayloadAction<Collection>) => {
       state.userCollections = [action.payload, ...state.userCollections];
@@ -254,10 +260,14 @@ const collectionSlice = createSlice({
       const codeId = action.payload.collectionId;
       state.currentCollection = {
         ...state.currentCollection!,
-        stars: state.currentCollection!.stars.includes(action.payload.loggedUserId)
-          ? state.currentCollection!.stars.filter((l) => l != action.payload.loggedUserId)
+        stars: state.currentCollection!.stars.includes(
+          action.payload.loggedUserId
+        )
+          ? state.currentCollection!.stars.filter(
+              (l) => l != action.payload.loggedUserId
+            )
           : state.currentCollection!.stars.concat(action.payload.loggedUserId),
-      }
+      };
     },
     deleteCollectionReducer: (state, action: PayloadAction<Collection>) => {
       state.userCollections = state.userCollections.filter(

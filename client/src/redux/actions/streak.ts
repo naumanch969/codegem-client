@@ -37,12 +37,13 @@ export const getStreak = (streakId: string) => async (dispatch: Dispatch) => {
 };
 
 export const getStreaks =
-  (loading: boolean = false,query: string) =>
+  (loading: boolean = false, query: string) =>
   async (dispatch: Dispatch) => {
     try {
       loading && dispatch(start());
-      const { data } = await api.getStreaks(query);
-      dispatch(getStreaksReducer(data));
+      const { data }: { data: { result: Streak[]; count: number } } =
+        await api.getStreaks(query);
+      dispatch(getStreaksReducer({ result: data.result, count: data.count }));
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
@@ -64,11 +65,15 @@ export const getSavedStreaks = () => async (dispatch: Dispatch) => {
 };
 
 export const getUserStreaks =
-  (userId: string) => async (dispatch: Dispatch) => {
+  (loading: boolean = false, query: string) =>
+  async (dispatch: Dispatch) => {
     try {
-      dispatch(start());
-      const { data } = await api.getUserStreaks(userId);
-      dispatch(getUserStreaksReducer(data));
+      loading && dispatch(start());
+      const { data }: { data: { result: Streak[]; count: number } } =
+        await api.getUserStreaks(query);
+      dispatch(
+        getUserStreaksReducer({ result: data.result, count: data.count })
+      );
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
@@ -76,9 +81,9 @@ export const getUserStreaks =
         : dispatch(error(err.message));
     }
   };
-
 export const createStreak =
-  (streakData: any, onClose: () => void) => async (dispatch: Dispatch) => {
+  (streakData: any, onClose: () => void, toast: any) =>
+  async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       const { data } = await api.createStreak(streakData);
@@ -93,31 +98,32 @@ export const createStreak =
         dispatch(createStreakReducer(data));
       }
       onClose();
+      toast.success(`Success! Streak created.`);
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
         ? dispatch(error(err.response.data.message))
         : dispatch(error(err.message));
+      toast.error(err.response.data.message || "OOPS, Something went wrong!");
     }
   };
 
 export const updateStreak =
-  (
-    streakId: string,
-    streakData: any,
-    onClose: ()=> void
-  ) =>
+  (streakId: string, streakData: any, onClose: () => void, toast: any) =>
+  // TODO: check why is groupId is not passed here but passed in createStreak
   async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       const { data } = await api.updateStreak(streakId, streakData);
       dispatch(updateStreakReducer(data));
       onClose();
+      toast.success(`Success! Streak updated.`);
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
         ? dispatch(error(err.response.data.message))
         : dispatch(error(err.message));
+      toast.success(err.response.data.message || "OOPS, Something went wrong!");
     }
   };
 export const shareStreak =
