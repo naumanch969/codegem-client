@@ -14,7 +14,7 @@ import { Separator } from "@/components/ui/separator";
 const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
 
     const filterButtons = ["All", "Latest", "Famous", "Trending", "Recommended to you"];
-    const { onOpen } = useChallengeModal()
+    const { onOpen, onSetChallenge } = useChallengeModal()
 
     const [searchValue, setSearchValue] = useState('');
 
@@ -39,7 +39,7 @@ const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
                         <Search className="text-white" />
                     </Button>
                 </div>
-                <Button onClick={() => onOpen()} variant="default">
+                <Button onClick={() => { onOpen(); onSetChallenge(null) }} variant="default">
                     <Add /> <span className="" >Add Challenge</span>
                 </Button>
             </div>
@@ -65,7 +65,7 @@ const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
                 <div className="flex justify-end flex-[3] " >
                     <Select onValueChange={(value: string) => setFilters({ ...filters, language: value })} >
                         <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Language" default='all' />
+                            <SelectValue placeholder="Language" defaultValue='all' />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="python">Python</SelectItem>

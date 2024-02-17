@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Topbar from "./Topbar";
-import { useStateContext } from "../../contexts/ContextProvider";
 import Challenge from "./Challenge";
 import Rightbar from "./Rightbar";
-import Create from "./Create";
 import { useDispatch, useSelector } from "react-redux";
 import { getChallenges } from "../../redux/actions/challenge";
 import { RootState } from "../../redux/store";
-import { Loader } from "../../utils/Components";
-import UpdateModal from "../Codes/Update";
-import CreateChallenge from "./Create";
 import { Pagination } from "@mui/material";
 import { Challenge as TChallenge } from "@/interfaces";
 
@@ -40,12 +35,11 @@ const Challenges = () => {
   }
 
   return (
-    <div className="flex w-full  "> 
+    <div className="flex w-full  ">
 
       <div className={`lg:w-[75%] w-full h-full p-[1rem] flex justify-center `}>
         <div className="w-full flex flex-col h-full">
           <Topbar filters={filters} setFilters={setFilters} />
-          <Create />
           <div className="w-full flex flex-col justify-between items-start gap-[2rem] mt-[1rem] " >
             {
               isFetching
