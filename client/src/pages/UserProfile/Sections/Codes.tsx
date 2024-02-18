@@ -13,7 +13,7 @@ const Codes = () => {
   const { currentUser, isFetching }: { currentUser: User | null, isFetching: boolean } = useSelector((state: RootState) => state.user)
 
   useEffect(() => {
-    dispatch<any>(getUserCodes(currentUser?._id as string))
+    dispatch<any>(getUserCodes(codes.length == 0, currentUser?._id as string))
   }, [])
 
   return (
@@ -21,29 +21,29 @@ const Codes = () => {
     <div className="w-full flex flex-col gap-[2rem] ">
       <div className="flex flex-col">
         <h2 className="text-3xl font-bold mb-6 text-dark-slate-blue">Your Codes</h2>
-        {
-          isFetching
-            ?
-            <div className='flex justify-center w-full ' >
-              <Loader />
-            </div>
-            :
-            <>
-              {
-                codes.length == 0
-                  ?
-                  <div className="flex justify-center items-center min-h-[16rem] ">
-                    <p className='font-medium text-2xl text-center mb-16 ' >No codes to show.</p>
-                  </div>
-                  :
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {codes.map((code, index) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {
+            isFetching
+              ?
+              Array(6).fill('').map((_, index) => (
+                <CodeCard.Skeleton key={index} />
+              ))
+              :
+              <>
+                {
+                  codes.length == 0
+                    ?
+                    <div className="flex justify-center items-center min-h-[16rem] ">
+                      <p className='font-medium text-2xl text-center mb-16 ' >No codes to show.</p>
+                    </div>
+                    :
+                    codes.map((code, index) => (
                       <CodeCard code={code} key={index} />
-                    ))}
-                  </div>
-              }
-            </>
-        }
+                    ))
+                }
+              </>
+          }
+        </div>
       </div>
 
     </div>

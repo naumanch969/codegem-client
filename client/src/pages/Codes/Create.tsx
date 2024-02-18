@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { Lock, ArrowDropDown, } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { createCode, updateCode } from '../../redux/actions/code';
 import { RootState } from '../../redux/store';
-import { Code, User, } from '../../interfaces';
-import { image6 } from '../../assets';
+import { User, } from '../../interfaces';
 import { useCodeModal } from '../../hooks/useCodeModal';
 import { z } from "zod"
 import { useForm } from 'react-hook-form';

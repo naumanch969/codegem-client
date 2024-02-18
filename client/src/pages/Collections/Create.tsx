@@ -1,140 +1,152 @@
-import React, { ChangeEvent, useState } from 'react';
-import { Modal } from '@mui/material';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createCollection } from '../../redux/actions/collection';
+import { createCollection, updateCollection } from '../../redux/actions/collection';
 import { RootState } from '../../redux/store';
-import { Close, Lock, ArrowDropDown } from '@mui/icons-material';
-import { Avatar } from '../../utils/Components';
-import { image6 } from '../../assets';
-import { User } from '../../interfaces';
 import { useCollectionModal } from '../../hooks/useCollectionModal';
+import { z } from "zod"
+import { useForm } from 'react-hook-form';
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Button } from "@/components/ui/button"
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Modal } from '@/components/ui/modal';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import toast from 'react-hot-toast';
+import { User } from '@/interfaces';
+
 
 const CreateCollection = () => {
 
-    ///////////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////////
+    // <---------------------------------------------------- VARIABLES ----------------------------------------------------------->
+    const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
+    const { isOpen, onClose, collection } = useCollectionModal()
+    const { isFetching } = useSelector((state: RootState) => state.collection)
+
+    const formSchema = z.object({
+        name: z.string().min(2, { message: 'Name must contain atleast 2 characters.' }).max(250, { message: 'Title can\' be longer than 250 characters.' }),
+        description: z.string().min(2, { message: 'Description must contain atleast 2 characters.' }),
+        visibility: z.string().min(2).max(50),
+    })
+
+    const initialData: z.infer<typeof formSchema> = {
+        name: "",
+        description: "",
+        visibility: "public",
+    }
+
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: collection || initialData,
+    })
     const dispatch = useDispatch();
-    const { isOpen, onClose } = useCollectionModal()
-    const { loggedUser: user, isFetching }: { loggedUser: User | null, isFetching: boolean } = useSelector((state: RootState) => state.user);
-    const menu = [
-        'private',
-        'public',
-        'friends only',
-        'all friends except',
-        'only share with',
-    ];
 
-    const initialCollection = {
-        name: '',
-        description: '',
-        visibility: 'private',
-    };
+    // <---------------------------------------------------- FUNCTIONS ----------------------------------------------------------->
+    const onSubmit = (values: z.infer<typeof formSchema>) => {
 
-    ///////////////////////////////////////////////////// STATES ////////////////////////////////////////////////////
-    const [collectionData, setCollectionData] = useState(initialCollection);
-    const [showVisibilityMenu, setShowVisibilityMenu] = useState(false);
-
-    ///////////////////////////////////////////////////// FUNCTIONS ////////////////////////////////////////////////////
-    const handleCreate = () => {
-        const { name, description } = collectionData
-        if (!name || !description) return alert('Make sure to provide all the fields.')
-        dispatch<any>(createCollection(collectionData, onClose));
-        setCollectionData(initialCollection)
-    };
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
-        setCollectionData(pre => ({ ...pre, [e.target.name]: e.target.value }));
-    };
+        if (Boolean(collection)) { // update
+            dispatch<any>(updateCollection(collection?._id as string, values, onClose, toast))
+        }
+        else {  // create
+            dispatch<any>(createCollection(values, onClose, toast));
+        }
 
 
+        form.reset(initialData);
+    }
 
     return (
-        <Modal open={isOpen} onClose={onClose} className='flex justify-center items-center '>
-            <div className='bg-white w-[35rem] min-h-[20rem] h-fit max-h-[90vh] overflow-y-scroll rounded-[8px] p-[1rem] ' >
+        <Modal
+            title={`${Boolean(collection) ? 'Update' : 'Create'} collection`}
+            description=''
+            isOpen={isOpen}
+            onClose={onClose}
+            className='bg-card lg:w-[40vw] md:w-[50vw] sm:w-[80vw] w-full min-h-[20rem] h-fit '
+        >
 
-                <div className='h-[12%] relative flex justify-center items-center pb-[12px] ' >
-                    <h4 className='text-[22px] font-bold text-dark-slate-blue ' >Create Collection</h4>
-                    <button onClick={onClose} className='absolute right-0 w-[2rem] h-[2rem] rounded-full bg-transparent ' ><Close className='text-cool-gray' /></button>
+            <div className='min-h-[82%] h-auto flex flex-col justify-between gap-[8px] p-1 ' >
+
+                {/* avatar */}
+                <div className="w-full flex justify-between items-center">
+                    <div className='flex items-center gap-3 ' >
+                        <Avatar>
+                            <AvatarImage src={loggedUser?.profilePicture} alt="Profile" />
+                            <AvatarFallback>{loggedUser?.firstName.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <p className='font-semibold text-dark-slate-blue text-lg capitalize ' >{loggedUser?.firstName} {loggedUser?.lastName}</p>
+                    </div>
+                    <Select onValueChange={(value: string) => form.setValue("visibility", value)} >
+                        <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Visibility" defaultValue='public' />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="public">Public</SelectItem>
+                            <SelectItem value="private">Private</SelectItem>
+                        </SelectContent>
+                    </Select>
                 </div>
 
-                <hr className='h-[2px] w-full py-[12px] text-warm-gray  ' />
-
-                <div className='min-h-[82%] h-auto flex flex-col justify-between gap-[8px] ' >
-
-                    {/* avatar */}
-                    <div className='flex gap-[1rem] ' >
-                        <Avatar src={image6} />
-                        <div className='flex flex-col ' >
-                            <p className='font-semibold text-dark-slate-blue capitalize ' >{user?.firstName} {user?.lastName}</p>
-                            <div className='relative flex flex-col justify-center items-start gap-1cursor-pointer rounded-t-[4px] min-w-[9rem] bg-gray-100 ' >
-
-                                <button onClick={() => setShowVisibilityMenu(pre => !pre)} className='w-full flex justify-between items-center p-[2px] ' >
-                                    <span className="flex justify-start gap-[2px] capitalize " >
-                                        <Lock style={{ fontSize: '16px' }} className='text-[16px] ' />
-                                        <span className='text-[12px] font-medium ' >{collectionData.visibility}</span>
-                                    </span>
-                                    <ArrowDropDown />
-                                </button>
-                                {
-                                    showVisibilityMenu &&
-                                    <div className='w-full absolute top-full bg-white shadow-box flex flex-col items-start gap-1rounded-b-[4px] ' >
-                                        {
-                                            menu.filter(m => m != collectionData.visibility).map((item, index) => (
-                                                <button key={index} onClick={() => { setShowVisibilityMenu(false); setCollectionData({ ...collectionData, visibility: item }) }} className='w-full gap-[2px] text-start hover:bg-teal-blue-lighten hover:text-white text-cool-gray capitalize p-[2px] ' >
-                                                    <Lock style={{ fontSize: '16px' }} className='text-[16px] ' />
-                                                    <span className='text-[12px] font-medium ' >{item}</span>
-                                                </button>
-                                            ))
-                                        }
-                                    </div>
-                                }
-
-                            </div>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 ">
+                        <FormField
+                            control={form.control}
+                            name="name"
+                            render={({ field }: { field: any }) => (
+                                <FormItem>
+                                    <FormLabel>Name</FormLabel>
+                                    <FormControl>
+                                        {/* TODO: make all input fields disabled if isFetching is true */}
+                                        <Input className='bg-secondary' placeholder="Name of collection" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="description"
+                            render={({ field }: { field: any }) => (
+                                <FormItem>
+                                    <FormLabel>Description</FormLabel>
+                                    <FormControl>
+                                        <Textarea
+                                            rows={4}
+                                            disabled={isFetching}
+                                            placeholder="Description"
+                                            className='bg-secondary'
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <div className="flex justify-end items-center gap-2 w-full">
+                            <Button variant='outline' onClick={(e) => { e.preventDefault(); onClose(); form.reset(initialData); }} >Cancel</Button>
+                            <Button disabled={isFetching} type="submit">Submit</Button>
                         </div>
-                    </div>
+                    </form>
+                </Form>
 
-
-
-                    <div className='flex flex-col gap-[8px] ' >
-                        <div className="flex flex-col gap-4">
-                            <div className="flex flex-col gap-2 ">
-                                <label htmlFor="name" className='flex-[1] text-cool-gray ' >Name<span className='text-[18px] text-teal-blue-darken ' >*</span> :</label>
-                                <input
-                                    name='name'
-                                    placeholder='Name..'
-                                    value={collectionData.name}
-                                    onChange={(e) => handleChange(e)}
-                                    className={`h-[40px] px-[4px] py-[2px] flex w-full outline-cool-gray bg-light-gray text-cool-gray border-cool-gray border-[1px] resize-none text-[16px] rounded-[4px] `}
-                                />
-                            </div>
-                            <div className="flex flex-col gap-2 ">
-                                <label htmlFor="description" className='flex-[1] text-cool-gray ' >Description<span className='text-[18px] text-teal-blue-darken ' >*</span> :</label>
-                                <textarea
-                                    rows={4}
-                                    name='description'
-                                    placeholder='Write a short description of the collection?....'
-                                    value={collectionData.description}
-                                    onChange={(e) => handleChange(e)}
-                                    className={` px-[4px] py-[2px] flex w-full outline-cool-gray bg-light-gray text-cool-gray border-cool-gray border-[1px] resize-none text-[16px] rounded-[4px] `}
-                                />
-                            </div>
-                        </div>
-
-                        {/* buttons */}
-                        <div className='flex flex-col gap-[8px] ' >
-                            {/* collection button */}
-                            <div className='flex justify-end ' >
-                                <button onClick={handleCreate} disabled={!collectionData.name} className={` ${!collectionData.name ? 'cursor-not-allowed ' : 'cursor-pointer '}  w-[6rem] rounded-[4px] p-[4px] bg-teal-blue text-white font-medium text-[18px] `} >
-                                    {isFetching ? 'Creating...' : 'Create'}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
 
             </div>
-        </Modal>
-    );
-};
 
-export default CreateCollection;
+        </Modal>
+    )
+}
+
+export default CreateCollection

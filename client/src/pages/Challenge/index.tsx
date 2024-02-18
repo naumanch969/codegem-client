@@ -38,7 +38,7 @@ const Challenges = () => {
     <div className="flex w-full  ">
 
       <div className={`lg:w-[75%] w-full h-full p-[1rem] flex justify-center `}>
-        <div className="w-full flex flex-col h-full">
+        <div className="lg:w-[48rem] w-full flex flex-col h-full">
           <Topbar filters={filters} setFilters={setFilters} />
           <div className="w-full flex flex-col justify-between items-start gap-[2rem] mt-[1rem] " >
             {

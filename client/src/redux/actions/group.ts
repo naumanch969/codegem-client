@@ -112,17 +112,20 @@ export const getGroupChallenges =
   };
 
 export const createGroup =
-  (groupData: any, onClose: () => void) => async (dispatch: Dispatch) => {
+  (groupData: any, onClose: () => void, toast: any) =>
+  async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       const { data } = await api.createGroup(groupData);
       dispatch(createGroupReducer(data));
       onClose();
+      toast.success("Success! Group created.");
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
         ? dispatch(error(err.response.data.message))
         : dispatch(error(err.message));
+      toast.error(err.response.data.message || "OOPS, Something went wrong!");
     }
   };
 export const createGroupCode =
@@ -172,18 +175,20 @@ export const createGroupChallenge =
   };
 
 export const updateGroup =
-  (groupId: string, groupData: any, onClose: () => void) =>
+  (groupId: string, groupData: any, onClose: () => void, toast: any) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       const { data } = await api.updateGroup(groupId, groupData);
       dispatch(updateGroupReducer(data));
       onClose();
+      toast.success("Success! Group updated.");
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
         ? dispatch(error(err.response.data.message))
         : dispatch(error(err.message));
+      toast.error(err.response.data.message || "OOPS, Something went wrong!");
     }
   };
 export const joinGroup =

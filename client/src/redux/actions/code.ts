@@ -55,7 +55,7 @@ export const getSavedCodes = () => async (dispatch: Dispatch) => {
   try {
     dispatch(start());
     const { data } = await api.getSavedCodes();
-    dispatch(getCodesReducer(data));
+    dispatch(getCodesReducer({ result: data }));
     dispatch(end());
   } catch (err: any) {
     err.response?.data?.message
@@ -123,7 +123,7 @@ export const updateCode =
     }
   };
 export const shareCode =
-  (code: Code, friendIds: string[], loggedUserId: string, setOpen: any) =>
+  (code: Code, friendIds: string[], setOpen: any) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch(shareCodeReducer({ code, friendIds }));
@@ -136,7 +136,7 @@ export const shareCode =
     }
   };
 export const shareCodeInGroups =
-  (code: Code, groupIds: string[], loggedUserId: string, setOpen: any) =>
+  (code: Code, groupIds: string[], setOpen: any) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch(shareCodeInGroupsReducer({ code, groupIds }));

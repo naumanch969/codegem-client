@@ -8,27 +8,71 @@ import { createError, isUndefined } from "../utils/functions.js";
 
 export const getChallenges = async (req, res, next) => {
   try {
-    const result = await Challenge.find()
+    const { page, pageSize, count } = req.query; // count is boolean
+
+    let query = Challenge.find();
+
+    const pageNumber = parseInt(page, 10) || 1;
+    const size = parseInt(pageSize, 10) || 10;
+    const skip = (pageNumber - 1) * size;
+
+    query = query.skip(skip).limit(size);
+
+    const resultPromise = query
       .sort({ createdAt: -1 })
       .populate("user")
+      .populate("shares")
       .exec();
-    res.status(200).json(result);
+
+    const [result, totalCount] = await Promise.all([
+      resultPromise,
+      count ? Challenge.countDocuments() : Promise.resolve(null),
+    ]);
+
+    let response = { result };
+    if (totalCount !== null) {
+      response.count = totalCount;
+    }
+
+    res.status(200).json(response);
   } catch (error) {
     next(createError(res, 500, error.message));
   }
 };
 export const getUserChallenges = async (req, res, next) => {
   try {
+    const { page, pageSize, count } = req.query; // count is boolean
     const { userId } = req.params;
-    const result = await Challenge.find({ user: userId })
+
+    let query = Challenge.find({ user: userId });
+
+    const pageNumber = parseInt(page, 10) || 1;
+    const size = parseInt(pageSize, 10) || 10;
+    const skip = (pageNumber - 1) * size;
+
+    query = query.skip(skip).limit(size);
+
+    const resultPromise = query
+      .sort({ createdAt: -1 })
       .populate("user")
+      .populate("shares")
       .exec();
-    res.status(200).json(result);
+
+    const [result, totalCount] = await Promise.all([
+      resultPromise,
+      count ? Challenge.countDocuments() : Promise.resolve(null),
+    ]);
+
+    let response = { result };
+    if (totalCount !== null) {
+      response.count = totalCount;
+    }
+
+    res.status(200).json(response);
   } catch (error) {
     next(createError(res, 500, error.message));
   }
 };
-
 export const getLikedChallenges = async (req, res, next) => {
   try {
     const result = await Challenge.find({ likes: { $in: [req.user._id] } })
@@ -90,6 +134,7 @@ export const createChallenge = async (req, res, next) => {
     res.status(200).json(result);
   } catch (error) {
     next(createError(res, 500, error.message));
+    console.log("error", error);
   }
 };
 

@@ -114,17 +114,20 @@ export const getUserCollections =
     }
   };
 export const createCollection =
-  (collectionData: any, onClose: () => void) => async (dispatch: Dispatch) => {
+  (collectionData: any, onClose: () => void, toast: any) =>
+  async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       const { data } = await api.createCollection(collectionData);
       dispatch(createCollectionReducer(data));
       onClose();
+      toast.success("Success! Collection created.");
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
         ? dispatch(error(err.response.data.message))
         : dispatch(error(err.message));
+      toast.error(err.response.data.message || "OOPS, Something went wrong!");
     }
   };
 
@@ -175,18 +178,25 @@ export const createCollectionChallenge =
   };
 
 export const updateCollection =
-  (collectionId: string, collectionData: any, onClose: () => void) =>
+  (
+    collectionId: string,
+    collectionData: any,
+    onClose: () => void,
+    toast: any
+  ) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       const { data } = await api.updateCollection(collectionId, collectionData);
       dispatch(updateCollectionReducer(data));
       onClose();
+      toast.success("Success! Collection updated.");
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
         ? dispatch(error(err.response.data.message))
         : dispatch(error(err.message));
+      toast.error(err.response.data.message || "OOPS, Something went wrong!");
     }
   };
 export const shareCollection =

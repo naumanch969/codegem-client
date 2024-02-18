@@ -9,16 +9,16 @@ import { useGroupModal } from '../../hooks/useGroupModal';
 const Create = () => {
 
     ///////////////////////////// VARIABLES /////////////////////////////////////
-    const { onOpen: onCodeOpen } = useCodeModal()
-    const { onOpen: onStreakOpen } = useStreakModal()
-    const { onOpen: onChallengeOpen } = useChallengeModal()
+    const { onOpen: onCodeOpen, onSetCode } = useCodeModal()
+    const { onOpen: onStreakOpen, onSetStreak } = useStreakModal()
+    const { onOpen: onChallengeOpen, onSetChallenge } = useChallengeModal()
     const { onOpen: onCollectionOpen } = useCollectionModal()
     const { onOpen: onGroupOpen } = useGroupModal()
 
     const arr = [
-        { onClick: onCodeOpen, name: 'Create Code', icon: CodeOutlined },
-        { onClick: onStreakOpen, name: 'Create Streak', icon: CodeOff },
-        { onClick: onChallengeOpen, name: 'Create Challenge', icon: SyncProblem },
+        { onClick: () => { onSetCode(null); onCodeOpen() }, name: 'Create Code', icon: CodeOutlined },
+        { onClick: () => { onSetStreak(null); onStreakOpen() }, name: 'Create Streak', icon: CodeOff },
+        { onClick: () => { onSetChallenge(null); onChallengeOpen() }, name: 'Create Challenge', icon: SyncProblem },
         { onClick: onCollectionOpen, name: 'Create Collection', icon: CollectionsTwoTone },
         { onClick: onGroupOpen, name: 'Create Group', icon: Group },
         { onClick: onCodeOpen, name: 'Create Account', icon: Person },

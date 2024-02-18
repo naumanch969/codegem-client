@@ -39,7 +39,6 @@ const CreateChallenge = ({ groupId, handleSubmit }: { groupId?: string, handleSu
     // <---------------------------------------------------- VARIABLES ----------------------------------------------------------->
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
     const { isOpen, onClose, challenge } = useChallengeModal()
-    console.log('challenge', challenge)
     const { isFetching } = useSelector((state: RootState) => state.challenge)
 
     const formSchema = z.object({
@@ -65,7 +64,6 @@ const CreateChallenge = ({ groupId, handleSubmit }: { groupId?: string, handleSu
         defaultValues: challenge || initialData,
     })
     const dispatch = useDispatch();
-console.log('form',form.getValues())
     // <---------------------------------------------------- STATES ----------------------------------------------------------->
     const [hashTag, setHashTag] = useState('')
 

@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { PeopleAlt, Update, PersonAdd, Image } from '@mui/icons-material';
-import { Avatar } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { User } from '../../interfaces';
 import { getFriends, getSuggestedUsers } from '../../redux/actions/friend';
 import { Link, useNavigate } from 'react-router-dom';
 import { SampleProfileCoverImage, image1 } from '../../assets';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const RightSidebar = () => {
 
@@ -69,7 +69,10 @@ const RightSidebar = () => {
     return (
         <div className="flex flex-col gap-4 w-full">
             <div className="flex flex-col items-center mb-4 gap-y-2 ">
-                <img src={loggedUser?.profilePicture} alt="Profile" className="w-32 h-32 rounded-full mr-2" />
+                <Avatar className='w-32 h-32' >
+                    <AvatarImage src={loggedUser?.profilePicture} alt="Profile" />
+                    <AvatarFallback className='text-8xl text-center' >{loggedUser?.firstName.charAt(0)}</AvatarFallback>
+                </Avatar>
                 <div className='flex flex-col items-center gap-y-0.5 ' >
                     <p className="capitalize text-xl font-semibold text-gray-800">{loggedUser?.firstName} {loggedUser?.lastName}</p>
                     <p className="text-lg text-gray-600">{loggedUser?.email}</p>

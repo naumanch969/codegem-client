@@ -22,28 +22,28 @@ const Collections = () => {
       {/* Your Collections */}
       <div className="flex flex-col">
         <h2 className="text-3xl font-bold mb-6 text-dark-slate-blue">Your Collections</h2>
-        {
-          userCollections.length == 0
-            ?
-            <div className="flex justify-center items-center min-h-[16rem] ">
-              <p className='font-medium text-2xl text-center mb-16 ' >No collections to show.</p>
-            </div>
-            :
-            <>
-              {
-                isFetching ?
-                  <div className='flex justify-center items-center w-full' >
-                    <Loader />
-                  </div>
-                  :
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {userCollections.map((collection, index) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {
+            isFetching ?
+              Array(6).fill('').map((_, index) => (
+                <CollectionCard.Skeleton key={index} />
+              ))
+              :
+              <>
+                {
+                  userCollections.length == 0
+                    ?
+                    <div className="flex justify-center items-center min-h-[16rem] col-span-3 ">
+                      <p className='font-medium text-2xl text-center mb-16 ' >No collections to show.</p>
+                    </div>
+                    :
+                    userCollections.map((collection, index) => (
                       <CollectionCard collection={collection} key={index} />
-                    ))}
-                  </div>
-              }
-            </>
-        }
+                    ))
+                }
+              </>
+          }
+        </div>
       </div>
 
     </div>

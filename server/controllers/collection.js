@@ -8,21 +8,43 @@ import { createError, isUndefined } from "../utils/functions.js";
 
 export const getCollections = async (req, res, next) => {
   try {
-    const userId = req.user._id;
-    const collections = await Collection.find({ owner: { $ne: userId } })
+    const { page, pageSize, count } = req.query; // count is boolean
+
+    let query = Collection.find();
+
+    const pageNumber = parseInt(page, 10) || 1;
+    const size = parseInt(pageSize, 10) || 10;
+    const skip = (pageNumber - 1) * size;
+
+    query = query.skip(skip).limit(size);
+
+    const resultPromise = query
+      .sort({ createdAt: -1 })
       .populate("codes")
       .populate("owner")
       .exec();
 
-    res.status(200).json(collections);
+    const [result, totalCount] = await Promise.all([
+      resultPromise,
+      count ? Collection.countDocuments() : Promise.resolve(null),
+    ]);
+
+    let response = { result };
+    if (totalCount !== null) {
+      response.count = totalCount;
+    }
+
+    res.status(200).json(response);
   } catch (error) {
     next(createError(res, 500, error.message));
   }
 };
-
 export const getUserCollections = async (req, res, next) => {
   try {
+    const { page, pageSize, count } = req.query; // count is boolean
     const { userId } = req.params;
+
+    let query = Collection.find({ owner: userId });
 
     // Check if the user has a collection named "Saved"
     const savedCollection = await Collection.findOne({
@@ -40,12 +62,29 @@ export const getUserCollections = async (req, res, next) => {
       await newSavedCollection.save();
     }
 
-    const collections = await Collection.find({ owner: userId })
+    const pageNumber = parseInt(page, 10) || 1;
+    const size = parseInt(pageSize, 10) || 10;
+    const skip = (pageNumber - 1) * size;
+
+    query = query.skip(skip).limit(size);
+
+    const resultPromise = query
+      .sort({ createdAt: -1 })
       .populate("codes")
       .populate("owner")
       .exec();
 
-    res.status(200).json(collections);
+    const [result, totalCount] = await Promise.all([
+      resultPromise,
+      count ? Collection.countDocuments() : Promise.resolve(null),
+    ]);
+
+    let response = { result };
+    if (totalCount !== null) {
+      response.count = totalCount;
+    }
+
+    res.status(200).json(response);
   } catch (error) {
     next(createError(res, 500, error.message));
   }
@@ -89,7 +128,6 @@ export const getCollectionStreaks = async (req, res, next) => {
     })
       .populate("streaks")
       .exec();
-    console.log(collection);
     res.status(200).json(collection?.streaks || []);
   } catch (error) {
     next(createError(res, 500, error.message));

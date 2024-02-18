@@ -23,27 +23,25 @@ const Saved = () => {
         {
           isFetching
             ?
-            <div className="flex justify-center items-center">
-              <Loader />
-            </div>
+            Array(6).fill('').map((_, index) => (
+              <CodeCard.Skeleton key={index} />
+            ))
             :
-            <>
-              {
-                codes.length == 0
-                  ?
-                  <div className="flex justify-center items-center min-h-[16rem] ">
-                    <p className='font-medium text-2xl text-center mb-16 ' >No code to show.</p>
-                  </div>
-                  :
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {
-                      codes.map((code, index) => (
-                        <CodeCard code={code} key={index} />
-                      ))
-                    }
-                  </div>
-              }
-            </>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <>
+                {
+                  codes.length == 0
+                    ?
+                    <div className="flex justify-center items-center min-h-[16rem] ">
+                      <p className='font-medium text-2xl text-center mb-16 ' >No code to show.</p>
+                    </div>
+                    :
+                    codes.map((code, index) => (
+                      <CodeCard code={code} key={index} />
+                    ))
+                }
+              </>
+            </div>
         }
       </div>
 

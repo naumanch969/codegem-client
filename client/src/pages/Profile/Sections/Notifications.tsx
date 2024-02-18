@@ -1,43 +1,37 @@
-import React, { useState } from 'react';
-import { Check, Delete, Visibility, Clear } from '@mui/icons-material';
+import React, { useEffect } from 'react';
 import NotificationCard from '../../Notifications/NotificationCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { getNotifications } from '@/redux/actions/notification';
+import { Notification } from '@/interfaces';
+import { RootState } from '@/redux/store';
 
 const Notifications = () => {
-  // Sample notifications
-  const [notifications, setNotifications] = useState([
-    { id: 1, text: 'Your post got 10 likes', timestamp: '5 hours ago', isRead: true },
-    { id: 2, text: 'New message from User123', timestamp: '2 hours ago', isRead: false },
-    { id: 3, text: 'New message from User456', timestamp: '2 hours ago', isRead: false },
-    // Add more sample notifications
-  ]);
 
-  const handleMarkAsRead = (id) => {
-    setNotifications(prevNotifications =>
-      prevNotifications.map(notification =>
-        notification.id === id ? { ...notification, isRead: true } : notification
-      )
-    );
+  const { notifications, isFetching }: { notifications: Notification[], isFetching: boolean } = useSelector((state: RootState) => state.notification)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch<any>(getNotifications())
+  }, [])
+
+  const handleMarkAsRead = (id: string) => {
+
   };
 
-  const handleDeleteNotification = (id) => {
-    setNotifications(prevNotifications =>
-      prevNotifications.filter(notification => notification.id !== id)
-    );
+  const handleDeleteNotification = (id: string) => {
+
   };
 
   const handleMarkAllAsRead = () => {
-    setNotifications(prevNotifications =>
-      prevNotifications.map(notification => ({ ...notification, isRead: true }))
-    );
+
   };
 
   const handleDismissAll = () => {
-    setNotifications([]);
+
   };
 
   return (
-    <div className="mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4 text-dark-slate-blue">Notifications</h1>
+    <div className="mx-auto p-4 w-full ">
       <div className="flex justify-between items-center mb-4">
         <button
           className="text-teal-blue hover:text-teal-blue-dark"
@@ -53,9 +47,17 @@ const Notifications = () => {
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {notifications.map((notification, index) => (
-          <NotificationCard notification={notification} key={index} />
-        ))}
+        {
+          isFetching
+            ?
+            Array(6).fill('').map((_, index) => (
+              <NotificationCard.Skeleton key={index} />
+            ))
+            :
+            notifications.map((notification, index) => (
+              <NotificationCard notification={notification} key={index} />
+            ))
+        }
       </div>
     </div>
   );

@@ -1,19 +1,19 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Topbar from "./Topbar";
 import Rightbar from "./Rightbar";
 import { useDispatch, useSelector } from "react-redux";
 import { getCodes } from "../../redux/actions/code";
 import { RootState } from "../../redux/store";
-import CodeComponent from "../Codes/Code";
-import Pagination from '@mui/material/Pagination';
+import { Pagination } from "@mui/material";
 import { Code as TCode } from "@/interfaces";
+import CodeComponent from "../Codes/Code";
 
 
-const Codes = () => {
-
+const Home = () => {
+  // TODO: make registeration optional for first view of the page
   /////////////////////////////////////// VARIABLES //////////////////////////////////////////
   const dispatch = useDispatch()
-  const { codes, isFetching, count }: { codes: TCode[], isFetching: boolean, count: number } = useSelector((state: RootState) => state.code)
+  const { codes, isFetching, count = 20 }: { codes: TCode[], isFetching: boolean, count: number } = useSelector((state: RootState) => state.code)
   const pageSize = 20;
   const totalPages = Math.ceil(count / pageSize);
 
@@ -23,7 +23,7 @@ const Codes = () => {
 
   /////////////////////////////////////// USE EFFECTS ///////////////////////////////////////
   useEffect(() => {
-    dispatch<any>(getCodes(codes.length == 0, `?page=${page}&pageSize=${pageSize}`))
+    dispatch<any>(getCodes(codes.length == 0, `?page=${page}&pageSize=${pageSize}&count=${true}`))
   }, [])
   useEffect(() => {
     // TODO: if data of particular page is available then dont call api
@@ -36,9 +36,10 @@ const Codes = () => {
   }
 
   return (
-    <div className="flex w-full h-full ">
+    <div className="flex w-full  ">
+
       <div className={`lg:w-[75%] w-full h-full p-[1rem] flex justify-center `}>
-        <div className="w-full flex flex-col h-full">
+        <div className="lg:w-[48rem] w-full flex flex-col h-full">
           <Topbar filters={filters} setFilters={setFilters} />
           <div className="w-full flex flex-col justify-between items-start gap-[2rem] mt-[1rem] " >
             {
@@ -48,13 +49,9 @@ const Codes = () => {
                   <CodeComponent.Skeleton key={index} />
                 ))
                 :
-                <>
-                  {
-                    codes?.map((code, index) => (
-                      <CodeComponent key={index} code={code} />
-                    ))
-                  }
-                </>
+                codes?.map((code, index) => (
+                  <CodeComponent key={index} code={code} />
+                ))
             }
             <div className="w-full flex justify-center">
               <Pagination
@@ -69,11 +66,11 @@ const Codes = () => {
           </div>
         </div>
       </div>
-      <div className="hidden lg:block w-[25%] bg-cool-gray-light p-4 rounded shadow h-full ">
+      <div className="hidden lg:block w-[25%] bg-cool-gray-light p-4 rounded shadow">
         <Rightbar />
       </div>
     </div>
   );
 };
 
-export default Codes
+export default Home

@@ -147,7 +147,6 @@ export const shareChallengeInGroups =
   (
     challenge: Challenge,
     groupIds: string[],
-    loggedUserId: string,
     setOpen: any
   ) =>
   async (dispatch: Dispatch) => {

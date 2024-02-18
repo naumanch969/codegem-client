@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import OTPInput from "react-otp-input";
 import { useDispatch, useSelector } from "react-redux";
-import { verifyRegisterationEmail, resendOTP, verifyOTP } from "../../redux/actions/user";
+import { verifyRegisterationEmail, resendOTP, verifyOTP } from "../../redux/actions/auth";
 import { logo } from "../../assets";
 import { ArrowBack } from "@mui/icons-material";
 import { RootState } from "../../redux/store";

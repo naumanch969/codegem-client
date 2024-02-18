@@ -2,7 +2,7 @@ import React, { FC, ChangeEvent, FormEvent, useState } from "react";
 import { Input } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { sendOTP } from "../../redux/actions/user";
+import { sendOTP } from "../../redux/actions/auth";
 import { logo } from '../../assets'
 import { RootState } from "../../redux/store";
 

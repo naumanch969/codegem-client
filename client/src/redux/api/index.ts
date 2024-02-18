@@ -46,13 +46,7 @@ export const getSentRequests = (query: string) =>
 export const getReceivedRequests = (query: string) =>
   API.get(`/friend/received-requests${query}`);
 
-// users
-export const getAllUsers = () => API.get(`/user/get/all`);
-export const getUser = (userId: string) =>
-  API.get(`/user/get/single/${userId}`);
-export const getProfile = () => API.get(`/user/get/profile`);
-export const updateProfile = (profileData: User) =>
-  API.put(`/user/update/profile`, profileData);
+// auth
 export const register = (userData: User) =>
   API.post(`/auth/register`, userData);
 export const verifyRegisterationEmail = ({
@@ -76,6 +70,18 @@ export const setNewPassword = ({
 }) => API.put(`/auth/newpassword`, { email, password });
 export const changePassword = (userData: any) =>
   API.put(`/auth/change_password`, userData);
+
+// users
+export const getAllUsers = () => API.get(`/user/get/all`);
+export const getUser = (userId: string) =>
+  API.get(`/user/get/single/${userId}`);
+export const getProfile = () => API.get(`/user/get/profile`);
+export const updateProfile = (profileData: User) =>
+  API.put(`/user/update/profile`, profileData);
+export const editPersonalDetails = (
+  type: "interests" | "hobbies" | "books" | "programming",
+  values: string[]
+) => API.put(`/user/update/personal-details?type=${type}`, { values });
 
 // CODE
 export const getCode = (id: string) => API.get(`/code/get/single/${id}`);

@@ -12,6 +12,11 @@ const userSchema = new Schema({
   coverImage: { type: String },
   bio: { type: String },
   title: { type: String },
+  location: { type: String },
+  interests: { type: [String], default: [] },
+  hobbies: { type: [String], default: [] },
+  programming: { type: [String], default: [] },
+  books: { type: [String], default: [] },
   socialLinks: {
     type: {
       facebook: String,

@@ -83,9 +83,9 @@ const SingleCollectionView = () => {
         <div className="container mx-auto p-[1rem] flex flex-col gap-3 ">
 
             <ShareCollection open={openShareCollection} setOpen={setOpenShareCollection} collection={currentCollection!} />
-            {activeMenuItem == 'codes' && <CodeCreateModal open={openCreateModal} setOpen={setOpenCreateModal} handleSubmit={handleCreateCode} />}
-            {activeMenuItem == 'streaks' && <StreakCreateModal open={openCreateModal} setOpen={setOpenCreateModal} handleSubmit={handleCreateStreak} />}
-            {activeMenuItem == 'challenges' && <ChallengeCreateModal open={openCreateModal} setOpen={setOpenCreateModal} handleSubmit={handleCreateChallenge} />}
+            {activeMenuItem == 'codes' && <CodeCreateModal handleSubmit={handleCreateCode} />}
+            {activeMenuItem == 'streaks' && <StreakCreateModal handleSubmit={handleCreateStreak} />}
+            {activeMenuItem == 'challenges' && <ChallengeCreateModal handleSubmit={handleCreateChallenge} />}
 
             <RelatedCollectionSlider />
 

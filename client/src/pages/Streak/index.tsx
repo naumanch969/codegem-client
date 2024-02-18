@@ -7,9 +7,6 @@ import Create from "./Create";
 import { useDispatch, useSelector } from "react-redux";
 import { getStreaks } from "../../redux/actions/streak";
 import { RootState } from "../../redux/store";
-import { Loader } from "../../utils/Components";
-import UpdateModal from "../Codes/Update";
-import CreateStreak from "./Create";
 import { Pagination } from "@mui/material";
 import { Streak as TStreak } from "@/interfaces";
 
@@ -44,7 +41,7 @@ const Streaks = () => {
     <div className="flex w-full  ">
 
       <div className={`lg:w-[75%] w-full h-full p-[1rem] flex justify-center `}>
-        <div className="w-full flex flex-col h-full">
+        <div className="lg:w-[48rem] w-full flex flex-col h-full">
           <Topbar filters={filters} setFilters={setFilters} />
           <div className="w-full flex flex-col justify-between items-start gap-[2rem] mt-[1rem] " >
             {

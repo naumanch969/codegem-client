@@ -27,7 +27,7 @@ const FriendCard = ({ friend, type }: { friend: User, type: string }) => {
   }
 
   return (
-    <div className="bg-white p-4 shadow-md rounded-md flex flex-col justify-between">
+    <div className="bg-secondary p-4 shadow-md rounded-md flex flex-col justify-between">
       <div className='w-full ' >
         {
           friend?.profilePicture

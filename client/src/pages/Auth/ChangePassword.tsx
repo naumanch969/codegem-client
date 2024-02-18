@@ -1,30 +1,22 @@
-import React, { FC, useState, ChangeEvent, FormEvent } from "react";
-import { TextField, Dialog, DialogTitle, DialogContent, DialogActions, Input } from "@mui/material";
+import React, { useState, FormEvent } from "react";
+import { Input } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { changePassword } from "../../redux/actions/user";
-import { Person, Visibility, VisibilityOff } from "@mui/icons-material";
+import { changePassword } from "../../redux/actions/auth";
 import { logo } from "../../assets";
 
-interface ChangePasswordProps {
-    open: boolean;
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
 
-const ChangePassword = ({ open, setOpen, setSnackbarText, snackbarText }: { open?: boolean, setOpen?: any, setSnackbarText?: any, snackbarText?: string }) => {
+const ChangePassword = ({ setOpen, setSnackbarText }: { setOpen?: any, setSnackbarText?: any }) => {
 
     ////////////////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////////
     const PasswordButtonInitialStyle = { opacity: 0 };
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { isFetching, error } = useSelector((state: any) => state.user);
+    const { isFetching } = useSelector((state: any) => state.user);
 
     ////////////////////////////////////////////////////// STATES //////////////////////////////////////////////////////
     const [passwordData, setPasswordData] = useState({ newPassword: "", oldPassword: "" });
     const [inputError, setInputError] = useState({ newPassword: "", oldPassword: "" });
-    const [showPassword, setShowPassword] = useState(false);
-    const [showPasswordButton, setShowPasswordButton] = useState(PasswordButtonInitialStyle);
-    const [showSnackbar, setShowSnackbar] = useState(false);
 
     ////////////////////////////////////////////////////// FUNCTIONS //////////////////////////////////////////////////////
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,6 +26,8 @@ const ChangePassword = ({ open, setOpen, setSnackbarText, snackbarText }: { open
     const handleSubmit = (e: FormEvent<HTMLButtonElement>) => {
         e.preventDefault();
         const { oldPassword, newPassword } = passwordData;
+
+        // TODO: integrate react-hook-form  here
 
         if (!oldPassword)
             return setInputError((prev) => ({ ...prev, oldPassword: "Previous password is required" }));

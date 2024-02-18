@@ -20,9 +20,8 @@ const CollectionCard = ({ collection }: { collection: Collection }) => {
 
     /////////////////////////////////////////////////// FUNCTIONS /////////////////////////////////////////////////////
     const handleOpenUpdateModal = () => {
-        dispatch(getCollectionReducer(collection))
-        onOpen()
         onSetCollection(collection)
+        onOpen()
     }
     const handleOpenDeleteModal = () => {
         dispatch(getCollectionReducer(collection))

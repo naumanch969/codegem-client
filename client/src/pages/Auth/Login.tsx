@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { Person, VisibilityOff } from '@mui/icons-material';
 import { Input } from "@mui/material";
-import { login } from '../../redux/actions/user';
+import { login } from '../../redux/actions/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { InputAdornment } from '@mui/material';

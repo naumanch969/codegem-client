@@ -4,29 +4,78 @@ import Share from "../models/submodels/share.js";
 import Group from "../models/group.js";
 import User from "../models/user.js";
 import Collection from "../models/collection.js";
-import { createError, createNotification, isUndefined } from "../utils/functions.js";
-
+import {
+  createError,
+  createNotification,
+  isUndefined,
+} from "../utils/functions.js";
 export const getStreaks = async (req, res, next) => {
   try {
-    const result = await Streak.find()
+    const { page, pageSize, count } = req.query; // count is boolean
+
+    let query = Streak.find();
+
+    const pageNumber = parseInt(page, 10) || 1;
+    const size = parseInt(pageSize, 10) || 10;
+    const skip = (pageNumber - 1) * size;
+
+    query = query.skip(skip).limit(size);
+
+    const resultPromise = query
       .sort({ createdAt: -1 })
       .populate("user")
+      .populate("shares")
       .exec();
-    res.status(200).json(result);
+
+    const [result, totalCount] = await Promise.all([
+      resultPromise,
+      count ? Streak.countDocuments() : Promise.resolve(null),
+    ]);
+
+    let response = { result };
+    if (totalCount !== null) {
+      response.count = totalCount;
+    }
+
+    res.status(200).json(response);
   } catch (error) {
     next(createError(res, 500, error.message));
   }
 };
 export const getUserStreaks = async (req, res, next) => {
   try {
+    const { page, pageSize, count  } = req.query; // count is boolean
     const { userId } = req.params;
-    const result = await Streak.find({ user: userId }).populate("user").exec();
-    res.status(200).json(result);
+
+    let query = Streak.find({ user: userId });
+
+    const pageNumber = parseInt(page, 10) || 1;
+    const size = parseInt(pageSize, 10) || 10;
+    const skip = (pageNumber - 1) * size;
+
+    query = query.skip(skip).limit(size);
+
+    const resultPromise = query
+      .sort({ createdAt: -1 })
+      .populate("user")
+      .populate("shares")
+      .exec();
+
+    const [result, totalCount] = await Promise.all([
+      resultPromise,
+      count ? Streak.countDocuments() : Promise.resolve(null),
+    ]);
+
+    let response = { result };
+    if (totalCount !== null) {
+      response.count = totalCount;
+    }
+
+    res.status(200).json(response);
   } catch (error) {
     next(createError(res, 500, error.message));
   }
 };
-
 export const getLikedStreaks = async (req, res, next) => {
   try {
     const result = await Streak.find({ likes: { $in: [req.user._id] } })
@@ -83,6 +132,7 @@ export const createStreak = async (req, res, next) => {
 
     res.status(200).json(result);
   } catch (error) {
+    console.log('error', error)
     next(createError(res, 500, error.message));
   }
 };

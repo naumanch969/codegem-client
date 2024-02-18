@@ -12,8 +12,6 @@ import { getCollections, getUserCollections } from '../../redux/actions/collecti
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { Collection, User } from '../../interfaces';
-import UpdateCollection from './Update';
-import CreateCollection from './Create';
 import { useCollectionModal } from '../../hooks/useCollectionModal';
 
 const Collections: React.FC = () => {

@@ -1,10 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { ArrowDownward } from '@mui/icons-material';
 import { User } from '../../interfaces';
 import { RootState } from '../../redux/store';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { SampleProfileCoverImage } from '../../assets';
+import { Button } from '@/components/ui/button';
+import { Pencil } from 'lucide-react';
 
 const ProfilePage = () => {
 
@@ -30,22 +31,19 @@ const ProfilePage = () => {
                                 src={loggedUser?.profilePicture ? loggedUser?.profilePicture : "https://via.placeholder.com/50"}
                                 className="w-full h-full object-cover rounded-full"
                                 alt="Profile"
-                            /> 
+                            />
                         </div>
                     </div>
                     <div>
-                        <h1 className="text-2xl font-bold text-dark-slate-blue">{loggedUser?.username}</h1>
+                        <h1 className="text-2xl font-bold text-dark-slate-blue "><span className='capitalize' >{loggedUser?.firstName} {loggedUser?.lastName} </span>({loggedUser?.username}) </h1>
                         <p className="text-gray-600">{loggedUser?.email}</p>
                     </div>
                 </div>
                 {/* Edit profile button */}
                 <div className="flex items-end gap-[1rem]">
-                    <button onClick={() => navigate('/profile/edit')} className="p-[.5rem] rounded-[5px] bg-light-gray hover:bg-light-blue">
-                        Edit Profile
-                    </button>
-                    <button className="p-[.5rem] rounded-[5px] bg-light-gray hover:bg-light-blue">
-                        <ArrowDownward />
-                    </button>
+                    <Button onClick={() => navigate('/profile/edit')} variant='outline' className='flex items-center gap-2' >
+                        <Pencil className='w-4 h-4' /> Edit Profile
+                    </Button>
                 </div>
             </div>
         </div>

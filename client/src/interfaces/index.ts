@@ -12,12 +12,17 @@ export interface User {
   coverImage?: string;
   bio?: string;
   title?: string;
+  location?: string;
   socialLinks: {
     facebook: string;
     instagram: string;
     twitter: string;
     linkedin: string;
   };
+  interests: string[];
+  programming: string[];
+  hobbies: string[];
+  books: string[];
   verified?: boolean;
   saved?: string[];
   friends?: string[];

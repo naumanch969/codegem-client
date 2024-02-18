@@ -1,31 +1,78 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { Button, Loader } from '../../utils/Components'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { Upload } from '../../utils/Components/Upload';
 import { User } from '../../interfaces';
 import * as api from '../../redux/api';
 import { updateProfile } from '../../redux/actions/user';
+import { z } from "zod"
+import { useForm } from 'react-hook-form';
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Button } from "@/components/ui/button"
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { X } from 'lucide-react'
+import { Badge } from '@/components/ui/badge';
+import { Modal } from '@/components/ui/modal';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import toast from 'react-hot-toast';
+import { Separator } from '@/components/ui/separator';
+
 
 const ProfileEditPage: React.FC = () => {
 
-    //////////////////////////////////////////////// VARIABLES /////////////////////////////////////////////////////
-    const dispatch = useDispatch()
-    const { url, isFetching }: { url: string, isFetching: boolean } = useSelector((state: RootState) => state.general);
+    // <---------------------------------------------------- VARIABLES ----------------------------------------------------------->
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
-    const initialState = {
-        _id: '',
-        firstName: '',
-        lastName: '',
-        username: '',
-        email: '',
-        phone: '',
-        password: '',
-        profilePicture: '',
-        coverImage: '',
-        bio: '',
-        title: '',
-        socialLinks: [],
+
+    const formSchema = z.object({
+        firstName: z.string().min(2, { message: 'Title must contain atleast 2 characters.' }).max(250, { message: 'Title can\' be longer than 250 characters.' }),
+        lastName: z.string().min(2, { message: 'Title must contain atleast 2 characters.' }).max(250, { message: 'Title can\' be longer than 250 characters.' }),
+        username: z.string().min(2, { message: 'Title must contain atleast 2 characters.' }).max(250, { message: 'Title can\' be longer than 250 characters.' }),
+        email: z.string().min(2, { message: 'Title must contain atleast 2 characters.' }).max(250, { message: 'Title can\' be longer than 250 characters.' }),
+        title: z.string().min(2, { message: 'Title must contain atleast 2 characters.' }).max(250, { message: 'Title can\' be longer than 250 characters.' }),
+        bio: z.string().min(2, { message: 'Title must contain atleast 2 characters.' }).max(250, { message: 'Title can\' be longer than 250 characters.' }),
+        externalLinks: z.object({ facebook: z.string(), twitter: z.string(), instagram: z.string(), linkedin: z.string(), github: z.string() })
+    })
+
+    const initialData: z.infer<typeof formSchema> = {
+        firstName: "",
+        lastName: "",
+        username: "",
+        email: "",
+        title: "",
+        bio: "",
+        externalLinks: { facebook: '', twitter: '', instagram: '', linkedin: '', github: '' },
+    }
+
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: loggedUser! || initialData,
+    })
+    const dispatch = useDispatch();
+
+
+    const { url, isFetching }: { url: string, isFetching: boolean } = useSelector((state: RootState) => state.general);
+
+    // <---------------------------------------------------- FUNCTIONS ----------------------------------------------------------->
+    const onSubmit = (values: z.infer<typeof formSchema>) => {
+
+
+        // form.reset(initialData);
     }
 
     //////////////////////////////////////////////// STATES /////////////////////////////////////////////////////
@@ -69,13 +116,13 @@ const ProfileEditPage: React.FC = () => {
         e.preventDefault();
 
         let coverImageUrl, profilePictureUrl;
-        if ((profileData?.coverImage as { name: String })?.name) {
+        if (profileData?.coverImage) {
             const formData = new FormData();
             formData.append('image', profileData.coverImage as string);
             const { data } = await api.uploadImage(formData)
             coverImageUrl = data.result
         }
-        if ((profileData?.coverImage as { name: String })?.name) {
+        if (profileData?.coverImage) {
             const formData = new FormData();
             formData.append('image', profileData.profilePicture as string);
             const { data } = await api.uploadImage(formData)
@@ -94,13 +141,12 @@ const ProfileEditPage: React.FC = () => {
 
 
     return (
-        <div className='w-full p-8 flex flex-col gap-4 ' >
-            <div className="w-full h-[20rem] border bg-gray-200 rounded-[6px] overflow-hidden " >
-                <Upload image={coverImage} handleFileChange={handleCoverImageChange} handleFileClear={handleCoverImageClear} />
-            </div>
-            <h1 className="text-3xl text-dark-slate-blue font-bold ">Edit Profile</h1>
-
-            <form onSubmit={handleSubmit}>
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full p-8 flex flex-col gap-4 ">
+                <div className="w-full h-[20rem] border bg-gray-200 rounded-[6px] overflow-hidden " >
+                    <Upload image={coverImage} handleFileChange={handleCoverImageChange} handleFileClear={handleCoverImageClear} />
+                </div>
+                <h1 className="text-3xl text-dark-slate-blue font-bold ">Edit Profile</h1>
                 <div className='grid grid-cols-8 '  >
                     <div className="col-span-3 flex flex-col justify-start items-center gap-4 py-4 px-6 ">
                         <div className="w-48 h-48 border border-gray-500 rounded-full overflow-hidden ">
@@ -118,176 +164,173 @@ const ProfileEditPage: React.FC = () => {
                     <div className="flex flex-col col-span-5 gap-14 ">
                         {/* Basic Info */}
                         <div className="grid grid-cols-2 gap-4 w-full ">
-                            <div className="col-span-2 flex flex-col justify-between items-start gap-4 w-full mb-4 ">
+                            <div className="col-span-2 flex flex-col justify-between items-start gap-4 w-full">
                                 <div className="flex justify-between items-center w-full ">
                                     <h3 className='text-xl font-medium text-dark-slate-blue-darken ' >Basic Info</h3>
                                     <div className="flex justify-end items-center gap-2 ">
-                                        <Button onClick={handleSubmit} type='secondary' variant='text' text='Cancel' loading={isFetching} disabled={isFetching} />
-                                        <Button onClick={handleSubmit} type='secondary' variant='filled' text='Save' loading={isFetching} disabled={isFetching} />
+                                        <Button onClick={handleSubmit} >Save</Button>
                                     </div>
                                 </div>
-                                <hr className='w-full h-[2px] bg-gray-200 ' />
+                                <Separator />
                             </div>
-                            <div className='col-span-1 flex flex-col gap-1 ' >
-                                <label htmlFor="firstName" className='text-sm text-dark-slate-blue ' >First Name</label>
-                                <input
-                                    id='firstName'
-                                    className='border h-[40px] rounded-md px-4 w-full focus:outline-teal-blue '
-                                    placeholder="First Name"
-                                    value={profileData.firstName}
-                                    onChange={handleChange}
-                                    name="firstName"
-                                    type="text"
-                                />
-                            </div>
-                            <div className='col-span-1 flex flex-col gap-1 ' >
-                                <label htmlFor="lastName" className='text-sm text-dark-slate-blue ' >Last Name</label>
-                                <input
-                                    id='lastName'
-                                    className='border h-[40px] rounded-md px-4 w-full focus:outline-teal-blue '
-                                    placeholder="Last Name"
-                                    value={profileData.lastName}
-                                    onChange={handleChange}
-                                    name="lastName"
-                                    type="text"
-                                />
-                            </div>
-                            <div className='col-span-1 flex flex-col gap-1 ' >
-                                <label htmlFor="username" className='text-sm text-dark-slate-blue ' >Username</label>
-                                <input
-                                    id='username'
-                                    className='border h-[40px] rounded-md px-4 w-full focus:outline-teal-blue '
-                                    placeholder="Username"
-                                    value={profileData.username}
-                                    onChange={handleChange}
-                                    name="username"
-                                    type="text"
-                                />
-                            </div>
-                            <div className='col-span-1 flex flex-col gap-1 ' >
-                                <label htmlFor="email" className='text-sm text-dark-slate-blue ' >Email</label>
-                                <input
-                                    id='email'
-                                    className='border h-[40px] rounded-md px-4 w-full focus:outline-teal-blue '
-                                    placeholder="Email"
-                                    value={profileData.email}
-                                    onChange={handleChange}
-                                    name="email"
-                                    type="text"
-                                />
-                            </div>
-                            <div className='col-span-2 flex flex-col gap-1 ' >
-                                <label htmlFor="title" className='text-sm text-dark-slate-blue ' >Title</label>
-                                <input
-                                    id='title'
-                                    className='border h-[40px] rounded-md px-4 w-full focus:outline-teal-blue '
-                                    placeholder="i.e., Tech Enthusiastic, Gamer"
-                                    value={profileData.title}
-                                    onChange={handleChange}
-                                    name="title"
-                                    type="text"
-                                />
-                            </div>
+                            <FormField
+                                control={form.control}
+                                name="firstName"
+                                render={({ field }: { field: any }) => (
+                                    <FormItem className='md:col-span-1 col-span-2 ' >
+                                        <FormLabel>First Name</FormLabel>
+                                        <FormControl>
+                                            <Input className='bg-secondary' placeholder="John" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="lastName"
+                                render={({ field }: { field: any }) => (
+                                    <FormItem className='md:col-span-1 col-span-2 ' >
+                                        <FormLabel>Last Name</FormLabel>
+                                        <FormControl>
+                                            <Input className='bg-secondary' placeholder="Doe" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="username"
+                                render={({ field }: { field: any }) => (
+                                    <FormItem className='md:col-span-1 col-span-2 ' >
+                                        <FormLabel>Username</FormLabel>
+                                        <FormControl>
+                                            <Input className='bg-secondary' placeholder="johndoe" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }: { field: any }) => (
+                                    <FormItem className='md:col-span-1 col-span-2 ' >
+                                        <FormLabel>Email</FormLabel>
+                                        <FormControl>
+                                            <Input className='bg-secondary' placeholder="johndoe@example.com" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="title"
+                                render={({ field }: { field: any }) => (
+                                    <FormItem className='md:col-span-1 col-span-2 ' >
+                                        <FormLabel>Title</FormLabel>
+                                        <FormControl>
+                                            <Input className='bg-secondary' placeholder="Title" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                         </div>
                         {/* About Me */}
                         <div className="flex flex-col gap-4 w-full ">
-                            <div className="flex flex-col justify-between items-start gap-4 w-full mb-4 ">
+                            <div className="flex flex-col justify-between items-start gap-4 w-full ">
                                 <h3 className='text-xl font-medium text-dark-slate-blue-darken ' >About Me</h3>
-                                <hr className='w-full h-[2px] bg-gray-200 ' />
+                                <Separator />
                             </div>
-                            <div className='w-full flex flex-col gap-1 ' >
-                                <label htmlFor="bio" className='text-sm text-dark-slate-blue ' >Bio</label>
-                                <textarea
-                                    id='bio'
-                                    className='resize-none border rounded-md px-4 py-2 w-full focus:outline-teal-blue '
-                                    placeholder="Your bio here..."
-                                    rows={4}
-                                    value={bio}
-                                    onChange={(e) => setBio(e.target.value)}
-                                />
-                            </div>
+                            <FormField
+                                control={form.control}
+                                name="bio"
+                                render={({ field }: { field: any }) => (
+                                    <FormItem className='md:col-span-1 col-span-2 ' >
+                                        <FormLabel>Bio</FormLabel>
+                                        <FormControl>
+                                            <Textarea
+                                                className='bg-secondary'
+                                                placeholder="Something about you"
+                                                rows={5}
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                         </div>
                         {/* External Links */}
                         <div className="flex flex-col gap-4 w-full ">
-                            <div className="flex flex-col justify-between items-start gap-4 w-full mb-4">
+                            <div className="flex flex-col justify-between items-start gap-4 w-full ">
                                 <h3 className='text-xl font-medium text-dark-slate-blue-darken ' >External Links</h3>
-                                <hr className='w-full h-[2px] bg-gray-200 ' />
+                                <Separator />
                             </div>
-                            <div className='w-full flex flex-col gap-1 ' >
-                                <label htmlFor="facebook" className='text-sm text-dark-slate-blue ' >Facebook</label>
-                                <input
-                                    id='facebook'
-                                    className='border h-[40px] rounded-md px-4 w-full focus:outline-teal-blue '
-                                    placeholder="Facebook"
-                                    value={socialLinks.facebook}
-                                    onChange={(e) => handleChangeSocialLinks('facebook', e.target.value)}
-                                    name="facebook"
-                                    type="text"
-                                />
-                            </div>
-                            <div className='w-full flex flex-col gap-1 ' >
-                                <label htmlFor="twitter" className='text-sm text-dark-slate-blue ' >Twitter</label>
-                                <input
-                                    id='twitter'
-                                    className='border h-[40px] rounded-md px-4 w-full focus:outline-teal-blue '
-                                    placeholder="Twitter"
-                                    value={socialLinks.twitter}
-                                    onChange={(e) => handleChangeSocialLinks('twitter', e.target.value)}
-                                    name="twitter"
-                                    type="text"
-                                />
-                            </div>
-                            <div className='w-full flex flex-col gap-1 ' >
-                                <label htmlFor="instagram" className='text-sm text-dark-slate-blue ' >Instagram</label>
-                                <input
-                                    id='instagram'
-                                    className='border h-[40px] rounded-md px-4 w-full focus:outline-teal-blue '
-                                    placeholder="Instagram"
-                                    value={socialLinks.instagram}
-                                    onChange={(e) => handleChangeSocialLinks('instagram', e.target.value)}
-                                    name="instagram"
-                                    type="text"
-                                />
-                            </div>
-                            <div className='w-full flex flex-col gap-1 ' >
-                                <label htmlFor="linkedin" className='text-sm text-dark-slate-blue ' >Linkedin</label>
-                                <input
-                                    id='linkedin'
-                                    className='border h-[40px] rounded-md px-4 w-full focus:outline-teal-blue '
-                                    placeholder="Linkedin"
-                                    value={socialLinks.linkedin}
-                                    onChange={(e) => handleChangeSocialLinks('linkedin', e.target.value)}
-                                    name="linkedin"
-                                    type="text"
-                                />
-                            </div>
+                            <FormField
+                                control={form.control}
+                                name="externalLinks"
+                                render={({ field }: { field: any }) => (
+                                    <FormItem className='md:col-span-1 col-span-2 ' >
+                                        <FormLabel>Github</FormLabel>
+                                        <FormControl>
+                                            <Input className='bg-secondary' placeholder="Github" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="externalLinks"
+                                render={({ field }: { field: any }) => (
+                                    <FormItem className='md:col-span-1 col-span-2 ' >
+                                        <FormLabel>Linkedin</FormLabel>
+                                        <FormControl>
+                                            <Input className='bg-secondary' placeholder="Linkedin" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="externalLinks"
+                                render={({ field }: { field: any }) => (
+                                    <FormItem className='md:col-span-1 col-span-2 ' >
+                                        <FormLabel>Instgram</FormLabel>
+                                        <FormControl>
+                                            <Input className='bg-secondary' placeholder="Instagram" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="externalLinks"
+                                render={({ field }: { field: any }) => (
+                                    <FormItem className='md:col-span-1 col-span-2 ' >
+                                        <FormLabel>Facebook</FormLabel>
+                                        <FormControl>
+                                            <Input className='bg-secondary' placeholder="Facebook" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                         </div>
-                        {/* External Links */}
-                        {/* <div className="flex flex-col gap-4 w-full ">
-                            <div className="flex flex-col justify-between items-start gap-4 w-full mb-4">
-                                <h3 className='text-xl font-medium text-dark-slate-blue-darken ' >Security</h3>
-                                <hr className='w-full h-[2px] bg-gray-200 ' />
-                            </div>
-                            <div className='w-full flex flex-col gap-1 ' >
-                                <label htmlFor="password" className='text-sm text-dark-slate-blue ' >Password</label>
-                                <input
-                                    id='password'
-                                    className='border h-[40px] rounded-md px-4 w-full focus:outline-teal-blue '
-                                    placeholder="Password"
-                                    value={'socialMedia.facebook'}
-                                    onChange={(e) => { }}
-                                    type="password"
-                                />
-                            </div>
-                        </div> */}
                         {/* Button */}
-                        <div className='flex justify-start items-center  ' >
-                            <Button onClick={handleSubmit} type='secondary' text='Update' loading={isFetching} disabled={isFetching} />
+                        <div className='flex justify-end items-center  ' >
+                            <Button onClick={handleSubmit} >Save</Button>
                         </div>
                     </div>
                 </div>
             </form>
-        </div>
+        </Form>
     );
 };
 

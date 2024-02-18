@@ -127,7 +127,7 @@ export const updateStreak =
     }
   };
 export const shareStreak =
-  (streak: Streak, friendIds: string[], loggedUserId: string, setOpen: any) =>
+  (streak: Streak, friendIds: string[], setOpen: any) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch(shareStreakReducer({ streak, friendIds }));
@@ -140,7 +140,7 @@ export const shareStreak =
     }
   };
 export const shareStreakInGroups =
-  (streak: Streak, groupIds: string[], loggedUserId: string, setOpen: any) =>
+  (streak: Streak, groupIds: string[], setOpen: any) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch(shareStreakInGroupsReducer({ streak, groupIds }));

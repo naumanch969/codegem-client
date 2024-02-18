@@ -15,7 +15,7 @@ import {
 
 export const getCodes = async (req, res, next) => {
   try {
-    const { page, pageSize } = req.query;
+    const { page, pageSize, count } = req.query; // count is boolean
 
     let query = Code.find();
 
@@ -25,23 +25,57 @@ export const getCodes = async (req, res, next) => {
 
     query = query.skip(skip).limit(size);
 
-    const result = await query
+    const resultPromise = query
       .sort({ createdAt: -1 })
       .populate("user")
       .populate("shares")
       .exec();
 
-    res.status(200).json(result);
+    const [result, totalCount] = await Promise.all([
+      resultPromise,
+      count ? Code.countDocuments() : Promise.resolve(null),
+    ]);
+
+    let response = { result };
+    if (totalCount !== null) {
+      response.count = totalCount;
+    }
+
+    res.status(200).json(response);
   } catch (error) {
     next(createError(res, 500, error.message));
   }
 };
-
 export const getUserCodes = async (req, res, next) => {
   try {
+    const { page, pageSize, count } = req.query; // count is boolean
     const { userId } = req.params;
-    const result = await Code.find({ user: userId }).populate("user").exec();
-    res.status(200).json(result);
+
+    let query = Code.find({ user: userId });
+
+    const pageNumber = parseInt(page, 10) || 1;
+    const size = parseInt(pageSize, 10) || 10;
+    const skip = (pageNumber - 1) * size;
+
+    query = query.skip(skip).limit(size);
+
+    const resultPromise = query
+      .sort({ createdAt: -1 })
+      .populate("user")
+      .populate("shares")
+      .exec();
+
+    const [result, totalCount] = await Promise.all([
+      resultPromise,
+      count ? Code.countDocuments() : Promise.resolve(null),
+    ]);
+
+    let response = { result };
+    if (totalCount !== null) {
+      response.count = totalCount;
+    }
+
+    res.status(200).json(response);
   } catch (error) {
     next(createError(res, 500, error.message));
   }

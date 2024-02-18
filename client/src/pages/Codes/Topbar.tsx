@@ -65,7 +65,7 @@ const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
                 <div className="flex justify-end flex-[3] " >
                     <Select onValueChange={(value: string) => setFilters({ ...filters, language: value })} >
                         <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Language" default='all' />
+                            <SelectValue placeholder="Language" defaultValue='all' />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="python">Python</SelectItem>

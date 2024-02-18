@@ -26,11 +26,9 @@ import {
   Streaks,
   Challenges
 } from "./pages";
-import { getAllUsers } from "./redux/actions/user";
 import { useDispatch, useSelector } from "react-redux";
 import { useStateContext } from "./contexts/ContextProvider";
 import { AuthWrapper } from "./wrappers";
-import Cookie from "js-cookie";
 import { getUserCollections } from './redux/actions/collection'
 import { RootState } from "./redux/store";
 import { Collection as TCollection } from './interfaces'

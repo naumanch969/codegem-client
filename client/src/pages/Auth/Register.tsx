@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Input } from "@mui/material";
 import { Person } from '@mui/icons-material';
-import { register } from '../../redux/actions/user';
+import { register } from '../../redux/actions/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { User } from '../../interfaces';

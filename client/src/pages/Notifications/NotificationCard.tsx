@@ -50,3 +50,16 @@ const NotificationCard = ({ notification }: { notification: Notification }) => {
 }
 
 export default NotificationCard
+
+NotificationCard.Skeleton = function () {
+    return (
+        <div className={`w-full animate-pulse flex flex-col gap-y-3 justify-between p-4 border rounded shadow-lg bg-light-gray`}>
+            <span className="h-6 w-full bg-warm-gray-dark rounded" />
+            <span className="h-6 w-full bg-warm-gray-dark rounded" />
+            <div className="flex justify-end items-center gap-2 w-full h-4 ">
+                <span className="h-4 w-[30%] bg-warm-gray-dark rounded" />
+                <span className="h-4 w-[30%] bg-warm-gray-dark rounded" />
+            </div>
+        </div>
+    )
+}

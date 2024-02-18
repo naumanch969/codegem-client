@@ -6,20 +6,65 @@ import { createError, isUndefined } from "../utils/functions.js";
 
 export const getGroups = async (req, res, next) => {
   try {
-    const userId = req.user._id;
-    const groups = await Group.find({}).populate("admin").exec();
+    const { page, pageSize, count } = req.query; // count is boolean
 
-    res.status(200).json(groups);
+    let query = Group.find();
+
+    const pageNumber = parseInt(page, 10) || 1;
+    const size = parseInt(pageSize, 10) || 10;
+    const skip = (pageNumber - 1) * size;
+
+    query = query.skip(skip).limit(size);
+
+    const resultPromise = query
+      .sort({ createdAt: -1 })
+      .populate("admin")
+      .exec();
+
+    const [result, totalCount] = await Promise.all([
+      resultPromise,
+      count ? Group.countDocuments() : Promise.resolve(null),
+    ]);
+
+    let response = { result };
+    if (totalCount !== null) {
+      response.count = totalCount;
+    }
+
+    res.status(200).json(response);
   } catch (error) {
     next(createError(res, 500, error.message));
   }
 };
-
 export const getUserGroups = async (req, res, next) => {
   try {
+    const { page, pageSize, count } = req.query; // count is boolean
     const { userId } = req.params;
-    const groups = await Group.find({ admin: userId }).populate("admin").exec();
-    res.status(200).json(groups);
+
+    let query = Group.find({ admin: userId });
+
+    const pageNumber = parseInt(page, 10) || 1;
+    const size = parseInt(pageSize, 10) || 10;
+    const skip = (pageNumber - 1) * size;
+
+    query = query.skip(skip).limit(size);
+
+    const resultPromise = query
+      .sort({ createdAt: -1 })
+      .populate("admin")
+      .exec();
+
+    const [result, totalCount] = await Promise.all([
+      resultPromise,
+      count ? Group.countDocuments() : Promise.resolve(null),
+    ]);
+
+    let response = { result };
+    if (totalCount !== null) {
+      response.count = totalCount;
+    }
+
+    res.status(200).json(response);
   } catch (error) {
     next(createError(res, 500, error.message));
   }

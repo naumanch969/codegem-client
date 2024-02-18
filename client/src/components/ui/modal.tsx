@@ -25,7 +25,7 @@ export const Modal: FC<ModalProps> = ({
 
     return (
         <Dialog open={isOpen} onOpenChange={onChange}  >
-            <DialogContent className={cn("", className)} >
+            <DialogContent className={cn("max-w-[70vw] ", className)} >
                 <DialogHeader  >
                     <DialogTitle className='text-lg' >{title}</DialogTitle>
                     <DialogDescription>{description}</DialogDescription>
