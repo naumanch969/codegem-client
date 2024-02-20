@@ -18,13 +18,14 @@ const Codes = () => {
   const totalPages = Math.ceil(count / pageSize);
 
   /////////////////////////////////////// STATES //////////////////////////////////////////
-  const [filters, setFilters] = useState({ codes: 'all', language: 'all' })
+  const [activeMenu, setActiveMenu] = useState<'all' | 'latest' | 'famous' | 'trending' | 'recommended'>('all')
+  const [language, setLanguage] = useState<string>('all')
   const [page, setPage] = useState<number>(1)
 
   /////////////////////////////////////// USE EFFECTS ///////////////////////////////////////
   useEffect(() => {
-    dispatch<any>(getCodes(codes.length == 0, `?page=${page}&pageSize=${pageSize}&count=${true}`))
-  }, [])
+    dispatch<any>(getCodes(codes.length == 0, `?page=${page}&pageSize=${pageSize}&count=${true}&language=${language}&filter=${activeMenu}`))
+  }, [activeMenu, language])
   useEffect(() => {
     // TODO: if data of particular page is available then dont call api
     fetchMore()
@@ -40,7 +41,13 @@ const Codes = () => {
 
       <div className={`lg:w-[75%] w-full h-full p-[1rem] flex justify-center `}>
         <div className="lg:w-[48rem] w-full flex flex-col h-full">
-          <Topbar filters={filters} setFilters={setFilters} />
+          <Topbar
+            activeMenu={activeMenu}
+            setActiveMenu={setActiveMenu}
+            language={language}
+            setLanguage={setLanguage}
+            basicQuery={`?page=${page}&pageSize=${pageSize}&count=${true}`}
+          />
           <div className="w-full flex flex-col justify-between items-start gap-[2rem] mt-[1rem] " >
             {
               isFetching

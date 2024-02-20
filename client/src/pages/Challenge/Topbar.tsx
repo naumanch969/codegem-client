@@ -11,13 +11,19 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
+import { useDispatch } from "react-redux";
+import { searchChallenges } from "@/redux/actions/challenge";
+const Topbar = ({ activeMenu, setActiveMenu, language, setLanguage, basicQuery }: { activeMenu: string, setActiveMenu: any, language: string, setLanguage: any, basicQuery: string }) => {
 
+    const dispatch = useDispatch()
     const filterButtons = ["All", "Latest", "Famous", "Trending", "Recommended to you"];
-    const { onOpen, onSetChallenge } = useChallengeModal()
+    const { onOpen } = useChallengeModal()
 
     const [searchValue, setSearchValue] = useState('');
 
+    const onSearch = () => {
+        dispatch<any>(searchChallenges(true, `${basicQuery}&query=${searchValue}`))
+    }
 
     return (
         <div className="w-full flex flex-col gap-[1rem] ">
@@ -32,6 +38,7 @@ const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
                         className="w-full "
                     />
                     <Button
+                        onClick={onSearch}
                         variant='default'
                         size='sm'
                         className="absolute right-[2.52px] top-[50%] transform translate-y-[-50%]"
@@ -39,7 +46,7 @@ const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
                         <Search className="text-white" />
                     </Button>
                 </div>
-                <Button onClick={() => { onOpen(); onSetChallenge(null) }} variant="default">
+                <Button onClick={() => onOpen()} variant="default">
                     <Add /> <span className="" >Add Challenge</span>
                 </Button>
             </div>
@@ -52,8 +59,8 @@ const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
                             <Button
                                 key={index}
                                 size='sm'
-                                onClick={() => setFilters({ ...filters, challenges: item.toLowerCase() })}
-                                variant={filters?.challenges?.toLowerCase() == item?.toLowerCase() ? "default" : "ghost"}
+                                onClick={() => setActiveMenu(item.toLowerCase())}
+                                variant={activeMenu.toLowerCase() == item.toLowerCase() ? "default" : "ghost"}
                             >
                                 {item}
                             </Button>
@@ -63,7 +70,7 @@ const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
                 </div>
                 {/* select */}
                 <div className="flex justify-end flex-[3] " >
-                    <Select onValueChange={(value: string) => setFilters({ ...filters, language: value })} >
+                    <Select defaultValue={language} onValueChange={(value: string) => setLanguage(value)} >
                         <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Language" defaultValue='all' />
                         </SelectTrigger>

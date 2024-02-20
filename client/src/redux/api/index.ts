@@ -86,6 +86,8 @@ export const editPersonalDetails = (
 // CODE
 export const getCode = (id: string) => API.get(`/code/get/single/${id}`);
 export const getCodes = (query: string) => API.get(`/code/get/all${query}`);
+export const searchCodes = (query: string) =>
+  API.get(`/code/get/search${query}`);
 export const getUserCodes = (userId: string) =>
   API.get(`/code/get/user/${userId}`);
 export const getLikedCodes = () => API.get(`/code/get/liked`);
@@ -111,6 +113,8 @@ export const getChallenge = (id: string) =>
   API.get(`/challenge/get/single/${id}`);
 export const getChallenges = (query: string) =>
   API.get(`/challenge/get/all${query}`);
+export const searchChallenge = (query: string) =>
+  API.get(`/challenge/get/search${query}`);
 export const getUserChallenges = (userId: string) =>
   API.get(`/challenge/get/user/${userId}`);
 export const getLikedChallenges = () => API.get(`/challenge/get/liked`);
@@ -140,6 +144,8 @@ export const deleteChallenge = (id: string) =>
 // STREAK
 export const getStreak = (id: string) => API.get(`/streak/get/single/${id}`);
 export const getStreaks = (query: string) => API.get(`/streak/get/all${query}`);
+export const searchStreaks = (query: string) =>
+  API.get(`/streak/get/search${query}`);
 export const getUserStreaks = (userId: string) =>
   API.get(`/streak/get/user/${userId}`);
 export const getLikedStreaks = () => API.get(`/streak/get/liked`);

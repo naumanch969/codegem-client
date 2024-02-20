@@ -56,6 +56,24 @@ export const getChallenges =
         : dispatch(error(err.message));
     }
   };
+
+export const searchChallenges=
+  (loading: boolean = false, query: string) =>
+  async (dispatch: Dispatch) => {
+    try {
+      loading && dispatch(start());
+      const { data }: { data: { result: Challenge[]; count: number } } =
+        await api.searchChallenge(query);
+      dispatch(
+        getChallengesReducer({ result: data.result, count: data.count })
+      );
+      dispatch(end());
+    } catch (err: any) {
+      err.response?.data?.message
+        ? dispatch(error(err.response.data.message))
+        : dispatch(error(err.message));
+    }
+  };
 export const getSavedChallenges = () => async (dispatch: Dispatch) => {
   try {
     dispatch(start());

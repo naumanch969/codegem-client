@@ -51,6 +51,21 @@ export const getStreaks =
         : dispatch(error(err.message));
     }
   };
+export const searchStreaks =
+  (loading: boolean = false, query: string) =>
+  async (dispatch: Dispatch) => {
+    try {
+      loading && dispatch(start());
+      const { data }: { data: { result: Streak[]; count: number } } =
+        await api.searchStreaks(query);
+      dispatch(getStreaksReducer({ result: data.result, count: data.count }));
+      dispatch(end());
+    } catch (err: any) {
+      err.response?.data?.message
+        ? dispatch(error(err.response.data.message))
+        : dispatch(error(err.message));
+    }
+  };
 export const getSavedStreaks = () => async (dispatch: Dispatch) => {
   try {
     dispatch(start());

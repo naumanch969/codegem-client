@@ -11,15 +11,19 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { useDispatch } from "react-redux";
+import { searchStreaks } from "@/redux/actions/streak";
+const Topbar = ({ activeMenu, setActiveMenu, language, setLanguage, basicQuery }: { activeMenu: string, setActiveMenu: any, language: string, setLanguage: any, basicQuery: string }) => {
 
-
-const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
-
+    const dispatch = useDispatch()
     const filterButtons = ["All", "Latest", "Famous", "Trending", "Recommended to you"];
-    const { onOpen, onSetStreak } = useStreakModal()
+    const { onOpen } = useStreakModal()
 
     const [searchValue, setSearchValue] = useState('');
 
+    const onSearch = () => {
+        dispatch<any>(searchStreaks(true, `${basicQuery}&query=${searchValue}`))
+    }
 
     return (
         <div className="w-full flex flex-col gap-[1rem] ">
@@ -34,6 +38,7 @@ const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
                         className="w-full "
                     />
                     <Button
+                        onClick={onSearch}
                         variant='default'
                         size='sm'
                         className="absolute right-[2.52px] top-[50%] transform translate-y-[-50%]"
@@ -41,7 +46,7 @@ const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
                         <Search className="text-white" />
                     </Button>
                 </div>
-                <Button onClick={() => {onOpen(); onSetStreak(null)}} variant="default">
+                <Button onClick={() => onOpen()} variant="default">
                     <Add /> <span className="" >Add Streak</span>
                 </Button>
             </div>
@@ -54,8 +59,8 @@ const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
                             <Button
                                 key={index}
                                 size='sm'
-                                onClick={() => setFilters({ ...filters, streaks: item.toLowerCase() })}
-                                variant={filters.streaks.toLowerCase() == item.toLowerCase() ? "default" : "ghost"}
+                                onClick={() => setActiveMenu(item.toLowerCase())}
+                                variant={activeMenu.toLowerCase() == item.toLowerCase() ? "default" : "ghost"}
                             >
                                 {item}
                             </Button>
@@ -65,9 +70,9 @@ const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
                 </div>
                 {/* select */}
                 <div className="flex justify-end flex-[3] " >
-                    <Select onValueChange={(value: string) => setFilters({ ...filters, language: value })} >
+                    <Select defaultValue={language} onValueChange={(value: string) => setLanguage(value)} >
                         <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Language" default='all' />
+                            <SelectValue placeholder="Language" defaultValue='all' />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="python">Python</SelectItem>
