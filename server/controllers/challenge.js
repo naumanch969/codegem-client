@@ -8,25 +8,63 @@ import { createError, isUndefined } from "../utils/functions.js";
 
 export const getChallenges = async (req, res, next) => {
   try {
-    const { page, pageSize, count } = req.query; // count is boolean
+    const { page, pageSize, count, filter } = req.query; // count is boolean, filter: famous|trending|latest
 
-    let query = Challenge.find();
+    let aggregationPipeline = [];
+
+    if (filter === "famous") {
+      aggregationPipeline.push({ $sort: { likes: -1 } });
+    } else if (filter == "trending") {
+      // TODO: add shares in it aswell, same for other gets (getCodes, getStreaks etc.)
+      aggregationPipeline.push(
+        {
+          $lookup: {
+            from: "comments",
+            localField: "comments",
+            foreignField: "_id",
+            as: "comments",
+          },
+        },
+        {
+          $addFields: {
+            commentsCount: { $size: "$comments" },
+          },
+        },
+        { $sort: { commentsCount: -1 } }
+      );
+    } else if (filter === "latest") {
+      aggregationPipeline.push({ $sort: { createdAt: -1 } });
+    } else {
+      aggregationPipeline.push({ $sort: { createdAt: -1 } });
+    }
 
     const pageNumber = parseInt(page, 10) || 1;
     const size = parseInt(pageSize, 10) || 10;
     const skip = (pageNumber - 1) * size;
 
-    query = query.skip(skip).limit(size);
+    aggregationPipeline.push({ $skip: skip }, { $limit: size });
 
-    const resultPromise = query
-      .sort({ createdAt: -1 })
-      .populate("user")
-      .populate("shares")
-      .exec();
+    aggregationPipeline.push(
+      {
+        $lookup: {
+          from: "users",
+          localField: "user",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      {
+        $addFields: {
+          user: { $arrayElemAt: ["$user", 0] }, // Convert user from array to single object
+        },
+      }
+    );
+
+    const resultPromise = Challenge.aggregate(aggregationPipeline).exec();
 
     const [result, totalCount] = await Promise.all([
       resultPromise,
-      count ? Challenge.countDocuments() : Promise.resolve(null),
+      count ? Challenge.countDocuments().exec() : Promise.resolve(null),
     ]);
 
     let response = { result };
@@ -39,6 +77,7 @@ export const getChallenges = async (req, res, next) => {
     next(createError(res, 500, error.message));
   }
 };
+
 export const getUserChallenges = async (req, res, next) => {
   try {
     const { page, pageSize, count } = req.query; // count is boolean
@@ -52,6 +91,47 @@ export const getUserChallenges = async (req, res, next) => {
 
     query = query.skip(skip).limit(size);
 
+    const resultPromise = query.populate("user").populate("shares").exec();
+
+    const [result, totalCount] = await Promise.all([
+      resultPromise,
+      count ? Challenge.countDocuments(query) : Promise.resolve(null),
+    ]);
+
+    let response = { result };
+    if (totalCount !== null) {
+      response.count = totalCount;
+    }
+
+    res.status(200).json(response);
+  } catch (error) {
+    next(createError(res, 500, error.message));
+  }
+};
+
+export const searchChallenges = async (req, res, next) => {
+  try {
+    const { page, pageSize, count, userId, query: searchQuery } = req.query;
+
+    let query = userId ? Code.find({ user: userId }) : Code.find();
+
+    if (searchQuery) {
+      const regex = new RegExp(searchQuery, "i"); // 'i' for case-insensitive search
+      query = query.or([
+        { title: { $regex: regex } },
+        { description: { $regex: regex } },
+        { challenge: { $regex: regex } },
+        { soltuion: { $regex: regex } },
+        { tags: { $in: [regex] } },
+      ]);
+    }
+
+    const pageNumber = parseInt(page, 10) || 1;
+    const size = parseInt(pageSize, 10) || 10;
+    const skip = (pageNumber - 1) * size;
+
+    query = query.skip(skip).limit(size);
+
     const resultPromise = query
       .sort({ createdAt: -1 })
       .populate("user")
@@ -60,7 +140,7 @@ export const getUserChallenges = async (req, res, next) => {
 
     const [result, totalCount] = await Promise.all([
       resultPromise,
-      count ? Challenge.countDocuments() : Promise.resolve(null),
+      count ? Challenge.countDocuments(query) : Promise.resolve(null),
     ]);
 
     let response = { result };

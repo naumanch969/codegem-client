@@ -2,11 +2,11 @@ import React from 'react';
 
 const Menubar = ({ activeMenuItem, setActiveMenuItem }: { activeMenuItem: any, setActiveMenuItem: any }) => {
     const menuItems = [
+        'Find',
         'Friends',
         'Suggested',
         'Received',
         'Sent',
-        'More',
     ];
 
     return (

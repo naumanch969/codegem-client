@@ -68,6 +68,7 @@ const CreateGroup = () => {    // handleSubmit is passed through collection crea
 
     // <---------------------------------------------------- FUNCTIONS ----------------------------------------------------------->
     const onSubmit = (values: z.infer<typeof formSchema>) => {
+        console.log('test')
         console.log('values', values)
         if (Boolean(group)) { // update
             dispatch<any>(updateGroup(group?._id as string, values, onClose, toast))

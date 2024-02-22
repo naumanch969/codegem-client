@@ -12,28 +12,66 @@ import {
   createNotification,
   isUndefined,
 } from "../utils/functions.js";
-
 export const getCodes = async (req, res, next) => {
   try {
-    const { page, pageSize, count } = req.query; // count is boolean
+    const { page, pageSize, count, filter } = req.query; // count is boolean, filter: famous|trending|latest
 
-    let query = Code.find();
+    let aggregationPipeline = [];
+
+    if (filter === "famous") {
+      aggregationPipeline.push(
+        { $sort: { likes: -1 } } // Sort by likes in descending order
+      );
+    } else if (filter == "trending") {
+      aggregationPipeline.push(
+        {
+          $lookup: {
+            from: "comments",
+            localField: "comments",
+            foreignField: "_id",
+            as: "comments",
+          },
+        },
+        {
+          $addFields: {
+            commentsCount: { $size: "$comments" },
+          },
+        },
+        { $sort: { commentsCount: -1 } }
+      );
+    } else if (filter === "latest") {
+      aggregationPipeline.push({ $sort: { createdAt: -1 } });
+    } else {
+      aggregationPipeline.push({ $sort: { createdAt: -1 } });
+    }
 
     const pageNumber = parseInt(page, 10) || 1;
     const size = parseInt(pageSize, 10) || 10;
     const skip = (pageNumber - 1) * size;
 
-    query = query.skip(skip).limit(size);
+    aggregationPipeline.push({ $skip: skip }, { $limit: size });
 
-    const resultPromise = query
-      .sort({ createdAt: -1 })
-      .populate("user")
-      .populate("shares")
-      .exec();
+    aggregationPipeline.push(
+      {
+        $lookup: {
+          from: "users",
+          localField: "user",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      {
+        $addFields: {
+          user: { $arrayElemAt: ["$user", 0] }, // Convert user from array to single object
+        },
+      }
+    );
+
+    const resultPromise = Code.aggregate(aggregationPipeline).exec();
 
     const [result, totalCount] = await Promise.all([
       resultPromise,
-      count ? Code.countDocuments() : Promise.resolve(null),
+      count ? Code.countDocuments().exec() : Promise.resolve(null),
     ]);
 
     let response = { result };
@@ -46,6 +84,7 @@ export const getCodes = async (req, res, next) => {
     next(createError(res, 500, error.message));
   }
 };
+
 export const getUserCodes = async (req, res, next) => {
   try {
     const { page, pageSize, count } = req.query; // count is boolean
@@ -67,7 +106,50 @@ export const getUserCodes = async (req, res, next) => {
 
     const [result, totalCount] = await Promise.all([
       resultPromise,
-      count ? Code.countDocuments() : Promise.resolve(null),
+      count ? Code.countDocuments(query) : Promise.resolve(null),
+    ]);
+
+    let response = { result };
+    if (totalCount !== null) {
+      response.count = totalCount;
+    }
+
+    res.status(200).json(response);
+  } catch (error) {
+    next(createError(res, 500, error.message));
+  }
+};
+export const searchCodes = async (req, res, next) => {
+  try {
+    const { page, pageSize, count, userId, query: searchQuery } = req.query; // count is boolean
+
+    let query = userId ? Code.find({ user: userId }) : Code.find();
+
+    if (searchQuery) {
+      const regex = new RegExp(searchQuery, "i"); // 'i' for case-insensitive search
+      query = query.or([
+        { title: { $regex: searchQuery, $options: "i" } },
+        { description: { $regex: searchQuery, $options: "i" } },
+        { code: { $regex: searchQuery, $options: "i" } },
+        { tags: { $in: [regex] } },
+      ]);
+    }
+
+    const pageNumber = parseInt(page, 10) || 1;
+    const size = parseInt(pageSize, 10) || 10;
+    const skip = (pageNumber - 1) * size;
+
+    query = query.skip(skip).limit(size);
+
+    const resultPromise = query
+      .sort({ createdAt: -1 })
+      .populate("user")
+      .populate("shares")
+      .exec();
+
+    const [result, totalCount] = await Promise.all([
+      resultPromise,
+      count ? Code.countDocuments(query) : Promise.resolve(null),
     ]);
 
     let response = { result };

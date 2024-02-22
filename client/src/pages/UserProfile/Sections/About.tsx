@@ -14,7 +14,6 @@ const About = () => {
 
   return (
     <>
-
       <Card className="bg-white p-4 rounded shadow-md  ">
         <div className="grid grid-cols-2 gap-4">
           <CardContent className="col-span-1">
@@ -43,13 +42,13 @@ const About = () => {
               <Tooltip placement='top' title="Title" arrow>
                 <Info className="text-cool-gray mr-2" />
               </Tooltip>
-              <p className="text-cool-gray">{currentUser?.title ?? "Null" }</p>
+              <p className="text-cool-gray">{currentUser?.title ?? "Null"}</p>
             </div>
             <div className="flex items-center mb-2">
               <Tooltip placement='top' title="Location" arrow>
                 <LocationOn className="text-cool-gray mr-2" />
               </Tooltip>
-              <p className="text-cool-gray">{currentUser?.location ?? "Null" }</p>
+              <p className="text-cool-gray">{currentUser?.location ?? "Null"}</p>
             </div>
           </CardContent>
 

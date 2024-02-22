@@ -1,27 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { SearchOff } from '@mui/icons-material';
 import Friends from './Friends'
 import Menubar from './Menubar';
-import { User } from '../../interfaces';
 import SuggestedFriends from './SuggestedFriends';
 import SentRequests from './SentRequests';
 import ReceivedRequests from './ReceivedRequests';
+import Find from './Find';
+import { useDispatch } from 'react-redux';
+import { searchFriends, searchUsers } from '@/redux/actions/friend';
+import { Search } from 'lucide-react';
 
 const FriendsPage = () => {
 
     ////////////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////
+    const dispatch = useDispatch()
+    const pageSize = 20;
+    const maxLength = 50;
+    const totalPages = Math.ceil(maxLength / pageSize);
 
     ////////////////////////////////////////////////// STATES //////////////////////////////////////////////////
-    const [searchQuery, setSearchQuery] = useState<string>('');
-    const [activeMenuItem, setActiveMenuItem] = useState<string>('friends');
+    const [searchValue, setSearchValue] = useState<string>('');
+    const [activeMenuItem, setActiveMenuItem] = useState<string>('find');
+    const [page, setPage] = useState<number>(1)
 
     ////////////////////////////////////////////////// USE EFFECTS //////////////////////////////////////////////////
 
 
     ////////////////////////////////////////////////// FUNCTIONS //////////////////////////////////////////////////
-    const handleSearch = () => {
-        // todo: Implement search functionality here
-    };
+    const onSearch = () => {
+        if (activeMenuItem == 'find')
+            dispatch<any>(searchUsers(true, `?page=${page}&pageSize=${pageSize}&count=${true}&query=${searchValue}`))
+        else
+            dispatch<any>(searchFriends(true, `?page=${page}&pageSize=${pageSize}&count=${true}&query=${searchValue}`))
+    }
 
     return (
         <div className="p-6 flex flex-col gap-[1rem] w-full ">
@@ -32,12 +43,13 @@ const FriendsPage = () => {
                     <input
                         type="text"
                         placeholder="Search Friends..."
-                        value={searchQuery}
-                        onChange={e => setSearchQuery(e.target.value)}
+                        value={searchValue}
+                        onChange={e => setSearchValue(e.target.value)}
+                        onKeyDown={(e) => e.key == 'Enter' && onSearch()}
                         className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-blue-dark focus:border-transparent"
                     />
-                    <span onClick={handleSearch} className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer">
-                        <SearchOff />
+                    <span onClick={onSearch} className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                        <Search />
                     </span>
                 </div>
             </div>
@@ -46,10 +58,11 @@ const FriendsPage = () => {
                 <Menubar activeMenuItem={activeMenuItem} setActiveMenuItem={setActiveMenuItem} />
             </div>
 
-            {activeMenuItem === 'friends' && <Friends />}
-            {activeMenuItem === 'suggested' && <SuggestedFriends />}
-            {activeMenuItem === 'sent' && <SentRequests />}
-            {activeMenuItem === 'received' && <ReceivedRequests />}
+            {activeMenuItem === 'find' && <Find totalPages={totalPages} page={page} setPage={setPage} pageSize={pageSize} />}
+            {activeMenuItem === 'friends' && <Friends totalPages={totalPages} page={page} setPage={setPage} pageSize={pageSize} />}
+            {activeMenuItem === 'suggested' && <SuggestedFriends totalPages={totalPages} page={page} setPage={setPage} pageSize={pageSize} />}
+            {activeMenuItem === 'sent' && <SentRequests totalPages={totalPages} page={page} setPage={setPage} pageSize={pageSize} />}
+            {activeMenuItem === 'received' && <ReceivedRequests totalPages={totalPages} page={page} setPage={setPage} pageSize={pageSize} />}
 
         </div>
     );

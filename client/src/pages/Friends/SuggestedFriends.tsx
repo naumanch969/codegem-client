@@ -1,23 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getSuggestedUsers } from '../../redux/actions/friend'
 import { User } from '../../interfaces'
-import { Loader } from '../../utils/Components'
 import { RootState } from '../../redux/store'
 import FriendCard from './FriendCard'
 import { Pagination } from '@mui/material'
 
-const SuggestedFriends = () => {
+const SuggestedFriends = ({ totalPages, page, setPage, pageSize }: { totalPages: number, page: number, setPage: any, pageSize: number }) => {
 
     //////////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////
     const dispatch = useDispatch()
     const { suggestedUsers, isFetching }: { suggestedUsers: User[], isFetching: boolean } = useSelector((state: RootState) => state.friend)
-    const pageSize = 5;
-    const maxLength = 50;
-    const totalPages = Math.ceil(maxLength / pageSize);
 
     //////////////////////////////////////////////////// STATES ////////////////////////////////////////////////
-    const [page, setPage] = useState<number>(1)
 
     //////////////////////////////////////////////////// USE EFFECTS ////////////////////////////////////////////////
     useEffect(() => {

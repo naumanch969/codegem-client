@@ -1,15 +1,14 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Pagination, Tooltip } from '@mui/material';
-import CreateGroup from './Create';
 import GroupCard from './GroupCard';
 import { Add, Filter, Search } from '@mui/icons-material';
 import { Path } from '../../utils/Components';
 import { Group, User } from '../../interfaces';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { getGroups } from '../../redux/actions/group';
+import { getGroups, searchGroups } from '../../redux/actions/group';
 import { useGroupModal } from '../../hooks/useGroupModal';
-import UpdateGroup from './Update';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 
 const Groups = () => {
@@ -28,7 +27,7 @@ const Groups = () => {
 
     /////////////////////////////////// STATES /////////////////////////////////////
     const [filter, setFilter] = useState<string>('all');
-    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [searchValue, setSearchValue] = useState<string>('');
     const [page, setPage] = useState<number>(1)
 
     /////////////////////////////////// USE EFFECTS /////////////////////////////////////
@@ -45,12 +44,11 @@ const Groups = () => {
     const fetchMore = async () => {
         dispatch<any>(getGroups(groups.length == 0, `?page=${page}&pageSize=${pageSize}`))
     }
-    const handleFilterChange = (newFilter: string) => {
-        setFilter(newFilter);
-    };
-
+    const onSearch = () => {
+        dispatch<any>(searchGroups(true, `?page=${page}&pageSize=${pageSize}&count=${true}&query=${searchValue}`))
+    }
     const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(event.target.value);
+        setSearchValue(event.target.value);
     };
 
     const filteredGroups = groups.filter((group: Group) => {
@@ -65,8 +63,8 @@ const Groups = () => {
     });
 
     return (
-        <div className="container mx-auto p-4"> 
-        
+        <div className="container mx-auto p-4">
+
             <div className="flex justify-between items-center">
                 <div className="flex flex-col">
                     <Path segments={segments} />
@@ -84,29 +82,35 @@ const Groups = () => {
 
             <div className="flex justify-between items-center mb-4">
                 <div className="relative">
-                    <select
-                        value={filter}
-                        onChange={(e) => handleFilterChange(e.target.value)}
-                        className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-blue-dark focus:border-transparent"
-                    >
-                        <option value="all">All Groups</option>
-                        <option value="joined">Joined Groups</option>
-                        <option value="available">Available Groups</option>
-                    </select>
-                    <span className="absolute right-2 top-1/2 transform -translate-y-1/2">
-                        <Filter />
-                    </span>
-                </div>
-                <div className="relative">
                     <input
                         type="text"
                         placeholder="Search groups..."
-                        value={searchQuery}
+                        value={searchValue}
+                        onKeyDown={(e) => e.key == 'Enter' && onSearch()}
                         onChange={handleSearchChange}
                         className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-blue-dark focus:border-transparent"
                     />
-                    <span className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                    <button onClick={onSearch} className="absolute right-2 top-1/2 transform -translate-y-1/2">
                         <Search />
+                    </button>
+                </div>
+                <div className="relative">
+                    <Select onValueChange={(value: string) => { }} >
+                        <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Language" defaultValue='all' />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All</SelectItem>
+                            <SelectItem value="python">Python</SelectItem>
+                            <SelectItem value="javascript">Javascript</SelectItem>
+                            <SelectItem value="kotlin">Kotlin</SelectItem>
+                            <SelectItem value="java">Java</SelectItem>
+                            <SelectItem value="c">C</SelectItem>
+                            <SelectItem value="c++">C++</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    <span className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                        <Filter />
                     </span>
                 </div>
             </div>

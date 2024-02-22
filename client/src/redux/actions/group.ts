@@ -66,6 +66,21 @@ export const getGroups =
         : dispatch(error(err.message));
     }
   };
+export const searchGroups =
+  (loading: boolean = false, query: string) =>
+  async (dispatch: Dispatch) => {
+    try {
+      loading && dispatch(start());
+      const { data }: { data: { result: Group[]; count: number } } =
+        await api.searchGroups(query);
+      dispatch(getGroupsReducer({ result: data.result, count: data.count }));
+      dispatch(end());
+    } catch (err: any) {
+      err.response?.data?.message
+        ? dispatch(error(err.response.data.message))
+        : dispatch(error(err.message));
+    }
+  };
 export const getGroupCodes =
   (collectionId: string, setLoading?: any) => async (dispatch: Dispatch) => {
     try {

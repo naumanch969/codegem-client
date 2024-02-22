@@ -3,7 +3,7 @@ import { createError } from "../utils/functions.js";
 
 export const getAllUsers = async (req, res, next) => {
   try {
-    const users = await User.find();
+    const users = await User.find({ _id: { $ne: req.user._id } });
     res.status(200).json(users);
   } catch (error) {
     next(createError(res, 500, error.message));

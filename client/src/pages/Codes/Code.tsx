@@ -129,7 +129,7 @@ const CodeComponent = ({ code }: { code: Code }) => {
           <div className='flex gap-[1rem]'>
             <Avatar>
               <AvatarImage src={code?.user?.profilePicture} alt="Profile" />
-              <AvatarFallback>{code?.user?.firstName?.charAt(0)}</AvatarFallback>
+              <AvatarFallback className='capitalize' >{code?.user?.firstName?.charAt(0)}</AvatarFallback>
             </Avatar>
             <CardTitle className='flex flex-col items-start justify-center'>
               <Link to={`/user/${code?.user?._id}`} className='text-sm font-semibold capitalize hover:underline hover:text-teal-blue'>
@@ -193,7 +193,6 @@ const CodeComponent = ({ code }: { code: Code }) => {
         </CardContent>
 
         <Separator className='w-full h-[1px] bg-cool-gray-light border-none mb-[6px] mt-[6px]' />
-
         {/* likes, share, comments */}
         <CardFooter className={`flex justify-between items-center p-4 pt-1 ${showComments ? 'pb-0' : 'pb-2'} `}>
           <div>
@@ -205,7 +204,9 @@ const CodeComponent = ({ code }: { code: Code }) => {
           <div className='flex gap-[4px]'>
             <IconButton onClick={() => setOpenShareModal(true)} size='medium' className='relative'>
               <Share fontSize="inherit" />
-              <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-teal-blue-lighten text-white'>{code?.shares?.length}</span>
+              <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-teal-blue-lighten text-white'>
+                {code?.shares?.length}
+              </span>
             </IconButton>
             <IconButton onClick={handleSave} size='medium' className='relative'>
               {

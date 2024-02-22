@@ -44,6 +44,34 @@ export const getFriends =
         : dispatch(error(err.message));
     }
   };
+export const searchFriends =
+  (loading: boolean = false, query: string): AsyncAction =>
+  async (dispatch) => {
+    try {
+      loading && dispatch(start());
+      const { data }: { data: { _id: string; friends: User[] } } = await api.searchFriends(query);
+      dispatch(getFriendsReducer(data.friends));
+      dispatch(end());
+    } catch (err: any) {
+      err.response?.data?.message
+        ? dispatch(error(err.response.data.message))
+        : dispatch(error(err.message));
+    }
+  };
+export const searchUsers =
+  (loading: boolean = false, query: string): AsyncAction =>
+  async (dispatch) => {
+    try {
+      loading && dispatch(start());
+      const { data }: { data: { _id: string; friends: User[] } } = await api.searchUsers(query);
+      dispatch(getFriendsReducer(data.friends));
+      dispatch(end());
+    } catch (err: any) {
+      err.response?.data?.message
+        ? dispatch(error(err.response.data.message))
+        : dispatch(error(err.message));
+    }
+  };
 
 export const getSentRequests =
   (loading: boolean = false, query: string): AsyncAction =>

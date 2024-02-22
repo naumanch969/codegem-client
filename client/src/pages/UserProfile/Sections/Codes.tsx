@@ -17,11 +17,9 @@ const Codes = () => {
   }, [])
 
   return (
-
     <div className="w-full flex flex-col gap-[2rem] ">
-      <div className="flex flex-col">
-        <h2 className="text-3xl font-bold mb-6 text-dark-slate-blue">Your Codes</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {
+        <div className="flex flex-col gap-6 lg:px-60 md:px-50 sm:px-10 px-4 ">
           {
             isFetching
               ?
@@ -33,7 +31,7 @@ const Codes = () => {
                 {
                   codes.length == 0
                     ?
-                    <div className="flex justify-center items-center min-h-[16rem] ">
+                    <div className="flex justify-center items-center min-h-[16rem]">
                       <p className='font-medium text-2xl text-center mb-16 ' >No codes to show.</p>
                     </div>
                     :
@@ -44,8 +42,7 @@ const Codes = () => {
               </>
           }
         </div>
-      </div>
-
+      }
     </div>
   );
 };

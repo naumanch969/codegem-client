@@ -7,17 +7,13 @@ import { RootState } from '../../redux/store'
 import FriendCard from './FriendCard'
 import { Pagination } from '@mui/material'
 
-const Friends = () => {
+const Friends = ({ totalPages, page, setPage,pageSize }: { totalPages: number, page: number, setPage: any,pageSize:number }) => {
 
   //////////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////
   const dispatch = useDispatch()
   const { friends, isFetching }: { friends: User[], isFetching: boolean } = useSelector((state: RootState) => state.friend)
-  const pageSize = 5;
-  const maxLength = 50;
-  const totalPages = Math.ceil(maxLength / pageSize);
 
   //////////////////////////////////////////////////// STATES ////////////////////////////////////////////////
-  const [page, setPage] = useState<number>(1)
 
   //////////////////////////////////////////////////// USE EFFECTS ////////////////////////////////////////////////
   useEffect(() => {

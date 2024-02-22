@@ -23,7 +23,7 @@ export const getGroups = async (req, res, next) => {
 
     const [result, totalCount] = await Promise.all([
       resultPromise,
-      count ? Group.countDocuments() : Promise.resolve(null),
+      count ? Group.countDocuments(query) : Promise.resolve(null),
     ]);
 
     let response = { result };
@@ -56,7 +56,49 @@ export const getUserGroups = async (req, res, next) => {
 
     const [result, totalCount] = await Promise.all([
       resultPromise,
-      count ? Group.countDocuments() : Promise.resolve(null),
+      count ? Group.countDocuments(query) : Promise.resolve(null),
+    ]);
+
+    let response = { result };
+    if (totalCount !== null) {
+      response.count = totalCount;
+    }
+
+    res.status(200).json(response);
+  } catch (error) {
+    next(createError(res, 500, error.message));
+  }
+};
+export const searchGroups = async (req, res, next) => {
+  try {
+    const { page, pageSize, count, userId, query: searchQuery } = req.query; // count is boolean
+
+    let query = userId ? Group.find({ owner: userId }) : Group.find();
+
+    if (searchQuery) {
+      const regex = new RegExp(searchQuery, "i"); // 'i' for case-insensitive search
+      query = query.or([
+        { name: { $regex: searchQuery, $options: "i" } },
+        { description: { $regex: searchQuery, $options: "i" } },
+        // TODO: add tags to group model
+        // { tags: { $in: [regex] } },
+      ]);
+    }
+
+    const pageNumber = parseInt(page, 10) || 1;
+    const size = parseInt(pageSize, 10) || 10;
+    const skip = (pageNumber - 1) * size;
+
+    query = query.skip(skip).limit(size);
+
+    const resultPromise = query
+      .sort({ createdAt: -1 })
+      .populate("admin")
+      .exec();
+
+    const [result, totalCount] = await Promise.all([
+      resultPromise,
+      count ? Group.countDocuments(query) : Promise.resolve(null), // Pass the same query to countDocuments
     ]);
 
     let response = { result };

@@ -34,7 +34,40 @@ export const getCollection =
         : dispatch(error(err.message));
     }
   };
-
+export const getCollections =
+  (loading: boolean = false, query: string) =>
+  async (dispatch: Dispatch) => {
+    try {
+      loading && dispatch(start());
+      const { data }: { data: { result: Collection[]; count: number } } =
+        await api.getCollections(query);
+      dispatch(
+        getCollectionsReducer({ result: data.result, count: data.count })
+      );
+      dispatch(end());
+    } catch (err: any) {
+      err.response?.data?.message
+        ? dispatch(error(err.response.data.message))
+        : dispatch(error(err.message));
+    }
+  };
+export const searchCollections =
+  (loading: boolean = false, query: string) =>
+  async (dispatch: Dispatch) => {
+    try {
+      loading && dispatch(start());
+      const { data }: { data: { result: Collection[]; count: number } } =
+        await api.searchCollections(query);
+      dispatch(
+        getCollectionsReducer({ result: data.result, count: data.count })
+      );
+      dispatch(end());
+    } catch (err: any) {
+      err.response?.data?.message
+        ? dispatch(error(err.response.data.message))
+        : dispatch(error(err.message));
+    }
+  };
 export const getCollectionCodes =
   (collectionId: string, setLoading?: any) => async (dispatch: Dispatch) => {
     try {
@@ -77,23 +110,6 @@ export const getCollectionChallenges =
         : dispatch(error(err.message));
     } finally {
       setLoading && setLoading(false);
-    }
-  };
-export const getCollections =
-  (loading: boolean = false, query: string) =>
-  async (dispatch: Dispatch) => {
-    try {
-      loading && dispatch(start());
-      const { data }: { data: { result: Collection[]; count: number } } =
-        await api.getCollections(query);
-      dispatch(
-        getCollectionsReducer({ result: data.result, count: data.count })
-      );
-      dispatch(end());
-    } catch (err: any) {
-      err.response?.data?.message
-        ? dispatch(error(err.response.data.message))
-        : dispatch(error(err.message));
     }
   };
 export const getUserCollections =

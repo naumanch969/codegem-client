@@ -16,10 +16,12 @@ import {
   createCollectionChallenge,
   shareCollection,
   starCollection,
+  searchCollections,
 } from "../controllers/collection.js";
 import { verifyToken } from "../middleware/auth.js";
 
 router.get("/get/all", verifyToken, getCollections);
+router.get("/get/search", verifyToken, searchCollections);
 router.get("/get/user/:userId", verifyToken, getUserCollections);
 router.get("/get/single/:collectionId", verifyToken, getCollection);
 router.get("/get/codes/:collectionId", verifyToken, getCollectionCodes);

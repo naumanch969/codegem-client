@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const ProfileMenuBar = ({ activeMenuItem, setActiveMenuItem }: { activeMenuItem: string, setActiveMenuItem: any }) => {
-    const menuItems = ['About', 'Codes', 'Saved', 'Collections', 'Groups', 'Friends', 'Settings'];
+    const menuItems = ['About', 'Codes', 'Saved', 'Collections', 'Groups'];
 
     return (
         <div className="flex justify-center mb-6">

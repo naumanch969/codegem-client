@@ -16,10 +16,12 @@ import {
   getGroupCodes,
   getGroupStreaks,
   getGroupChallenges,
+  searchGroups,
 } from "../controllers/group.js";
 import { verifyToken } from "../middleware/auth.js";
 
 router.get("/get/all", verifyToken, getGroups);
+router.get("/get/search", verifyToken, searchGroups);
 router.get("/get/user/:userId", verifyToken, getUserGroups);
 router.get("/get/single/:groupId", verifyToken, getGroup);
 router.get("/get/codes/:collectionId", verifyToken, getGroupCodes);

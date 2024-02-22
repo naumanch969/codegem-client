@@ -3,6 +3,7 @@ const router = express.Router();
 import {
   getChallenges,
   getUserChallenges,
+  searchChallenges,
   getSavedChallenges,
   createChallenge,
   shareChallenge,
@@ -19,6 +20,7 @@ import {
 import { verifyToken } from "../middleware/auth.js";
 
 router.get("/get/all", verifyToken, getChallenges);
+router.get("/get/search", verifyToken, searchChallenges);
 router.get("/get/user/:userId", verifyToken, getUserChallenges);
 router.get("/get/saved", verifyToken, getSavedChallenges); // get logged user' saved challenges
 router.get("/get/liked", verifyToken, getLikedChallenges); // get logged user' liked challenges

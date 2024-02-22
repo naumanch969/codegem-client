@@ -70,7 +70,7 @@ const Topbar = ({ activeMenu, setActiveMenu, language, setLanguage, basicQuery }
                 </div>
                 {/* select */}
                 <div className="flex justify-end flex-[3] " >
-                    <Select defaultValue={language} onValueChange={(value: string) => setLanguage(value)} >
+                    <Select onValueChange={(value: string) => setLanguage(value)} >
                         <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Language" defaultValue='all' />
                         </SelectTrigger>

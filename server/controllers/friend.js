@@ -3,7 +3,6 @@ import { createError } from "../utils/functions.js";
 import { Types } from "mongoose";
 
 export const getFriends = async (req, res, next) => {
-  // this request is made by the sender
   try {
     const userId = req.user._id;
     const { page, pageSize } = req.query;
@@ -22,6 +21,87 @@ export const getFriends = async (req, res, next) => {
     next(createError(res, 500, error.message));
   }
 };
+export const searchFriends = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    const { page, pageSize, count, query: searchQuery } = req.query; // count is boolean
+
+    let query = User.findById(userId, { friends: 1 });
+    if (searchQuery) {
+      const regex = new RegExp(searchQuery, "i"); // 'i' for case-insensitive search
+      query = query.or([
+        { firstName: { $regex: searchQuery, $options: "i" } },
+        { lastName: { $regex: searchQuery, $options: "i" } },
+        { username: { $regex: searchQuery, $options: "i" } },
+        { email: { $regex: searchQuery, $options: "i" } },
+      ]);
+    }
+
+
+    const pageNumber = parseInt(page, 10) || 1;
+    const size = parseInt(pageSize, 10) || 10;
+    const skip = (pageNumber - 1) * size;
+
+    query = query.skip(skip).limit(size);
+
+    const resultPromise = query.populate("friends").exec();
+
+    const [result, totalCount] = await Promise.all([
+      resultPromise,
+      count ? User.countDocuments(query) : Promise.resolve(null),
+    ]);
+
+    let response = { result };
+    if (totalCount !== null) {
+      response.count = totalCount;
+    }
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.log("error", error);
+    next(createError(res, 500, error.message));
+  }
+};
+export const searchUsers = async (req, res, next) => {
+  try {
+      const { page, pageSize, count, query: searchQuery } = req.query;
+
+      let query = User.find(); // Start with finding all users
+
+      if (searchQuery) {
+          const regex = new RegExp(searchQuery, "i"); // 'i' for case-insensitive search
+          query = query.or([
+              { firstName: { $regex: regex } },
+              { lastName: { $regex: regex } },
+              { username: { $regex: regex } },
+              { email: { $regex: regex } },
+          ]);
+      }
+
+      const pageNumber = parseInt(page, 10) || 1;
+      const size = parseInt(pageSize, 10) || 10;
+      const skip = (pageNumber - 1) * size;
+
+      query = query.skip(skip).limit(size);
+
+      const resultPromise = query.populate("friends").exec();
+
+      const [result, totalCount] = await Promise.all([
+          resultPromise,
+          count ? User.countDocuments(query) : Promise.resolve(null),
+      ]);
+
+      let response = { result };
+      if (totalCount !== null) {
+          response.count = totalCount;
+      }
+
+      res.status(200).json(response);
+  } catch (error) {
+      next(createError(res, 500, error.message));
+  }
+};
+
 export const getSuggestedUsers = async (req, res, next) => {
   try {
     const userId = Types.ObjectId(req?.user?._id);

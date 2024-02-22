@@ -11,18 +11,20 @@ import {
 import { AsyncAction } from "../store";
 import { User } from "../../interfaces";
 
-export const getAllUsers = (): AsyncAction => async (dispatch) => {
-  try {
-    dispatch(start());
-    const { data } = await api.getAllUsers();
-    dispatch(getAllUsersReducer(data));
-    dispatch(end());
-  } catch (err: any) {
-    err.response?.data?.message
-      ? dispatch(error(err.response.data.message))
-      : dispatch(error(err.message));
-  }
-};
+export const getUsers =
+  (loading: boolean = false, query: string): AsyncAction =>
+  async (dispatch) => {
+    try {
+      loading && dispatch(start());
+      const { data } = await api.getUsers();
+      dispatch(getAllUsersReducer(data));
+      dispatch(end());
+    } catch (err: any) {
+      err.response?.data?.message
+        ? dispatch(error(err.response.data.message))
+        : dispatch(error(err.message));
+    }
+  };
 export const getUser =
   (userId: string): AsyncAction =>
   async (dispatch) => {

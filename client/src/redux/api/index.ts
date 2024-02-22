@@ -41,6 +41,10 @@ export const acceptFriendRequest = (senderId: string) =>
 export const getSuggestedUsers = (query: string) =>
   API.get(`/friend/suggested-users${query}`);
 export const getFriends = (query: string) => API.get(`/friend/all${query}`);
+export const searchFriends = (query: string) =>
+  API.get(`/friend/search${query}`);
+export const searchUsers = (query: string) =>
+  API.get(`/friend/search-user${query}`);
 export const getSentRequests = (query: string) =>
   API.get(`/friend/sent-requests${query}`);
 export const getReceivedRequests = (query: string) =>
@@ -72,7 +76,7 @@ export const changePassword = (userData: any) =>
   API.put(`/auth/change_password`, userData);
 
 // users
-export const getAllUsers = () => API.get(`/user/get/all`);
+export const getUsers = () => API.get(`/user/get/all`);
 export const getUser = (userId: string) =>
   API.get(`/user/get/single/${userId}`);
 export const getProfile = () => API.get(`/user/get/profile`);
@@ -178,6 +182,8 @@ export const getComments = (
 // Collections
 export const getCollections = (query: string) =>
   API.get(`/collection/get/all${query}`);
+export const searchCollections = (query: string) =>
+  API.get(`/collection/get/search${query}`);
 export const getUserCollections = (userId: string, query: string) =>
   API.get(`/collection/get/user/${userId}${query}`);
 export const getCollection = (collectionId: string) =>
@@ -212,6 +218,8 @@ export const deleteCollection = (collectionId: string) =>
   API.delete(`/collection/delete/${collectionId}`);
 
 export const getGroups = (query: string) => API.get(`/group/get/all${query}`);
+export const searchGroups = (query: string) =>
+  API.get(`/group/get/search${query}`);
 export const getUserGroups = (userId: string) =>
   API.get(`/group/get/user/${userId}`);
 export const getGroup = (groupId: string) =>

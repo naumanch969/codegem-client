@@ -7,6 +7,7 @@ import { Collection } from '../../interfaces';
 import { useDispatch } from 'react-redux';
 import { getCollectionReducer } from '../../redux/reducers/collection';
 import { useCollectionModal } from '../../hooks/useCollectionModal';
+import { LucideGroup } from 'lucide-react'
 
 
 const CollectionCard = ({ collection }: { collection: Collection }) => {
@@ -38,7 +39,7 @@ const CollectionCard = ({ collection }: { collection: Collection }) => {
                 <CardContent className='p-2' >
                     <div className="flex justify-between items-center">
                         <Typography variant="h6" component="h3" className="text-dark-slate-blue capitalize ">
-                            <Favorite fontSize="small" style={{ verticalAlign: 'middle', marginRight: '0.5rem' }} />
+                            <LucideGroup fontSize="small" style={{ verticalAlign: 'middle', marginRight: '0.5rem' }} />
                             {collection.name}
                         </Typography>
                         <div className="flex gap-0 relative">

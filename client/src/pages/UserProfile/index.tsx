@@ -9,8 +9,6 @@ import Saved from './Sections/Saved'
 import Collections from './Sections/Collections'
 import Codes from './Sections/Codes'
 import Groups from './Sections/Groups'
-import Friends from './Sections/Friends'
-import Settings from './Sections/Settings'
 import { getUser } from '../../redux/actions/user'
 
 const ProfilePage = () => {
@@ -32,14 +30,11 @@ const ProfilePage = () => {
 
             <div className="flex flex-col gap-[1rem] ">
                 <MenuBar activeMenuItem={activeMenuItem} setActiveMenuItem={setActiveMenuItem} />
-
                 {activeMenuItem == 'about' && <About />}
                 {activeMenuItem == 'saved' && <Saved />}
                 {activeMenuItem == 'collections' && <Collections />}
                 {activeMenuItem == 'codes' && <Codes />}
                 {activeMenuItem == 'groups' && <Groups />}
-                {activeMenuItem == 'friends' && <Friends />}
-                {activeMenuItem == 'settings' && <Settings />}
             </div>
 
         </div>
