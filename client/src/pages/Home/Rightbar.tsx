@@ -14,6 +14,7 @@ const RightSidebar = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { friends, suggestedUsers, isFetching }: { friends: User[], suggestedUsers: User[], isFetching: boolean } = useSelector((state: RootState) => state.friend)
+    console.log('friends', friends)
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
 
     //////////////////////////////////////////////////// STATES ///////////////////////////////////////////////
@@ -54,7 +55,7 @@ const RightSidebar = () => {
     )
     Friend.Skeleton = function () {
         return (
-            <div className='w-full flex justify-start gap-x-2 p-[1rem] bg-light-gray text-cool-gray-dark rounded-[6px] animate-pulse mb-4 '>
+            <div className='w-full flex justify-start gap-x-2 p-4 bg-light-gray text-cool-gray-dark rounded-[6px] animate-pulse mb-4 '>
                 <div className="flex">
                     <div className="w-10 h-10 rounded-full bg-warm-gray-dark" />
                 </div>
@@ -110,7 +111,7 @@ const RightSidebar = () => {
                                 <Friend.Skeleton key={index} />
                             ))
                             :
-                            friends.map((friend, index) => (
+                            friends?.map((friend, index) => (
                                 <Friend friend={friend} key={index} />
                             ))
                     }

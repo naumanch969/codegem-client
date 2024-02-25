@@ -24,11 +24,11 @@ export const BasicInfo = ({ isOpen, onClose }: { isOpen: boolean, onClose: () =>
     // <--------------------------------------------------- VARIABLES ---------------------------------------------------->
     const { loggedUser, isFetching }: { loggedUser: User | null, isFetching: boolean } = useSelector((state: RootState) => state.user)
     const formSchema = z.object({
-        username: z.string().min(2, { message: 'Username must contain atleast 2 characters.' }),
-        name: z.string().min(2, { message: 'Name must contain atleast 2 characters.' }),
-        email: z.string().min(2, { message: 'Email must contain atleast 2 characters.' }),
+        username: z.string().min(1, { message: 'Username is required.' }),
+        name: z.string().min(1, { message: 'Name is required.' }),
+        email: z.string().min(1, { message: 'Email is required.' }),
         location: z.string(),
-        title: z.string().min(2, { message: 'Bio must contain atleast 2 characters.' }),
+        title: z.string().min(1, { message: 'Bio is required.' }),
     })
 
     const initialData: z.infer<typeof formSchema> = {

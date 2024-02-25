@@ -53,7 +53,7 @@ const PeopleYouMayKnow = () => {
     }
     FriendCard.Skeleton = function () {
         return (
-            <div className='w-full flex flex-col justify-start gap-x-2 p-[1rem] bg-secondary text-cool-gray-dark rounded-[6px] animate-pulse mb-4 '>
+            <div className='w-full flex flex-col justify-start gap-x-2 p-4 bg-secondary text-cool-gray-dark rounded-[6px] animate-pulse mb-4 '>
                 <div className="flex w-full justify-center ">
                     <div className="w-full h-40 rounded-lg bg-warm-gray-dark" />
                 </div>

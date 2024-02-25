@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion'
 import { useParams } from 'react-router-dom'; // Import necessary routing components
-import { Group as GroupIcon, Person, Code as CodeIcon, ExitToApp, Edit, Delete as DeleteIcon, DeleteForever, Add, UpdateOutlined, DeleteForeverSharp, MoreVert } from '@mui/icons-material';
+import { Group as GroupIcon, Person, Code as CodeIcon, ExitToApp, Edit, Delete as DeleteIcon, DeleteForever, Add, UpdateOutlined, DeleteForeverSharp, MoreVert, Update, Category, Language } from '@mui/icons-material';
 import { Loader, Path } from '../../utils/Components';
 import { Group, User } from '../../interfaces';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { createGroupChallenge, createGroupCode, createGroupStreak, getGroup, getGroupChallenges, getGroupCodes, getGroupStreaks, joinGroup, leaveGroup } from '../../redux/actions/group';
-import { getGroupReducer } from '../../redux/reducers/group';
-import Update from './Update';
 import Delete from './Delete';
 import { IconButton, Tooltip } from '@mui/material';
 import CodeCreateModal from '../Codes/Create';
@@ -21,7 +19,12 @@ import { useGroupModal } from '../../hooks/useGroupModal';
 import { useCodeModal } from '../../hooks/useCodeModal';
 import { useStreakModal } from '../../hooks/useStreakModal';
 import { useChallengeModal } from '../../hooks/useChallengeModal';
-
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 const SingleGroup = () => {
 
@@ -48,10 +51,7 @@ const SingleGroup = () => {
         'Challenges',
     ];
     //////////////////////////////////////////////////// STATES ////////////////////////////////////////////////////
-    const [openCreateModal, setOpenCreateModal] = useState(false)
-    const [openUpdateModal, setOpenUpdateModal] = useState(false)
     const [openDeleteModal, setOpenDeleteModal] = useState(false)
-    const [showMenu, setShowMenu] = useState(false)
     const [activeMenuItem, setActiveMenuItem] = useState<'codes' | 'streaks' | 'challenges'>('codes')
     const [loading, setLoading] = useState<boolean>(false)
 
@@ -88,11 +88,9 @@ const SingleGroup = () => {
         if (!currentGroup) return
         onSetGroup(currentGroup as Group)
         onOpen()
-        setShowMenu(false)
     }
     const handleOpenDeleteModal = () => {
         setOpenDeleteModal(true)
-        setShowMenu(false)
     }
     const handleCreateCode = (codeData: any) => {
         dispatch<any>(createGroupCode(groupId!, codeData, onClose))
@@ -114,13 +112,7 @@ const SingleGroup = () => {
             onChallengeOpen()
         }
     }
-    /////////////////////////////////////// COMPONENTS ////////////////////////////////////////
-    const Menu = () => (
-        <motion.div animate={{ x: [100, 0], opacity: [0, 1] }} className="absolute z-[50] shadow-box top-[3rem] items-start right-0 w-[15rem] h-auto flex flex-col gap-1p-[8px] border-[2px] bg-white text-dark-slate-blue border-warm-gray-dark rounded-[4px]">
-            <button onClick={handleOpenUpdateModal} className="w-full flex hover:bg-cool-gray-light hover:text-teal-blue p-[6px] rounded-[6px] gap-2"><UpdateOutlined /><span className="">Update</span></button>
-            <button onClick={handleOpenDeleteModal} className="w-full flex hover:bg-cool-gray-light hover:text-teal-blue p-[6px] rounded-[6px] gap-2"><DeleteForeverSharp /><span className="">Delete</span></button>
-        </motion.div>
-    );
+    console.log('isFetching', isFetching)
 
     return (
         <div className="container mx-auto p-4">
@@ -130,13 +122,10 @@ const SingleGroup = () => {
             {activeMenuItem == 'challenges' && <ChallengeCreateModal handleSubmit={handleCreateChallenge} />}
 
             <Delete open={openDeleteModal} setOpen={setOpenDeleteModal} />
-
             {
                 isFetching
                     ?
-                    <div className="flex justify-center items-center w-full h-full">
-                        <Loader />
-                    </div>
+                    <SingleGroup.Skeleton />
                     :
                     <div className='flex flex-col gap-4' >
                         <Path segments={segments} />
@@ -144,15 +133,29 @@ const SingleGroup = () => {
                         <div className="bg-white p-6 rounded-lg shadow-md">
                             <div className="flex justify-between items-">
                                 <h1 className="text-3xl font-bold mb-4 capitalize ">{currentGroup?.name}</h1>
-                                {
-                                    isAdmin &&
-                                    <div className="relative">
-                                        <IconButton onClick={() => setShowMenu(prev => !prev)} className="bg-teal-blue cursor-pointer capitalize text-black"><MoreVert /></IconButton>
-                                        {showMenu && <Menu />}
-                                    </div>
-                                }
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger>
+                                        <IconButton><MoreVert /></IconButton>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent side='bottom' >
+                                        <DropdownMenuItem onClick={handleLeaveGroup} className='cursor-pointer flex gap-x-1' >
+                                            <ExitToApp /> Leave Group
+                                        </DropdownMenuItem>
+                                        {
+                                            isAdmin &&
+                                            <>
+                                                <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={handleOpenUpdateModal} >
+                                                    <Edit /> Update
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={handleOpenDeleteModal} >
+                                                    <DeleteIcon /> Delete
+                                                </DropdownMenuItem>
+                                            </>
+                                        }
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
                             </div>
-                            <p className="text-gray-600 mb-4">{currentGroup?.description}</p>
+                            <p className="text-gray-600 mb-4">{currentGroup?.description?.charAt(0)?.toUpperCase()! + currentGroup?.description?.slice(1)!}</p>
                             <div className="flex items-center mb-4">
                                 <p className="text-teal-blue mr-2">{currentGroup?.members.length} Members</p>
                                 <p className="text-gray-500">{currentGroup?.shares?.length} Codes Shared</p>
@@ -163,16 +166,16 @@ const SingleGroup = () => {
                                     <p className="text-teal-blue capitalize ">{(currentGroup?.admin as User)?.firstName} {(currentGroup?.admin as User)?.lastName}</p>
                                 </div>
                             </Tooltip>
-                            <Tooltip placement='top-start' title='Technologies' >
+                            <Tooltip placement='top-start' title='Categories' >
                                 <div className="flex items-center mb-4">
-                                    <CodeIcon className="text-gray-500 mr-2" />
+                                    <Category className="text-gray-500 mr-2" />
                                     <p className="text-teal-blue capitalize italic cursor-pointer ">{currentGroup?.categories.join(', ')}</p>
                                 </div>
                             </Tooltip>
-                            <Tooltip placement='top-start' title='Status' >
+                            <Tooltip placement='top-start' title='Programming Languages' >
                                 <div className="flex items-center mb-4">
-                                    <GroupIcon className="text-gray-500 mr-2" />
-                                    <p className="text-teal-blue">Online</p>
+                                    <CodeIcon className="text-gray-500 mr-2" />
+                                    <p className="text-teal-blue capitalize italic cursor-pointer ">{currentGroup?.languages.join(', ')}</p>
                                 </div>
                             </Tooltip>
                             <div className="flex items-center mb-4">
@@ -180,15 +183,11 @@ const SingleGroup = () => {
                                 <p className="text-teal-blue">{new Date(currentGroup?.createdAt as Date).getFullYear()}</p>
                             </div>
                             <div className="flex justify-between items-center">
-                                {isJoined ? (
-                                    <button onClick={handleLeaveGroup} className="px-4 py-2 bg-teal-blue text-white rounded-lg hover:bg-teal-blue-dark">
-                                        Leave Group <ExitToApp className="ml-1" />
-                                    </button>
-                                ) : (
+                                {!isJoined &&
                                     <button onClick={handleJoinGroup} className="px-4 py-2 bg-teal-blue text-white rounded-lg hover:bg-teal-blue-dark">
                                         Join Group
                                     </button>
-                                )}
+                                }
                             </div>
                         </div>
 
@@ -219,14 +218,9 @@ const SingleGroup = () => {
                         </div>
 
 
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {
-                                loading ?
-                                    <div className="w-full h-full col-span-2 flex justify-center items-center ">
-                                        <Loader />
-                                    </div>
-                                    :
+                        <div className="w-full flex justify-center">
+                            <div className="lg:w-[48rem] pt-1 px-3 w-full flex flex-col items-center gap-4 h-full">
+                                {
                                     <>
                                         {/* {[...(currentGroup?.codes || []), ...(currentGroup?.shares.map(codeObj => codeObj.code) || [])].map((code, index) => (
                                             <Code key={index} code={code} />
@@ -237,16 +231,24 @@ const SingleGroup = () => {
                                                 &&
                                                 <>
                                                     {
-                                                        currentGroup?.codes?.length == 0
+                                                        loading
                                                             ?
-                                                            <div className="w-full h-full flex justify-center items-center col-span-2 ">
-                                                                <span>No Codes to Show.</span>
-                                                            </div>
+                                                            Array(5).fill('').map((_, index) => (
+                                                                <CodeComponent.Skeleton key={index} />
+                                                            ))
                                                             :
                                                             <>
-                                                                {currentGroup?.codes?.map((code, index) => (
-                                                                    <CodeComponent code={code} key={index} />
-                                                                ))}
+                                                                {
+                                                                    currentGroup?.codes?.length == 0
+                                                                        ?
+                                                                        <div className="w-full h-40 flex justify-center items-center">
+                                                                            <span>No Codes to Show.</span>
+                                                                        </div>
+                                                                        :
+                                                                        currentGroup?.codes?.map((code, index) => (
+                                                                            <CodeComponent code={code} key={index} />
+                                                                        ))
+                                                                }
                                                             </>
                                                     }
                                                 </>
@@ -256,16 +258,26 @@ const SingleGroup = () => {
                                                 &&
                                                 <>
                                                     {
-                                                        currentGroup?.streaks?.length == 0
+                                                        loading
                                                             ?
-                                                            <div className="w-full h-full flex justify-center items-center col-span-2 ">
-                                                                <span>No Streaks to Show.</span>
-                                                            </div>
+                                                            Array(5).fill('').map((_, index) => (
+                                                                <StreakComponent.Skeleton key={index} />
+                                                            ))
                                                             :
                                                             <>
-                                                                {currentGroup?.streaks?.map((streak, index) => (
-                                                                    <StreakComponent streak={streak} key={index} />
-                                                                ))}
+                                                                {
+                                                                    currentGroup?.streaks?.length == 0
+                                                                        ?
+                                                                        <div className="w-full h-40 flex justify-center items-center ">
+                                                                            <span>No Streaks to Show.</span>
+                                                                        </div>
+                                                                        :
+                                                                        <>
+                                                                            {currentGroup?.streaks?.map((streak, index) => (
+                                                                                <StreakComponent streak={streak} key={index} />
+                                                                            ))}
+                                                                        </>
+                                                                }
                                                             </>
                                                     }
                                                 </>
@@ -275,23 +287,34 @@ const SingleGroup = () => {
                                                 &&
                                                 <>
                                                     {
-                                                        currentGroup?.challenges?.length == 0
+                                                        loading
                                                             ?
-                                                            <div className="w-full h-full flex justify-center items-center col-span-2 ">
-                                                                <span>No Challenges to Show.</span>
-                                                            </div>
+                                                            Array(5).fill('').map((_, index) => (
+                                                                <ChallengeComponent.Skeleton key={index} />
+                                                            ))
                                                             :
                                                             <>
-                                                                {currentGroup?.challenges?.map((challenge, index) => (
-                                                                    <ChallengeComponent challenge={challenge} key={index} />
-                                                                ))}
+                                                                {
+                                                                    currentGroup?.challenges?.length == 0
+                                                                        ?
+                                                                        <div className="w-full h-40 flex justify-center items-center ">
+                                                                            <span>No Challenges to Show.</span>
+                                                                        </div>
+                                                                        :
+                                                                        <>
+                                                                            {currentGroup?.challenges?.map((challenge, index) => (
+                                                                                <ChallengeComponent challenge={challenge} key={index} />
+                                                                            ))}
+                                                                        </>
+                                                                }
                                                             </>
                                                     }
                                                 </>
                                             }
                                         </>
                                     </>
-                            }
+                                }
+                            </div>
                         </div>
                     </div>
             }
@@ -301,3 +324,37 @@ const SingleGroup = () => {
 };
 
 export default SingleGroup;
+
+SingleGroup.Skeleton = function () {
+    return (
+        <div className='w-full flex flex-col gap-4 p-4 bg-white text-cool-gray-dark rounded-[6px] animate-pulse '>
+
+            <div className='w-full h-[340px] flex flex-col gap-4 p-4 bg-light-gray text-cool-gray-dark rounded-[6px]'>
+                <span className='w-full h-5 rounded bg-warm-gray-dark' />
+                <span className='w-3/4 h-5 rounded bg-warm-gray-dark' />
+                <span className='w-1/2 h-4 rounded bg-warm-gray-dark' />
+                <span className='w-full h-5 rounded bg-warm-gray-dark' />
+                <span className='w-2/3 h-4 rounded bg-warm-gray-dark' />
+                <span className='w-full h-5 rounded bg-warm-gray-dark' />
+                <span className='w-full h-5 rounded bg-warm-gray-dark' />
+                <span className='w-1/3 h-4 rounded bg-warm-gray-dark' />
+                <span className='w-1/4 h-4 rounded bg-warm-gray-dark' />
+            </div>
+
+            <div className='w-full h-fit flex justify-center items-center gap-4 p-4 bg-light-gray text-cool-gray-dark rounded-[6px]'>
+                <span className='w-20 h-8 rounded-md bg-warm-gray-dark' />
+                <span className='w-20 h-8 rounded-md bg-warm-gray-dark' />
+                <span className='w-20 h-8 rounded-md bg-warm-gray-dark' />
+            </div>
+
+            <div className="w-full flex justify-center">
+                <div className="lg:w-[48rem] pt-1 px-3 w-full flex flex-col items-center gap-2 h-full">
+                    {Array(5).fill('').map((_, index) => (
+                        <CodeComponent.Skeleton />
+                    ))}
+                </div>
+            </div>
+
+        </div>
+    )
+}

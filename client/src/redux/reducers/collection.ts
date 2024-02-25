@@ -4,7 +4,9 @@ import { Challenge, Code, Collection, Streak } from "../../interfaces";
 interface InitialState {
   isFetching: boolean;
   error: string;
+  categories: string[];
   collections: Collection[];
+  popularCollections: Collection[];
   userCollections: Collection[];
   filteredCollections: Collection[];
   currentCollection: Collection | null;
@@ -13,6 +15,8 @@ interface InitialState {
 
 const initialState: InitialState = {
   collections: [],
+  popularCollections: [],
+  categories: [],
   userCollections: [],
   filteredCollections: [],
   isFetching: false,
@@ -38,6 +42,12 @@ const collectionSlice = createSlice({
 
     getCollectionReducer: (state, action: PayloadAction<Collection>) => {
       state.currentCollection = action.payload;
+    },
+    getCollectionCategoriesReducer: (
+      state,
+      action: PayloadAction<string[]>
+    ) => {
+      state.categories = action.payload;
     },
     getCollectionCodesReducer: (state, action: PayloadAction<Code[]>) => {
       state.currentCollection = {
@@ -67,6 +77,12 @@ const collectionSlice = createSlice({
       state.collections = action.payload.result;
       if (action.payload.count) state.count = action.payload.count;
     },
+    getPopularCollectionsReducer: (
+      state,
+      action: PayloadAction<{ result: Collection[] }>
+    ) => {
+      state.popularCollections = action.payload.result;
+     },
     getUserCollectionsReducer: (
       state,
       action: PayloadAction<{ result: Collection[]; count?: number }>
@@ -256,17 +272,26 @@ const collectionSlice = createSlice({
       state,
       action: PayloadAction<{ collectionId: string; loggedUserId: string }>
     ) => {
-      // TODO: also update userCollections - may be
-      const codeId = action.payload.collectionId;
+      const collectionId = action.payload.collectionId;
+      const userId = action.payload.loggedUserId;
+      state.collections = state.collections.map(
+        (c) =>
+          (c =
+            c._id == collectionId
+              ? {
+                  ...c,
+                  stars: c.stars.some((id) => id == userId)
+                    ? c.stars.filter((l) => l != userId)
+                    : c.stars.concat(userId),
+                }
+              : c)
+      );
+      console.log("state", state.collections);
       state.currentCollection = {
         ...state.currentCollection!,
-        stars: state.currentCollection!.stars.includes(
-          action.payload.loggedUserId
-        )
-          ? state.currentCollection!.stars.filter(
-              (l) => l != action.payload.loggedUserId
-            )
-          : state.currentCollection!.stars.concat(action.payload.loggedUserId),
+        stars: state.currentCollection!.stars.includes(userId)
+          ? state.currentCollection!.stars.filter((l) => l != userId)
+          : state.currentCollection!.stars.concat(userId),
       };
     },
     deleteCollectionReducer: (state, action: PayloadAction<Collection>) => {
@@ -283,11 +308,13 @@ export const {
   end,
   error,
   getCollectionReducer,
+  getPopularCollectionsReducer,
   getCollectionCodesReducer,
   getCollectionStreaksReducer,
   getCollectionChallengesReducer,
   getCollectionsReducer,
   getUserCollectionsReducer,
+  getCollectionCategoriesReducer,
 
   saveCodeReducer,
   unsaveCodeReducer,

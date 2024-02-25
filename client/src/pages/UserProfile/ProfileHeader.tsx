@@ -20,7 +20,7 @@ const ProfilePage = () => {
             </div>
             <div className="flex justify-between items-center gap-4 my-[1rem] px-[2rem]">
                 {/* Profile image and username */}
-                <div className="flex items-end gap-[1rem] relative">
+                <div className="flex items-end gap-4 relative">
                     <div className="relative w-[10rem]">
                         <div className="w-[10rem] h-[10rem] absolute bottom-[-1rem] rounded-full border-[1px] border-gray-500">
                             <img

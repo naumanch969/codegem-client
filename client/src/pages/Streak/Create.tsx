@@ -30,6 +30,8 @@ import { Badge } from '@/components/ui/badge';
 import { Modal } from '@/components/ui/modal';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import toast from 'react-hot-toast';
+import { programmingLanguages } from '@/constant';
+import { Combobox } from '@/components/ui/combobox';
 
 
 const CreateStreak = ({ groupId, handleSubmit }: { groupId?: string, handleSubmit?: (data: any) => void }) => {
@@ -39,16 +41,18 @@ const CreateStreak = ({ groupId, handleSubmit }: { groupId?: string, handleSubmi
     const { isOpen, onClose, streak } = useStreakModal()
 
     const formSchema = z.object({
-        title: z.string().min(2, { message: 'Title must contain atleast 2 characters.' }).max(250, { message: 'Title can\' be longer than 250 characters.' }),
-        description: z.string().min(2, { message: 'Description must contain atleast 2 characters.' }),
+        title: z.string().min(1, { message: 'Title is required.' }).max(250, { message: 'Title can\' be longer than 250 characters.' }),
+        description: z.string().min(1, { message: 'Description is required.' }),
+        language: z.string().min(1, { message: 'Language is required.' }),
         streak: z.object({ description: z.string(), code: z.string() }).array(),
         hashTags: z.array(z.string({ required_error: "Hashtags are required." })),
-        visibility: z.string().min(2).max(50),
+        visibility: z.string().min(1).max(50),
     })
 
     const initialData: z.infer<typeof formSchema> = {
         title: "",
         description: "",
+        language: "",
         streak: [],
         hashTags: [],
         visibility: "public",
@@ -160,6 +164,28 @@ const CreateStreak = ({ groupId, handleSubmit }: { groupId?: string, handleSubmi
                                             placeholder="Description"
                                             className='bg-secondary'
                                             {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="language"
+                            render={({ field }: { field: any }) => (
+                                <FormItem>
+                                    <FormLabel>Language</FormLabel>
+                                    <FormControl>
+                                        <Combobox
+                                            items={programmingLanguages}
+                                            onSelect={(value: string) => { field.onChange(value); console.log('value', value) }}
+                                            onFilter={(value: string) => { }}
+                                            selected={field.value}
+                                            className='w-full bg-secondary text-light text-muted-foreground '
+                                            emptyString='No language found.'
+                                            isMultiple={false}
+                                            placeholder='Language'
                                         />
                                     </FormControl>
                                     <FormMessage />

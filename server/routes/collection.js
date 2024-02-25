@@ -3,10 +3,10 @@ const router = express.Router();
 import {
   getCollections,
   getCollection,
+  getCollectionCategories,
   getCollectionCodes,
   getCollectionStreaks,
   getCollectionChallenges,
-  getUserCollections,
   createCollections,
   updateCollections,
   deleteCollection,
@@ -16,13 +16,11 @@ import {
   createCollectionChallenge,
   shareCollection,
   starCollection,
-  searchCollections,
 } from "../controllers/collection.js";
 import { verifyToken } from "../middleware/auth.js";
 
 router.get("/get/all", verifyToken, getCollections);
-router.get("/get/search", verifyToken, searchCollections);
-router.get("/get/user/:userId", verifyToken, getUserCollections);
+router.get("/get/categories", verifyToken, getCollectionCategories);
 router.get("/get/single/:collectionId", verifyToken, getCollection);
 router.get("/get/codes/:collectionId", verifyToken, getCollectionCodes);
 router.get("/get/streaks/:collectionId", verifyToken, getCollectionStreaks);
@@ -43,6 +41,7 @@ router.post(
   verifyToken,
   createCollectionChallenge
 );
+
 router.put("/update/:collectionId", verifyToken, updateCollections);
 router.put("/share/:collectionId", verifyToken, shareCollection);
 router.put("/star/:collectionId", verifyToken, starCollection);

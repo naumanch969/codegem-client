@@ -20,7 +20,7 @@ const SaveCode = ({ open, setOpen, code }: { open: boolean, setOpen: any, code: 
 
     ///////////////////////////////////////////////////// STATES ////////////////////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getUserCollections(userCollections.length == 0, loggedUser?._id as string, `?page=${1}&pageSize=${20}`))
+        // Place User Collection
     }, [])
 
     ///////////////////////////////////////////////////// FUNCTIONS ////////////////////////////////////////////////////

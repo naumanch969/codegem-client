@@ -45,9 +45,9 @@ const Apps = () => {
 
   /////////////////////////////////////////////// USE EFFECTS /////////////////////////////////////////////////////
   useEffect(() => {
-    // dispatch<any>(getAllUsers());
+    // dispatch<any>(getUsers());
     if (userCollections.length == 0) {
-      dispatch<any>(getUserCollections(userCollections.length == 0, loggedUser?._id!, `?page=${1}&pageSize=${10}`));
+      // Place User Collection
     }
   }, [userCollections]);
 
@@ -80,12 +80,12 @@ const Apps = () => {
               <div className="md:w-screen flex justify-between ">
                 <div
                   style={{ height: "calc(100vh - 4rem)" }}
-                  className={`${showSidebar ? "lg:w-[20%] md:w-[25%]  " : "lg:w-[5%] md:w-[6%]"} bg-dark-slate-blue text-white sticky top-[4rem] transition-all border-r-[2px] border-gray-100`}
+                  className={`${showSidebar ? "lg:w-[20%] md:w-[25%]" : "lg:w-[5%] md:w-[6%]"} bg-dark-slate-blue text-white sticky top-[4rem] transition-all border-r-[2px] border-gray-100`}
                 >
                   <Sidebar />
                 </div>
 
-                <div className="flex  bg-white text-cool-gray w-[80%] ">
+                <div className={`flex bg-white text-cool-gray ${showSidebar ? "lg:w-[80%] md:w-[75%]" : "lg:w-[95%] md:w-[94%]"}  `}>
                   <Routes>
                     <Route path="/" element={<Navigate to="/home" />} />
                     <Route path="/home" element={<Home />} />

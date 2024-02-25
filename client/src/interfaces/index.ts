@@ -40,6 +40,7 @@ export interface Code {
   user?: User;
   title: string;
   description: string;
+  language: string;
   code: string;
   tags: { name: string; user: string }[];
   hashTags: string[];
@@ -56,6 +57,7 @@ export interface Challenge {
   user?: User;
   title: string;
   description: string;
+  language: string;
   challenge: string;
   solution: string;
   tags: { name: string; user: string }[];
@@ -73,6 +75,7 @@ export interface Streak {
   user?: User;
   title: string;
   description: string;
+  language: string;
   streak: { description: string; code: string }[];
   tags: { name: string; user: string }[];
   hashTags: string[];
@@ -88,6 +91,8 @@ export interface Collection {
   _id: string;
   name: string;
   description: string;
+  language: string;
+  categories: string[];
   codes: Code[];
   streaks: Streak[];
   shares: (string | Share)[];
@@ -95,6 +100,7 @@ export interface Collection {
   challenges: Challenge[];
   owner: User | string;
   visibility: string;
+  createdAt: Date | string;
 }
 
 export interface Group {
@@ -104,7 +110,8 @@ export interface Group {
   avatar: string;
   description: string;
   members: string[];
-  categories: [] | string[];
+  categories: string[];
+  languages: string[];
   admin: User | string;
   shares: (string | Share)[]; // if populated, array of Share otherwise of string
   codes: Code[];

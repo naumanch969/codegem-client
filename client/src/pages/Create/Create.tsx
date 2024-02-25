@@ -21,7 +21,6 @@ const Create = () => {
         { onClick: () => { onSetChallenge(null); onChallengeOpen() }, name: 'Create Challenge', icon: SyncProblem },
         { onClick: onCollectionOpen, name: 'Create Collection', icon: CollectionsTwoTone },
         { onClick: onGroupOpen, name: 'Create Group', icon: Group },
-        { onClick: onCodeOpen, name: 'Create Account', icon: Person },
     ];
 
     ///////////////////////////// STATES ////////////////////////////////////////

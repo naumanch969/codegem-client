@@ -3,7 +3,7 @@ import {
   start,
   end,
   error,
-  getAllUsersReducer,
+  getUsersReducer,
   getUserReducer,
   getProfileReducer,
   editPersonalDetailsReducer,
@@ -17,7 +17,7 @@ export const getUsers =
     try {
       loading && dispatch(start());
       const { data } = await api.getUsers();
-      dispatch(getAllUsersReducer(data));
+      dispatch(getUsersReducer(data));
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message

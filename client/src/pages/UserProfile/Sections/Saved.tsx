@@ -16,7 +16,7 @@ const Saved = () => {
   }, [])
   return (
 
-    <div className="w-full flex flex-col gap-[2rem] ">
+    <div className="w-full flex flex-col gap-8 ">
       <div className="flex flex-col gap-6 lg:px-60 md:px-50 sm:px-10 px-4 ">
         {
           isFetching

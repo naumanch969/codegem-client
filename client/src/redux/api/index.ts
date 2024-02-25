@@ -90,8 +90,6 @@ export const editPersonalDetails = (
 // CODE
 export const getCode = (id: string) => API.get(`/code/get/single/${id}`);
 export const getCodes = (query: string) => API.get(`/code/get/all${query}`);
-export const searchCodes = (query: string) =>
-  API.get(`/code/get/search${query}`);
 export const getUserCodes = (userId: string) =>
   API.get(`/code/get/user/${userId}`);
 export const getLikedCodes = () => API.get(`/code/get/liked`);
@@ -148,8 +146,6 @@ export const deleteChallenge = (id: string) =>
 // STREAK
 export const getStreak = (id: string) => API.get(`/streak/get/single/${id}`);
 export const getStreaks = (query: string) => API.get(`/streak/get/all${query}`);
-export const searchStreaks = (query: string) =>
-  API.get(`/streak/get/search${query}`);
 export const getUserStreaks = (userId: string) =>
   API.get(`/streak/get/user/${userId}`);
 export const getLikedStreaks = () => API.get(`/streak/get/liked`);
@@ -181,10 +177,10 @@ export const getComments = (
 
 // Collections
 export const getCollections = (query: string) =>
-  API.get(`/collection/get/all${query}`);
-export const searchCollections = (query: string) =>
-  API.get(`/collection/get/search${query}`);
-export const getUserCollections = (userId: string, query: string) =>
+  API.get(`/collection/get/all${query}`); 
+export const getCollectionCategories = () =>
+  API.get(`/collection/get/categories`);
+export const getUserCollections = (query: string, userId: string) =>
   API.get(`/collection/get/user/${userId}${query}`);
 export const getCollection = (collectionId: string) =>
   API.get(`/collection/get/single/${collectionId}`);
@@ -218,8 +214,6 @@ export const deleteCollection = (collectionId: string) =>
   API.delete(`/collection/delete/${collectionId}`);
 
 export const getGroups = (query: string) => API.get(`/group/get/all${query}`);
-export const searchGroups = (query: string) =>
-  API.get(`/group/get/search${query}`);
 export const getUserGroups = (userId: string) =>
   API.get(`/group/get/user/${userId}`);
 export const getGroup = (groupId: string) =>

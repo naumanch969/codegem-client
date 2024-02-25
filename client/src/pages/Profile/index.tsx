@@ -24,12 +24,12 @@ const ProfilePage = () => {
 
 
     return (
-        <div className="container mx-auto p-4 w-full flex flex-col gap-[2rem] ">
+        <div className="container mx-auto p-4 w-full flex flex-col gap-8 ">
 
             <ProfileHeader />
             <PeopleYouMayKnow />
 
-            <div className="flex flex-col gap-[1rem] ">
+            <div className="flex flex-col gap-4 ">
                 <MenuBar activeMenuItem={activeMenuItem} setActiveMenuItem={setActiveMenuItem} />
 
                 {activeMenuItem == 'about' && <About />}

@@ -28,6 +28,10 @@ import { Modal } from '@/components/ui/modal';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import toast from 'react-hot-toast';
 import { User } from '@/interfaces';
+import { Combobox } from '@/components/ui/combobox';
+import { programmingLanguages } from '@/constant';
+import { Badge } from '@/components/ui/badge';
+import { X } from 'lucide-react';
 
 
 const CreateCollection = () => {
@@ -38,14 +42,18 @@ const CreateCollection = () => {
     const { isFetching } = useSelector((state: RootState) => state.collection)
 
     const formSchema = z.object({
-        name: z.string().min(2, { message: 'Name must contain atleast 2 characters.' }).max(250, { message: 'Title can\' be longer than 250 characters.' }),
-        description: z.string().min(2, { message: 'Description must contain atleast 2 characters.' }),
-        visibility: z.string().min(2).max(50),
+        name: z.string().min(1, { message: 'Name is required.' }).max(250, { message: 'Title can\' be longer than 250 characters.' }),
+        description: z.string().min(1, { message: 'Description is required.' }),
+        language: z.string().min(1, { message: 'Language is required.' }),
+        categories: z.string().min(1, { message: 'Category is required.' }).array(),
+        visibility: z.string().min(1).max(50),
     })
 
     const initialData: z.infer<typeof formSchema> = {
         name: "",
         description: "",
+        language: "",
+        categories: [],
         visibility: "public",
     }
 
@@ -54,6 +62,10 @@ const CreateCollection = () => {
         defaultValues: collection || initialData,
     })
     const dispatch = useDispatch();
+
+    // <---------------------------------------------------- STATES ----------------------------------------------------------->
+    const [category, setCategory] = useState('')
+
 
     // <---------------------------------------------------- FUNCTIONS ----------------------------------------------------------->
     const onSubmit = (values: z.infer<typeof formSchema>) => {
@@ -68,6 +80,22 @@ const CreateCollection = () => {
 
         form.reset(initialData);
     }
+    const onAddCategory = (e: React.KeyboardEvent<HTMLInputElement>, field: { value: string[], onChange: (value: string[]) => void },) => {
+        if (e.key === 'Enter' && e.currentTarget.value.trim() !== '') {
+            setCategory('')
+            e.preventDefault();
+            field.value
+                ?
+                field.onChange([...field?.value, e.currentTarget.value])
+                :
+                field.onChange([e.currentTarget.value]);
+        }
+    };
+    const onCategoryFilter = (text: string, field: { value: string[], onChange: (value: string[]) => void }) => {
+        const updated = field.value.filter(item => item !== text);
+        field.onChange(updated);
+    };
+
 
     return (
         <Modal
@@ -130,6 +158,59 @@ const CreateCollection = () => {
                                             className='bg-secondary'
                                             {...field}
                                         />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="language"
+                            render={({ field }: { field: any }) => (
+                                <FormItem>
+                                    <FormLabel>Language</FormLabel>
+                                    <FormControl>
+                                        <Combobox
+                                            items={programmingLanguages}
+                                            onSelect={(value: string) => { field.onChange(value); console.log('value', value) }}
+                                            onFilter={(value: string) => { }}
+                                            selected={field.value}
+                                            className='w-full bg-secondary text-light text-muted-foreground '
+                                            emptyString='No language found.'
+                                            isMultiple={false}
+                                            placeholder='Language'
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            name="categories"
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem className="col-span-1 md:col-span-2 ">
+                                    <FormLabel>
+                                        Categories
+                                    </FormLabel>
+                                    <FormControl>
+                                        <>
+                                            <Input
+                                                placeholder="Category - separated by enter    (i.e., Technology, Android, Ideas etc.)"
+                                                value={category}
+                                                onChange={(e) => setCategory(e.target.value)}
+                                                onKeyDown={(e) => { onAddCategory(e, field) }}
+                                                className='bg-secondary'
+                                            />
+                                            <div className="space-x-1">
+                                                {field.value?.map((text: string, index: number) => (
+                                                    <Badge key={index}>
+                                                        {text}{' '}
+                                                        <X onClick={() => onCategoryFilter(text, field)} className="w-4 h-4 rounded-full" />
+                                                    </Badge>
+                                                ))}
+                                            </div>
+                                        </>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

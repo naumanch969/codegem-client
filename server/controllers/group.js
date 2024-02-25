@@ -6,9 +6,37 @@ import { createError, isUndefined } from "../utils/functions.js";
 
 export const getGroups = async (req, res, next) => {
   try {
-    const { page, pageSize, count } = req.query; // count is boolean
-
-    let query = Group.find();
+    const {
+      page,
+      pageSize,
+      count,
+      userId,
+      query: searchQuery,
+      languages: languagesString,
+    } = req.query;
+    let query = userId ? Group.find({ owner: userId }) : Group.find();
+    
+    const languages = languagesString
+      ?.split(",")
+      ?.map((l) => new RegExp(l, "i"));
+    if (searchQuery) {
+      const regex = new RegExp(searchQuery, "i");
+      query = query.or([
+        { name: { $regex: regex } },
+        { description: { $regex: regex } },
+        { categories: { $in: [regex] } },
+        { languages: { $in: [regex] } },
+      ]);
+    }
+    if (languagesString) {
+      query = query.or([
+        {
+          languages: {
+            $in: languages,
+          },
+        },
+      ]);
+    }
 
     const pageNumber = parseInt(page, 10) || 1;
     const size = parseInt(pageSize, 10) || 10;
@@ -23,7 +51,7 @@ export const getGroups = async (req, res, next) => {
 
     const [result, totalCount] = await Promise.all([
       resultPromise,
-      count ? Group.countDocuments(query) : Promise.resolve(null),
+      count ? Group.countDocuments(query) : Promise.resolve(null), // Pass the same query to countDocuments
     ]);
 
     let response = { result };
@@ -33,6 +61,7 @@ export const getGroups = async (req, res, next) => {
 
     res.status(200).json(response);
   } catch (error) {
+    console.log("error", error);
     next(createError(res, 500, error.message));
   }
 };
@@ -57,48 +86,6 @@ export const getUserGroups = async (req, res, next) => {
     const [result, totalCount] = await Promise.all([
       resultPromise,
       count ? Group.countDocuments(query) : Promise.resolve(null),
-    ]);
-
-    let response = { result };
-    if (totalCount !== null) {
-      response.count = totalCount;
-    }
-
-    res.status(200).json(response);
-  } catch (error) {
-    next(createError(res, 500, error.message));
-  }
-};
-export const searchGroups = async (req, res, next) => {
-  try {
-    const { page, pageSize, count, userId, query: searchQuery } = req.query; // count is boolean
-
-    let query = userId ? Group.find({ owner: userId }) : Group.find();
-
-    if (searchQuery) {
-      const regex = new RegExp(searchQuery, "i"); // 'i' for case-insensitive search
-      query = query.or([
-        { name: { $regex: searchQuery, $options: "i" } },
-        { description: { $regex: searchQuery, $options: "i" } },
-        // TODO: add tags to group model
-        // { tags: { $in: [regex] } },
-      ]);
-    }
-
-    const pageNumber = parseInt(page, 10) || 1;
-    const size = parseInt(pageSize, 10) || 10;
-    const skip = (pageNumber - 1) * size;
-
-    query = query.skip(skip).limit(size);
-
-    const resultPromise = query
-      .sort({ createdAt: -1 })
-      .populate("admin")
-      .exec();
-
-    const [result, totalCount] = await Promise.all([
-      resultPromise,
-      count ? Group.countDocuments(query) : Promise.resolve(null), // Pass the same query to countDocuments
     ]);
 
     let response = { result };
@@ -173,8 +160,22 @@ export const getGroupChallenges = async (req, res, next) => {
 
 export const createGroups = async (req, res, next) => {
   try {
+    const { name, description, categories, languages } = req.body;
+    if (
+      isUndefined(name) ||
+      isUndefined(description) ||
+      isUndefined(categories) ||
+      categories.length == 0 ||
+      isUndefined(languages) ||
+      languages.length == 0
+    )
+      return next(
+        createError(res, 400, "Make sure to provide all the fields.")
+      );
+
     const groups = await Group.create({
       ...req.body,
+      languages,
       admin: req?.user?._id,
       members: [req?.user?._id],
     });

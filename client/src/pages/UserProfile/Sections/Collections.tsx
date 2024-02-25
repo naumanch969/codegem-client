@@ -12,12 +12,12 @@ const Collections = () => {
   const { currentUser }: { currentUser: User | null } = useSelector((state: RootState) => state.user)
 
   useEffect(() => {
-    dispatch<any>(getUserCollections(userCollections.length == 0, currentUser?._id as string, `?page=${1}&pageSize=${20}`))
+            // Place User Collection
   }, [])
 
   return (
 
-    <div className="w-full flex flex-col gap-[2rem] ">
+    <div className="w-full flex flex-col gap-8 ">
       {/* Your Collections */}
       <div className="flex flex-col">
         <h2 className="text-3xl font-bold mb-6 text-dark-slate-blue">Your Collections</h2>

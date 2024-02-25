@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { Lock, ArrowDropDown, } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { createGroup, updateGroup } from '../../redux/actions/group';
 import { RootState } from '../../redux/store';
-import { Group, User, } from '../../interfaces';
-import { image6 } from '../../assets';
+import { User, } from '../../interfaces';
 import { useGroupModal } from '../../hooks/useGroupModal';
 import { z } from "zod"
 import { useForm } from 'react-hook-form';
@@ -32,6 +30,8 @@ import { Badge } from '@/components/ui/badge';
 import { Modal } from '@/components/ui/modal';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import toast from 'react-hot-toast';
+import { Combobox } from '@/components/ui/combobox';
+import { programmingLanguages } from '@/constant';
 
 
 const CreateGroup = () => {    // handleSubmit is passed through collection create group
@@ -42,18 +42,18 @@ const CreateGroup = () => {    // handleSubmit is passed through collection crea
     const { isFetching } = useSelector((state: RootState) => state.group)
 
     const formSchema = z.object({
-        title: z.string().min(2, { message: 'Title must contain atleast 2 characters.' }).max(250, { message: 'Title can\' be longer than 250 characters.' }),
-        description: z.string().min(2, { message: 'Description must contain atleast 2 characters.' }),
-        group: z.string().min(2, { message: 'Group must contain atleast 2 characters.' }),
+        name: z.string().min(1, { message: 'Name is required.' }).max(250, { message: 'Name can\'t be longer than 250 characters.' }),
+        description: z.string().min(1, { message: 'Description is required.' }),
         categories: z.array(z.string({ required_error: "Hashtags are required." })),
-        visibility: z.string().min(2).max(50),
+        languages: z.array(z.string({ required_error: "Hashtags are required." })),
+        visibility: z.string().min(1).max(50),
     })
 
     const initialData: z.infer<typeof formSchema> = {
-        title: "",
+        name: "",
         description: "",
-        group: "",
         categories: [],
+        languages: [],
         visibility: "public",
     }
 
@@ -90,9 +90,24 @@ const CreateGroup = () => {    // handleSubmit is passed through collection crea
                 field.onChange([e.currentTarget.value]);
         }
     };
-    const handleFilterHashTag = (text: string, field: { value: string[], onChange: (value: string[]) => void }) => {
-        const updatedMain = field.value.filter(item => item !== text);
-        field.onChange(updatedMain);
+    const onLanguageSelect = (value: string, field: { value: string[], onChange: (value: string[]) => void },) => {
+
+        const isExist = field.value.find(v => v.toLowerCase() == value.toLowerCase())
+
+        if (isExist) {
+            onFilter(value, field)
+        }
+        else {
+            field.value
+                ?
+                field.onChange([...field?.value, value])
+                :
+                field.onChange([value]);
+        }
+    };
+    const onFilter = (text: string, field: { value: string[], onChange: (value: string[]) => void }) => {
+        const updated = field.value.filter(item => item !== text);
+        field.onChange(updated);
     };
 
 
@@ -128,15 +143,15 @@ const CreateGroup = () => {    // handleSubmit is passed through collection crea
                 </div>
 
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 ">
+                    <form onSubmit={form.handleSubmit(() => console.log('test'))} className="space-y-2 ">
                         <FormField
                             control={form.control}
-                            name="title"
+                            name="name"
                             render={({ field }: { field: any }) => (
                                 <FormItem>
-                                    <FormLabel>Title</FormLabel>
+                                    <FormLabel>Name</FormLabel>
                                     <FormControl>
-                                        <Input className='bg-secondary' placeholder="Title" {...field} />
+                                        <Input className='bg-secondary' placeholder="Name" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -172,7 +187,7 @@ const CreateGroup = () => {    // handleSubmit is passed through collection crea
                                     <FormControl>
                                         <>
                                             <Input
-                                                placeholder="Text - separated by enter"
+                                                placeholder="Category - separated by enter    (i.e., Mobile Development, Web Development etc.)"
                                                 value={category}
                                                 onChange={(e) => setCategory(e.target.value)}
                                                 onKeyDown={(e) => { handleAddHashTag(e, field) }}
@@ -182,7 +197,7 @@ const CreateGroup = () => {    // handleSubmit is passed through collection crea
                                                 {field.value?.map((text: string, index: number) => (
                                                     <Badge key={index}>
                                                         {text}{' '}
-                                                        <X onClick={() => handleFilterHashTag(text, field)} className="w-4 h-4 rounded-full" />
+                                                        <X onClick={() => onFilter(text, field)} className="w-4 h-4 rounded-full" />
                                                     </Badge>
                                                 ))}
                                             </div>
@@ -192,9 +207,34 @@ const CreateGroup = () => {    // handleSubmit is passed through collection crea
                                 </FormItem>
                             )}
                         />
+                        <FormField
+                            name="languages"
+                            control={form.control}
+                            render={({ field }: { field: any }) => (
+                                <FormItem className="col-span-1 md:col-span-2 ">
+                                    <FormLabel>
+                                        Languages
+                                    </FormLabel>
+                                    <FormControl>
+                                        <>
+                                            <Combobox
+                                                items={programmingLanguages}
+                                                onSelect={(value: string) => onLanguageSelect(value, field)}
+                                                onFilter={(value: string) => onFilter(value, field)}
+                                                selected={field.value}
+                                                placeholder='Languages'
+                                                emptyString='No language found'
+                                                className='w-full bg-secondary '
+                                            />
+                                        </>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         <div className="flex justify-end items-center gap-2 w-full">
                             <Button variant='outline' onClick={(e) => { e.preventDefault(); onClose(); form.reset(initialData); }} >Cancel</Button>
-                            <Button disabled={isFetching} type="submit">Submit</Button>
+                            <Button disabled={isFetching} onClick={form.handleSubmit(onSubmit)} type="submit">Submit</Button>
                         </div>
                     </form>
                 </Form>

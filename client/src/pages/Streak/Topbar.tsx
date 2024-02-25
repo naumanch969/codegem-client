@@ -1,44 +1,61 @@
 import React, { useState } from "react";
-import { Add, Search } from '@mui/icons-material'
+import { Add, Search, Filter } from '@mui/icons-material'
 import { useStreakModal } from "../../hooks/useStreakModal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { useDispatch } from "react-redux";
-import { searchStreaks } from "@/redux/actions/streak";
-const Topbar = ({ activeMenu, setActiveMenu, language, setLanguage, basicQuery }: { activeMenu: string, setActiveMenu: any, language: string, setLanguage: any, basicQuery: string }) => {
+import { Combobox } from "@/components/ui/combobox";
+import { X } from "lucide-react";
+import { programmingLanguages } from "@/constant";
+import { Badge } from "@/components/ui/badge";
 
-    const dispatch = useDispatch()
+interface Props {
+    activeMenu: string,
+    setActiveMenu: any,
+    languages: string[],
+    setLanguages: any,
+    searchedQuery: string,
+    setSearchedQuery: any,
+}
+
+const Topbar = ({
+    activeMenu,
+    setActiveMenu,
+    languages,
+    setLanguages,
+    searchedQuery,
+    setSearchedQuery,
+}: Props) => {
+
     const filterButtons = ["All", "Latest", "Famous", "Trending", "Recommended to you"];
     const { onOpen } = useStreakModal()
-
     const [searchValue, setSearchValue] = useState('');
 
-    const onSearch = () => {
-        dispatch<any>(searchStreaks(true, `${basicQuery}&query=${searchValue}`))
+    const onLanguageFilter = (value: string) => {
+        setLanguages((pre: string[]) => pre.filter(item => item.toLowerCase() != value.toLowerCase()))
+    }
+    const onLanguageSelect = (value: string) => {
+        const isExist = languages.find(l => l.toLowerCase() == value.toLowerCase())
+        if (isExist)
+            onLanguageFilter(value)
+        else
+            setLanguages((pre: string[]) => ([...pre, value]))
     }
 
     return (
-        <div className="w-full flex flex-col gap-[1rem] ">
-
-            <div className="flex justify-between items-center gap-x-4 " >
+        <div className="w-full flex flex-col gap-4 ">
+            <div className="flex justify-between items-center gap-8 ">
                 <div className="relative w-full " >
                     <Input
                         type="text"
                         placeholder="Search here... "
                         value={searchValue}
                         onChange={(e) => setSearchValue(e.target.value)}
+                        onKeyDown={e => e.key == 'Enter' && setSearchedQuery(searchValue)}
                         className="w-full "
                     />
                     <Button
-                        onClick={onSearch}
+                        onClick={() => setSearchedQuery(searchValue)}
                         variant='default'
                         size='sm'
                         className="absolute right-[2.52px] top-[50%] transform translate-y-[-50%]"
@@ -51,7 +68,7 @@ const Topbar = ({ activeMenu, setActiveMenu, language, setLanguage, basicQuery }
                 </Button>
             </div>
 
-            <div className="flex justify-between items-center gap-[2rem] ">
+            <div className="flex justify-between items-center gap-x-4 " >
                 {/* buttons */}
                 <div className="w-fit flex flex-col justify-between gap-1 h-full ">
                     <div className="w-full flex justify-start items-center gap-1 ">
@@ -69,22 +86,50 @@ const Topbar = ({ activeMenu, setActiveMenu, language, setLanguage, basicQuery }
                     <Separator />
                 </div>
                 {/* select */}
-                <div className="flex justify-end flex-[3] " >
-                    <Select onValueChange={(value: string) => setLanguage(value)} >
-                        <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Language" defaultValue='all' />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="python">Python</SelectItem>
-                            <SelectItem value="javascript">Javascript</SelectItem>
-                            <SelectItem value="kotlin">Kotlin</SelectItem>
-                            <SelectItem value="java">Java</SelectItem>
-                            <SelectItem value="c">C</SelectItem>
-                            <SelectItem value="c++">C++</SelectItem>
-                        </SelectContent>
-                    </Select>
+                <div className="relative">
+                    <Combobox
+                        items={programmingLanguages}
+                        onFilter={(value: string) => onLanguageFilter(value)}
+                        onSelect={(value: string) => onLanguageSelect(value)}
+                        selected={languages}
+                        emptyString='No language found'
+                        placeholder='Language'
+                        className=''
+                        showBadges={false}
+                    />
+                    <span className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                        <Filter />
+                    </span>
                 </div>
             </div>
+
+            {(searchedQuery || languages.length > 0) &&
+                <div className="flex justify-start items-center flex-wrap gap-2 mt-2 ">
+                    <span className='text-lg text-muted-foreground' >Filters: </span>
+                    {
+                        searchedQuery &&
+                        <Badge className="flex items-center gap-1 capitalize" >
+                            {searchedQuery}
+                            <X
+                                onClick={(event) => { event.stopPropagation(); setSearchedQuery(''); setSearchValue('') }}
+                                className="w-4 h-4 rounded-full cursor-pointer"
+                            />
+                        </Badge>
+                    }
+                    {
+                        languages.map((s: string, i: number) =>
+                            <Badge variant='secondary' key={i} className="flex items-center gap-1 uppercase" >
+                                {s}
+                                <X
+                                    onClick={(event) => { event.stopPropagation(); onLanguageFilter(s); }}
+                                    className="w-4 h-4 rounded-full cursor-pointer"
+                                />
+                            </Badge>
+                        )
+                    }
+                </div>
+            }
+
         </div>
     );
 };

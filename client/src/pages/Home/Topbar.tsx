@@ -20,7 +20,7 @@ const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
 
 
     return (
-        <div className="w-full flex flex-col gap-[1rem] ">
+        <div className="w-full flex flex-col gap-4 ">
 
             <div className="flex justify-between items-center gap-x-4 " >
                 <div className="relative w-full " >
@@ -44,7 +44,7 @@ const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
                 </Button>
             </div>
 
-            <div className="flex justify-between items-center gap-[2rem] ">
+            <div className="flex justify-between items-center gap-8 ">
                 {/* buttons */}
                 <div className="w-fit flex flex-col justify-between gap-1 h-full ">
                     <div className="w-full flex justify-start items-center gap-1 ">

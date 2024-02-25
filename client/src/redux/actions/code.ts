@@ -50,22 +50,7 @@ export const getCodes =
         ? dispatch(error(err.response.data.message))
         : dispatch(error(err.message));
     }
-  };
-export const searchCodes =
-  (loading: boolean = false, query: string) =>
-  async (dispatch: Dispatch) => {
-    try {
-      loading && dispatch(start());
-      const { data }: { data: { result: Code[]; count: number } } =
-        await api.searchCodes(query);
-      dispatch(getCodesReducer({ result: data.result, count: data.count }));
-      dispatch(end());
-    } catch (err: any) {
-      err.response?.data?.message
-        ? dispatch(error(err.response.data.message))
-        : dispatch(error(err.message));
-    }
-  };
+  }; 
 export const getSavedCodes = () => async (dispatch: Dispatch) => {
   try {
     dispatch(start());

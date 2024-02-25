@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react"
 import {
     HomeOutlined, PersonOutlined, GroupOutlined, CollectionsBookmarkOutlined, NotificationsNoneOutlined, AddBoxOutlined, AccountCircleOutlined, DensityMediumOutlined,
     Home, Person, Group, CollectionsBookmark, NotificationsNone, AddBox, AccountCircle, DensityMedium, Code, CodeOutlined,
-    FormatAlignCenterSharp
+    FormatAlignCenterSharp,
+    SyncProblem,
+    SyncProblemOutlined,
+    CodeOff,
+    CodeOffOutlined
 } from "@mui/icons-material"
 import { lowercase } from '../utils/functions/function'
 import { Tooltip } from '@mui/material'
@@ -24,21 +28,21 @@ const Sidebar = () => {
             active: pathname.includes('/home') || pathname == '/'
         },
         {
-            name: 'Streaks',
-            iconFilled: Home,
-            iconOutlined: HomeOutlined,
-            active: pathname.includes('/streaks')
-        },
-        {
             name: 'Codes',
             iconFilled: Code,
             iconOutlined: CodeOutlined,
             active: pathname.includes('/codes')
         },
         {
+            name: 'Streaks',
+            iconFilled: CodeOff,
+            iconOutlined: CodeOffOutlined,
+            active: pathname.includes('/streaks')
+        },
+        {
             name: 'Challenges',
-            iconFilled: FormatAlignCenterSharp,
-            iconOutlined: HomeOutlined,
+            iconFilled: SyncProblem,
+            iconOutlined: SyncProblemOutlined,
             active: pathname.includes('/challenges')
         },
         {
@@ -96,7 +100,7 @@ const Sidebar = () => {
             {
                 showSidebar
                     ?
-                    <div className={`flex flex-col justify-start gap-[1rem] w-full h-full`}>
+                    <div className={`flex flex-col justify-start gap-4 w-full h-full`}>
                         {
                             sidebarLinks.map((item, index) => (
                                 <Link

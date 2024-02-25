@@ -80,15 +80,14 @@ export default FriendCard;
 
 FriendCard.Skeleton = function () {
   return (
-    <div className='w-full flex flex-col justify-start gap-x-2 p-[1rem] bg-light-gray text-cool-gray-dark rounded-[6px] animate-pulse mb-4 '>
+    <div className='w-full flex flex-col justify-start gap-x-2 p-4 bg-light-gray text-cool-gray-dark rounded-[6px] animate-pulse mb-4 '>
       <div className="flex w-full justify-center ">
         <div className="w-full h-40 rounded-lg bg-warm-gray-dark" />
       </div>
-      <div className="w-full flex flex-col justify-center items-center gap-y-2 mt-2 ">
-        <p className="w-[60%] h-5 bg-warm-gray-dark rounded" />
-        <p className="w-full h-4 bg-warm-gray-dark rounded" />
+      <div className="w-full flex flex-col justify-start items-center gap-y-2 mt-2 ">
+        <p className="w-2/3 h-5 bg-warm-gray-dark rounded" />
+        <p className="w-1/3 h-4 bg-warm-gray-dark rounded" />
       </div>
-      <p className="w-full h-8 bg-warm-gray-dark rounded mt-2 " />
     </div>
   )
 }

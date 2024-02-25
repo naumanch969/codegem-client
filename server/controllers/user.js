@@ -1,14 +1,36 @@
 import User from "../models/user.js";
 import { createError } from "../utils/functions.js";
 
-export const getAllUsers = async (req, res, next) => {
+export const getUsers = async (req, res, next) => {
   try {
-    const users = await User.find({ _id: { $ne: req.user._id } });
-    res.status(200).json(users);
+    const { page, pageSize, count } = req.query;
+
+    let query = User.find({ _id: { $ne: req.user._id } });
+
+    const pageNumber = parseInt(page, 10) || 1;
+    const size = parseInt(pageSize, 10) || 10;
+    const skip = (pageNumber - 1) * size;
+
+    query = query.skip(skip).limit(size);
+
+    const resultPromise = query.exec();
+
+    const [result, totalCount] = await Promise.all([
+      resultPromise,
+      count ? User.countDocuments({ _id: { $ne: req.user._id } }).exec() : Promise.resolve(null),
+    ]);
+
+    let response = { result };
+    if (totalCount !== null) {
+      response.count = totalCount;
+    }
+
+    res.status(200).json(response);
   } catch (error) {
-    next(createError(res, 500, error.message));
+    next(createError(500, error.message));
   }
 };
+
 export const getUser = async (req, res, next) => {
   try {
     const { userId } = req.params;

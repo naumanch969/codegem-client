@@ -5,6 +5,7 @@ import {
   error,
   getCollectionReducer,
   getUserCollectionsReducer,
+  getCollectionCategoriesReducer,
   getCollectionsReducer,
   getCollectionCodesReducer,
   getCollectionStreaksReducer,
@@ -17,6 +18,7 @@ import {
   updateCollectionReducer,
   deleteCollectionReducer,
   starCollectionReducer,
+  getPopularCollectionsReducer,
 } from "../reducers/collection";
 import * as api from "../api";
 import { Challenge, Code, Collection, Streak } from "../../interfaces";
@@ -51,15 +53,45 @@ export const getCollections =
         : dispatch(error(err.message));
     }
   };
-export const searchCollections =
+export const getPopularCollections =
+  (loading: boolean = false) =>
+  async (dispatch: Dispatch) => {
+    try {
+      loading && dispatch(start());
+      const { data }: { data: { result: Collection[]; count: number } } =
+        await api.getCollections(`?popular=${true}`);
+      dispatch(getPopularCollectionsReducer({ result: data.result }));
+      dispatch(end());
+    } catch (err: any) {
+      err.response?.data?.message
+        ? dispatch(error(err.response.data.message))
+        : dispatch(error(err.message));
+    }
+  };
+export const getCollectionCategories =
+  (loading: boolean = false) =>
+  async (dispatch: Dispatch) => {
+    try {
+      loading && dispatch(start());
+      const { data }: { data: string[] } = await api.getCollectionCategories();
+      dispatch(getCollectionCategoriesReducer(data));
+      dispatch(end());
+    } catch (err: any) {
+      err.response?.data?.message
+        ? dispatch(error(err.response.data.message))
+        : dispatch(error(err.message));
+    }
+  };
+export const getUserCollections =
   (loading: boolean = false, query: string) =>
   async (dispatch: Dispatch) => {
     try {
       loading && dispatch(start());
       const { data }: { data: { result: Collection[]; count: number } } =
-        await api.searchCollections(query);
+        await api.getCollections(query);
+      console.log("data user", data);
       dispatch(
-        getCollectionsReducer({ result: data.result, count: data.count })
+        getUserCollectionsReducer({ result: data.result, count: data.count })
       );
       dispatch(end());
     } catch (err: any) {
@@ -112,23 +144,6 @@ export const getCollectionChallenges =
       setLoading && setLoading(false);
     }
   };
-export const getUserCollections =
-  (loading: boolean = false, userId: string, query: string) =>
-  async (dispatch: Dispatch) => {
-    try {
-      loading && dispatch(start());
-      const { data }: { data: { result: Collection[]; count: number } } =
-        await api.getUserCollections(userId, query);
-      dispatch(
-        getUserCollectionsReducer({ result: data.result, count: data.count })
-      );
-      dispatch(end());
-    } catch (err: any) {
-      err.response?.data?.message
-        ? dispatch(error(err.response.data.message))
-        : dispatch(error(err.message));
-    }
-  };
 export const createCollection =
   (collectionData: any, onClose: () => void, toast: any) =>
   async (dispatch: Dispatch) => {
@@ -148,13 +163,11 @@ export const createCollection =
   };
 
 export const createCollectionCode =
-  (collectionId: string, codeData: Code, setOpen: any) =>
-  async (dispatch: Dispatch) => {
+  (collectionId: string, codeData: Code) => async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       await api.createCollectionCode(collectionId, codeData);
       dispatch(createCollectionCodeReducer(codeData));
-      setOpen(false);
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
@@ -163,13 +176,11 @@ export const createCollectionCode =
     }
   };
 export const createCollectionStreak =
-  (collectionId: string, streakData: Streak, setOpen: any) =>
-  async (dispatch: Dispatch) => {
+  (collectionId: string, streakData: Streak) => async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       await api.createCollectionStreak(collectionId, streakData);
       dispatch(createCollectionStreakReducer(streakData));
-      setOpen(false);
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
@@ -178,13 +189,12 @@ export const createCollectionStreak =
     }
   };
 export const createCollectionChallenge =
-  (collectionId: string, challengeData: Challenge, setOpen: any) =>
+  (collectionId: string, challengeData: Challenge) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch(start());
       await api.createCollectionChallenge(collectionId, challengeData);
       dispatch(createCollectionChallengeReducer(challengeData));
-      setOpen(false);
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
@@ -234,7 +244,9 @@ export const starCollection =
   async (dispatch: Dispatch) => {
     try {
       dispatch(starCollectionReducer({ collectionId, loggedUserId }));
-      await api.starCollection(collectionId as string);
+      console.log("can you here me");
+      const { data } = await api.starCollection(collectionId as string);
+      console.log("data of here ", data);
     } catch (err: any) {
       err.response?.data?.message
         ? dispatch(error(err.response.data.message))

@@ -5,6 +5,7 @@ import { User } from '../../interfaces'
 import { RootState } from '../../redux/store'
 import FriendCard from './FriendCard'
 import { Pagination } from '@mui/material'
+import { empty } from '@/assets'
 
 const SentRequest = ({ totalPages, page, setPage, pageSize }: { totalPages: number, page: number, setPage: any, pageSize: number }) => {
 
@@ -38,21 +39,34 @@ const SentRequest = ({ totalPages, page, setPage, pageSize }: { totalPages: numb
                             <FriendCard.Skeleton key={index} />
                         ))
                         :
-                        sentRequests.map((friend, index) => (
-                            <FriendCard key={index} friend={friend} type={'sentRequest'} />
-                        ))
+                        sentRequests.length == 0
+                            ?
+                            <div className='w-full flex flex-col justify-center items-center grayscale '>
+                                <img src={empty} alt='Empty' className='w-96 h-96 grayscale ' />
+                                <span className='text-foreground text-center text-lg font-semibold ' >Nothing Found.</span>
+                                <span className='text-muted-foreground text-center text-md ' >It's our fault not yours.</span>
+                            </div>
+                            :
+                            sentRequests.map((friend, index) => (
+                                <FriendCard key={index} friend={friend} type={'sentRequest'} />
+                            ))
                 }
             </div>
-            <div className="w-full flex justify-center">
-                <Pagination
-                    count={totalPages}
-                    defaultPage={1}
-                    page={page}
-                    siblingCount={0}
-                    onChange={(e: any, page: number) => setPage(page)}
-                    size='large'
-                />
-            </div>
+
+            {
+                totalPages > 1 &&
+                <div className="w-full flex justify-center">
+                    <Pagination
+                        count={totalPages}
+                        defaultPage={1}
+                        page={page}
+                        siblingCount={0}
+                        onChange={(e: any, page: number) => setPage(page)}
+                        size='large'
+                    />
+                </div>
+            }
+
         </div>
     )
 }

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { SearchOff } from '@mui/icons-material';
 import Friends from './Friends'
 import Menubar from './Menubar';
 import SuggestedFriends from './SuggestedFriends';
@@ -9,6 +8,7 @@ import Find from './Find';
 import { useDispatch } from 'react-redux';
 import { searchFriends, searchUsers } from '@/redux/actions/friend';
 import { Search } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 
 const FriendsPage = () => {
 
@@ -20,6 +20,7 @@ const FriendsPage = () => {
 
     ////////////////////////////////////////////////// STATES //////////////////////////////////////////////////
     const [searchValue, setSearchValue] = useState<string>('');
+    const [searchedQuery, setSearchedValue] = useState<string>('');
     const [activeMenuItem, setActiveMenuItem] = useState<string>('find');
     const [page, setPage] = useState<number>(1)
 
@@ -28,6 +29,7 @@ const FriendsPage = () => {
 
     ////////////////////////////////////////////////// FUNCTIONS //////////////////////////////////////////////////
     const onSearch = () => {
+        setSearchedValue(searchValue)
         if (activeMenuItem == 'find')
             dispatch<any>(searchUsers(true, `?page=${page}&pageSize=${pageSize}&count=${true}&query=${searchValue}`))
         else
@@ -35,22 +37,23 @@ const FriendsPage = () => {
     }
 
     return (
-        <div className="p-6 flex flex-col gap-[1rem] w-full ">
+        <div className="p-6 flex flex-col gap-4 w-full ">
 
             <div className="flex justify-between items-center w-full">
-                <h1 className="text-3xl font-bold text-dark-slate-blue " >Friends</h1>
-                <div className="relative w-fit ">
-                    <input
-                        type="text"
+                <h1 className="text-3xl font-bold text-dark-slate-blue " >
+                    Friends {searchedQuery && <span className="font-medium"> {" > "} <span className='text-teal-blue ' >{searchedQuery}</span></span>}
+                </h1>
+                <div className="relative w-1/3 ">
+                    <Input
                         placeholder="Search Friends..."
                         value={searchValue}
-                        onChange={e => setSearchValue(e.target.value)}
+                        onChange={(e) => setSearchValue(e.target.value)}
                         onKeyDown={(e) => e.key == 'Enter' && onSearch()}
-                        className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-blue-dark focus:border-transparent"
+                        className="w-full px-4 py-2"
                     />
-                    <span onClick={onSearch} className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                    <button onClick={onSearch} className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer">
                         <Search />
-                    </span>
+                    </button>
                 </div>
             </div>
 

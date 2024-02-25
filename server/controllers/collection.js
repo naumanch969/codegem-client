@@ -8,120 +8,91 @@ import { createError, isUndefined } from "../utils/functions.js";
 
 export const getCollections = async (req, res, next) => {
   try {
-    const { page, pageSize, count } = req.query; // count is boolean
+    const {
+      page,
+      pageSize,
+      count,
+      userId,
+      query: searchQuery,
+      languages: languagesString,
+      popular,
+    } = req.query;
+    let query;
 
-    let query = Collection.find();
-
-    const pageNumber = parseInt(page, 10) || 1;
-    const size = parseInt(pageSize, 10) || 10;
-    const skip = (pageNumber - 1) * size;
-
-    query = query.skip(skip).limit(size);
-
-    const resultPromise = query
-      .sort({ createdAt: -1 })
-      .populate("owner")
-      .exec();
-
-    const [result, totalCount] = await Promise.all([
-      resultPromise,
-      count ? Collection.countDocuments(query) : Promise.resolve(null),
-    ]);
-
-    let response = { result };
-    if (totalCount !== null) {
-      response.count = totalCount;
-    }
-
-    res.status(200).json(response);
-  } catch (error) {
-    next(createError(res, 500, error.message));
-  }
-};
-export const getUserCollections = async (req, res, next) => {
-  try {
-    const { page, pageSize, count } = req.query; // count is boolean
-    const { userId } = req.params;
-
-    let query = Collection.find({ owner: userId });
-
-    // Check if the user has a collection named "Saved"
-    const savedCollection = await Collection.findOne({
-      owner: userId,
-      name: "Saved",
-    });
-
-    // If "Saved" collection doesn't exist, create it
-    if (!savedCollection) {
-      const newSavedCollection = new Collection({
-        name: "Saved",
-        description: "The collection of your saved codes.",
-        owner: userId,
+    // Constructing base query based on userId
+    if (userId) {
+      query = Collection.find({ owner: userId });
+    } else if (!searchQuery && !languagesString) {
+      query = Collection.find({
+        name: { $ne: "Saved" },
+        owner: { $ne: req.user._id },
       });
-      await newSavedCollection.save();
+    } else {
+      query = Collection.find({
+        name: { $ne: "Saved" },
+      });
     }
 
-    const pageNumber = parseInt(page, 10) || 1;
-    const size = parseInt(pageSize, 10) || 10;
-    const skip = (pageNumber - 1) * size;
-
-    query = query.skip(skip).limit(size);
-
-    const resultPromise = query
-      .sort({ createdAt: -1 })
-      .populate("owner")
-      .exec();
-
-    const [result, totalCount] = await Promise.all([
-      resultPromise,
-      count ? Collection.countDocuments(query) : Promise.resolve(null),
-    ]);
-
-    let response = { result };
-    if (totalCount !== null) {
-      response.count = totalCount;
+    // If userId matches logged user, ensure "Saved" collection exists
+    if (userId == req.user._id) {
+      const savedCollection = await Collection.findOne({
+        owner: userId,
+        name: "Saved",
+      });
+      if (!savedCollection) {
+        await Collection.create({
+          name: "Saved",
+          description: "The collection of your saved codes.",
+          owner: userId,
+        });
+      }
     }
 
-    res.status(200).json(response);
-  } catch (error) {
-    next(createError(res, 500, error.message));
-  }
-};
-export const searchCollections = async (req, res, next) => {
-  try {
-    const { page, pageSize, count, userId, query: searchQuery } = req.query; // count is boolean
-
-    let query = userId
-      ? Collection.find({ owner: userId, name: { $ne: "Saved" } })
-      : Collection.find({ name: { $ne: "Saved" } });
-
+    // Adding search and language filters
     if (searchQuery) {
-      const regex = new RegExp(searchQuery, "i"); // 'i' for case-insensitive search
+      const regex = new RegExp(searchQuery, "i");
       query = query.or([
-        { name: { $regex: searchQuery, $options: "i" } },
-        { description: { $regex: searchQuery, $options: "i" } },
-        // TODO:  add tags in collection model
-        // { tags: { $in: [regex] } },
+        { name: { $regex: regex } },
+        { description: { $regex: regex } },
+        { language: { $regex: regex } },
+        { categories: { $in: [regex] } },
       ]);
     }
 
+    // Language Filter
+    if (languagesString) {
+      const languages = languagesString
+        ?.split(",")
+        ?.map((l) => new RegExp(l, "i"));
+      query = query.or([
+        ...languages.map((l) => ({
+          language: { $regex: new RegExp(l, "i") },
+        })),
+      ]);
+    }
+
+    if (popular) {
+      query = query.sort({ stars: -1 });
+    }
+
+    // Pagination
     const pageNumber = parseInt(page, 10) || 1;
     const size = parseInt(pageSize, 10) || 10;
     const skip = (pageNumber - 1) * size;
-
-    query = query.skip(skip).limit(size);
-
-    const resultPromise = query
+    query
+      .skip(skip)
+      .limit(popular ? 5 : size)  // for popular, we only need 5 collections
       .sort({ createdAt: -1 })
-      .populate("owner")
-      .exec();
+      .populate("owner");
 
+    // Execute query and count total if required
     const [result, totalCount] = await Promise.all([
-      resultPromise,
-      count ? Collection.countDocuments(query) : Promise.resolve(null),
+      query.exec(),
+      count ? Collection.countDocuments(query) : null,
     ]);
 
-    let response = { result };
+    // Construct response
+    const response = { result };
     if (totalCount !== null) {
       response.count = totalCount;
     }
@@ -129,6 +100,21 @@ export const searchCollections = async (req, res, next) => {
     res.status(200).json(response);
   } catch (error) {
     next(createError(res, 500, error.message));
+  }
+};
+export const getCollectionCategories = async (req, res, next) => {
+  try {
+    const collections = await Collection.find({
+      categories: { $gte: 1 },
+    });
+    console.log("collections", collections);
+
+    const categories = collections.map((item) => item.categories.map((c) => c));
+
+    res.status(200).json(...new Set(categories));
+  } catch (error) {
+    console.error(error); // Log the error details
+    next(createError(res, 500, "An error occurred while fetching categories"));
   }
 };
 

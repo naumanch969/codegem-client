@@ -1,5 +1,5 @@
 import {
-  getAllUsers,
+  getUsers,
   getUser,
   getProfile,
   updateUser,
@@ -14,7 +14,7 @@ import express from "express";
 
 const router = express.Router();
 
-router.get("/get/all", verifyToken, getAllUsers);
+router.get("/get/all", verifyToken, getUsers);
 router.get("/get/single/:userId", getUser);
 router.get("/get/profile", verifyToken, getProfile);
 router.put("/update/profile", verifyToken, updateProfile);

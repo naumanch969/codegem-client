@@ -20,7 +20,7 @@ const SaveStreak = ({ open, setOpen, streak }: { open: boolean, setOpen: any, st
 
     ///////////////////////////////////////////////////// STATES ////////////////////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getUserCollections(userCollections.length == 0, loggedUser?._id as string, `?page=${1}&pageSize=${20}`))
+                // Place User Collection
     }, [])
 
     ///////////////////////////////////////////////////// FUNCTIONS ////////////////////////////////////////////////////

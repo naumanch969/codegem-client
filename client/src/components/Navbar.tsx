@@ -14,7 +14,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
-import { ChangeCircle, Dehaze, Logout, Person } from '@mui/icons-material'
+import { ChangeCircle, Dehaze, Logout, Person, Person2TwoTone } from '@mui/icons-material'
 import { Button } from './ui/button'
 const Navbar = () => {
 
@@ -71,9 +71,15 @@ const Navbar = () => {
                                 </Avatar>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
-                                <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={handleAccountClick} ><Person />Account</DropdownMenuItem>
-                                <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={() => { }}  ><ChangeCircle />Change Password</DropdownMenuItem>
-                                <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={handleLogout} ><Logout />Logout</DropdownMenuItem>
+                                <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={handleAccountClick} >
+                                    <Link to='/profile' ><Person />Profile</Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={handleAccountClick} >
+                                    <Link to='/more' ><Person2TwoTone />Personalize</Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={handleLogout} >
+                                    <Link to='/profile' ><Logout />Logout</Link>
+                                </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                         :

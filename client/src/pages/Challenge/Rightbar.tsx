@@ -54,7 +54,7 @@ const RightSidebar = () => {
     )
     Friend.Skeleton = function () {
         return (
-            <div className='w-full flex justify-start gap-x-2 p-[1rem] bg-light-gray text-cool-gray-dark rounded-[6px] animate-pulse mb-4 '>
+            <div className='w-full flex justify-start gap-x-2 p-4 bg-light-gray text-cool-gray-dark rounded-[6px] animate-pulse mb-4 '>
                 <div className="flex">
                     <div className="w-10 h-10 rounded-full bg-warm-gray-dark" />
                 </div>
@@ -74,7 +74,7 @@ const RightSidebar = () => {
                     <AvatarFallback className='text-8xl text-center' >{loggedUser?.firstName.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className='flex flex-col items-center gap-y-0.5 ' >
-                    <p className="capitalize text-xl font-semibold text-gray-800">{loggedUser?.firstName} {loggedUser?.lastName}</p>
+                    <Link to='/profile' className="capitalize font-semibold text-gray-800 text-lg ">{loggedUser?.firstName} {loggedUser?.lastName}</Link>
                     <p className="text-lg text-gray-600">{loggedUser?.email}</p>
                 </div>
             </div>

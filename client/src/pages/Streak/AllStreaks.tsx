@@ -15,7 +15,7 @@ const StreakStreaks = ({ filters }: { filters: any }) => {
   }, [filters])
 
   return (
-    <div className='w-full flex flex-col gap-[1rem] ' >
+    <div className='w-full flex flex-col gap-4 ' >
 
       {
         streaks.map((streak: Streak, index: number) => (

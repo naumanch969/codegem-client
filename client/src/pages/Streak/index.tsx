@@ -9,7 +9,8 @@ import { getStreaks } from "../../redux/actions/streak";
 import { RootState } from "../../redux/store";
 import { Pagination } from "@mui/material";
 import { Streak as TStreak } from "@/interfaces";
-
+import qs from "query-string";
+import { empty } from "@/assets";
 
 const Streaks = () => {
 
@@ -20,37 +21,41 @@ const Streaks = () => {
   const totalPages = Math.ceil(count / pageSize);
 
   /////////////////////////////////////// STATES //////////////////////////////////////////
-  const [page, setPage] = useState<number>(1)
   const [activeMenu, setActiveMenu] = useState<'all' | 'latest' | 'famous' | 'trending' | 'recommended'>('all')
-  const [language, setLanguage] = useState<string>('all')
+  const [languages, setLanguages] = useState<string[]>([])
+  const [searchedQuery, setSearchedQuery] = useState<string>('')
+  const [page, setPage] = useState<number>(1)
 
   /////////////////////////////////////// USE EFFECTS ///////////////////////////////////////
   useEffect(() => {
-    dispatch<any>(getStreaks(streaks.length == 0, `?page=${page}&pageSize=${pageSize}&count=${true}&language=${language}&filter=${activeMenu}`))
-  }, [activeMenu, language])
-  useEffect(() => {
     // TODO: if data of particular page is available then dont call api
-    fetchMore()
-  }, [page])
+    fetch({ loading: true, count: true })
+  }, [activeMenu, languages, searchedQuery, languages, page])
 
   /////////////////////////////////////// FUNCTIONS /////////////////////////////////////////
-  const fetchMore = async () => {
-    dispatch<any>(getStreaks(true, `?page=${page}&pageSize=${pageSize}`))
+  const fetch = ({ loading = false, count = false }: { loading?: boolean, count?: boolean }) => {
+    const languagesString = languages.join(',')
+    const query = qs.stringifyUrl(
+      { url: '', query: { page, pageSize, query: searchedQuery, languages: languagesString, count, filter: activeMenu } },
+      { skipEmptyString: true, skipNull: true }
+    );
+    dispatch<any>(getStreaks(loading, query))
   }
 
   return (
     <div className="flex w-full  ">
 
-      <div className={`lg:w-[75%] w-full h-full p-[1rem] flex justify-center `}>
-        <div className="lg:w-[48rem] w-full flex flex-col h-full">
+      <div className={`lg:w-[75%] w-full h-full p-4 flex justify-center `}>
+        <div className="lg:w-[48rem] pt-1 px-3 w-full flex flex-col h-full">
           <Topbar
             activeMenu={activeMenu}
             setActiveMenu={setActiveMenu}
-            language={language}
-            setLanguage={setLanguage}
-            basicQuery={`?page=${page}&pageSize=${pageSize}&count=${true}`}
+            languages={languages}
+            setLanguages={setLanguages}
+            searchedQuery={searchedQuery}
+            setSearchedQuery={setSearchedQuery}
           />
-          <div className="w-full flex flex-col justify-between items-start gap-[2rem] mt-[1rem] " >
+          <div className="w-full flex flex-col justify-between items-start gap-8 mt-[1rem] " >
             {
               isFetching
                 ?
@@ -58,20 +63,34 @@ const Streaks = () => {
                   <Streak.Skeleton key={index} />
                 ))
                 :
-                streaks?.map((streak, index) => (
-                  <Streak key={index} streak={streak} />
-                ))
+                streaks.length == 0
+                  ?
+                  <div className='w-full flex flex-col justify-center items-center grayscale '>
+                    <img src={empty} alt='Empty' className='w-96 h-96 grayscale ' />
+                    <span className='text-foreground text-center text-lg font-semibold ' >Nothing Found.</span>
+                    <span className='text-muted-foreground text-center text-md ' >It's our fault not yours.</span>
+                  </div>
+                  :
+                  streaks?.map((streak, index) => (
+                    <Streak key={index} streak={streak} />
+                  ))
             }
-            <div className="w-full flex justify-center">
-              <Pagination
-                count={totalPages}
-                defaultPage={1}
-                page={page}
-                siblingCount={0}
-                onChange={(e: any, page: number) => setPage(page)}
-                size='large'
-              />
-            </div>
+
+            {
+              totalPages > 1 &&
+              <div className="w-full flex justify-center">
+                <Pagination
+                  count={totalPages}
+                  defaultPage={1}
+                  page={page}
+                  siblingCount={0}
+                  onChange={(e: any, page: number) => setPage(page)}
+                  size='large'
+                />
+              </div>
+            }
+
+
           </div>
         </div>
       </div>

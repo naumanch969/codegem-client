@@ -127,7 +127,7 @@ const StreakComponent = ({ streak }: { streak: Streak }) => {
 
         {/* username */}
         <CardHeader className='flex flex-row justify-between items-center w-full p-4 pb-2 '>
-          <div className='flex gap-[1rem]'>
+          <div className='flex gap-4'>
             <Avatar>
               <AvatarImage src={streak?.user?.profilePicture} alt="Profile" />
               <AvatarFallback>{streak?.user?.firstName?.charAt(0) || 'X'}</AvatarFallback>
@@ -163,9 +163,10 @@ const StreakComponent = ({ streak }: { streak: Streak }) => {
             {/* <h3 className='font-semibold text-[20px] capitalize '>{streak?.title}</h3> */}
             <CardDescription className='text-[14px]'>{streak?.description}</CardDescription>
             <div className='flex gap-[6px]'>
+              {streak?.language && <span className='text-teal-blue italic hover:underline cursor-pointer lowercase '>#{streak?.language}</span>}
               {
-                streak?.tags?.map((tag, index) => (
-                  <span key={index} className='text-teal-blue italic hover:underline cursor-pointer lowercase '>#{tag.name}</span>
+                streak?.hashTags?.map((tag, index) => (
+                  <span key={index} className='text-muted-foreground italic hover:underline cursor-pointer lowercase '>#{tag}</span>
                 ))
               }
             </div>
@@ -304,7 +305,7 @@ export default StreakComponent;
 
 StreakComponent.Skeleton = function () {
   return (
-    <div className='w-full flex flex-col p-[1rem] bg-light-gray text-cool-gray-dark rounded-[6px] animate-pulse '>
+    <div className='w-full flex flex-col p-4 bg-light-gray text-cool-gray-dark rounded-[6px] animate-pulse '>
 
       <div className='flex justify-start items-center gap-x-2 w-full'>
         <div className='w-[3rem] h-[3rem] bg-warm-gray-dark rounded-full' />

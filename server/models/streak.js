@@ -22,6 +22,7 @@ const streakSchema = Schema(
       ],
     },
     hashTags: { type: [String], default: [] },
+    language: { type: String, default: "" },
     likes: { type: [{ type: Schema.Types.ObjectId, ref: "User" }] },
     comments: { type: [{ type: Schema.Types.ObjectId, ref: "Comment" }] },
     shares: { type: [{ type: Schema.Types.ObjectId, ref: "Share" }] }, // this post is being shared among which people/group

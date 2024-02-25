@@ -14,6 +14,7 @@ import {
   rejectFriendRequestReducer,
 } from "../reducers/friend";
 import { AsyncAction } from "../store";
+import { getUsersReducer } from "../reducers/user";
 
 export const getSuggestedUsers =
   (loading: boolean = false, query: string): AsyncAction =>
@@ -35,8 +36,10 @@ export const getFriends =
   async (dispatch) => {
     try {
       loading && dispatch(start());
-      const { data }: { data: { _id: string; friends: User[] } } = await api.getFriends(query);
-      dispatch(getFriendsReducer(data.friends));
+      const { data }: { data: { count: number; result: User[] } } =
+        await api.getFriends(query);
+      console.log("data 1", data);
+      dispatch(getFriendsReducer({ result: data.result, count: data.count }));
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
@@ -49,8 +52,10 @@ export const searchFriends =
   async (dispatch) => {
     try {
       loading && dispatch(start());
-      const { data }: { data: { _id: string; friends: User[] } } = await api.searchFriends(query);
-      dispatch(getFriendsReducer(data.friends));
+      const { data }: { data: { count: number; result: User[] } } =
+        await api.searchFriends(query);
+      console.log("data 2", data);
+      dispatch(getFriendsReducer({ result: data.result, count: data.count }));
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message
@@ -63,8 +68,9 @@ export const searchUsers =
   async (dispatch) => {
     try {
       loading && dispatch(start());
-      const { data }: { data: { _id: string; friends: User[] } } = await api.searchUsers(query);
-      dispatch(getFriendsReducer(data.friends));
+      const { data }: { data: { count: number; result: User[] } } =
+        await api.searchUsers(query);
+      dispatch(getUsersReducer({ result: data.result, count: data.count }));
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message

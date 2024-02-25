@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Button, IconButton, Tooltip } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import { FavoriteOutlined, BookmarkBorderOutlined, ShareOutlined, Add, Star, StarOutline } from '@mui/icons-material';
 import CodeComponent from '../Codes/Code';
 import RelatedCollectionSlider from './RelatedCollectionSlider'
@@ -15,6 +15,10 @@ import CodeCreateModal from '../Codes/Create'
 import StreakCreateModal from '../Streak/Create'
 import ChallengeCreateModal from '../Challenge/Create'
 import ShareCollection from './ShareCollection';
+import { Button } from '@/components/ui/button';
+import { Empty } from '@/utils/Components/Empty';
+import { capitalizeFirstLetter } from '@/lib/utils';
+import { Share } from 'lucide-react';
 
 
 const SingleCollectionView = () => {
@@ -26,7 +30,7 @@ const SingleCollectionView = () => {
     const collectionName = (
         currentCollection?.name ? currentCollection.name.charAt(0).toUpperCase() + currentCollection.name.slice(1).toLowerCase() : ''
     );
-
+    const starred = currentCollection?.stars?.some(id => id == loggedUser?._id as string)
     const segments = [
         { name: 'Home', link: '/home' },
         { name: 'Collections', link: '/collections' },
@@ -40,7 +44,6 @@ const SingleCollectionView = () => {
     ///////////////////////////////////////////////////// STATES //////////////////////////////////////////////////////
     const [activeMenuItem, setActiveMenuItem] = useState<'codes' | 'streaks' | 'challenges'>('codes')
     const [loading, setLoading] = useState<boolean>(false)
-    const [openCreateModal, setOpenCreateModal] = useState<boolean>(false)
     const [openShareCollection, setOpenShareCollection] = useState<boolean>(false)
 
     ///////////////////////////////////////////////////// useEffects //////////////////////////////////////////////////////
@@ -67,20 +70,20 @@ const SingleCollectionView = () => {
 
     ///////////////////////////////////////////////////// FUNCTIONS //////////////////////////////////////////////////////
     const handleCreateCode = (codeData: any) => {
-        dispatch<any>(createCollectionCode(collectionId!, codeData, setOpenCreateModal))
+        dispatch<any>(createCollectionCode(collectionId!, codeData))
     }
     const handleCreateStreak = (streakData: any) => {
-        dispatch<any>(createCollectionStreak(collectionId!, streakData, setOpenCreateModal))
+        dispatch<any>(createCollectionStreak(collectionId!, streakData))
     }
     const handleCreateChallenge = (challengeData: any) => {
-        dispatch<any>(createCollectionChallenge(collectionId!, challengeData, setOpenCreateModal))
+        dispatch<any>(createCollectionChallenge(collectionId!, challengeData))
     }
     const handleStar = () => {
         dispatch<any>(starCollection(currentCollection?._id!, loggedUser?._id!))
     }
 
     return (
-        <div className="container mx-auto p-[1rem] flex flex-col gap-3 ">
+        <div className="container mx-auto p-4 flex flex-col gap-3 ">
 
             <ShareCollection open={openShareCollection} setOpen={setOpenShareCollection} collection={currentCollection!} />
             {activeMenuItem == 'codes' && <CodeCreateModal handleSubmit={handleCreateCode} />}
@@ -92,9 +95,7 @@ const SingleCollectionView = () => {
             {
                 isFetching
                     ?
-                    <div className="flex justify-center items-center w-full h-full">
-                        <Loader />
-                    </div>
+                    <SingleCollectionView.Skeleton />
                     :
                     <>
                         <Path segments={segments} />
@@ -107,18 +108,18 @@ const SingleCollectionView = () => {
 
                                 <div className="flex justify-center space-x-4 ">
                                     <Tooltip placement='top' title='Star' >
-                                        <IconButton size="medium" onClick={handleStar} >
-                                            {currentCollection?.stars?.includes(loggedUser?._id as string) ? <Star fontSize="inherit" /> : <StarOutline fontSize="inherit" />}
-                                        </IconButton>
+                                        <Button onClick={handleStar} variant={starred ? 'default' : 'outline'} size='sm' className='p-1 w-7 h-7 ' >
+                                            {starred ? <Star fontSize="inherit" /> : <StarOutline fontSize="inherit" />}
+                                        </Button>
                                     </Tooltip>
                                     <Tooltip placement='top' title='Share' >
-                                        <IconButton size="medium" onClick={() => setOpenShareCollection(pre => !pre)} >
-                                            <ShareOutlined />
-                                        </IconButton>
+                                        <Button variant={'outline'} size='sm' className='p-1 w-7 h-7 ' >
+                                            <ShareOutlined className='' />
+                                        </Button>
                                     </Tooltip>
                                 </div>
                             </div>
-                            <p className="text-gray-600 mb-2">{currentCollection?.description}</p>
+                            <p className="text-gray-600 mb-2">{capitalizeFirstLetter(currentCollection?.description!)}</p>
                         </div>
 
 
@@ -142,81 +143,77 @@ const SingleCollectionView = () => {
                                     </div>
                                 </div>
                                 <button
-                                    onClick={() => setOpenCreateModal(true)}
                                     className="absolute top-0 right-4 flex justify-center items-center gap-1 bg-teal-blue hover:bg-teal-blue-lighten text-white py-2 px-2 rounded-lg shadow-md capitalize "
                                 >
                                     <Add /> Add {activeMenuItem.slice(0, -1)}
                                 </button>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 min-h-[16rem] ">
-                                {
-                                    loading ?
-                                        <div className="w-full h-full col-span-2 flex justify-center items-center ">
-                                            <Loader />
-                                        </div>
-                                        :
-                                        <>
-                                            {
-                                                activeMenuItem == 'codes'
-                                                &&
-                                                <>
-                                                    {
-                                                        currentCollection?.codes?.length == 0
-                                                            ?
-                                                            <div className="w-full h-full flex justify-center items-center col-span-2 ">
-                                                                <span>No Codes to Show.</span>
-                                                            </div>
-                                                            :
-                                                            <>
-                                                                {currentCollection?.codes?.map((code, index) => (
-                                                                    <CodeComponent code={code} key={index} />
-                                                                ))}
-                                                            </>
-                                                    }
-                                                </>
-                                            }
-                                            {
-                                                activeMenuItem == 'streaks'
-                                                &&
-                                                <>
-                                                    {
-                                                        currentCollection?.streaks?.length == 0
-                                                            ?
-                                                            <div className="w-full h-full flex justify-center items-center col-span-2 ">
-                                                                <span>No Streaks to Show.</span>
-                                                            </div>
-                                                            :
-                                                            <>
-                                                                {currentCollection?.streaks?.map((streak, index) => (
-                                                                    <StreakComponent streak={streak} key={index} />
-                                                                ))}
-                                                            </>
-                                                    }
-                                                </>
-                                            }
-                                            {
-                                                activeMenuItem == 'challenges'
-                                                &&
-                                                <>
-                                                    {
-                                                        currentCollection?.challenges?.length == 0
-                                                            ?
-                                                            <div className="w-full h-full flex justify-center items-center col-span-2 ">
-                                                                <span>No Challenges to Show.</span>
-                                                            </div>
-                                                            :
-                                                            <>
-                                                                {currentCollection?.challenges?.map((challenge, index) => (
-                                                                    <ChallengeComponent challenge={challenge} key={index} />
-                                                                ))}
-                                                            </>
-                                                    }
-                                                </>
-                                            }
-                                        </>
-                                }
+                            <div className="flex justify-center items-center">
+                                <div className="lg:w-[48rem] pt-1 px-3 w-full flex flex-col gap-6 min-h-[16rem] ">
+                                    {
+                                        loading ?
+                                            Array(5).fill('').map((_, index) => (
+                                                <CodeComponent.Skeleton key={index} />
+                                            ))
+                                            :
+                                            <>
+                                                {
+                                                    activeMenuItem == 'codes'
+                                                    &&
+                                                    <>
+                                                        {
+                                                            currentCollection?.codes?.length == 0
+                                                                ?
+                                                                <Empty />
+                                                                :
+                                                                <>
+                                                                    {currentCollection?.codes?.map((code, index) => (
+                                                                        <CodeComponent code={code} key={index} />
+                                                                    ))}
+                                                                </>
+                                                        }
+                                                    </>
+                                                }
+                                                {
+                                                    activeMenuItem == 'streaks'
+                                                    &&
+                                                    <>
+                                                        {
+                                                            currentCollection?.streaks?.length == 0
+                                                                ?
+                                                                <Empty />
+                                                                :
+                                                                <>
+                                                                    {currentCollection?.streaks?.map((streak, index) => (
+                                                                        <StreakComponent streak={streak} key={index} />
+                                                                    ))}
+                                                                </>
+                                                        }
+                                                    </>
+                                                }
+                                                {
+                                                    activeMenuItem == 'challenges'
+                                                    &&
+                                                    <>
+                                                        {
+                                                            currentCollection?.challenges?.length == 0
+                                                                ?
+                                                                <Empty />
+                                                                :
+                                                                <>
+                                                                    {currentCollection?.challenges?.map((challenge, index) => (
+                                                                        <ChallengeComponent challenge={challenge} key={index} />
+                                                                    ))}
+                                                                </>
+                                                        }
+                                                    </>
+                                                }
+                                            </>
+                                    }
+                                </div>
                             </div>
+
                         </div>
                     </>
             }
@@ -225,3 +222,34 @@ const SingleCollectionView = () => {
 };
 
 export default SingleCollectionView;
+
+
+SingleCollectionView.Skeleton = function () {
+    return (
+        <div className='w-full flex flex-col gap-4 p-4 bg-white text-cool-gray-dark rounded-[6px] animate-pulse '>
+
+            <div className='w-full h-fit flex flex-col gap-4 p-4 bg-light-gray text-cool-gray-dark rounded-[6px]'>
+                <span className='w-1/3 h-4 rounded bg-warm-gray-dark' />
+                <span className='w-1/2 h-4 rounded bg-warm-gray-dark' />
+                <span className='w-2/3 h-4 rounded bg-warm-gray-dark' />
+                <span className='w-1/4 h-4 rounded bg-warm-gray-dark' />
+                <span className='w-2/3 h-4 rounded bg-warm-gray-dark' />
+            </div>
+
+            <div className='w-full h-fit flex justify-center items-center gap-4 p-4 bg-light-gray text-cool-gray-dark rounded-[6px]'>
+                <span className='w-20 h-8 rounded-md bg-warm-gray-dark' />
+                <span className='w-20 h-8 rounded-md bg-warm-gray-dark' />
+                <span className='w-20 h-8 rounded-md bg-warm-gray-dark' />
+            </div>
+
+            <div className="w-full flex justify-center">
+                <div className="lg:w-[48rem] pt-1 px-3 w-full flex flex-col items-center gap-2 h-full">
+                    {Array(5).fill('').map((_, index) => (
+                        <CodeComponent.Skeleton />
+                    ))}
+                </div>
+            </div>
+
+        </div>
+    )
+}

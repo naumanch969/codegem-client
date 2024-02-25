@@ -24,7 +24,7 @@ const ProfilePage = () => {
             </div>
             <div className="flex justify-between items-center gap-4 my-[1rem] px-[2rem]">
                 {/* Profile image and username */}
-                <div className="flex items-end gap-[1rem] relative">
+                <div className="flex items-end gap-4 relative">
                     <div className="relative w-[10rem]">
                         <div className="w-[10rem] h-[10rem] absolute bottom-[-1rem] rounded-full border-[1px] border-gray-500">
                             <img
@@ -40,7 +40,7 @@ const ProfilePage = () => {
                     </div>
                 </div>
                 {/* Edit profile button */}
-                <div className="flex items-end gap-[1rem]">
+                <div className="flex items-end gap-4">
                     <Button onClick={() => navigate('/profile/edit')} variant='outline' className='flex items-center gap-2' >
                         <Pencil className='w-4 h-4' /> Edit Profile
                     </Button>

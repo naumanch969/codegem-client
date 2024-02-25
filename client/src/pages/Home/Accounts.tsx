@@ -28,13 +28,13 @@ const Accounts = () => {
 
             {
                 Boolean(loggedInAccounts.length) &&
-                <div className='flex flex-col gap-[1rem] '  >
+                <div className='flex flex-col gap-4 '  >
                     <h4 className='font-semibold text-[18px] ' >Accounts</h4>
                     <div className='w-full flex flex-col gap-[12px]  ' >
                         {
                             loggedInAccounts.map((account, index) => (
                                 <div key={index} onContextMenu={() => { }} className="relative flex justify-between items-center hover:bg-gray-100 cursor-pointer px-[8px] py-[4px] rounded-[8px]  " >
-                                    <div className="flex justify-start items-center gap-[1rem] " >
+                                    <div className="flex justify-start items-center gap-4 " >
                                         <Avatar />
                                         <div className="flex flex-col justify-start " >
                                             <p className="text-[14px] font-medium " >{account.email}</p>
@@ -51,13 +51,13 @@ const Accounts = () => {
                 </div>
             }
 
-            <div className='flex flex-col gap-[1rem] '  >
+            <div className='flex flex-col gap-4 '  >
                 <h4 className='font-semibold text-[18px] ' >People you may know:</h4>
                 <div className='w-full flex flex-col gap-[12px]  ' >
                     {
                         suggestedUsers.map((account, index) => (
                             <div key={index} className="flex justify-between items-center hover:bg-gray-100 cursor-pointer px-[8px] py-[4px] rounded-[8px]  " >
-                                <div className="flex justify-start items-center gap-[1rem] " >
+                                <div className="flex justify-start items-center gap-4 " >
                                     <Avatar />
                                     <div className="flex flex-col justify-start " >
                                         <p className="text-[14px] font-medium " >{account.email}</p>

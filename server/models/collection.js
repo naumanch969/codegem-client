@@ -4,6 +4,10 @@ const collectionSchema = new Schema(
   {
     name: { type: String, required: true },
     description: { type: String, required: false },
+    language: { type: String, required: false },
+    categories: {
+      type: [{ type: String, default: [] }],
+    },
     codes: {
       type: [{ type: Schema.Types.ObjectId, ref: "Code" }],
     },

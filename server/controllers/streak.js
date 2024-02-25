@@ -11,9 +11,19 @@ import {
 } from "../utils/functions.js";
 export const getStreaks = async (req, res, next) => {
   try {
-    const { page, pageSize, count, filter } = req.query;
+    const {
+      page,
+      pageSize,
+      count,
+      userId,
+      filter,
+      query: searchQuery,
+      languages: languagesString,
+    } = req.query;
 
-    let aggregationPipeline = [];
+    let aggregationPipeline = userId
+      ? [{ $match: { user: { $regex: new RegExp(userId, "i") } } }]
+      : [];
 
     if (filter === "famous") {
       aggregationPipeline.push({ $sort: { likes: -1 } });
@@ -40,6 +50,40 @@ export const getStreaks = async (req, res, next) => {
       aggregationPipeline.push({ $sort: { createdAt: -1 } });
     }
 
+    // SearchQuery Filter
+    if (searchQuery) {
+      const regex = new RegExp(searchQuery, "i");
+      aggregationPipeline.push({
+        $match: {
+          $or: [
+            { title: { $regex: regex } },
+            { description: { $regex: regex } },
+            { "streak.code": { $regex: regex } },
+            { "streak.description": { $regex: regex } },
+            { language: { $regex: regex } },
+            { hashTags: { $in: [regex] } },
+          ],
+        },
+      });
+    }
+
+    // Language Filter
+    const languages = languagesString
+      ?.split(",")
+      ?.map((l) => new RegExp(l, "i"));
+    if (languagesString) {
+      aggregationPipeline.push({
+        $match: {
+          $or: [
+            ...languages.map((l) => ({
+              language: { $regex: new RegExp(l, "i") },
+            })),
+          ],
+        },
+      });
+    }
+
+    // Pagination
     const pageNumber = parseInt(page, 10) || 1;
     const size = parseInt(pageSize, 10) || 10;
     const skip = (pageNumber - 1) * size;
@@ -112,52 +156,7 @@ export const getUserStreaks = async (req, res, next) => {
   } catch (error) {
     next(createError(res, 500, error.message));
   }
-};
-export const searchStreaks = async (req, res, next) => {
-  try {
-    const { page, pageSize, count, userId, query: searchQuery } = req.query;
-
-    let query = userId ? Code.find({ user: userId }) : Code.find();
-
-    if (searchQuery) {
-      const regex = new RegExp(searchQuery, "i"); // 'i' for case-insensitive search
-      query = query.or([
-        { title: { $regex: regex } },
-        { description: { $regex: regex } },
-        { "streak.description": { $regex: regex } },
-        { "streak.code": { $regex: regex } },
-        { tags: { $in: [regex] } },
-      ]);
-    }
-
-    const pageNumber = parseInt(page, 10) || 1;
-    const size = parseInt(pageSize, 10) || 10;
-    const skip = (pageNumber - 1) * size;
-
-    query = query.skip(skip).limit(size);
-
-    const resultPromise = query
-      .sort({ createdAt: -1 })
-      .populate("user")
-      .populate("shares")
-      .exec();
-
-    const [result, totalCount] = await Promise.all([
-      resultPromise,
-      count ? Streak.countDocuments(query) : Promise.resolve(null),
-    ]);
-
-    let response = { result };
-    if (totalCount !== null) {
-      response.count = totalCount;
-    }
-
-    res.status(200).json(response);
-  } catch (error) {
-    next(createError(res, 500, error.message));
-  }
-};
-export const getLikedStreaks = async (req, res, next) => {
+}; export const getLikedStreaks = async (req, res, next) => {
   try {
     const result = await Streak.find({ likes: { $in: [req.user._id] } })
       .populate("user")

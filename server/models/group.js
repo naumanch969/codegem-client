@@ -11,6 +11,7 @@ const groupSchema = Schema(
       default: [],
     },
     categories: { type: [String], default: [] },
+    languages: { type: [String], default: [] },
     admin: { type: Schema.Types.ObjectId, ref: "User", required: true },
     codes: { type: [Schema.Types.ObjectId], ref: "Code", default: [] },
     challenges: { type: [Schema.Types.ObjectId], ref: "Challenge", default: [] },

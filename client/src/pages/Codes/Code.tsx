@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { MoreVert, ThumbUpOutlined, Share, Comment, Save, CopyAll, Report, Delete, Update, ThumbUp, BookmarkBorderOutlined, Bookmark, CopyAllOutlined } from '@mui/icons-material';
+import { MoreVert, ThumbUpOutlined, Share, Comment, Save, CopyAll, Delete, Update, ThumbUp, BookmarkBorderOutlined, Bookmark, CopyAllOutlined } from '@mui/icons-material';
 import { IconButton, Tooltip } from '@mui/material';
-import { image1 } from '../../assets';
-import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { commentCode, likeCode, saveCode } from '../../redux/actions/code';
 import { format } from 'timeago.js'
@@ -126,7 +124,7 @@ const CodeComponent = ({ code }: { code: Code }) => {
 
         {/* username */}
         <CardHeader className='flex flex-row justify-between items-center w-full p-4 pb-2 '>
-          <div className='flex gap-[1rem]'>
+          <div className='flex gap-4'>
             <Avatar>
               <AvatarImage src={code?.user?.profilePicture} alt="Profile" />
               <AvatarFallback className='capitalize' >{code?.user?.firstName?.charAt(0)}</AvatarFallback>
@@ -162,9 +160,10 @@ const CodeComponent = ({ code }: { code: Code }) => {
             {/* <h3 className='font-semibold text-[20px] capitalize '>{code?.title}</h3> */}
             <CardDescription className='text-[14px]'>{code?.description}</CardDescription>
             <div className='flex gap-[6px]'>
+              {code?.language && <span className='text-teal-blue italic hover:underline cursor-pointer lowercase '>#{code?.language}</span>}
               {
-                code?.tags?.map((tag, index) => (
-                  <span key={index} className='text-teal-blue italic hover:underline cursor-pointer lowercase '>#{tag.name}</span>
+                code?.hashTags?.map((tag, index) => (
+                  <span key={index} className='text-muted-foreground italic hover:underline cursor-pointer lowercase '>#{tag}</span>
                 ))
               }
             </div>
@@ -296,7 +295,7 @@ export default CodeComponent;
 
 CodeComponent.Skeleton = function () {
   return (
-    <div className='w-full flex flex-col p-[1rem] bg-light-gray text-cool-gray-dark rounded-[6px] animate-pulse '>
+    <div className='w-full flex flex-col p-4 bg-light-gray text-cool-gray-dark rounded-[6px] animate-pulse '>
 
       <div className='flex justify-start items-center gap-x-2 w-full'>
         <div className='w-[3rem] h-[3rem] bg-warm-gray-dark rounded-full' />

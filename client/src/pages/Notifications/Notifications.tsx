@@ -5,11 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { Notification as TNotification, User } from '../../interfaces';
 import { deleteNotifications, getNotifications, markAllAsRead } from '../../redux/actions/notification';
+import { empty } from '@/assets';
 
 const Notification = () => {
 
     const dispatch = useDispatch()
-    const { notifications }: { notifications: TNotification[] } = useSelector((state: RootState) => state.notification)
+    const { notifications, isFetching }: { notifications: TNotification[], isFetching: boolean } = useSelector((state: RootState) => state.notification)
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
 
 
@@ -43,9 +44,25 @@ const Notification = () => {
                 </button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {notifications.map((notification, index) => (
-                    <NotificationCard notification={notification} key={index} />
-                ))}
+                {
+                    isFetching
+                        ?
+                        Array(5).fill('').map((_, index) => (
+                            <NotificationCard.Skeleton key={index} />
+                        ))
+                        :
+                        notifications.length == 0
+                            ?
+                            <div className='col-span-3 flex flex-col justify-center items-center grayscale '>
+                                <img src={empty} alt='Empty' className='w-96 h-96 grayscale ' />
+                                <span className='text-foreground text-center text-lg font-semibold ' >Nothing Found.</span>
+                                <span className='text-muted-foreground text-center text-md ' >It's our fault not yours.</span>
+                            </div>
+                            :
+                            notifications.map((notification, index) => (
+                                <NotificationCard notification={notification} key={index} />
+                            ))
+                }
             </div>
         </div>
     );

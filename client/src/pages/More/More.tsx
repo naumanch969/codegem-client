@@ -156,7 +156,7 @@ const MorePage = () => {
     return (
         <div className="p-6 w-full">
             <h1 className="text-3xl font-bold mb-4 text-dark-slate-blue">More</h1>
-            <div className="w-full flex flex-col gap-[1rem]">
+            <div className="w-full flex flex-col gap-4">
                 {sections.map((section, index) => (
                     <Section
                         key={index}

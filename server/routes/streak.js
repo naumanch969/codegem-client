@@ -3,7 +3,6 @@ const router = express.Router();
 import {
   getStreaks,
   getUserStreaks,
-  searchStreaks,
   getSavedStreaks,
   createStreak,
   shareStreak,
@@ -20,7 +19,6 @@ import {
 import { verifyToken } from "../middleware/auth.js";
 
 router.get("/get/all", verifyToken, getStreaks);
-router.get("/get/search", verifyToken, searchStreaks);
 router.get("/get/user/:userId", verifyToken, getUserStreaks);
 router.get("/get/saved", verifyToken, getSavedStreaks); // get logged user' saved streaks
 router.get("/get/liked", verifyToken, getLikedStreaks); // get logged user' liked streaks
@@ -30,7 +28,11 @@ router.post("/create", verifyToken, createStreak);
 router.put("/update/:streakId", verifyToken, updateStreak);
 router.put("/like/:streakId", verifyToken, likeStreak);
 router.put("/save/:streakId", verifyToken, saveStreak);
-router.put("/save-in-collections/:streakId", verifyToken, saveStreakInCollections);
+router.put(
+  "/save-in-collections/:streakId",
+  verifyToken,
+  saveStreakInCollections
+);
 router.put("/share/:streakId", verifyToken, shareStreak);
 router.put("/share-in-groups/:streakId", verifyToken, shareStreakInGroups);
 router.put("/comment/:streakId", verifyToken, commentStreak);

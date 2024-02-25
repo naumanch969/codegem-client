@@ -114,7 +114,7 @@ const ShareCollection = ({ open, setOpen, collection }: { open: boolean, setOpen
     return (
         <>
             <Modal open={open} onClose={() => setOpen(false)} className='flex justify-center items-center ' >
-                <div className='bg-white md:w-[30rem] sm:w-[60vw] flex flex-col justify-between w-full min-h-[20rem] h-fit max-h-[90vh] overflow-y-scroll rounded-[8px] p-[1rem] ' >
+                <div className='bg-white md:w-[30rem] sm:w-[60vw] flex flex-col justify-between w-full min-h-[20rem] h-fit max-h-[90vh] overflow-y-scroll rounded-[8px] p-4 ' >
 
                     <div className="flex flex-col">
                         <div className='w-full relative flex justify-between items-center pb-[12px] ' >

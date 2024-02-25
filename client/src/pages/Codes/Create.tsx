@@ -30,6 +30,8 @@ import { Badge } from '@/components/ui/badge';
 import { Modal } from '@/components/ui/modal';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import toast from 'react-hot-toast';
+import { Combobox } from '@/components/ui/combobox';
+import { programmingLanguages } from '@/constant';
 
 
 const CreateCode = ({ groupId, handleSubmit }: { groupId?: string, handleSubmit?: (data: any) => void }) => {    // handleSubmit is passed through collection create code
@@ -40,17 +42,19 @@ const CreateCode = ({ groupId, handleSubmit }: { groupId?: string, handleSubmit?
     const { isFetching } = useSelector((state: RootState) => state.code)
 
     const formSchema = z.object({
-        title: z.string().min(2, { message: 'Title must contain atleast 2 characters.' }).max(250, { message: 'Title can\' be longer than 250 characters.' }),
-        description: z.string().min(2, { message: 'Description must contain atleast 2 characters.' }),
-        code: z.string().min(2, { message: 'Code must contain atleast 2 characters.' }),
+        title: z.string().min(1, { message: 'Title is required.' }).max(250, { message: 'Title can\' be longer than 250 characters.' }),
+        description: z.string().min(1, { message: 'Description is required.' }),
+        code: z.string().min(1, { message: 'Code is required.' }),
+        language: z.string().min(1, { message: 'Language is required.' }),
         hashTags: z.array(z.string({ required_error: "Hashtags are required." })),
-        visibility: z.string().min(2).max(50),
+        visibility: z.string().min(1).max(50),
     })
 
     const initialData: z.infer<typeof formSchema> = {
         title: "",
         description: "",
         code: "",
+        language: "",
         hashTags: [],
         visibility: "public",
     }
@@ -98,11 +102,10 @@ const CreateCode = ({ groupId, handleSubmit }: { groupId?: string, handleSubmit?
                 field.onChange([e.currentTarget.value]);
         }
     };
-    const handleFilterHashTag = (text: string, field: { value: string[], onChange: (value: string[]) => void }) => {
+    const onFilterHashTag = (text: string, field: { value: string[], onChange: (value: string[]) => void }) => {
         const updatedMain = field.value.filter(item => item !== text);
         field.onChange(updatedMain);
     };
-
 
     return (
         <Modal
@@ -170,6 +173,28 @@ const CreateCode = ({ groupId, handleSubmit }: { groupId?: string, handleSubmit?
                             )}
                         />
                         <FormField
+                            control={form.control}
+                            name="language"
+                            render={({ field }: { field: any }) => (
+                                <FormItem>
+                                    <FormLabel>Language</FormLabel>
+                                    <FormControl>
+                                        <Combobox
+                                            items={programmingLanguages}
+                                            onSelect={(value: string) => { field.onChange(value); console.log('value', value) }}
+                                            onFilter={(value: string) => { }}
+                                            selected={field.value}
+                                            className='w-full bg-secondary text-light text-muted-foreground '
+                                            emptyString='No language found.'
+                                            isMultiple={false}
+                                            placeholder='Language'
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
                             name="hashTags"
                             control={form.control}
                             render={({ field }) => (
@@ -190,7 +215,7 @@ const CreateCode = ({ groupId, handleSubmit }: { groupId?: string, handleSubmit?
                                                 {field.value?.map((text: string, index: number) => (
                                                     <Badge key={index}>
                                                         {text}{' '}
-                                                        <X onClick={() => handleFilterHashTag(text, field)} className="w-4 h-4 rounded-full" />
+                                                        <X onClick={() => onFilterHashTag(text, field)} className="w-4 h-4 rounded-full" />
                                                     </Badge>
                                                 ))}
                                             </div>

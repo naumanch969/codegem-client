@@ -5,6 +5,7 @@ import { Group, User } from '../../interfaces';
 import { useDispatch, useSelector } from 'react-redux';
 import { joinGroup, leaveGroup } from '../../redux/actions/group';
 import { RootState } from '../../redux/store';
+import { Card, CardContent, CardDescription, CardFooter, CardTitle } from '@/components/ui/card';
 
 const GroupCard = ({ group }: { group: Group }) => {
 
@@ -27,42 +28,55 @@ const GroupCard = ({ group }: { group: Group }) => {
 
 
     return (
-        <div className={`flex flex-col justify-between p-4 border rounded shadow-lg ${isJoined ? 'bg-white' : 'bg-light-gray'
-            } hover:scale-105 transition-all duration-300`}>
-            <Link to={`/groups/${group._id}`} className="block">
-                <div className="flex justify-between items-center mb-3">
-                    <p className={`text-lg font-semibold capitalize flex items-center w-full ${isJoined ? 'text-gray-800' : 'text-teal-blue'} `}>
-                        <GroupIcon className="mr-2" style={{ fontSize: '2rem' }} />
-                        {group.name}
-                    </p>
-                    <p className={`text-sm ${isJoined ? 'text-gray-600' : 'text-teal-blue'
-                        }`}>
-                        {group.members.length} Members
-                    </p>
+        <Card className={`bg-light-gray-light rounded transition-transform transform hover:scale-105 ${isJoined ? 'bg-white' : 'bg-light-gray'}`}>
+
+            <CardContent className='p-4 pb-0 ' >
+                <Link to={`/groups/${group._id}`} className="block">
+                    <div className="flex justify-between items-center mb-3">
+                        <CardTitle className={`text-lg font-semibold capitalize flex items-center w-full ${isJoined ? 'text-gray-800' : 'text-teal-blue'} `}>
+                            <GroupIcon className="mr-2" style={{ fontSize: '2rem' }} />
+                            {group.name}
+                        </CardTitle>
+                        <div className={`text-sm w-28 text-end ${isJoined ? 'text-muted-foreground' : 'text-teal-blue'
+                            }`}>
+                            {group.members.length} Members
+                        </div>
+                    </div>
+                    <CardDescription className={`text-foreground mb-3`}>
+                        {group.description.charAt(0).toUpperCase() + group.description.slice(1)}
+                    </CardDescription>
+                </Link>
+
+            </CardContent>
+            <CardFooter className="flex justify-between items-center p-4 pt-0 ">
+                <div className="flex justify-start flex-wrap gap-1">
+                    {
+                        (group.languages.length > 3 ? group.languages.slice(0, 3) : group.languages).map((l, index) => (
+                            <span className='text-muted-foreground italic' key={index} >#{l} </span>
+                        ))
+                    }
+                    {
+                        (group.categories.length > 2 ? group.categories.slice(0, 2) : group.categories).map((l, index) => (
+                            <span className='text-muted-foreground italic' key={index} >#{l} </span>
+                        ))
+                    }
                 </div>
-                <p className={`text-gray-500 ${isJoined ? 'text-gray-600' : 'text-teal-blue'
-                    } mb-3`}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac dolor vitae risus cursus vestibulum.
-                </p>
-            </Link>
-            <div className="flex justify-between items-center">
-                {
-                    (group.admin as User)?._id?.toString() != loggedUser?._id?.toString() &&
-                    <>
-                        {isJoined ? (
-                            <button onClick={handleLeaveGroup} className="text-red-500 hover:text-red-700">
-                                Leave Group <ExitToApp className="ml-1" />
-                            </button>
-                        ) : (
-                            <button onClick={handleJoinGroup} className={`text-teal-blue hover:text-teal-blue-dark ${isJoined ? 'text-gray-600 cursor-default' : ''}`}>
-                                {isJoined ? 'Joined' : 'Join Group'}{' '}
-                                {isJoined ? <CheckCircle className="ml-1" /> : null}
-                            </button>
-                        )}
-                    </>
-                }
-            </div>
-        </div>
+                <div className="">
+                    {
+                        (group.admin as User)?._id?.toString() != loggedUser?._id?.toString() &&
+                        <>
+                            {!isJoined &&
+                                <button onClick={handleJoinGroup} className={`text-teal-blue hover:text-teal-blue-dark ${isJoined ? 'text-muted-foreground cursor-default' : ''}`}>
+                                    {isJoined ? 'Joined' : 'Join Group'}{' '}
+                                    {isJoined ? <CheckCircle className="ml-1" /> : null}
+                                </button>
+                            }
+                        </>
+                    }
+                </div>
+            </CardFooter>
+
+        </Card>
     );
 };
 

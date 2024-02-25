@@ -38,10 +38,10 @@ const Home = () => {
   return (
     <div className="flex w-full  ">
 
-      <div className={`lg:w-[75%] w-full h-full p-[1rem] flex justify-center `}>
-        <div className="lg:w-[48rem] w-full flex flex-col h-full">
+      <div className={`lg:w-[75%] w-full h-full p-4 flex justify-center `}>
+        <div className="lg:w-[48rem] pt-1 px-3 w-full flex flex-col h-full">
           <Topbar filters={filters} setFilters={setFilters} />
-          <div className="w-full flex flex-col justify-between items-start gap-[2rem] mt-[1rem] " >
+          <div className="w-full flex flex-col justify-between items-start gap-8 mt-[1rem] " >
             {
               isFetching
                 ?
@@ -53,16 +53,21 @@ const Home = () => {
                   <CodeComponent key={index} code={code} />
                 ))
             }
-            <div className="w-full flex justify-center">
-              <Pagination
-                count={totalPages}
-                defaultPage={1}
-                page={page}
-                siblingCount={0}
-                onChange={(e: any, page: number) => setPage(page)}
-                size='large'
-              />
-            </div>
+
+            {
+              totalPages > 1 &&
+              <div className="w-full flex justify-center">
+                <Pagination
+                  count={totalPages}
+                  defaultPage={1}
+                  page={page}
+                  siblingCount={0}
+                  onChange={(e: any, page: number) => setPage(page)}
+                  size='large'
+                />
+              </div>
+            }
+
           </div>
         </div>
       </div>

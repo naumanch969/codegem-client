@@ -12,6 +12,7 @@ interface InitialState {
   loggedUser: User | null;
   currentUser: User | null;
   accounts: User | [];
+  count: number;
 }
 
 const stringifiedToken = Cookie.get("code.connect");
@@ -28,6 +29,7 @@ const initialState: InitialState = {
   loggedUserToken: stringifiedToken ? JSON.parse(stringifiedToken) : null,
   loggedUser: stringifiedUser ? JSON.parse(stringifiedUser) : null,
   accounts: stringifiedAccounts ? JSON.parse(stringifiedAccounts) : [],
+  count: 20,
 };
 
 const userSlice = createSlice({
@@ -48,8 +50,12 @@ const userSlice = createSlice({
     setLoggedUserToken: (state, action: PayloadAction<any>) => {
       state.loggedUserToken = action.payload;
     },
-    getAllUsersReducer: (state, action: PayloadAction<User[]>) => {
-      state.users = action.payload;
+    getUsersReducer: (
+      state,
+      action: PayloadAction<{ count: number; result: User[] }>
+    ) => {
+      state.users = action.payload.result;
+      state.count = action.payload.count;
     },
     getUserReducer: (state, action: PayloadAction<User>) => {
       state.currentUser = action.payload;
@@ -63,7 +69,7 @@ const userSlice = createSlice({
         type: "interests" | "hobbies" | "books" | "programming";
         values: string[];
       }>
-    ) => { 
+    ) => {
       state.loggedUser = {
         ...state.loggedUser!,
         [action.payload.type]: action.payload.values,
@@ -95,7 +101,7 @@ export const {
   start,
   end,
   error,
-  getAllUsersReducer,
+  getUsersReducer,
   getUserReducer,
   getProfileReducer,
   editPersonalDetailsReducer,

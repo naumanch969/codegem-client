@@ -5,18 +5,28 @@ import { Types } from "mongoose";
 export const getFriends = async (req, res, next) => {
   try {
     const userId = req.user._id;
-    const { page, pageSize } = req.query;
+    const { page, pageSize, count } = req.query;
 
-    let query = User.findById(userId, { friends: 1 });
+    let query = User.findById(userId, { friends: 1 }) 
 
     const pageNumber = parseInt(page, 10) || 1;
     const size = parseInt(pageSize, 10) || 10;
     const skip = (pageNumber - 1) * size;
 
     query = query.skip(skip).limit(size);
+    const resultPromise = query.populate("friends").exec();
 
-    const result = await query.populate("friends").exec();
-    res.status(200).json(result);
+    const [result, totalCount] = await Promise.all([
+      resultPromise,
+      count ? User.countDocuments(query) : Promise.resolve(null),
+    ]);
+
+    let response = { result: result.friends };
+    if (totalCount !== null) {
+      response.count = totalCount;
+    }
+
+    res.status(200).json(response);
   } catch (error) {
     next(createError(res, 500, error.message));
   }
@@ -26,7 +36,7 @@ export const searchFriends = async (req, res, next) => {
     const userId = req.user._id;
     const { page, pageSize, count, query: searchQuery } = req.query; // count is boolean
 
-    let query = User.findById(userId, { friends: 1 });
+    let query = User.findById(userId, { friends: 1 }) 
     if (searchQuery) {
       const regex = new RegExp(searchQuery, "i"); // 'i' for case-insensitive search
       query = query.or([
@@ -37,6 +47,45 @@ export const searchFriends = async (req, res, next) => {
       ]);
     }
 
+    const pageNumber = parseInt(page, 10) || 1;
+    const size = parseInt(pageSize, 10) || 10;
+    const skip = (pageNumber - 1) * size;
+
+    query = query.skip(skip).limit(size);
+
+    const resultPromise = query.populate("friends").exec();
+
+    const [result, totalCount] = await Promise.all([
+      resultPromise,
+      count ? User.countDocuments(query) : Promise.resolve(null),
+    ]);
+
+    let response = { result: result.friends };
+    if (totalCount !== null) {
+      response.count = totalCount;
+    }
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.log("error", error);
+    next(createError(res, 500, error.message));
+  }
+};
+export const searchUsers = async (req, res, next) => {
+  try {
+    const { page, pageSize, count, query: searchQuery } = req.query;
+
+    let query = User.find(); // Start with finding all users
+
+    if (searchQuery) {
+      const regex = new RegExp(searchQuery, "i"); // 'i' for case-insensitive search
+      query = query.or([
+        { firstName: { $regex: regex } },
+        { lastName: { $regex: regex } },
+        { username: { $regex: regex } },
+        { email: { $regex: regex } },
+      ]);
+    }
 
     const pageNumber = parseInt(page, 10) || 1;
     const size = parseInt(pageSize, 10) || 10;
@@ -56,49 +105,9 @@ export const searchFriends = async (req, res, next) => {
       response.count = totalCount;
     }
 
-    res.status(200).json(result);
+    res.status(200).json(response);
   } catch (error) {
-    console.log("error", error);
     next(createError(res, 500, error.message));
-  }
-};
-export const searchUsers = async (req, res, next) => {
-  try {
-      const { page, pageSize, count, query: searchQuery } = req.query;
-
-      let query = User.find(); // Start with finding all users
-
-      if (searchQuery) {
-          const regex = new RegExp(searchQuery, "i"); // 'i' for case-insensitive search
-          query = query.or([
-              { firstName: { $regex: regex } },
-              { lastName: { $regex: regex } },
-              { username: { $regex: regex } },
-              { email: { $regex: regex } },
-          ]);
-      }
-
-      const pageNumber = parseInt(page, 10) || 1;
-      const size = parseInt(pageSize, 10) || 10;
-      const skip = (pageNumber - 1) * size;
-
-      query = query.skip(skip).limit(size);
-
-      const resultPromise = query.populate("friends").exec();
-
-      const [result, totalCount] = await Promise.all([
-          resultPromise,
-          count ? User.countDocuments(query) : Promise.resolve(null),
-      ]);
-
-      let response = { result };
-      if (totalCount !== null) {
-          response.count = totalCount;
-      }
-
-      res.status(200).json(response);
-  } catch (error) {
-      next(createError(res, 500, error.message));
   }
 };
 
