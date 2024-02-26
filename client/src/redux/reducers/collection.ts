@@ -286,7 +286,6 @@ const collectionSlice = createSlice({
                 }
               : c)
       );
-      console.log("state", state.collections);
       state.currentCollection = {
         ...state.currentCollection!,
         stars: state.currentCollection!.stars.includes(userId)

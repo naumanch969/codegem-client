@@ -9,7 +9,6 @@ const FriendsPage = () => {
 
   const dispatch = useDispatch()
   const { friends, isFetching }: { friends: User[], isFetching: boolean } = useSelector((state: RootState) => state.friend)
-console.log('fie', friends)
   useEffect(() => {
     dispatch<any>(getFriends(friends?.length == 0, `?page=${1}&pageSize=${20}`))
   }, [])

@@ -107,7 +107,6 @@ export const getCollectionCategories = async (req, res, next) => {
     const collections = await Collection.find({
       categories: { $gte: 1 },
     });
-    console.log("collections", collections);
 
     const categories = collections.map((item) => item.categories.map((c) => c));
 

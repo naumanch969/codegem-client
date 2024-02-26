@@ -38,7 +38,6 @@ export const getFriends =
       loading && dispatch(start());
       const { data }: { data: { count: number; result: User[] } } =
         await api.getFriends(query);
-      console.log("data 1", data);
       dispatch(getFriendsReducer({ result: data.result, count: data.count }));
       dispatch(end());
     } catch (err: any) {
@@ -54,7 +53,6 @@ export const searchFriends =
       loading && dispatch(start());
       const { data }: { data: { count: number; result: User[] } } =
         await api.searchFriends(query);
-      console.log("data 2", data);
       dispatch(getFriendsReducer({ result: data.result, count: data.count }));
       dispatch(end());
     } catch (err: any) {

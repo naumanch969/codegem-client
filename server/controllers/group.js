@@ -61,7 +61,6 @@ export const getGroups = async (req, res, next) => {
 
     res.status(200).json(response);
   } catch (error) {
-    console.log("error", error);
     next(createError(res, 500, error.message));
   }
 };

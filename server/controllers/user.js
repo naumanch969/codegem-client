@@ -80,7 +80,6 @@ export const editPersonalDetails = async (req, res, next) => {
   try {
     const { type } = req.query;
     const { values } = req.body;
-    console.log("type", type.split(" ")[0], "values", values);
 
     const result = await User.findByIdAndUpdate(
       req.user._id,

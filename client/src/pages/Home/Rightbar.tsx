@@ -14,7 +14,6 @@ const RightSidebar = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { friends, suggestedUsers, isFetching }: { friends: User[], suggestedUsers: User[], isFetching: boolean } = useSelector((state: RootState) => state.friend)
-    console.log('friends', friends)
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
 
     //////////////////////////////////////////////////// STATES ///////////////////////////////////////////////

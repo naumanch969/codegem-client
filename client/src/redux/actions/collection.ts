@@ -89,7 +89,6 @@ export const getUserCollections =
       loading && dispatch(start());
       const { data }: { data: { result: Collection[]; count: number } } =
         await api.getCollections(query);
-      console.log("data user", data);
       dispatch(
         getUserCollectionsReducer({ result: data.result, count: data.count })
       );
@@ -244,9 +243,7 @@ export const starCollection =
   async (dispatch: Dispatch) => {
     try {
       dispatch(starCollectionReducer({ collectionId, loggedUserId }));
-      console.log("can you here me");
       const { data } = await api.starCollection(collectionId as string);
-      console.log("data of here ", data);
     } catch (err: any) {
       err.response?.data?.message
         ? dispatch(error(err.response.data.message))

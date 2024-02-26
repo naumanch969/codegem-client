@@ -46,7 +46,6 @@ const CollectionCard = ({ collection }: { collection: Collection }) => {
         setOpenDeleteModal(true)
     }
     const onStar = () => {
-        console.log('here i am')
         dispatch<any>(starCollection(collection._id, loggedUser?._id!))
     }
 

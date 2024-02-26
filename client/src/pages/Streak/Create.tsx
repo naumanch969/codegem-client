@@ -179,7 +179,7 @@ const CreateStreak = ({ groupId, handleSubmit }: { groupId?: string, handleSubmi
                                     <FormControl>
                                         <Combobox
                                             items={programmingLanguages}
-                                            onSelect={(value: string) => { field.onChange(value); console.log('value', value) }}
+                                            onSelect={(value: string) => field.onChange(value) }
                                             onFilter={(value: string) => { }}
                                             selected={field.value}
                                             className='w-full bg-secondary text-light text-muted-foreground '
