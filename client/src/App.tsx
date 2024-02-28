@@ -35,13 +35,11 @@ import { Collection as TCollection } from './interfaces'
 
 const Apps = () => {
   /////////////////////////////////////////////// VARIABLES /////////////////////////////////////////////////////
-  const dispatch = useDispatch();
   const { pathname } = useLocation();
   const { showSidebar } = useStateContext();
   const { loggedUserToken, loggedUser } = useSelector((state: RootState) => state.user);
   const { userCollections }: { userCollections: TCollection[] } = useSelector((state: RootState) => state.collection);
   /////////////////////////////////////////////// STATES /////////////////////////////////////////////////////
-  const [darkMode, setDarkMode] = useState(true)
 
   /////////////////////////////////////////////// USE EFFECTS /////////////////////////////////////////////////////
   useEffect(() => {

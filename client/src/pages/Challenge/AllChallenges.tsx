@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect} from 'react'
 import ChallengeComponent from './Challenge'
 import { filter } from '../../redux/reducers/challenge'
 import { useDispatch, useSelector } from 'react-redux'
@@ -7,7 +7,7 @@ import { RootState } from '../../redux/store'
 
 const ChallengeChallenges = ({ filters }: { filters: any }) => {
 
-  const { filteredChallenges: challenges, isFetching, error } = useSelector((state: RootState) => state.challenge)
+  const { filteredChallenges: challenges } = useSelector((state: RootState) => state.challenge)
   const dispatch = useDispatch()
 
   useEffect(() => {

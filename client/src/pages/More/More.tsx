@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion"
 import {
     ExpandMore,
     ChevronRight,
@@ -26,11 +31,16 @@ import {
     ContactSupport,
     Help,
     Logout,
+    PrivacyTip,
+    NotificationImportant,
+    Mode,
+    CastConnected,
+    HelpCenter,
 } from '@mui/icons-material';
 
 const MorePage = () => {
 
-    const SettingsItem = ({ icon, label, value }) => {
+    const SettingsItem = ({ icon, label, value }: { icon: any, label: string, value: string }) => {
         return (
             <div className="flex items-center py-2 px-4 rounded-md hover:bg-light-gray transition duration-200 cursor-pointer">
                 {icon && <div className="mr-2 text-cool-gray">{icon}</div>}
@@ -43,18 +53,17 @@ const MorePage = () => {
         );
     };
 
-    const Section = ({ icon, title, content, expanded, handleChange }) => {
+    const Section = ({ icon, title, content }: { icon: any, title: string, content: any }) => {
         return (
-            <Accordion expanded={expanded} onChange={handleChange}>
-                <AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel-content" id="panel-header">
-                    {icon}
-                    <span className="ml-2">{title}</span>
-                </AccordionSummary>
-                <AccordionDetails>
-                    <div className="flex flex-col w-full">
+            <Accordion type="single" collapsible>
+                <AccordionItem value="item-1">
+                    <AccordionTrigger>
+                        <div className="flex justify-start gap-2">{icon} <span>{title}</span></div>
+                    </AccordionTrigger>
+                    <AccordionContent>
                         {content}
-                    </div>
-                </AccordionDetails>
+                    </AccordionContent>
+                </AccordionItem>
             </Accordion>
         );
     };
@@ -62,6 +71,7 @@ const MorePage = () => {
     const sections = [
         {
             title: 'Account Settings',
+            icon: <Person />,
             content: (
                 <>
                     <SettingsItem icon={<VerifiedUser />} label="Username" value="johndoe" />
@@ -74,6 +84,7 @@ const MorePage = () => {
         },
         {
             title: 'Privacy Settings',
+            icon: <PrivacyTip />,
             content: (
                 <>
                     <SettingsItem icon={<Visibility />} label="Manage Visibility of Profile" value="Everyone" />
@@ -88,6 +99,7 @@ const MorePage = () => {
         },
         {
             title: 'Notification Settings',
+            icon: <NotificationImportant />,
             content: (
                 <>
                     <SettingsItem icon={<Email />} label="Email Notifications" value="Enabled" />
@@ -98,6 +110,7 @@ const MorePage = () => {
         },
         {
             title: 'Theme and Display Settings',
+            icon: <Mode />,
             content: (
                 <>
                     <SettingsItem icon={<Brightness4 />} label="Choose Dark/Light Theme" value="Dark" />
@@ -107,17 +120,18 @@ const MorePage = () => {
         },
         {
             title: 'Connected Accounts',
+            icon: <CastConnected />,
             content: (
                 <>
                     <SettingsItem icon={<Facebook />} label="Link/Unlink Facebook Account" value="Linked" />
                     <SettingsItem icon={<Twitter />} label="Link/Unlink Twitter Account" value="Not Linked" />
                     <SettingsItem icon={<GitHub />} label="Link/Unlink Github Account" value="Linked" />
-                    {/* ... Add more connected accounts items */}
                 </>
             ),
         },
         {
             title: 'Accessibility Settings',
+            icon: <Accessibility />,
             content: (
                 <>
                     <SettingsItem icon={<Accessibility />} label="Enable Accessibility Features" value="Enabled" />
@@ -126,6 +140,7 @@ const MorePage = () => {
         },
         {
             title: 'Help and Support',
+            icon: <HelpCenter />,
             content: (
                 <>
                     <SettingsItem icon={<ContactSupport />} label="Contact Support" value="support@example.com" />
@@ -135,6 +150,7 @@ const MorePage = () => {
         },
         {
             title: 'Log Out',
+            icon: <Logout />,
             content: (
                 <>
                     <button className="mt-6 px-4 py-2 bg-teal-blue  text-white rounded-lg hover:bg-teal-blue -dark transition duration-200">
@@ -147,12 +163,6 @@ const MorePage = () => {
     ];
 
 
-    const [expanded, setExpanded] = useState(null);
-
-    const handleAccordionChange = (panel) => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : false);
-    };
-
     return (
         <div className="p-6 w-full">
             <h1 className="text-3xl font-bold mb-4 text-dark-slate-blue">More</h1>
@@ -163,24 +173,9 @@ const MorePage = () => {
                         title={section.title}
                         content={section.content}
                         icon={section.icon}
-                        expanded={expanded === index}
-                        handleChange={handleAccordionChange(index)}
                     />
                 ))}
             </div>
-            <style jsx>
-                {`
-                    .MuiAccordionDetails-root {
-                        transition: height 0.3s ease-in-out;
-                        overflow: hidden;
-                        display: flex;
-                        flex-direction: column;
-                    }
-                    .Mui-expanded .MuiAccordionDetails-root {
-                        height: auto;
-                    }
-                `}
-            </style>
         </div>
     );
 };

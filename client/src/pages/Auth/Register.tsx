@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Input } from "@mui/material";
 import { Person } from '@mui/icons-material';
 import { register } from '../../redux/actions/auth';
@@ -24,7 +24,7 @@ const Register = ({ snackbarText, setSnackbarText }: { snackbarText?: string, se
 
     ///////////////////////////////////////////////////////// STATES /////////////////////////////////////////////////////
     const { isFetching, error } = useSelector((state: any) => state.user);
-    const [userData, setUserData] = useState<User>(initialUserState);
+    const [userData, setUserData] = useState<typeof initialUserState>(initialUserState);
     // const [snackbarText, setSnackbarText] = useState<string>('');
 
     ///////////////////////////////////////////////////////// USE EFFECTS /////////////////////////////////////////////////////
@@ -34,7 +34,7 @@ const Register = ({ snackbarText, setSnackbarText }: { snackbarText?: string, se
     const handleSubmit = () => {
         const { firstName, lastName, username, email, password } = userData;
         if (!firstName || !lastName || !username || !email || !password) return alert('Make sure to provide all the fields');
-        dispatch<any>(register(userData, navigate, setSnackbarText));
+        dispatch<any>(register(userData as User, navigate, setSnackbarText));
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
