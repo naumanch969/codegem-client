@@ -8,7 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { SampleProfileCoverImage, image1 } from '../../assets';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
-const RightSidebar = () => {
+const ChallengesRightbar = () => {
 
     //////////////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////
     const dispatch = useDispatch()
@@ -120,4 +120,4 @@ const RightSidebar = () => {
     );
 };
 
-export default RightSidebar;
+export default ChallengesRightbar;

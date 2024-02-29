@@ -8,7 +8,6 @@ import { RootState } from "../../redux/store";
 import { Pagination } from "@mui/material";
 import { Code as TCode } from "@/interfaces";
 import qs from "query-string";
-import { empty } from "@/assets";
 import { Empty } from "@/utils/Components/Empty";
 
 const Codes = () => {

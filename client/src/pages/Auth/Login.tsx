@@ -1,10 +1,9 @@
 import React, {  useState } from 'react';
-import { Person, VisibilityOff } from '@mui/icons-material';
+import { Person } from '@mui/icons-material';
 import { Input } from "@mui/material";
 import { login } from '../../redux/actions/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { InputAdornment } from '@mui/material';
 import { logo } from '../../assets';
 
 interface UserState {

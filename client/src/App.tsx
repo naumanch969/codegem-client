@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { Navbar, Sidebar } from "./components";
@@ -26,10 +26,9 @@ import {
   Streaks,
   Challenges
 } from "./pages";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useStateContext } from "./contexts/ContextProvider";
 import { AuthWrapper } from "./wrappers";
-import { getUserCollections } from './redux/actions/collection'
 import { RootState } from "./redux/store";
 import { Collection as TCollection } from './interfaces'
 
