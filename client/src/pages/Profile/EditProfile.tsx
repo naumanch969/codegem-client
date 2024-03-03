@@ -70,8 +70,6 @@ const ProfileEditPage: React.FC = () => {
 
     // <---------------------------------------------------- FUNCTIONS ----------------------------------------------------------->
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-
-
         // form.reset(initialData);
     }
 

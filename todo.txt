@@ -1,30 +1,8 @@
 TODO: MESSAGE SYSTEM
 TODO: SUBSCRIBE TO A COLLECTION
-TODO: ADD CICCULAR_LOADING TO ALL ASYNCHRNOUS BUTTONS
 
 TODO: ADD NOTIFICTAIONS TO EACH PROCESS, POST CREATE, FRIEND REQUEST ETC
-TODO: UPDATE THE DESIGN OF GROUP TO MAKE IT MORE CONJUSTED
 TODO: ENABLE THE SETTINGS
-TODO: CREATE HOME PAGE
-TODO: Add zustand
-TODO: create skeletons
-TODO: add search functionality
-TOOD: Certainly! Here's a more detailed list of actions that can trigger notifications in a social media application:
-
-1. **User Account Related:**
-   - Registration successful: "Welcome to [App Name]!"
-   - Password change confirmation: "Your password has been changed successfully."
-
-2. **Post Interactions:**
-   - New post created: "New Post: [Post Title]."
-   - Post liked: "[User] liked your post: [Post Title]."
-   - Post commented: "[User] commented on your post: [Post Title]."
-   - Post shared: "[User] shared your post: [Post Title]."
-
-3. **Friendship and Connections:**
-   - Friend request sent: "[User] sent you a friend request."
-   - Friend request accepted: "[User] accepted your friend request."
-   - Friend request declined: "[User] declined your friend request."
 
 4. **Messaging:**
    - New message received: "New message from [User]."
@@ -58,5 +36,3 @@ TOOD: Certainly! Here's a more detailed list of actions that can trigger notific
 
 12. **Notification Preferences:**
     - Remind users to update notification preferences: "Customize your notification preferences in settings."
-
-Make sure to adapt these notifications to fit the tone and style of your social media platform. Additionally, consider implementing notification grouping and smart scheduling to prevent overwhelming users with too many notifications at once.

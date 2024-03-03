@@ -22,7 +22,6 @@ const ProfilePage = () => {
         dispatch<any>(getProfile())
     }, [])
 
-
     return (
         <div className="container mx-auto p-4 w-full flex flex-col gap-8 ">
 
