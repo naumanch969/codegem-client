@@ -28,7 +28,7 @@ const Topbar = ({
 }: Props) => {
 
     const filterButtons = ["All", "Latest", "Famous", "Trending", "Recommended to you"];
-    const { onOpen } = useCodeModal()
+    const { onOpen, onSetCollectionId, onSetGroupId } = useCodeModal()
     const [searchValue, setSearchValue] = useState('');
 
     const onLanguageFilter = (value: string) => {
@@ -63,7 +63,7 @@ const Topbar = ({
                         <Search className="text-white" />
                     </Button>
                 </div>
-                <Button onClick={() => onOpen()} variant="default">
+                <Button onClick={() => { onOpen(); onSetCollectionId(''); onSetGroupId('') }} variant="default">
                     <Add /> <span className="" >Add Code</span>
                 </Button>
             </div>

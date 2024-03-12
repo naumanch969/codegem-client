@@ -51,10 +51,11 @@ const friendSlice = createSlice({
       state.receivedRequests = action.payload;
     },
     sendFriendRequestReducer: (state, action: PayloadAction<User>) => {
+      console.log('action.payload', action.payload)
+      state.sentRequests = [...state.sentRequests, action.payload];
       state.suggestedUsers = state.suggestedUsers.filter(
         (user) => user._id != action.payload._id
       );
-      state.sentRequests = [...state.sentRequests, action.payload];
     },
     acceptFriendRequestReducer: (state, action: PayloadAction<User>) => {
       state.receivedRequests = state.receivedRequests.filter(

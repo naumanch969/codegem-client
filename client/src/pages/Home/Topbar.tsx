@@ -14,7 +14,7 @@ import { Separator } from "@/components/ui/separator";
 const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
 
     const filterButtons = ["All", "Latest", "Famous", "Trending", "Recommended to you"];
-    const { onOpen } = useCodeModal()
+    const { onOpen, onSetGroupId, onSetCollectionId } = useCodeModal()
 
     const [searchValue, setSearchValue] = useState('');
 
@@ -39,7 +39,7 @@ const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
                         <Search className="text-white" />
                     </Button>
                 </div>
-                <Button onClick={() => onOpen()} variant="default">
+                <Button onClick={() => { onOpen(); onSetCollectionId(''); onSetGroupId('') }} variant="default">
                     <Add /> <span className="" >Add Code</span>
                 </Button>
             </div>

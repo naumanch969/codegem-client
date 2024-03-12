@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { IconButton, Tooltip } from '@mui/material';
-import { FavoriteOutlined, BookmarkBorderOutlined, ShareOutlined, Add, Star, StarOutline } from '@mui/icons-material';
+import { Tooltip } from '@mui/material';
+import { ShareOutlined, Add, Star, StarOutline } from '@mui/icons-material';
 import CodeComponent from '../Codes/Code';
 import RelatedCollectionSlider from './RelatedCollectionSlider'
-import { Challenge, Code, Collection, Streak, User } from '../../interfaces';
+import { Collection, User } from '../../interfaces';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { getCollection, getCollectionChallenges, getCollectionCodes, getCollectionStreaks, createCollectionCode, createCollectionStreak, createCollectionChallenge, starCollection } from '../../redux/actions/collection';
-import { Loader, Path } from '../../utils/Components';
+import { Path } from '../../utils/Components';
 import StreakComponent from '../Streak/Streak';
 import ChallengeComponent from '../Challenge/Challenge';
 import CodeCreateModal from '../Codes/Create'
@@ -18,13 +18,16 @@ import ShareCollection from './ShareCollection';
 import { Button } from '@/components/ui/button';
 import { Empty } from '@/utils/Components/Empty';
 import { capitalizeFirstLetter } from '@/lib/utils';
-import { Share } from 'lucide-react';
+import { useCodeModal } from '@/hooks/useCodeModal';
 
 
 const SingleCollectionView = () => {
     ///////////////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////////
     const dispatch = useDispatch()
     const { collectionId } = useParams();
+    const { onOpen: onCodeOpen, onSetCollectionId: onSetCollectionIdForCode, onSetGroupId: onSetGroupIdForCode } = useCodeModal()
+    const { onOpen: onStreakOpen, onSetCollectionId: onSetCollectionIdForStreak, onSetGroupId: onSetGroupIdForStreak } = useCodeModal()
+    const { onOpen: onChallengeOpen, onSetCollectionId: onSetCollectionIdForChallenge, onSetGroupId: onSetGroupIdForChallenge } = useCodeModal()
     const { currentCollection, isFetching }: { currentCollection: Collection | null, isFetching: boolean } = useSelector((state: RootState) => state.collection)
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
     const collectionName = (
@@ -69,13 +72,20 @@ const SingleCollectionView = () => {
     }, [activeMenuItem])
 
     ///////////////////////////////////////////////////// FUNCTIONS //////////////////////////////////////////////////////
-    const handleCreateCode = (codeData: any) => {
-        dispatch<any>(createCollectionCode(collectionId!, codeData))
+    const handleCreateCode = () => {
+        onCodeOpen()
+        onSetCollectionIdForCode(collectionId!)
+        onSetGroupIdForCode("")
     }
-    const handleCreateStreak = (streakData: any) => {
-        dispatch<any>(createCollectionStreak(collectionId!, streakData))
+    const handleCreateStreak = () => {
+        onCodeOpen()
+        onSetCollectionIdForCode(collectionId!)
+        onSetGroupIdForCode("")
     }
-    const handleCreateChallenge = (challengeData: any) => {
+    const handleCreateChallenge = () => {
+        onCodeOpen()
+        onSetCollectionIdForCode(collectionId!)
+        onSetGroupIdForCode("")
         dispatch<any>(createCollectionChallenge(collectionId!, challengeData))
     }
     const handleStar = () => {
@@ -128,9 +138,9 @@ const SingleCollectionView = () => {
                             <div className="relative">
                                 <div className="flex justify-center ">
                                     <div className="bg-white shadow-md rounded-lg flex overflow-hidden">
-                                        {menuItems.map(item => (
+                                        {menuItems.map((item, index) => (
                                             <button
-                                                key={item}
+                                                key={index}
                                                 className={`py-2 px-4 ${activeMenuItem.toLowerCase() === item.toLowerCase()
                                                     ? 'bg-teal-blue text-white'
                                                     : 'text-cool-gray'
@@ -143,6 +153,7 @@ const SingleCollectionView = () => {
                                     </div>
                                 </div>
                                 <button
+                                    onClick={onCodeOpen}
                                     className="absolute top-0 right-4 flex justify-center items-center gap-1 bg-teal-blue hover:bg-teal-blue-lighten text-white py-2 px-2 rounded-lg shadow-md capitalize "
                                 >
                                     <Add /> Add {activeMenuItem.slice(0, -1)}
@@ -245,7 +256,7 @@ SingleCollectionView.Skeleton = function () {
             <div className="w-full flex justify-center">
                 <div className="lg:w-[48rem] pt-1 px-3 w-full flex flex-col items-center gap-2 h-full">
                     {Array(5).fill('').map((_, index) => (
-                        <CodeComponent.Skeleton />
+                        <CodeComponent.Skeleton key={index} />
                     ))}
                 </div>
             </div>

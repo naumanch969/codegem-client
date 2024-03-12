@@ -36,9 +36,9 @@ const SingleGroup = () => {
     const isJoined = currentGroup?.members?.findIndex(memberId => memberId == loggedUser?._id) != -1
     const isAdmin = (currentGroup?.admin as User)?._id?.toString() == loggedUser?._id?.toString()
     const { onSetGroup, onOpen, onClose } = useGroupModal()
-    const { onOpen: onCodeOpen } = useCodeModal()
-    const { onOpen: onStreakOpen } = useStreakModal()
-    const { onOpen: onChallengeOpen } = useChallengeModal()
+    const { onOpen: onCodeOpen, onSetCollectionId: onSetCollectionIdForCode, onSetGroupId: onSetGroupIdForCode } = useCodeModal()
+    const { onOpen: onStreakOpen, onSetCollectionId: onSetCollectionIdForStreak, onSetGroupId: onSetGroupIdForStreak } = useStreakModal()
+    const { onOpen: onChallengeOpen, onSetCollectionId: onSetCollectionIdForChallenge, onSetGroupId: onSetGroupIdForChallenge } = useChallengeModal()
     const groupName = (currentGroup?.name ? currentGroup.name.charAt(0).toUpperCase() + currentGroup.name.slice(1).toLowerCase() : '');
     const segments = [
         { name: 'Home', link: '/home' },
@@ -104,12 +104,18 @@ const SingleGroup = () => {
     const handleOpen = () => {
         if (activeMenuItem == 'codes') {
             onCodeOpen()
+            onSetCollectionIdForCode('')
+            onSetGroupIdForCode(groupId!)
         }
         else if (activeMenuItem == 'streaks') {
             onStreakOpen()
+            onSetCollectionIdForStreak('')
+            onSetGroupIdForStreak(groupId!)
         }
         else {
             onChallengeOpen()
+            onSetCollectionIdForChallenge('')
+            onSetGroupIdForChallenge(groupId!)
         }
     }
 

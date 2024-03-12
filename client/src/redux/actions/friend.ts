@@ -112,6 +112,7 @@ export const sendFriendRequest =
   async (dispatch) => {
     try {
       const { data } = await api.sendFriendRequest(receiverId);
+      console.log('data', data)
       dispatch(sendFriendRequestReducer(data));
     } catch (err: any) {
       const e = err?.response?.data;

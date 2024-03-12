@@ -42,7 +42,7 @@ import { Link } from 'react-router-dom';
 const StreakComponent = ({ streak }: { streak: Streak }) => {
 
   /////////////////////////////////////// VARIABLES ////////////////////////////////////////
-  const { onOpen, onSetStreak } = useStreakModal()
+  const { onOpen, onSetStreak, onSetCollectionId, onSetGroupId } = useStreakModal()
   const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user);
   const { userCollections }: { userCollections: Collection[] } = useSelector((state: RootState) => state.collection);
   const savedCollection = userCollections.filter(collection => collection.name == 'Saved')
@@ -90,6 +90,8 @@ const StreakComponent = ({ streak }: { streak: Streak }) => {
     setShowMenu(false);
     onSetStreak(streak)
     onOpen()
+    onSetCollectionId('')
+    onSetGroupId('')
   }
   const handleOpenSaveModal = () => {
     setShowMenu(false);

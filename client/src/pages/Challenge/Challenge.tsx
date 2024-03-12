@@ -42,7 +42,7 @@ import { Link } from 'react-router-dom';
 const ChallengeComponent = ({ challenge }: { challenge: Challenge }) => {
 
   /////////////////////////////////////// VARIABLES ////////////////////////////////////////
-  const { onOpen, onSetChallenge } = useChallengeModal()
+  const { onOpen, onSetChallenge, onSetCollectionId, onSetGroupId } = useChallengeModal()
   const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user);
   const { userCollections }: { userCollections: Collection[] } = useSelector((state: RootState) => state.collection);
   const savedCollection = userCollections.filter(collection => collection.name == 'Saved')
@@ -90,6 +90,8 @@ const ChallengeComponent = ({ challenge }: { challenge: Challenge }) => {
     setShowMenu(false);
     onSetChallenge(challenge)
     onOpen()
+    onSetCollectionId('')
+    onSetGroupId('')
   }
   const handleOpenSaveModal = () => {
     setShowMenu(false);

@@ -34,11 +34,11 @@ import { Combobox } from '@/components/ui/combobox';
 import { programmingLanguages } from '@/constant';
 
 
-const CreateCode = ({ groupId, handleSubmit }: { groupId?: string, handleSubmit?: (data: any) => void }) => {    // handleSubmit is passed through collection create code
+const CreateCode = () => {    // handleSubmit is passed through collection create code
 
     // <---------------------------------------------------- VARIABLES ----------------------------------------------------------->
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
-    const { isOpen, onClose, code } = useCodeModal()
+    const { isOpen, onClose, code, collectionId, groupId } = useCodeModal()
     const { isFetching } = useSelector((state: RootState) => state.code)
 
     const formSchema = z.object({
@@ -70,11 +70,8 @@ const CreateCode = ({ groupId, handleSubmit }: { groupId?: string, handleSubmit?
 
     // <---------------------------------------------------- FUNCTIONS ----------------------------------------------------------->
     const onSubmit = (values: z.infer<typeof formSchema>) => {
+        // TODO: check format of data being sent to backend
         // FOR COLLECTION CODE CREATE
-        if (handleSubmit) {
-            handleSubmit(values)
-            return
-        }
         if (Boolean(code)) { // update
             groupId ?
                 dispatch<any>(updateCode(code?._id as string, { ...values, groupId }, onClose, toast))
@@ -82,7 +79,8 @@ const CreateCode = ({ groupId, handleSubmit }: { groupId?: string, handleSubmit?
                 dispatch<any>(updateCode(code?._id as string, values, onClose, toast))
         }
         else {  // create
-            groupId ?
+            groupId
+                ?
                 dispatch<any>(createCode({ ...values, groupId }, onClose, toast))
                 :
                 dispatch<any>(createCode(values, onClose, toast));

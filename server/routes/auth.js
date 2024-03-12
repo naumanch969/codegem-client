@@ -4,7 +4,6 @@ import { verifyToken } from '../middleware/auth.js'
 
 const router = express.Router()
 
-// POST
 router.post('/register', register)
 router.post('/verify_register_otp', verifyRegisterOTP)
 router.put('/login', login)

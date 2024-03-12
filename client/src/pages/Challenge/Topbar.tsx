@@ -63,7 +63,7 @@ const Topbar = ({
                         <Search className="text-white" />
                     </Button>
                 </div>
-                <Button onClick={() => onOpen()} variant="default">
+                <Button onClick={() => { onOpen(); onSetCollectionId(''); onSetGroupId('') }} variant="default">
                     <Add /> <span className="" >Add Challenge</span>
                 </Button>
             </div>

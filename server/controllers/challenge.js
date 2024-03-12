@@ -177,7 +177,7 @@ export const getSavedChallenges = async (req, res, next) => {
 };
 export const createChallenge = async (req, res, next) => {
   try {
-    let { title, challenge, solution, groupId, ...rest } = req.body;
+    let { title, challenge, solution, group, collection, ...rest } = req.body;
     if (isUndefined(title) || isUndefined(challenge) || isUndefined(solution))
       return next(
         createError(res, 400, "Title, Challenge and Solution are required")
@@ -186,28 +186,77 @@ export const createChallenge = async (req, res, next) => {
     const userId = req.user._id;
 
     var result;
-    if (groupId) {
+    if (group) {
       result = await Challenge.create({
         user: userId,
         title,
         challenge,
-        solution,
-        group: groupId,
+        group,
         ...rest,
       });
-      await Group.findByIdAndUpdate(
-        groupId,
+      const group = await Group.findByIdAndUpdate(
+        group,
         { $addToSet: { challenges: result._id } },
         { new: true }
       );
+      // Notifiying user who created the post
+      await Notification.create({
+        title: `New Post: ${title}`,
+        description: `You just created a challenge post in group: ${group.name}`,
+        user: req.user._id,
+      });
+      // Notifying group members
+      await Promise.all(
+        group.members.map(async (memberId) => {
+          await Notification.create({
+            title: `New Post: ${title}`,
+            description: `${findedUser.name} has just created a new post: ${title}. Check it out and give your thought!`,
+            user: memberId,
+          });
+        })
+      );
+    } else if (collection) {
+      result = await Challenge.create({
+        user: userId,
+        title,
+        challenge,
+        collection,
+        ...rest,
+      });
+      const collection = await Collection.findByIdAndUpdate(
+        collection,
+        { $addToSet: { challenges: result._id } },
+        { new: true }
+      );
+      // Notifiying user who created the post
+      await Notification.create({
+        title: `New Post: ${title}`,
+        description: `You just created a challenge post in group: ${collection.name}`,
+        user: req.user._id,
+      });
     } else {
       result = await Challenge.create({
         user: userId,
         title,
         challenge,
-        solution,
         ...rest,
       });
+      // Notifying user who created the post
+      await Notification.create({
+        title: `New Challenge - ${title}`,
+        description: "Your post has been created successfully.",
+        user: req.user._id,
+      });
+      // Notifying friends
+      await Promise.all(
+        findedUser.friends.map(async (friendId) => {
+          await Notification.create({
+            title: `New Post: ${title}`,
+            description: `${findedUser.name} has just created a new post: ${title}. Check it out and give your thought!`,
+            user: friendId,
+          });
+        })
+      );
     }
 
     res.status(200).json(result);

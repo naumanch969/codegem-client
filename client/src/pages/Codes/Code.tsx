@@ -40,7 +40,7 @@ import { Link } from 'react-router-dom';
 const CodeComponent = ({ code }: { code: Code }) => {
 
   /////////////////////////////////////// VARIABLES ////////////////////////////////////////
-  const { onOpen, onSetCode } = useCodeModal()
+  const { onOpen, onSetCode, onSetCollectionId, onSetGroupId } = useCodeModal()
   const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user);
   const { userCollections }: { userCollections: Collection[] } = useSelector((state: RootState) => state.collection);
   const savedCollection = userCollections.filter(collection => collection.name == 'Saved')
@@ -88,6 +88,8 @@ const CodeComponent = ({ code }: { code: Code }) => {
     setShowMenu(false);
     onSetCode(code)
     onOpen()
+    onSetCollectionId('')
+    onSetGroupId('')
   }
   const handleOpenSaveModal = () => {
     setShowMenu(false);

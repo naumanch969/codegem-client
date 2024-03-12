@@ -1,4 +1,4 @@
-import { CodeOff, CodeOutlined, CollectionsTwoTone, Group, Person, SyncProblem } from '@mui/icons-material';
+import { CodeOff, CodeOutlined, CollectionsTwoTone, Group, SyncProblem } from '@mui/icons-material';
 import React from 'react';
 import { useCodeModal } from '../../hooks/useCodeModal';
 import { useStreakModal } from '../../hooks/useStreakModal';
@@ -9,16 +9,16 @@ import { useGroupModal } from '../../hooks/useGroupModal';
 const Create = () => {
 
     ///////////////////////////// VARIABLES /////////////////////////////////////
-    const { onOpen: onCodeOpen, onSetCode } = useCodeModal()
-    const { onOpen: onStreakOpen, onSetStreak } = useStreakModal()
-    const { onOpen: onChallengeOpen, onSetChallenge } = useChallengeModal()
+    const { onOpen: onCodeOpen, onSetCode, onSetCollectionId: onSetCollectionIdForCode, onSetGroupId: onSetGroupIdForCode } = useCodeModal()
+    const { onOpen: onStreakOpen, onSetStreak, onSetCollectionId: onSetCollectionIdForStreak, onSetGroupId: onSetGroupIdForStreak } = useStreakModal()
+    const { onOpen: onChallengeOpen, onSetChallenge, onSetCollectionId: onSetCollectionIdForChallenge, onSetGroupId: onSetGroupIdForChallenge } = useChallengeModal()
     const { onOpen: onCollectionOpen } = useCollectionModal()
     const { onOpen: onGroupOpen } = useGroupModal()
 
     const arr = [
-        { onClick: () => { onSetCode(null); onCodeOpen() }, name: 'Create Code', icon: CodeOutlined },
-        { onClick: () => { onSetStreak(null); onStreakOpen() }, name: 'Create Streak', icon: CodeOff },
-        { onClick: () => { onSetChallenge(null); onChallengeOpen() }, name: 'Create Challenge', icon: SyncProblem },
+        { onClick: () => { onSetCode(null); onCodeOpen(); onSetCollectionIdForCode(''); onSetGroupIdForCode('') }, name: 'Create Code', icon: CodeOutlined },
+        { onClick: () => { onSetStreak(null); onStreakOpen(); onSetCollectionIdForStreak(''); onSetGroupIdForStreak('') }, name: 'Create Streak', icon: CodeOff },
+        { onClick: () => { onSetChallenge(null); onChallengeOpen(); onSetCollectionIdForChallenge(''); onSetGroupIdForChallenge('') }, name: 'Create Challenge', icon: SyncProblem },
         { onClick: onCollectionOpen, name: 'Create Collection', icon: CollectionsTwoTone },
         { onClick: onGroupOpen, name: 'Create Group', icon: Group },
     ];

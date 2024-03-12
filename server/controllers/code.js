@@ -162,7 +162,7 @@ export const getUserCodes = async (req, res, next) => {
   } catch (error) {
     next(createError(res, 500, error.message));
   }
-}; 
+};
 
 export const getLikedCodes = async (req, res, next) => {
   try {
@@ -189,7 +189,7 @@ export const getSavedCodes = async (req, res, next) => {
 };
 export const createCode = async (req, res, next) => {
   try {
-    let { title, code, groupId, ...rest } = req.body;
+    let { title, code, group, collection, ...rest } = req.body;
     if (isUndefined(title) || isUndefined(code))
       return next(
         createError(res, 400, "Make sure to provide all the fields.")
@@ -199,16 +199,16 @@ export const createCode = async (req, res, next) => {
     const findedUser = await User.findById(req.user._id);
 
     var result;
-    if (groupId) {
+    if (group) {
       result = await Code.create({
         user: userId,
         title,
         code,
-        groups: groupId ? [groupId] : [],
+        group,
         ...rest,
       });
       const group = await Group.findByIdAndUpdate(
-        groupId,
+        group,
         { $addToSet: { codes: result._id } },
         { new: true }
       );
@@ -228,17 +228,35 @@ export const createCode = async (req, res, next) => {
           });
         })
       );
+    } else if (collection) {
+      result = await Code.create({
+        user: userId,
+        title,
+        code,
+        collection,
+        ...rest,
+      });
+      const collection = await Collection.findByIdAndUpdate(
+        collection,
+        { $addToSet: { codes: result._id } },
+        { new: true }
+      );
+      // Notifiying user who created the post
+      await Notification.create({
+        title: `New Post: ${title}`,
+        description: `You just created a code post in group: ${collection.name}`,
+        user: req.user._id,
+      });
     } else {
       result = await Code.create({
         user: userId,
         title,
         code,
-        groups: groupId ? [groupId] : [],
         ...rest,
       });
       // Notifying user who created the post
       await Notification.create({
-        title: "New Code",
+        title: `New Code - ${title}`,
         description: "Your post has been created successfully.",
         user: req.user._id,
       });

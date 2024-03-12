@@ -179,7 +179,7 @@ const CreateStreak = ({ groupId, handleSubmit }: { groupId?: string, handleSubmi
                                     <FormControl>
                                         <Combobox
                                             items={programmingLanguages}
-                                            onSelect={(value: string) => field.onChange(value) }
+                                            onSelect={(value: string) => field.onChange(value)}
                                             onFilter={(value: string) => { }}
                                             selected={field.value}
                                             className='w-full bg-secondary text-light text-muted-foreground '
@@ -232,7 +232,7 @@ const CreateStreak = ({ groupId, handleSubmit }: { groupId?: string, handleSubmi
                                         <span>Streaks</span>
                                         <Button variant='link' onClick={(e) => {
                                             e.preventDefault();
-                                            setStreaks([{ description: '', code: '' }, ...streaks])
+                                            setStreaks([...streaks, { description: '', code: '' }])
                                         }}>Add streak</Button>
                                     </FormLabel>
                                     <div>

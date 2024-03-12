@@ -47,7 +47,7 @@ export interface Code {
   likes: string[];
   comments: (string | Comment)[];
   shares: (string | Share)[]; // if populated, array of Share otherwise of string
-  groups?: string;
+  group?: string;
   visibility: string;
   createdAt?: Date | string;
 }
@@ -65,7 +65,7 @@ export interface Challenge {
   likes: string[];
   comments: (string | Comment)[];
   shares: (string | Share)[]; // if populated, array of Share otherwise of string
-  groups?: string;
+  group?: string;
   visibility: string;
   createdAt?: Date | string;
 }

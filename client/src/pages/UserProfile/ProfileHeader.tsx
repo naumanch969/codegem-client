@@ -1,13 +1,51 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { User } from '../../interfaces';
 import { RootState } from '../../redux/store';
 import { SampleProfileCoverImage } from '../../assets';
+import { Button } from '@/components/ui/button';
+import { removeFriendRequest, sendFriendRequest, getSentRequests, getFriends, getReceivedRequests, acceptFriendRequest } from '@/redux/actions/friend';
 
 const ProfilePage = () => {
 
+    ///////////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////////////
+    const dispatch = useDispatch()
     const { currentUser }: { currentUser: User | null } = useSelector((state: RootState) => state.user)
+    const { sentRequests, receivedRequests, isFetching, friends } = useSelector((state: RootState) => state.friend)
 
+    ///////////////////////////////////////////////// STATES //////////////////////////////////////////////////////////
+    const [userType, setUserType] = useState<'friend' | 'request_sent' | 'request_received' | 'none'>('none')
+
+    ///////////////////////////////////////////////// USE EFFECTS //////////////////////////////////////////////////////////
+    useEffect(() => {
+        dispatch<any>(getReceivedRequests(receivedRequests.length == 0, ``))
+        dispatch<any>(getSentRequests(sentRequests.length == 0, ``))
+        dispatch<any>(getFriends(friends.length == 0, ``))
+    }, [])
+    useEffect(() => {
+        if (friends.some(user => user._id == currentUser?._id)) { // if friend
+            setUserType('friend')
+        }
+        else if (sentRequests.some(user => user._id == currentUser?._id)) {  // if request sent
+            setUserType('request_sent')
+        }
+        else if (receivedRequests.some(user => user._id == currentUser?._id)) { // if request received
+            setUserType('request_received')
+        }
+        else {
+            setUserType('none')
+        }
+    }, [sentRequests, currentUser, friends, receivedRequests])
+
+    ///////////////////////////////////////////////// FUNCTIONS //////////////////////////////////////////////////////////
+    const onClick = () => {
+        if (userType == 'request_sent')
+            dispatch<any>(removeFriendRequest(currentUser?._id as string))
+        else if (userType == 'request_received')
+            dispatch<any>(acceptFriendRequest(currentUser?._id as string))
+        else
+            dispatch<any>(sendFriendRequest(currentUser?._id as string))
+    }
 
     return (
         <div className="flex flex-col w-full">
@@ -18,6 +56,7 @@ const ProfilePage = () => {
                     className="w-full h-full"
                 />
             </div>
+
             <div className="flex justify-between items-center gap-4 my-[1rem] px-[2rem]">
                 {/* Profile image and username */}
                 <div className="flex items-end gap-4 relative">
@@ -35,8 +74,16 @@ const ProfilePage = () => {
                         <p className="text-gray-600">{currentUser?.email}</p>
                     </div>
                 </div>
+                {
+                    userType != 'friend' &&
+                    <Button onClick={onClick} disabled={isFetching} >
+                        {userType == 'request_received' ? 'Accept Request' : userType == 'request_sent' ? 'Remove Request' : 'Add Friend'}
+                    </Button>
+                }
             </div>
+
         </div>
+
     );
 };
 

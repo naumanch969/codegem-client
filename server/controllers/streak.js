@@ -156,7 +156,8 @@ export const getUserStreaks = async (req, res, next) => {
   } catch (error) {
     next(createError(res, 500, error.message));
   }
-}; export const getLikedStreaks = async (req, res, next) => {
+};
+export const getLikedStreaks = async (req, res, next) => {
   try {
     const result = await Streak.find({ likes: { $in: [req.user._id] } })
       .populate("user")
@@ -181,26 +182,61 @@ export const getSavedStreaks = async (req, res, next) => {
 };
 export const createStreak = async (req, res, next) => {
   try {
-    let { title, streak, groupId, ...rest } = req.body;
+    let { title, streak, group, collection, ...rest } = req.body;
     if (isUndefined(title) || isUndefined(streak[0].code))
       return next(createError(res, 400, "Title and Streak, both are required"));
 
     const userId = req.user._id;
 
     var result;
-    if (groupId) {
+    if (group) {
       result = await Streak.create({
         user: userId,
         title,
         streak,
-        group: groupId,
+        group,
         ...rest,
       });
-      await Group.findByIdAndUpdate(
-        groupId,
+      const group = await Group.findByIdAndUpdate(
+        group,
         { $addToSet: { streaks: result._id } },
         { new: true }
       );
+      // Notifiying user who created the post
+      await Notification.create({
+        title: `New Post: ${title}`,
+        description: `You just created a streak post in group: ${group.name}`,
+        user: req.user._id,
+      });
+      // Notifying group members
+      await Promise.all(
+        group.members.map(async (memberId) => {
+          await Notification.create({
+            title: `New Post: ${title}`,
+            description: `${findedUser.name} has just created a new post: ${title}. Check it out and give your thought!`,
+            user: memberId,
+          });
+        })
+      );
+    } else if (collection) {
+      result = await Streak.create({
+        user: userId,
+        title,
+        streak,
+        collection,
+        ...rest,
+      });
+      const collection = await Collection.findByIdAndUpdate(
+        collection,
+        { $addToSet: { streaks: result._id } },
+        { new: true }
+      );
+      // Notifiying user who created the post
+      await Notification.create({
+        title: `New Post: ${title}`,
+        description: `You just created a streak post in group: ${collection.name}`,
+        user: req.user._id,
+      });
     } else {
       result = await Streak.create({
         user: userId,
@@ -208,6 +244,22 @@ export const createStreak = async (req, res, next) => {
         streak,
         ...rest,
       });
+      // Notifying user who created the post
+      await Notification.create({
+        title: `New Streak - ${title}`,
+        description: "Your post has been created successfully.",
+        user: req.user._id,
+      });
+      // Notifying friends
+      await Promise.all(
+        findedUser.friends.map(async (friendId) => {
+          await Notification.create({
+            title: `New Post: ${title}`,
+            description: `${findedUser.name} has just created a new post: ${title}. Check it out and give your thought!`,
+            user: friendId,
+          });
+        })
+      );
     }
 
     res.status(200).json(result);
