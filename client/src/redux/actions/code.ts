@@ -87,7 +87,7 @@ export const createCode =
       if (codeData.groupId) {
         dispatch(
           createGroupCodeReducer({
-            groupId: codeData.groupId as string,
+            groupId: codeData.group as string,
             code: data,
           })
         );

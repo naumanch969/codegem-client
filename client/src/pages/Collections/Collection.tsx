@@ -78,15 +78,15 @@ const SingleCollectionView = () => {
         onSetGroupIdForCode("")
     }
     const handleCreateStreak = () => {
-        onCodeOpen()
+        onStreakOpen()
         onSetCollectionIdForCode(collectionId!)
         onSetGroupIdForCode("")
     }
     const handleCreateChallenge = () => {
-        onCodeOpen()
+        onChallengeOpen()
         onSetCollectionIdForCode(collectionId!)
         onSetGroupIdForCode("")
-        dispatch<any>(createCollectionChallenge(collectionId!, challengeData))
+        // dispatch<any>(createCollectionChallenge(collectionId!, challengeData))
     }
     const handleStar = () => {
         dispatch<any>(starCollection(currentCollection?._id!, loggedUser?._id!))
@@ -96,7 +96,7 @@ const SingleCollectionView = () => {
         <div className="container mx-auto p-4 flex flex-col gap-3 ">
 
             <ShareCollection open={openShareCollection} setOpen={setOpenShareCollection} collection={currentCollection!} />
-            {activeMenuItem == 'codes' && <CodeCreateModal handleSubmit={handleCreateCode} />}
+            {activeMenuItem == 'codes' && <CodeCreateModal />}
             {activeMenuItem == 'streaks' && <StreakCreateModal handleSubmit={handleCreateStreak} />}
             {activeMenuItem == 'challenges' && <ChallengeCreateModal handleSubmit={handleCreateChallenge} />}
 

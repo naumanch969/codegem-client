@@ -244,7 +244,7 @@ export const createCode = async (req, res, next) => {
       // Notifiying user who created the post
       await Notification.create({
         title: `New Post: ${title}`,
-        description: `You just created a code post in group: ${collection.name}`,
+        description: `You just created a code post in collection: ${collection.name}`,
         user: req.user._id,
       });
     } else {

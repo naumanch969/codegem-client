@@ -59,7 +59,7 @@ export const register = async (req, res, next) => {
 
     await createNotification(
       "Welcome to Codegem!",
-      "Congratulations! You've successfully joined [App Name]. Start connecting and sharing your moments with friends"
+      "Congratulations! You've successfully joined Codegem. Start connecting and sharing your moments with friends"
     );
 
     res

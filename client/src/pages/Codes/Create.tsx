@@ -32,6 +32,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import toast from 'react-hot-toast';
 import { Combobox } from '@/components/ui/combobox';
 import { programmingLanguages } from '@/constant';
+import { createCollectionChallenge } from '@/redux/actions/collection';
 
 
 const CreateCode = () => {    // handleSubmit is passed through collection create code
@@ -73,16 +74,19 @@ const CreateCode = () => {    // handleSubmit is passed through collection creat
         // TODO: check format of data being sent to backend
         // FOR COLLECTION CODE CREATE
         if (Boolean(code)) { // update
-            groupId ?
-                dispatch<any>(updateCode(code?._id as string, { ...values, groupId }, onClose, toast))
-                :
+            if (groupId)
+                dispatch<any>(updateCode(code?._id as string, { ...values, group: groupId }, onClose, toast))
+            else if (collectionId)
+                dispatch<any>(updateCode(code?._id as string, { ...values, collection: collectionId }, onClose, toast))
+            else
                 dispatch<any>(updateCode(code?._id as string, values, onClose, toast))
         }
         else {  // create
-            groupId
-                ?
-                dispatch<any>(createCode({ ...values, groupId }, onClose, toast))
-                :
+            if (groupId)
+                dispatch<any>(createCode({ ...values, group: groupId }, onClose, toast))
+            else if (collectionId)
+                dispatch<any>(createCode({ ...values, collection: collectionId }, onClose, toast))
+            else
                 dispatch<any>(createCode(values, onClose, toast));
         }
 
