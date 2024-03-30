@@ -21,7 +21,11 @@ const challengeSchema = Schema(
     comments: { type: [{ type: Schema.Types.ObjectId, ref: "Comment" }] },
     shares: { type: [{ type: Schema.Types.ObjectId, ref: "Share" }] }, // this post is being shared among which people/group
     group: { type: Schema.Types.ObjectId, ref: "Group", default: null }, // if groupPost, then groupId
-    collection: { type: Schema.Types.ObjectId, ref: "Collection", default: null }, // if collectionPost, then collectionId
+    collectionRef: {
+      type: Schema.Types.ObjectId,
+      ref: "Collection",
+      default: null,
+    }, // if collectionPost, then collectionId
     visibility: {
       type: String,
       enum: [

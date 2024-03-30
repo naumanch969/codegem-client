@@ -81,7 +81,7 @@ export const getCollections = async (req, res, next) => {
     const skip = (pageNumber - 1) * size;
     query
       .skip(skip)
-      .limit(popular ? 5 : size)  // for popular, we only need 5 collections
+      .limit(popular ? 5 : size) // for popular, we only need 5 collections
       .sort({ createdAt: -1 })
       .populate("owner");
 
@@ -109,8 +109,8 @@ export const getCollectionCategories = async (req, res, next) => {
     });
 
     const categories = collections.map((item) => item.categories.map((c) => c));
-
-    res.status(200).json(...new Set(categories));
+    console.log("categories", categories, [...new Set(categories.flat())]);
+    res.status(200).json([...new Set(categories.flat())]);
   } catch (error) {
     console.error(error); // Log the error details
     next(createError(res, 500, "An error occurred while fetching categories"));

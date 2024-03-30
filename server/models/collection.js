@@ -6,18 +6,17 @@ const collectionSchema = new Schema(
     description: { type: String, required: false },
     language: { type: String, required: false },
     categories: {
-      type: [{ type: String, default: [] }],
+      type: [String], // Change here from { type: [{ type: String, default: [] }]}
+      default: [], // If you want an empty array by default
     },
-    codes: {
-      type: [{ type: Schema.Types.ObjectId, ref: "Code" }],
-    },
+    codes: { type: [Schema.Types.ObjectId], ref: "Code", default: [] },
     challenges: {
-      type: [{ type: Schema.Types.ObjectId, ref: "Challenge" }],
+      type: [Schema.Types.ObjectId],
+      ref: "Challenge",
+      default: [],
     },
-    streaks: {
-      type: [{ type: Schema.Types.ObjectId, ref: "Streak" }],
-    },
-    shares: { type: [{ type: Schema.Types.ObjectId, ref: "Share" }] }, // this collection is being shared among which people/group
+    streaks: { type: [Schema.Types.ObjectId], ref: "Streak", default: [] },
+    shares: { type: [{ type: Schema.Types.ObjectId, ref: "Share" }] },
     stars: { type: [{ type: Schema.Types.ObjectId, ref: "User" }] },
     owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
     visibility: {
