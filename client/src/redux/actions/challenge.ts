@@ -19,6 +19,7 @@ import {
   saveChallengeReducer,
   saveChallengeInCollectionsReducer,
   unsaveChallengeReducer,
+  createCollectionChallengeReducer,
 } from "../reducers/collection";
 import * as api from "../api";
 import { Challenge, User } from "../../interfaces";
@@ -57,7 +58,7 @@ export const getChallenges =
     }
   };
 
-export const searchChallenges=
+export const searchChallenges =
   (loading: boolean = false, query: string) =>
   async (dispatch: Dispatch) => {
     try {
@@ -110,13 +111,10 @@ export const createChallenge =
     try {
       dispatch(start());
       const { data } = await api.createChallenge(challengeData);
-      if (challengeData.groupId) {
-        dispatch(
-          createGroupChallengeReducer({
-            groupId: challengeData.groupId as string,
-            challenge: data,
-          })
-        );
+      if (challengeData.group) {
+        dispatch(createGroupChallengeReducer({groupId: challengeData.group as string,challenge: data,})); // data may contain groupId, so we may just pass code
+      } else if (challengeData.collection) {
+        dispatch(createCollectionChallengeReducer(data));
       } else {
         dispatch(createChallengeReducer(data));
       }
@@ -162,11 +160,7 @@ export const shareChallenge =
     }
   };
 export const shareChallengeInGroups =
-  (
-    challenge: Challenge,
-    groupIds: string[],
-    setOpen: any
-  ) =>
+  (challenge: Challenge, groupIds: string[], setOpen: any) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch(shareChallengeInGroupsReducer({ challenge, groupIds }));

@@ -20,7 +20,7 @@ export const useChallengeModal = create<Props>((set) => ({
     onOpen: () => set({ isOpen: true }),
     onClose: () => set({ isOpen: false }),
     onSetCollectionId: (collectionId: string) => set({ collectionId }),
-    onSetGroupId: (collectionId: string) => set({ collectionId }),
+    onSetGroupId: (groupId: string) => set({ groupId }),
     onSetChallenge: (challenge: Challenge | null) => set({ challenge }),
     challenge: null
 }))

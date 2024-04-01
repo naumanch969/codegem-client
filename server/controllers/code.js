@@ -207,7 +207,7 @@ export const createCode = async (req, res, next) => {
         group,
         ...rest,
       });
-      const group = await Group.findByIdAndUpdate(
+      const findedGroup = await Group.findByIdAndUpdate(
         group,
         { $addToSet: { codes: result._id } },
         { new: true }
@@ -215,12 +215,12 @@ export const createCode = async (req, res, next) => {
       // Notifiying user who created the post
       await Notification.create({
         title: `New Post: ${title}`,
-        description: `You just created a code post in group: ${group.name}`,
+        description: `You just created a code post in group: ${findedGroup.name}`,
         user: req.user._id,
       });
       // Notifying group members
       await Promise.all(
-        group.members.map(async (memberId) => {
+        findedGroup.members.map(async (memberId) => {
           await Notification.create({
             title: `New Post: ${title}`,
             description: `${findedUser.name} has just created a new post: ${title}. Check it out and give your thought!`,
@@ -233,18 +233,20 @@ export const createCode = async (req, res, next) => {
         user: userId,
         title,
         code,
-        collection,
+        collectionRef: collection,
         ...rest,
       });
-      const collection = await Collection.findByIdAndUpdate(
-        collection,
+      result = await Code.findById(result._id).populate("collectionRef").exec();
+
+      const findedCollection = await Collection.findByIdAndUpdate(
+        collection, // collectionId
         { $addToSet: { codes: result._id } },
         { new: true }
       );
       // Notifiying user who created the post
       await Notification.create({
         title: `New Post: ${title}`,
-        description: `You just created a code post in collection: ${collection.name}`,
+        description: `You just created a code post in collection: ${findedCollection.name}`,
         user: req.user._id,
       });
     } else {
@@ -282,15 +284,20 @@ export const updateCode = async (req, res, next) => {
   try {
     const { codeId } = req.params;
 
-    const result = await Code.findByIdAndUpdate(
+    const { collection, ...rest } = req.body;
+
+    const updatedCode = await Code.findByIdAndUpdate(
       codeId,
-      { $set: req.body },
+      { $set: { collectionRef: collection, ...rest } },
       { new: true }
     );
 
-    await createNotification("Code Update", "You updated your post.");
+    await createNotification(
+      "Code Update",
+      `Your code post updated: ${updatedCode.title}`
+    );
 
-    res.status(200).json(result);
+    res.status(200).json(updatedCode);
   } catch (error) {
     next(createError(res, 500, error.message));
   }

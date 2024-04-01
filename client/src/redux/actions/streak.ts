@@ -19,6 +19,7 @@ import {
   saveStreakReducer,
   saveStreakInCollectionsReducer,
   unsaveStreakReducer,
+  createCollectionStreakReducer,
 } from "../reducers/collection";
 import * as api from "../api";
 import { Streak, User } from "../../interfaces";
@@ -50,7 +51,7 @@ export const getStreaks =
         ? dispatch(error(err.response.data.message))
         : dispatch(error(err.message));
     }
-  }; 
+  };
 export const getSavedStreaks = () => async (dispatch: Dispatch) => {
   try {
     dispatch(start());
@@ -87,13 +88,11 @@ export const createStreak =
     try {
       dispatch(start());
       const { data } = await api.createStreak(streakData);
-      if (streakData.groupId) {
-        dispatch(
-          createGroupStreakReducer({
-            groupId: streakData.groupId as string,
-            streak: data,
-          })
-        );
+
+      if (streakData.group) {
+        dispatch(createGroupStreakReducer({groupId: streakData.group as string,streak: data,})); // data may contain groupId, so we may just pass code
+      } else if (streakData.collection) {
+        dispatch(createCollectionStreakReducer(data));
       } else {
         dispatch(createStreakReducer(data));
       }

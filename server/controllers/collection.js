@@ -109,7 +109,7 @@ export const getCollectionCategories = async (req, res, next) => {
     });
 
     const categories = collections.map((item) => item.categories.map((c) => c));
-    console.log("categories", categories, [...new Set(categories.flat())]);
+
     res.status(200).json([...new Set(categories.flat())]);
   } catch (error) {
     console.error(error); // Log the error details

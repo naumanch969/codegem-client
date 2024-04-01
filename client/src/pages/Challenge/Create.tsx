@@ -36,11 +36,11 @@ import { programmingLanguages } from '@/constant';
 import { Combobox } from '@/components/ui/combobox';
 
 
-const CreateChallenge = ({ groupId, handleSubmit }: { groupId?: string, handleSubmit?: (data: any) => void }) => {    // handleSubmit is passed through collection create challenge
-
+const CreateChallenge = () => {
+console.log('here you go')
     // <---------------------------------------------------- VARIABLES ----------------------------------------------------------->
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
-    const { isOpen, onClose, challenge } = useChallengeModal()
+    const { isOpen, onClose, challenge, collectionId, groupId } = useChallengeModal()
     const { isFetching } = useSelector((state: RootState) => state.challenge)
 
     const formSchema = z.object({
@@ -73,24 +73,22 @@ const CreateChallenge = ({ groupId, handleSubmit }: { groupId?: string, handleSu
 
     // <---------------------------------------------------- FUNCTIONS ----------------------------------------------------------->
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        // FOR COLLECTION CODE CREATE
-        if (handleSubmit) {
-            handleSubmit(values)
-            return
-        }
         if (Boolean(challenge)) { // update
-            groupId ?
-                dispatch<any>(updateChallenge(challenge?._id as string, { ...values, groupId }, onClose, toast))
-                :
+            if (groupId)
+                dispatch<any>(updateChallenge(challenge?._id as string, { ...values, group: groupId }, onClose, toast))
+            else if (collectionId)
+                dispatch<any>(updateChallenge(challenge?._id as string, { ...values, collection: collectionId }, onClose, toast))
+            else
                 dispatch<any>(updateChallenge(challenge?._id as string, values, onClose, toast))
         }
         else {  // create
-            groupId ?
-                dispatch<any>(createChallenge({ ...values, groupId }, onClose, toast))
-                :
+            if (groupId)
+                dispatch<any>(createChallenge({ ...values, group: groupId }, onClose, toast))
+            else if (collectionId)
+                dispatch<any>(createChallenge({ ...values, collection: collectionId }, onClose, toast))
+            else
                 dispatch<any>(createChallenge(values, onClose, toast));
         }
-
 
         form.reset(initialData);
     }

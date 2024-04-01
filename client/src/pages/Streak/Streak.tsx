@@ -87,11 +87,11 @@ const StreakComponent = ({ streak }: { streak: Streak }) => {
   //   setShowMenu(false); // Close the menu after copying
   // };
   const handleOpenUpdateModal = () => {
-    setShowMenu(false);
     onSetStreak(streak)
-    onOpen()
     onSetCollectionId('')
     onSetGroupId('')
+    onOpen()
+    setShowMenu(false);
   }
   const handleOpenSaveModal = () => {
     setShowMenu(false);

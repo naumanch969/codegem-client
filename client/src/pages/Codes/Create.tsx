@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createCode, updateCode } from '../../redux/actions/code';
 import { RootState } from '../../redux/store';
@@ -41,7 +41,6 @@ const CreateCode = () => {    // handleSubmit is passed through collection creat
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
     const { isOpen, onClose, code, collectionId, groupId } = useCodeModal()
     const { isFetching } = useSelector((state: RootState) => state.code)
-
     const formSchema = z.object({
         title: z.string().min(1, { message: 'Title is required.' }).max(250, { message: 'Title can\' be longer than 250 characters.' }),
         description: z.string().min(1, { message: 'Description is required.' }),
@@ -50,7 +49,6 @@ const CreateCode = () => {    // handleSubmit is passed through collection creat
         hashTags: z.array(z.string({ required_error: "Hashtags are required." })),
         visibility: z.string().min(1).max(50),
     })
-
     const initialData: z.infer<typeof formSchema> = {
         title: "",
         description: "",
@@ -72,7 +70,6 @@ const CreateCode = () => {    // handleSubmit is passed through collection creat
     // <---------------------------------------------------- FUNCTIONS ----------------------------------------------------------->
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         // TODO: check format of data being sent to backend
-        // FOR COLLECTION CODE CREATE
         if (Boolean(code)) { // update
             if (groupId)
                 dispatch<any>(updateCode(code?._id as string, { ...values, group: groupId }, onClose, toast))
@@ -89,7 +86,6 @@ const CreateCode = () => {    // handleSubmit is passed through collection creat
             else
                 dispatch<any>(createCode(values, onClose, toast));
         }
-
 
         form.reset(initialData);
     }

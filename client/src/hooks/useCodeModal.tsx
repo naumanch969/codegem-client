@@ -20,7 +20,7 @@ export const useCodeModal = create<Props>((set) => ({
     onOpen: () => set({ isOpen: true }),
     onClose: () => set({ isOpen: false }),
     onSetCollectionId: (collectionId: string) => set({ collectionId }),
-    onSetGroupId: (collectionId: string) => set({ collectionId }),
+    onSetGroupId: (groupId: string) => set({ groupId }),
     onSetCode: (code: Code | null) => set({ code }),
     code: null
 }))

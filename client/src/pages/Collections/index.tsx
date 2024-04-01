@@ -99,7 +99,7 @@ const Collections: React.FC = () => {
                         <div className="relative w-1/3 ">
                             <Input
                                 type="text"
-                                placeholder="Search groups..."
+                                placeholder="Search collections..."
                                 value={searchValue}
                                 onKeyDown={(e) => e.key == 'Enter' && fetch({ loading: true })}
                                 onChange={handleSearchChange}

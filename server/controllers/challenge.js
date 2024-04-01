@@ -3,6 +3,7 @@ import Comment from "../models/submodels/comment.js";
 import Share from "../models/submodels/share.js";
 import Group from "../models/group.js";
 import User from "../models/user.js";
+import Notification from "../models/notification.js";
 import Collection from "../models/collection.js";
 import { createError, isUndefined } from "../utils/functions.js";
 
@@ -184,6 +185,7 @@ export const createChallenge = async (req, res, next) => {
       );
 
     const userId = req.user._id;
+    const findedUser = await User.findById(req.user._id);
 
     var result;
     if (group) {
@@ -194,7 +196,7 @@ export const createChallenge = async (req, res, next) => {
         group,
         ...rest,
       });
-      const group = await Group.findByIdAndUpdate(
+      const findedGroup = await Group.findByIdAndUpdate(
         group,
         { $addToSet: { challenges: result._id } },
         { new: true }
@@ -202,12 +204,12 @@ export const createChallenge = async (req, res, next) => {
       // Notifiying user who created the post
       await Notification.create({
         title: `New Post: ${title}`,
-        description: `You just created a challenge post in group: ${group.name}`,
+        description: `You just created a challenge post in group: ${findedGroup.name}`,
         user: req.user._id,
       });
       // Notifying group members
       await Promise.all(
-        group.members.map(async (memberId) => {
+        findedGroup.members.map(async (memberId) => {
           await Notification.create({
             title: `New Post: ${title}`,
             description: `${findedUser.name} has just created a new post: ${title}. Check it out and give your thought!`,
@@ -220,18 +222,22 @@ export const createChallenge = async (req, res, next) => {
         user: userId,
         title,
         challenge,
-        collection,
+        collectionRef: collection,
         ...rest,
       });
-      const collection = await Collection.findByIdAndUpdate(
-        collection,
+      result = await Challenge.findById(result._id)
+        .populate("collectionRef")
+        .exec();
+
+      const findedCollection = await Collection.findByIdAndUpdate(
+        collection, // collectionId
         { $addToSet: { challenges: result._id } },
         { new: true }
       );
       // Notifiying user who created the post
       await Notification.create({
         title: `New Post: ${title}`,
-        description: `You just created a challenge post in group: ${collection.name}`,
+        description: `You just created a challenge post in group: ${findedCollection.name}`,
         user: req.user._id,
       });
     } else {
@@ -269,9 +275,11 @@ export const updateChallenge = async (req, res, next) => {
   try {
     const { challengeId } = req.params;
 
+    const { collection, ...rest } = req.body;
+
     const result = await Challenge.findByIdAndUpdate(
       challengeId,
-      { $set: req.body },
+      { $set: { collectionRef: collection, ...rest } },
       { new: true }
     );
 

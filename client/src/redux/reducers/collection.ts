@@ -82,7 +82,7 @@ const collectionSlice = createSlice({
       action: PayloadAction<{ result: Collection[] }>
     ) => {
       state.popularCollections = action.payload.result;
-     },
+    },
     getUserCollectionsReducer: (
       state,
       action: PayloadAction<{ result: Collection[]; count?: number }>

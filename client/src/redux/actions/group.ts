@@ -82,10 +82,10 @@ export const getGroupCodes =
   };
 
 export const getGroupStreaks =
-  (collectionId: string, setLoading?: any) => async (dispatch: Dispatch) => {
+  (groupId: string, setLoading?: any) => async (dispatch: Dispatch) => {
     try {
       setLoading && setLoading(true);
-      const { data } = await api.getGroupStreaks(collectionId);
+      const { data } = await api.getGroupStreaks(groupId);
       dispatch(getGroupStreaksReducer(data));
     } catch (err: any) {
       err.response?.data?.message

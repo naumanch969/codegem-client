@@ -22,15 +22,15 @@ import { verifyToken } from "../middleware/auth.js";
 router.get("/get/all", verifyToken, getGroups);
 router.get("/get/user/:userId", verifyToken, getUserGroups);
 router.get("/get/single/:groupId", verifyToken, getGroup);
-router.get("/get/codes/:collectionId", verifyToken, getGroupCodes);
-router.get("/get/streaks/:collectionId", verifyToken, getGroupStreaks);
-router.get("/get/challenges/:collectionId", verifyToken, getGroupChallenges);
+router.get("/get/codes/:groupId", verifyToken, getGroupCodes);
+router.get("/get/streaks/:groupId", verifyToken, getGroupStreaks);
+router.get("/get/challenges/:groupId", verifyToken, getGroupChallenges);
 
 router.post("/create", verifyToken, createGroups);
-router.post("/code/create/:collectionId", verifyToken, createGroupCode);
-router.post("/streak/create/:collectionId", verifyToken, createGroupStreak);
+router.post("/code/create/:groupId", verifyToken, createGroupCode);
+router.post("/streak/create/:groupId", verifyToken, createGroupStreak);
 router.post(
-  "/challenge/create/:collectionId",
+  "/challenge/create/:groupId",
   verifyToken,
   createGroupChallenge
 );

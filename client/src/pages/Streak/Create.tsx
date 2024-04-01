@@ -34,12 +34,12 @@ import { programmingLanguages } from '@/constant';
 import { Combobox } from '@/components/ui/combobox';
 
 
-const CreateStreak = ({ groupId, handleSubmit }: { groupId?: string, handleSubmit?: (data: any) => void }) => {
+const CreateStreak = () => {
 
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
     const { isFetching }: { isFetching: boolean } = useSelector((state: RootState) => state.streak)
-    const { isOpen, onClose, streak } = useStreakModal()
-
+    const { isOpen, onClose, streak, collectionId, groupId } = useStreakModal()
+console.log('streak',streak)
     const formSchema = z.object({
         title: z.string().min(1, { message: 'Title is required.' }).max(250, { message: 'Title can\' be longer than 250 characters.' }),
         description: z.string().min(1, { message: 'Description is required.' }),
@@ -69,22 +69,20 @@ const CreateStreak = ({ groupId, handleSubmit }: { groupId?: string, handleSubmi
     const [streaks, setStreaks] = useState<{ description: string, code: string }[]>([{ description: '', code: '' }])
 
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        // FOR COLLECTION CODE CREATE
-        if (handleSubmit) {
-            handleSubmit(values)
-            return
+        if (Boolean(streak)) { // update
+            if (groupId)
+                dispatch<any>(updateStreak(streak?._id as string, { ...values, group: groupId, streak: streaks }, onClose, toast))
+            else if (collectionId)
+                dispatch<any>(updateStreak(streak?._id as string, { ...values, collection: collectionId, streak: streaks }, onClose, toast))
+            else
+                dispatch<any>(updateStreak(streak?._id as string, { ...values, streak: streaks }, onClose, toast))
         }
-
-        if (Boolean(streak)) {
-            groupId ?
-                dispatch<any>(updateStreak(streak?._id!, { ...values, groupId, streak: streaks }, onClose, toast))
-                :
-                dispatch<any>(updateStreak(streak?._id!, { ...values, streak: streaks }, onClose, toast));
-        }
-        else {
-            groupId ?
-                dispatch<any>(createStreak({ ...values, groupId, streak: streaks }, onClose, toast))
-                :
+        else {  // create
+            if (groupId)
+                dispatch<any>(createStreak({ ...values, group: groupId, streak: streaks }, onClose, toast))
+            else if (collectionId)
+                dispatch<any>(createStreak({ ...values, collection: collectionId, streak: streaks }, onClose, toast))
+            else
                 dispatch<any>(createStreak({ ...values, streak: streaks }, onClose, toast));
         }
     }

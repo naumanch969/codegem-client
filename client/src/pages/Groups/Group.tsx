@@ -25,6 +25,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Empty } from '@/utils/Components/Empty';
 
 const SingleGroup = () => {
 
@@ -36,9 +37,9 @@ const SingleGroup = () => {
     const isJoined = currentGroup?.members?.findIndex(memberId => memberId == loggedUser?._id) != -1
     const isAdmin = (currentGroup?.admin as User)?._id?.toString() == loggedUser?._id?.toString()
     const { onSetGroup, onOpen, onClose } = useGroupModal()
-    const { onOpen: onCodeOpen, onSetCollectionId: onSetCollectionIdForCode, onSetGroupId: onSetGroupIdForCode } = useCodeModal()
-    const { onOpen: onStreakOpen, onSetCollectionId: onSetCollectionIdForStreak, onSetGroupId: onSetGroupIdForStreak } = useStreakModal()
-    const { onOpen: onChallengeOpen, onSetCollectionId: onSetCollectionIdForChallenge, onSetGroupId: onSetGroupIdForChallenge } = useChallengeModal()
+    const { onOpen: onCodeOpen, onSetCode, onSetCollectionId: onSetCollectionIdForCode, onSetGroupId: onSetGroupIdForCode } = useCodeModal()
+    const { onOpen: onStreakOpen, onSetStreak, onSetCollectionId: onSetCollectionIdForStreak, onSetGroupId: onSetGroupIdForStreak } = useStreakModal()
+    const { onOpen: onChallengeOpen, onSetChallenge, onSetCollectionId: onSetCollectionIdForChallenge, onSetGroupId: onSetGroupIdForChallenge } = useChallengeModal()
     const groupName = (currentGroup?.name ? currentGroup.name.charAt(0).toUpperCase() + currentGroup.name.slice(1).toLowerCase() : '');
     const segments = [
         { name: 'Home', link: '/home' },
@@ -103,28 +104,31 @@ const SingleGroup = () => {
     }
     const handleOpen = () => {
         if (activeMenuItem == 'codes') {
-            onCodeOpen()
+            onSetCode(null)
             onSetCollectionIdForCode('')
             onSetGroupIdForCode(groupId!)
+            onCodeOpen()
         }
         else if (activeMenuItem == 'streaks') {
-            onStreakOpen()
+            onSetStreak(null)
             onSetCollectionIdForStreak('')
             onSetGroupIdForStreak(groupId!)
+            onStreakOpen()
         }
         else {
-            onChallengeOpen()
+            onSetChallenge(null)
             onSetCollectionIdForChallenge('')
             onSetGroupIdForChallenge(groupId!)
+            onChallengeOpen()
         }
     }
 
     return (
         <div className="container mx-auto p-4">
 
-            {activeMenuItem == 'codes' && <CodeCreateModal handleSubmit={handleCreateCode} />}
-            {activeMenuItem == 'streaks' && <StreakCreateModal handleSubmit={handleCreateStreak} />}
-            {activeMenuItem == 'challenges' && <ChallengeCreateModal handleSubmit={handleCreateChallenge} />}
+            {activeMenuItem == 'codes' && <CodeCreateModal />}
+            {activeMenuItem == 'streaks' && <StreakCreateModal />}
+            {activeMenuItem == 'challenges' && <ChallengeCreateModal />}
 
             <Delete open={openDeleteModal} setOpen={setOpenDeleteModal} />
             {
@@ -246,9 +250,7 @@ const SingleGroup = () => {
                                                                 {
                                                                     currentGroup?.codes?.length == 0
                                                                         ?
-                                                                        <div className="w-full h-40 flex justify-center items-center">
-                                                                            <span>No Codes to Show.</span>
-                                                                        </div>
+                                                                        <Empty />
                                                                         :
                                                                         currentGroup?.codes?.map((code, index) => (
                                                                             <CodeComponent code={code} key={index} />
@@ -273,9 +275,7 @@ const SingleGroup = () => {
                                                                 {
                                                                     currentGroup?.streaks?.length == 0
                                                                         ?
-                                                                        <div className="w-full h-40 flex justify-center items-center ">
-                                                                            <span>No Streaks to Show.</span>
-                                                                        </div>
+                                                                        <Empty />
                                                                         :
                                                                         <>
                                                                             {currentGroup?.streaks?.map((streak, index) => (
@@ -302,9 +302,7 @@ const SingleGroup = () => {
                                                                 {
                                                                     currentGroup?.challenges?.length == 0
                                                                         ?
-                                                                        <div className="w-full h-40 flex justify-center items-center ">
-                                                                            <span>No Challenges to Show.</span>
-                                                                        </div>
+                                                                        <Empty />
                                                                         :
                                                                         <>
                                                                             {currentGroup?.challenges?.map((challenge, index) => (

@@ -21,6 +21,7 @@ const codeSchema = Schema(
     shares: { type: [{ type: Schema.Types.ObjectId, ref: "Share" }] }, // this post is being shared among which people/group
     group: { type: Schema.Types.ObjectId, ref: "Group", default: null }, // if groupPost, then groupId
     collectionRef: { type: Schema.Types.ObjectId, ref: "Collection", default: null }, // if collectionPost, then collectionId
+    // collectionRef is being used as collection is mongodb reserved word and can't be used fieldname
     visibility: {
       type: String,
       enum: ["private", "public"],

@@ -19,6 +19,7 @@ import {
   saveCodeReducer,
   saveCodeInCollectionsReducer,
   unsaveCodeReducer,
+  createCollectionCodeReducer,
 } from "../reducers/collection";
 import * as api from "../api";
 import { Code, User } from "../../interfaces";
@@ -50,7 +51,7 @@ export const getCodes =
         ? dispatch(error(err.response.data.message))
         : dispatch(error(err.message));
     }
-  }; 
+  };
 export const getSavedCodes = () => async (dispatch: Dispatch) => {
   try {
     dispatch(start());
@@ -84,14 +85,12 @@ export const createCode =
     try {
       dispatch(start());
       const { data } = await api.createCode(codeData);
-      if (codeData.groupId) {
-        dispatch(
-          createGroupCodeReducer({
-            groupId: codeData.group as string,
-            code: data,
-          })
-        );
-      } else {
+      if (codeData.group) {
+        dispatch(createGroupCodeReducer({groupId: codeData.group as string,code: data,}));// data may contain groupId, so we may just pass code
+      } else if (codeData.collection) {
+        dispatch(createCollectionCodeReducer(data));
+      }
+      else {
         dispatch(createCodeReducer(data));
       }
       onClose();

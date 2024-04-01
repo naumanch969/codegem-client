@@ -19,15 +19,17 @@ import { Button } from '@/components/ui/button';
 import { Empty } from '@/utils/Components/Empty';
 import { capitalizeFirstLetter } from '@/lib/utils';
 import { useCodeModal } from '@/hooks/useCodeModal';
+import { useChallengeModal } from '@/hooks/useChallengeModal';
+import { useStreakModal } from '@/hooks/useStreakModal';
 
 
 const SingleCollectionView = () => {
     ///////////////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////////
     const dispatch = useDispatch()
     const { collectionId } = useParams();
-    const { onOpen: onCodeOpen, onSetCollectionId: onSetCollectionIdForCode, onSetGroupId: onSetGroupIdForCode } = useCodeModal()
-    const { onOpen: onStreakOpen, onSetCollectionId: onSetCollectionIdForStreak, onSetGroupId: onSetGroupIdForStreak } = useCodeModal()
-    const { onOpen: onChallengeOpen, onSetCollectionId: onSetCollectionIdForChallenge, onSetGroupId: onSetGroupIdForChallenge } = useCodeModal()
+    const { onOpen: onCodeOpen, onSetCode, onSetCollectionId: onSetCollectionIdForCode, onSetGroupId: onSetGroupIdForCode } = useCodeModal()
+    const { onOpen: onStreakOpen, onSetStreak, onSetCollectionId: onSetCollectionIdForStreak, onSetGroupId: onSetGroupIdForStreak } = useStreakModal()
+    const { onOpen: onChallengeOpen, onSetChallenge, onSetCollectionId: onSetCollectionIdForChallenge, onSetGroupId: onSetGroupIdForChallenge } = useChallengeModal()
     const { currentCollection, isFetching }: { currentCollection: Collection | null, isFetching: boolean } = useSelector((state: RootState) => state.collection)
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
     const collectionName = (
@@ -72,24 +74,30 @@ const SingleCollectionView = () => {
     }, [activeMenuItem])
 
     ///////////////////////////////////////////////////// FUNCTIONS //////////////////////////////////////////////////////
-    const handleCreateCode = () => {
-        onCodeOpen()
-        onSetCollectionIdForCode(collectionId!)
-        onSetGroupIdForCode("")
-    }
-    const handleCreateStreak = () => {
-        onStreakOpen()
-        onSetCollectionIdForCode(collectionId!)
-        onSetGroupIdForCode("")
-    }
-    const handleCreateChallenge = () => {
-        onChallengeOpen()
-        onSetCollectionIdForCode(collectionId!)
-        onSetGroupIdForCode("")
-        // dispatch<any>(createCollectionChallenge(collectionId!, challengeData))
-    }
+    // dispatch<any>(createCollectionChallenge(collectionId!, challengeData))
     const handleStar = () => {
         dispatch<any>(starCollection(currentCollection?._id!, loggedUser?._id!))
+    }
+    const onCreateModalOpen = () => {
+        if (activeMenuItem == 'codes') {
+            onSetCode(null)
+            onSetCollectionIdForCode(collectionId!)
+            onSetGroupIdForCode("")
+            onCodeOpen()
+        }
+        else if (activeMenuItem == 'streaks') {
+            onSetStreak(null)
+            onSetCollectionIdForStreak(collectionId!)
+            onSetGroupIdForStreak("")
+            onStreakOpen()
+        }
+        else {
+            onSetChallenge(null)
+            onSetCollectionIdForChallenge(collectionId!)
+            onSetGroupIdForChallenge("")
+            onChallengeOpen()
+        }
+
     }
 
     return (
@@ -97,8 +105,8 @@ const SingleCollectionView = () => {
 
             <ShareCollection open={openShareCollection} setOpen={setOpenShareCollection} collection={currentCollection!} />
             {activeMenuItem == 'codes' && <CodeCreateModal />}
-            {activeMenuItem == 'streaks' && <StreakCreateModal handleSubmit={handleCreateStreak} />}
-            {activeMenuItem == 'challenges' && <ChallengeCreateModal handleSubmit={handleCreateChallenge} />}
+            {activeMenuItem == 'streaks' && <StreakCreateModal />}
+            {activeMenuItem == 'challenges' && <ChallengeCreateModal />}
 
             <RelatedCollectionSlider />
 
@@ -115,16 +123,15 @@ const SingleCollectionView = () => {
                             <div className="flex justify-between items-center ">
                                 <h1 className="text-3xl font-bold text-dark-slate-blue capitalize ">{currentCollection?.name}</h1>
                                 {/* Interaction buttons */}
-
-                                <div className="flex justify-center space-x-4 ">
+                                <div className="flex justify-center space-x-2 px-4 ">
                                     <Tooltip placement='top' title='Star' >
-                                        <Button onClick={handleStar} variant={starred ? 'default' : 'outline'} size='sm' className='p-1 w-7 h-7 ' >
-                                            {starred ? <Star fontSize="inherit" /> : <StarOutline fontSize="inherit" />}
+                                        <Button onClick={handleStar} variant={starred ? 'default' : 'outline'} size='icon' >
+                                            {starred ? <Star /> : <StarOutline />}
                                         </Button>
                                     </Tooltip>
                                     <Tooltip placement='top' title='Share' >
-                                        <Button variant={'outline'} size='sm' className='p-1 w-7 h-7 ' >
-                                            <ShareOutlined className='' />
+                                        <Button variant={'outline'} size='icon'  >
+                                            <ShareOutlined />
                                         </Button>
                                     </Tooltip>
                                 </div>
@@ -153,7 +160,7 @@ const SingleCollectionView = () => {
                                     </div>
                                 </div>
                                 <button
-                                    onClick={onCodeOpen}
+                                    onClick={onCreateModalOpen}
                                     className="absolute top-0 right-4 flex justify-center items-center gap-1 bg-teal-blue hover:bg-teal-blue-lighten text-white py-2 px-2 rounded-lg shadow-md capitalize "
                                 >
                                     <Add /> Add {activeMenuItem.slice(0, -1)}
