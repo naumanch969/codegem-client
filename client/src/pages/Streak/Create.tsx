@@ -39,7 +39,7 @@ const CreateStreak = () => {
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
     const { isFetching }: { isFetching: boolean } = useSelector((state: RootState) => state.streak)
     const { isOpen, onClose, streak, collectionId, groupId } = useStreakModal()
-console.log('streak',streak)
+
     const formSchema = z.object({
         title: z.string().min(1, { message: 'Title is required.' }).max(250, { message: 'Title can\' be longer than 250 characters.' }),
         description: z.string().min(1, { message: 'Description is required.' }),

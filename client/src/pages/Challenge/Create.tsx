@@ -37,7 +37,6 @@ import { Combobox } from '@/components/ui/combobox';
 
 
 const CreateChallenge = () => {
-console.log('here you go')
     // <---------------------------------------------------- VARIABLES ----------------------------------------------------------->
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
     const { isOpen, onClose, challenge, collectionId, groupId } = useChallengeModal()

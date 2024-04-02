@@ -204,7 +204,6 @@ export const createStreak = async (req, res, next) => {
         { $addToSet: { streaks: result._id } },
         { new: true }
       );
-      console.log('findedGroup,k ', findedGroup)
       // Notifiying user who created the post
       await Notification.create({
         title: `New Post: ${title}`,

@@ -141,7 +141,7 @@ const CreateGroup = () => {    // handleSubmit is passed through collection crea
                 </div>
 
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(() => console.log('test'))} className="space-y-2 ">
+                    <form onSubmit={form.handleSubmit(() => {})} className="space-y-2 ">
                         <FormField
                             control={form.control}
                             name="name"
