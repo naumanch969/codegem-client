@@ -36,7 +36,7 @@ import { createCollectionChallenge } from '@/redux/actions/collection';
 
 
 const CreateCode = () => {    // handleSubmit is passed through collection create code
-
+console.log('testing...')
     // <---------------------------------------------------- VARIABLES ----------------------------------------------------------->
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
     const { isOpen, onClose, code, collectionId, groupId } = useCodeModal()
