@@ -92,16 +92,7 @@ const SingleGroup = () => {
     }
     const handleOpenDeleteModal = () => {
         setOpenDeleteModal(true)
-    }
-    const handleCreateCode = (codeData: any) => {
-        dispatch<any>(createGroupCode(groupId!, codeData, onClose))
-    }
-    const handleCreateStreak = (streakData: any) => {
-        dispatch<any>(createGroupStreak(groupId!, streakData, onClose))
-    }
-    const handleCreateChallenge = (challengeData: any) => {
-        dispatch<any>(createGroupChallenge(groupId!, challengeData, onClose))
-    }
+    } 
     const handleOpen = () => {
         if (activeMenuItem == 'codes') {
             onSetCode(null)

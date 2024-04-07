@@ -32,7 +32,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import toast from 'react-hot-toast';
 import { Combobox } from '@/components/ui/combobox';
 import { programmingLanguages } from '@/constant';
-import { createCollectionChallenge } from '@/redux/actions/collection';
 
 
 const CreateCode = () => {    // handleSubmit is passed through collection create code
