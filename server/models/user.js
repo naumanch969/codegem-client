@@ -1,6 +1,6 @@
 import { Schema, model, Document, Types } from "mongoose";
 
- const userSchema = new Schema({
+const userSchema = new Schema({
   firstName: { type: String },
   lastName: { type: String },
   username: { type: String, unique: true },
@@ -12,6 +12,7 @@ import { Schema, model, Document, Types } from "mongoose";
   bio: { type: String },
   title: { type: String },
   location: { type: String },
+  role: { type: String, enum: ["User", "Admin"], default: "User" },
   interests: { type: [String], default: [] },
   hobbies: { type: [String], default: [] },
   programming: { type: [String], default: [] },

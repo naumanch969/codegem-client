@@ -19,9 +19,10 @@ router.get("/get/single/:userId", getUser);
 router.get("/get/profile", verifyToken, getProfile);
 router.put("/update/profile", verifyToken, updateProfile);
 router.put("/update/personal-details", verifyToken, editPersonalDetails);
-router.put("/update/:userId", updateUser);
-router.delete("/delete", deleteUser);
+router.put("/update/:userId", verifyToken, updateUser);
 
-router.delete("/delete-collection", deleteUserCollection);
+router.delete("/delete/:userId", verifyToken, deleteUser);
+
+router.delete("/delete-collection", verifyToken, deleteUserCollection);
 
 export default router;

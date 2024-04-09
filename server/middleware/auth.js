@@ -19,3 +19,13 @@ export const verifyToken = async (req, res, next) => {
     next(createError(res, 500, "Invalid token"));
   }
 };
+export const verifyAdmin = async (req, res, next) => {
+  try {
+    if (req.user.role == "User")
+      return res.status(400).json({ message: "Admin restricted action." });
+
+    next();
+  } catch (error) {
+    next(createError(res, 500, "Invalid request"));
+  }
+};

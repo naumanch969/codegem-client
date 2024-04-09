@@ -1,3 +1,11 @@
+import Challenge from "../models/challenge.js";
+import Code from "../models/code.js";
+import Group from "../models/group.js";
+import Collection from "../models/collection.js";
+import Notification from "../models/notification.js";
+import Streak from "../models/streak.js";
+import Comment from "../models/submodels/comment.js";
+import Share from "../models/submodels/share.js";
 import User from "../models/user.js";
 import { createError } from "../utils/functions.js";
 
@@ -17,7 +25,9 @@ export const getUsers = async (req, res, next) => {
 
     const [result, totalCount] = await Promise.all([
       resultPromise,
-      count ? User.countDocuments({ _id: { $ne: req.user._id } }).exec() : Promise.resolve(null),
+      count
+        ? User.countDocuments({ _id: { $ne: req.user._id } }).exec()
+        : Promise.resolve(null),
     ]);
 
     let response = { result };
@@ -106,13 +116,42 @@ export const updateUser = async (req, res, next) => {
 };
 export const deleteUser = async (req, res, next) => {
   try {
-    const { email } = req.body;
+    const { userId } = req.params;
 
-    const user = await User.findOne({ email });
-    if (!user) return next(createError(res, "email not exist"));
+    const user = await User.findById(userId);
+    if (!user) return next(createError(res, "User not exist"));
+
+    await Code.deleteMany({ user: user._id });
+    await Streak.deleteMany({ user: user._id });
+    await Notification.deleteMany({ user: user._id });
+    await Challenge.deleteMany({ user: user._id });
+    await Collection.deleteMany({ owner: user._id });
+    await Group.deleteMany({ admin: user._id });
+    // remove being member from all groups
+    await Group.updateMany(
+      { members: user._id },
+      { $pull: { members: user._id } }
+    );
+    // remove if from friend list of others
+    await User.updateMany(
+      { friends: user._id },
+      { $pull: { friends: user._id } }
+    );
+    await User.updateMany(
+      { sentRequests: user._id },
+      { $pull: { sentRequests: user._id } }
+    );
+    await User.updateMany(
+      { receivedRequests: user._id },
+      { $pull: { receivedRequests: user._id } }
+    );
+    // delete all shares
+    await Share.deleteMany({ from: user._id });
+    // delete all comments
+    await Comment.deleteMany({ user: user._id });
 
     const result = await User.findByIdAndDelete(user._id);
-    return res.status(200).json(result);
+    return res.status(200).json({ message: "User deleted successfully." });
   } catch (error) {
     next(createError(res, 500, error.message));
   }

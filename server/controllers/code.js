@@ -190,10 +190,9 @@ export const getSavedCodes = async (req, res, next) => {
 export const createCode = async (req, res, next) => {
   try {
     let { title, code, group, collection, ...rest } = req.body;
-    if (isUndefined(title) || isUndefined(code))
-      return next(
-        createError(res, 400, "Make sure to provide all the fields.")
-      );
+    
+    if (isUndefined(title))return next(createError(res, 400, "Title is required."));
+    if (isUndefined(code))return next(createError(res, 400, "Code is required."));
 
     const userId = req.user._id;
     const findedUser = await User.findById(req.user._id);

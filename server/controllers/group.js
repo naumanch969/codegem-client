@@ -14,6 +14,7 @@ export const getGroups = async (req, res, next) => {
       query: searchQuery,
       languages: languagesString,
     } = req.query;
+    
     let query = userId ? Group.find({ owner: userId }) : Group.find();
     
     const languages = languagesString
