@@ -168,7 +168,9 @@ const codeSlice = createSlice({
               ? {
                   ...code,
                   likes: code.likes.includes(action.payload.loggedUserId)
-                    ? code.likes.filter((l) => l != action.payload.loggedUserId)
+                    ? code.likes.filter(
+                        (l) => l != action.payload.loggedUserId
+                      )
                     : code.likes.concat(action.payload.loggedUserId),
                 }
               : code)

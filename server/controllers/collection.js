@@ -1,9 +1,9 @@
 import Collection from "../models/collection.js";
 import User from "../models/user.js";
 import Share from "../models/submodels/share.js";
-import Streak from "../models/streak.js";
-import Challenge from "../models/challenge.js";
 import Code from "../models/code.js";
+import Challenge from "../models/challenge.js";
+import Streak from "../models/streak.js";
 import { createError, isUndefined } from "../utils/functions.js";
 
 export const getCollections = async (req, res, next) => {
@@ -386,6 +386,16 @@ export const starCollection = async (req, res, next) => {
 export const deleteCollection = async (req, res, next) => {
   try {
     const { collectionId } = req.params;
+
+    const colleciton = await Collection.findById(collectionId);
+    if (!colleciton)
+      return next(createError(res, 404, "Collection not found."));
+
+    await Code.deleteMany({ collectionRef: collectionId });
+    await Streak.deleteMany({ collectionRef: collectionId });
+    await Challenge.deleteMany({ collectionRef: collectionId });
+    await Share.deleteMany({ post: collectionId, postType: "collection" });
+    // TODO: pull shares from sentShares, receivedShares for user and group, we may need to implement this after implementing shareCollection functionality
 
     const deletedCollection = await Collection.findByIdAndDelete(collectionId);
     res.status(200).json(deletedCollection);

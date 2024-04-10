@@ -5,13 +5,18 @@ import { RootState } from '../../redux/store';
 import { SampleProfileCoverImage } from '../../assets';
 import { Button } from '@/components/ui/button';
 import { removeFriendRequest, sendFriendRequest, getSentRequests, getFriends, getReceivedRequests, acceptFriendRequest } from '@/redux/actions/friend';
+import { useRole } from '@/hooks/useRole';
+import { deleteUser } from '@/redux/actions/user';
+import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {
 
     ///////////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////////////
     const dispatch = useDispatch()
-    const { currentUser }: { currentUser: User | null } = useSelector((state: RootState) => state.user)
-    const { sentRequests, receivedRequests, isFetching, friends } = useSelector((state: RootState) => state.friend)
+    const navigate = useNavigate()
+    const { currentUser, isFetching: userFetching }: { currentUser: User | null, isFetching: boolean } = useSelector((state: RootState) => state.user)
+    const { sentRequests, receivedRequests, isFetching: friendsFetching, friends } = useSelector((state: RootState) => state.friend)
+    const { role } = useRole()
 
     ///////////////////////////////////////////////// STATES //////////////////////////////////////////////////////////
     const [userType, setUserType] = useState<'friend' | 'request_sent' | 'request_received' | 'none'>('none')
@@ -47,6 +52,12 @@ const ProfilePage = () => {
             dispatch<any>(sendFriendRequest(currentUser?._id as string))
     }
 
+    const onDeleteUser = () => {
+        if (role == 'Admin') {
+            dispatch<any>(deleteUser(currentUser?._id as string, navigate))
+        }
+    }
+
     return (
         <div className="flex flex-col w-full">
             <div className="w-full h-[20rem] rounded-[6px] overflow-hidden " >
@@ -74,12 +85,21 @@ const ProfilePage = () => {
                         <p className="text-gray-600">{currentUser?.email}</p>
                     </div>
                 </div>
-                {
-                    userType != 'friend' &&
-                    <Button onClick={onClick} disabled={isFetching} >
-                        {userType == 'request_received' ? 'Accept Request' : userType == 'request_sent' ? 'Remove Request' : 'Add Friend'}
-                    </Button>
-                }
+
+                <div className="flex justify-end gap-4">
+                    {
+                        userType != 'friend' &&
+                        <Button onClick={onClick} disabled={friendsFetching || userFetching} >
+                            {userType == 'request_received' ? 'Accept Request' : userType == 'request_sent' ? 'Remove Request' : 'Add Friend'}
+                        </Button>
+                    }
+                    {
+                        role == 'Admin' &&
+                        <Button onClick={onDeleteUser} variant='destructive' disabled={friendsFetching || userFetching} >
+                            Delete User
+                        </Button>
+                    }
+                </div>
             </div>
 
         </div>

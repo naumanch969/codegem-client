@@ -86,6 +86,8 @@ export const editPersonalDetails = (
   type: "interests" | "hobbies" | "books" | "programming",
   values: string[]
 ) => API.put(`/user/update/personal-details?type=${type}`, { values });
+export const deleteUser = (userId: string) =>
+  API.delete(`/user/delete/${userId}`);
 
 // CODE
 export const getCode = (id: string) => API.get(`/code/get/single/${id}`);
@@ -177,7 +179,7 @@ export const getComments = (
 
 // Collections
 export const getCollections = (query: string) =>
-  API.get(`/collection/get/all${query}`); 
+  API.get(`/collection/get/all${query}`);
 export const getCollectionCategories = () =>
   API.get(`/collection/get/categories`);
 export const getUserCollections = (query: string, userId: string) =>

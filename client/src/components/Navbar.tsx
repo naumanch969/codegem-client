@@ -66,8 +66,9 @@ const Navbar = () => {
                                 <h3 className="font-bolder text-[16px] " >Hey, {loggedUser?.username}</h3>
                                 <Avatar>
                                     <AvatarImage src={loggedUser?.profilePicture} alt={loggedUser?.username} />
-                                    <AvatarFallback></AvatarFallback>
-                                    {loggedUser?.username?.charAt(0)}
+                                    <AvatarFallback className='text-primary text-2xl font-semibold flex justify-center items-center' >
+                                        {loggedUser?.username?.charAt(0)}
+                                    </AvatarFallback>
                                 </Avatar>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>

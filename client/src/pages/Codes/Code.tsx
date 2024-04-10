@@ -26,8 +26,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Separator } from '@/components/ui/separator';
@@ -72,13 +70,7 @@ const CodeComponent = ({ code }: { code: Code }) => {
 
   /////////////////////////////////////// FUNCTIONS ////////////////////////////////////////
   const handleLikeCode = () => {
-    dispatch<any>(likeCode(code?._id as string, userId!));
-    // TODO
-    // if (isCodeLiked) {
-    //   code.likes = code?.likes.filter((id) => id !== userId)
-    // } else {
-    //   code.likes = [...code?.likes!, userId!]
-    // }
+    dispatch<any>(likeCode(code?._id as string, userId!, code?.group));
   };
   const handleCopyCode = () => {
     navigator.clipboard.writeText(code?.code);

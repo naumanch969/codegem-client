@@ -14,7 +14,10 @@ import {
   commentCodeReducer,
   deleteCodeReducer,
 } from "../reducers/code";
-import { createGroupCodeReducer } from "../reducers/group";
+import {
+  createGroupCodeReducer,
+  likeGroupCodeReducer,
+} from "../reducers/group";
 import {
   saveCodeReducer,
   saveCodeInCollectionsReducer,
@@ -86,11 +89,15 @@ export const createCode =
       dispatch(start());
       const { data } = await api.createCode(codeData);
       if (codeData.group) {
-        dispatch(createGroupCodeReducer({groupId: codeData.group as string,code: data,}));// data may contain groupId, so we may just pass code
+        dispatch(
+          createGroupCodeReducer({
+            groupId: codeData.group as string,
+            code: data,
+          })
+        ); // data may contain groupId, so we may just pass code
       } else if (codeData.collection) {
         dispatch(createCollectionCodeReducer(data));
-      }
-      else {
+      } else {
         dispatch(createCodeReducer(data));
       }
       onClose();
@@ -176,9 +183,13 @@ export const saveCodeInCollections =
     }
   };
 export const likeCode =
-  (codeId: string, loggedUserId: string) => async (dispatch: Dispatch) => {
+  (codeId: string, loggedUserId: string, groupId?: string) =>
+  async (dispatch: Dispatch) => {
     try {
       dispatch(likeCodeReducer({ codeId, loggedUserId }));
+      // TODO: do similar to this for share, comment, save etc...
+      if (groupId)
+        dispatch(likeGroupCodeReducer({ codeId, loggedUserId, groupId }));
       await api.likeCode(codeId);
     } catch (err: any) {
       err.response?.data?.message

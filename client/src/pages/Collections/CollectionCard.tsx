@@ -22,7 +22,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { format } from 'timeago.js';
 import { Button } from '@/components/ui/button';
 import { starCollection } from '@/redux/actions/collection';
-
+import { useRole } from '@/hooks/useRole';
 
 const CollectionCard = ({ collection }: { collection: Collection }) => {
 
@@ -32,6 +32,7 @@ const CollectionCard = ({ collection }: { collection: Collection }) => {
     const isOwner = ((collection.owner as User)?._id || collection.owner) == loggedUser?._id!
     const starred: boolean = Boolean(collection.stars.find(id => id == loggedUser?._id!))
     const { onOpen, onSetCollection } = useCollectionModal()
+    const { role } = useRole()
 
     /////////////////////////////////////////////////// STATES /////////////////////////////////////////////////////
     const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
@@ -81,7 +82,7 @@ const CollectionCard = ({ collection }: { collection: Collection }) => {
                             {collection.name}
                         </Link>
                         {
-                            isOwner &&
+                            isOwner || role == 'Admin' &&
                             <DropdownMenu>
                                 <DropdownMenuTrigger>
                                     <IconButton><MoreVert /></IconButton>

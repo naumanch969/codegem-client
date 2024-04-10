@@ -37,3 +37,7 @@ TODO: ENABLE THE SETTINGS
 
 12. **Notification Preferences:**
     - Remind users to update notification preferences: "Customize your notification preferences in settings."
+
+
+
+// TODO: if user try to access the user which is being deleted, show a specific 404 page showing that user is being deleted

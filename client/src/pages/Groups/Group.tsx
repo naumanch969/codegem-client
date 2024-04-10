@@ -85,19 +85,19 @@ const SingleGroup = () => {
     const handleLeaveGroup = () => {
         dispatch<any>(leaveGroup(groupId as string, loggedUser?._id as string))
     }
-    const handleOpenUpdateModal = () => {
+    const onOpenUpdateModal = () => {
         if (!currentGroup) return
         onSetGroup(currentGroup as Group)
         onOpen()
     }
-    const handleOpenDeleteModal = () => {
+    const onOpenDeleteModal = () => {
         setOpenDeleteModal(true)
     } 
     const handleOpen = () => {
         if (activeMenuItem == 'codes') {
             onSetCode(null)
-            onSetCollectionIdForCode('')
             onSetGroupIdForCode(groupId!)
+            onSetCollectionIdForCode('')
             onCodeOpen()
         }
         else if (activeMenuItem == 'streaks') {
@@ -144,10 +144,10 @@ const SingleGroup = () => {
                                         {
                                             isAdmin &&
                                             <>
-                                                <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={handleOpenUpdateModal} >
+                                                <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={onOpenUpdateModal} >
                                                     <Edit /> Update
                                                 </DropdownMenuItem>
-                                                <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={handleOpenDeleteModal} >
+                                                <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={onOpenDeleteModal} >
                                                     <DeleteIcon /> Delete
                                                 </DropdownMenuItem>
                                             </>

@@ -28,8 +28,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Separator } from '@/components/ui/separator';
@@ -37,7 +35,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Link } from 'react-router-dom';
-
 
 const ChallengeComponent = ({ challenge }: { challenge: Challenge }) => {
 
@@ -74,13 +71,7 @@ const ChallengeComponent = ({ challenge }: { challenge: Challenge }) => {
 
   /////////////////////////////////////// FUNCTIONS ////////////////////////////////////////
   const handleLikeChallenge = () => {
-    dispatch<any>(likeChallenge(challenge?._id as string, userId!));
-    // TODO
-    // if (isChallengeLiked) {
-    //   challenge.likes = challenge?.likes.filter((id) => id !== userId)
-    // } else {
-    //   challenge.likes = [...challenge?.likes!, userId!]
-    // }
+    dispatch<any>(likeChallenge(challenge?._id as string, userId!, challenge?.group));
   };
   const handleCopyChallenge = () => {
     navigator.clipboard.writeText(challenge?.challenge);

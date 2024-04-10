@@ -38,7 +38,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Link } from 'react-router-dom';
 
-
 const StreakComponent = ({ streak }: { streak: Streak }) => {
 
   /////////////////////////////////////// VARIABLES ////////////////////////////////////////
@@ -74,13 +73,7 @@ const StreakComponent = ({ streak }: { streak: Streak }) => {
 
   /////////////////////////////////////// FUNCTIONS ////////////////////////////////////////
   const handleLikeStreak = () => {
-    dispatch<any>(likeStreak(streak?._id as string, userId!));
-    // TODO
-    // if (isStreakLiked) {
-    //   streak.likes = streak?.likes.filter((id) => id !== userId)
-    // } else {
-    //   streak.likes = [...streak?.likes!, userId!]
-    // }
+    dispatch<any>(likeStreak(streak?._id as string, userId!, streak?.group));
   };
   // const handleCopyStreak = () => {
   //   navigator.clipboard.writeText(streak?.streak);

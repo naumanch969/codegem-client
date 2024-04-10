@@ -19,7 +19,7 @@ const ProfilePage = () => {
 
     useEffect(() => {
         dispatch<any>(getUser(userId as string))
-    }, [])
+    }, [userId])
 
 
     return (

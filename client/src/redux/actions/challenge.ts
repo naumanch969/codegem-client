@@ -14,7 +14,10 @@ import {
   commentChallengeReducer,
   deleteChallengeReducer,
 } from "../reducers/challenge";
-import { createGroupChallengeReducer } from "../reducers/group";
+import {
+  createGroupChallengeReducer,
+  likeGroupChallengeReducer,
+} from "../reducers/group";
 import {
   saveChallengeReducer,
   saveChallengeInCollectionsReducer,
@@ -112,7 +115,12 @@ export const createChallenge =
       dispatch(start());
       const { data } = await api.createChallenge(challengeData);
       if (challengeData.group) {
-        dispatch(createGroupChallengeReducer({groupId: challengeData.group as string,challenge: data,})); // data may contain groupId, so we may just pass code
+        dispatch(
+          createGroupChallengeReducer({
+            groupId: challengeData.group as string,
+            challenge: data,
+          })
+        ); // data may contain groupId, so we may just pass code
       } else if (challengeData.collection) {
         dispatch(createCollectionChallengeReducer(data));
       } else {
@@ -208,9 +216,13 @@ export const saveChallengeInCollections =
     }
   };
 export const likeChallenge =
-  (challengeId: string, loggedUserId: string) => async (dispatch: Dispatch) => {
+  (challengeId: string, loggedUserId: string, groupId?: string) =>
+  async (dispatch: Dispatch) => {
     try {
       dispatch(likeChallengeReducer({ challengeId, loggedUserId }));
+      if (groupId)
+        dispatch(likeGroupChallengeReducer({ challengeId, loggedUserId, groupId }));
+
       await api.likeChallenge(challengeId);
     } catch (err: any) {
       err.response?.data?.message

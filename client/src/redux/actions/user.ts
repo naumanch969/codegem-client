@@ -7,9 +7,11 @@ import {
   getUserReducer,
   getProfileReducer,
   editPersonalDetailsReducer,
+  deleteUserReducer,
 } from "../reducers/user";
 import { AsyncAction } from "../store";
 import { User } from "../../interfaces";
+import { useNavigate } from "react-router-dom";
 
 export const getUsers =
   (loading: boolean = false, query: string): AsyncAction =>
@@ -59,6 +61,19 @@ export const updateProfile =
       dispatch(start());
       const { data } = await api.updateProfile(profileData);
       dispatch(getProfileReducer(data));
+      dispatch(end());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+export const deleteUser =
+  (userId: string, navigate: ReturnType<typeof useNavigate>): AsyncAction =>
+  async (dispatch) => {
+    try {
+      dispatch(start());
+      await api.deleteUser(userId);
+      dispatch(deleteUserReducer(userId));
+      navigate("/friends");
       dispatch(end());
     } catch (error) {
       console.log(error);

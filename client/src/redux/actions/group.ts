@@ -17,6 +17,9 @@ import {
   createGroupStreakReducer,
   createGroupChallengeReducer,
   createGroupCodeReducer,
+  likeGroupCodeReducer,
+  likeGroupStreakReducer,
+  likeGroupChallengeReducer,
 } from "../reducers/group";
 import * as api from "../api";
 import { useNavigate } from "react-router-dom";
@@ -203,7 +206,7 @@ export const joinGroup =
         ? dispatch(error(err.response.data.message))
         : dispatch(error(err.message));
     }
-  };
+  }; 
 export const leaveGroup =
   (groupId: string, loggedUserId: string) => async (dispatch: Dispatch) => {
     try {

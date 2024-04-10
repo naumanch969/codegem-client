@@ -297,6 +297,9 @@ const collectionSlice = createSlice({
       state.userCollections = state.userCollections.filter(
         (collection) => collection._id != action.payload._id
       );
+      state.collections = state.collections.filter(
+        (collection) => collection._id != action.payload._id
+      );
     },
   },
 });

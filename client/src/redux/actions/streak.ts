@@ -14,7 +14,10 @@ import {
   commentStreakReducer,
   deleteStreakReducer,
 } from "../reducers/streak";
-import { createGroupStreakReducer } from "../reducers/group";
+import {
+  createGroupStreakReducer,
+  likeGroupStreakReducer,
+} from "../reducers/group";
 import {
   saveStreakReducer,
   saveStreakInCollectionsReducer,
@@ -90,7 +93,12 @@ export const createStreak =
       const { data } = await api.createStreak(streakData);
 
       if (streakData.group) {
-        dispatch(createGroupStreakReducer({groupId: streakData.group as string,streak: data,})); // data may contain groupId, so we may just pass code
+        dispatch(
+          createGroupStreakReducer({
+            groupId: streakData.group as string,
+            streak: data,
+          })
+        ); // data may contain groupId, so we may just pass code
       } else if (streakData.collection) {
         dispatch(createCollectionStreakReducer(data));
       } else {
@@ -180,9 +188,12 @@ export const saveStreakInCollections =
     }
   };
 export const likeStreak =
-  (streakId: string, loggedUserId: string) => async (dispatch: Dispatch) => {
+  (streakId: string, loggedUserId: string, groupId?: string) =>
+  async (dispatch: Dispatch) => {
     try {
       dispatch(likeStreakReducer({ streakId, loggedUserId }));
+      if (groupId)
+        dispatch(likeGroupStreakReducer({ streakId, loggedUserId, groupId }));
       await api.likeStreak(streakId);
     } catch (err: any) {
       err.response?.data?.message

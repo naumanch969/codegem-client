@@ -136,6 +136,149 @@ const groupSlice = createSlice({
               : group)
       );
     },
+    likeGroupCodeReducer: (
+      state,
+      action: PayloadAction<{
+        groupId: string;
+        codeId: string;
+        loggedUserId: string;
+      }>
+    ) => {
+      const codeId = action.payload.codeId;
+      const groupId = action.payload.groupId;
+      const loggedUserId = action.payload.loggedUserId;
+
+      if (state.currentGroup?._id?.toString() == groupId.toString()) {
+        state.currentGroup = {
+          ...state.currentGroup,
+          codes: state.currentGroup.codes.map(
+            (code) =>
+              (code =
+                code._id == codeId
+                  ? {
+                      ...code,
+                      likes: code.likes.includes(loggedUserId)
+                        ? code.likes.filter((l) => l != loggedUserId)
+                        : code.likes.concat(loggedUserId),
+                    }
+                  : code)
+          ),
+        };
+      }
+      state.groups = state.groups.map(
+        (group) =>
+          (group =
+            group._id == groupId
+              ? {
+                  ...group,
+                  codes: group.codes.map(
+                    (code) =>
+                      (code =
+                        code._id == codeId
+                          ? {
+                              ...code,
+                              likes: code.likes.includes(loggedUserId)
+                                ? code.likes.filter((l) => l != loggedUserId)
+                                : code.likes.concat(loggedUserId),
+                            }
+                          : code)
+                  ),
+                }
+              : group)
+      );
+    },
+    likeGroupStreakReducer: (
+      state,
+      action: PayloadAction<{
+        groupId: string;
+        streakId: string;
+        loggedUserId: string;
+      }>
+    ) => {
+      const { groupId, streakId, loggedUserId } = action.payload;
+
+      // Update currentGroup if its id matches the provided groupId
+      if (state.currentGroup?._id?.toString() === groupId.toString()) {
+        state.currentGroup = {
+          ...state.currentGroup,
+          streaks: state.currentGroup.streaks.map((streak) =>
+            streak._id === streakId
+              ? {
+                  ...streak,
+                  likes: streak.likes.includes(loggedUserId)
+                    ? streak.likes.filter((l) => l !== loggedUserId)
+                    : streak.likes.concat(loggedUserId),
+                }
+              : streak
+          ),
+        };
+      }
+
+      // Update groups array
+      state.groups = state.groups.map((group) =>
+        group._id === groupId
+          ? {
+              ...group,
+              streaks: group.streaks.map((streak) =>
+                streak._id === streakId
+                  ? {
+                      ...streak,
+                      likes: streak.likes.includes(loggedUserId)
+                        ? streak.likes.filter((l) => l !== loggedUserId)
+                        : streak.likes.concat(loggedUserId),
+                    }
+                  : streak
+              ),
+            }
+          : group
+      );
+    }, 
+    likeGroupChallengeReducer: (
+      state,
+      action: PayloadAction<{
+        groupId: string;
+        challengeId: string;
+        loggedUserId: string;
+      }>
+    ) => {
+      const { groupId, challengeId, loggedUserId } = action.payload;
+
+      // Update currentGroup if its id matches the provided groupId
+      if (state.currentGroup?._id?.toString() === groupId.toString()) {
+        state.currentGroup = {
+          ...state.currentGroup,
+          challenges: state.currentGroup.challenges.map((challenge) =>
+            challenge._id === challengeId
+              ? {
+                  ...challenge,
+                  likes: challenge.likes.includes(loggedUserId)
+                    ? challenge.likes.filter((l) => l !== loggedUserId)
+                    : challenge.likes.concat(loggedUserId),
+                }
+              : challenge
+          ),
+        };
+      }
+
+      // Update groups array
+      state.groups = state.groups.map((group) =>
+        group._id === groupId
+          ? {
+              ...group,
+              challenges: group.challenges.map((challenge) =>
+                challenge._id === challengeId
+                  ? {
+                      ...challenge,
+                      likes: challenge.likes.includes(loggedUserId)
+                        ? challenge.likes.filter((l) => l !== loggedUserId)
+                        : challenge.likes.concat(loggedUserId),
+                    }
+                  : challenge
+              ),
+            }
+          : group
+      );
+    },
     leaveGroupReducer: (
       state,
       action: PayloadAction<{ groupId: string; loggedUserId: string }>
@@ -187,6 +330,9 @@ export const {
   createGroupChallengeReducer,
   createGroupReducer,
   joinGroupReducer,
+  likeGroupCodeReducer,
+  likeGroupStreakReducer,
+  likeGroupChallengeReducer,
   leaveGroupReducer,
   updateGroupReducer,
   deleteGroupReducer,

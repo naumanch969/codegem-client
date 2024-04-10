@@ -93,6 +93,9 @@ const userSlice = createSlice({
     logoutReducer: (state) => {
       state.loggedUser = null;
     },
+    deleteUserReducer: (state, action: PayloadAction<string>) => {
+      state.users = state.users.filter((u) => u._id != action.payload);
+    },
   },
 });
 
@@ -104,6 +107,7 @@ export const {
   getUsersReducer,
   getUserReducer,
   getProfileReducer,
+  deleteUserReducer,
   editPersonalDetailsReducer,
   registerReducer,
   loginReducer,

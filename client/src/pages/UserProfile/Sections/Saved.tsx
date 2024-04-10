@@ -17,7 +17,7 @@ const Saved = () => {
   return (
 
     <div className="w-full flex flex-col gap-8 ">
-      <div className="flex flex-col gap-6 lg:px-60 md:px-50 sm:px-10 px-4 ">
+      <div className="flex flex-col gap-6 xl:px-60 lg:px-50 md:px-40 sm:px-10 px-4 ">
         {
           isFetching
             ?

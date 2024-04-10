@@ -4,7 +4,7 @@ const shareSchema = Schema(
   {
     from: { type: Schema.Types.ObjectId, ref: "User" },
     to: { type: Schema.Types.ObjectId }, // either group or user
-    post: { type: Schema.Types.ObjectId }, // either code, streak, challenge, project
+    post: { type: Schema.Types.ObjectId }, // either code, streak, challenge, project, collection
     postType: {
       type: String,
       enum: ["code", "streak", "challenge", "collection"],
