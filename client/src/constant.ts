@@ -1,5 +1,6 @@
 // export const baseURL = 'https://codegem.glitch.me'
 export const baseURL = "http://localhost:5000";
+export const adminEmail = 'naumanch969@gmail.com'
 
 
 export const programmingLanguages = [

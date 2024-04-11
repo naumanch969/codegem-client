@@ -32,6 +32,7 @@ import { AuthWrapper } from "./wrappers";
 import { RootState } from "./redux/store";
 import { Collection as TCollection } from './interfaces'
 import { useRole } from './hooks/useRole';
+import { adminEmail } from './constant';
 
 const Apps = () => {
   /////////////////////////////////////////////// VARIABLES /////////////////////////////////////////////////////
@@ -39,7 +40,6 @@ const Apps = () => {
   const { showSidebar } = useStateContext();
   const { loggedUserToken, loggedUser } = useSelector((state: RootState) => state.user);
   const { userCollections }: { userCollections: TCollection[] } = useSelector((state: RootState) => state.collection);
-  const adminEmail = 'naumanch969@gmail.com'
   const { onSetRole } = useRole()
 
   /////////////////////////////////////////////// STATES /////////////////////////////////////////////////////
