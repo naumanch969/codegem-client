@@ -1,11 +1,11 @@
 # Codegem
 
-Codegem is a social media platform targetted specifically for programmers, providing a dedicated space to share code snippets, maintain code streaks, collaborate on projects, and connect with like-minded individuals. Whether you're a seasoned developer or just starting out, Codegem offers a comprehensive set of features to enhance your coding experience.
+Codegem is a social media platform targeted specifically for programmers, providing a dedicated space to share code snippets, maintain code streaks, collaborate on projects, and connect with like-minded individuals. Whether you're an expert or just starting, Codegem offers comprehensive features to enhance your coding experience.
 
 ## Table of Contents
 - [🤖 Introduction](#-introduction)
 - [⚙️ Tech Stack](#️-tech-stack)
-- [🔋 Features](#-features)
+- [🔋  Features](#-features)
 - [🤸 Quick Start](#-quick-start)
 - [🕸️ Snippets](#️-snippets)
 - [🔗 Links](#-links)
@@ -59,7 +59,3 @@ Codegem allows you to share and discover code snippets. Whether it's a clever al
 ## 🚀 More
 
 For more amazing projects and development tools, check out [DevX Studio](https://devx.studio). DevX Studio is dedicated to building innovative projects to empower developers worldwide.
-
----
-
-Feel free to customize this README to fit your project's branding and style. Happy coding with Codegem!
