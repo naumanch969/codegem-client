@@ -58,7 +58,7 @@ const Apps = () => {
   /////////////////////////////////////////////// FUNCTIONS /////////////////////////////////////////////////////
 
   return (
-    <div className={`   w-screen min-h-screen overflow-x-hidden flex bg-light-grayD text-dark-slate-blue`}>
+    <div className={` w-screen min-h-screen overflow-x-hidden flex bg-light-grayD text-dark-slate-blue`}>
       {!loggedUserToken ? (
         <Routes>
           <Route path="/auth/register" element={<AuthWrapper><Register /></AuthWrapper>} />
