@@ -26,8 +26,8 @@ export const register = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, 12);
 
     var role;
-    if (username == process.env.ADMIN_USERNAME) role = "admin";
-    else role = role || "client";
+    if (username == process.env.ADMIN_USERNAME) role = "Admin";
+    else role = role || "User";
 
     const newUser = await User.create({
       firstName,

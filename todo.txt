@@ -1,4 +1,3 @@
-TODO: work on collection posts and group
 TODO: MESSAGE SYSTEM
 TODO: SUBSCRIBE TO A COLLECTION
 
