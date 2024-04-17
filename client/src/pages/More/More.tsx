@@ -37,9 +37,23 @@ import {
     CastConnected,
     HelpCenter,
 } from '@mui/icons-material';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 
 const MorePage = () => {
 
+    /////////////////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////////////
+    const { loggedUser } = useSelector((state: RootState) => state.user)
+    console.log('loggedUser', loggedUser)
+    /////////////////////////////////////////////////////// STATES //////////////////////////////////////////////////////////
+
+
+    /////////////////////////////////////////////////////// USE EFFECTS //////////////////////////////////////////////////////////
+
+
+    /////////////////////////////////////////////////////// FUNCTIONS //////////////////////////////////////////////////////////
+
+    /////////////////////////////////////////////////////// COMPONENTS //////////////////////////////////////////////////////////
     const SettingsItem = ({ icon, label, value }: { icon: any, label: string, value: string }) => {
         return (
             <div className="flex items-center py-2 px-4 rounded-md hover:bg-light-gray transition duration-200 cursor-pointer">
@@ -53,20 +67,6 @@ const MorePage = () => {
         );
     };
 
-    const Section = ({ icon, title, content }: { icon: any, title: string, content: any }) => {
-        return (
-            <Accordion type="single" collapsible>
-                <AccordionItem value="item-1">
-                    <AccordionTrigger>
-                        <div className="flex justify-start gap-2">{icon} <span>{title}</span></div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                        {content}
-                    </AccordionContent>
-                </AccordionItem>
-            </Accordion>
-        );
-    };
 
     const sections = [
         {
@@ -167,13 +167,35 @@ const MorePage = () => {
         <div className="p-6 w-full">
             <h1 className="text-3xl font-bold mb-4 text-dark-slate-blue">More</h1>
             <div className="w-full flex flex-col gap-4">
+                <Accordion type="single" collapsible>
+                    <AccordionItem value="item-1">
+                        <AccordionTrigger>
+                            <div className="flex justify-start gap-2"><Person /> <span>Account Settings</span></div>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                            <div className="flex items-center py-2 px-4 rounded-md hover:bg-light-gray transition duration-200 cursor-pointer">
+                                {icon && <div className="mr-2 text-cool-gray">{icon}</div>}
+                                <div>
+                                    <p className="text-cool-gray font-medium">{label}</p>
+                                    <p className="text-cool-gray">{value}</p>
+                                </div>
+                                <ChevronRight className="ml-auto w-4 h-4 text-cool-gray" />
+                            </div>
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
+
                 {sections.map((section, index) => (
-                    <Section
-                        key={index}
-                        title={section.title}
-                        content={section.content}
-                        icon={section.icon}
-                    />
+                    <Accordion key={index} type="single" collapsible>
+                        <AccordionItem value="item-1">
+                            <AccordionTrigger>
+                                <div className="flex justify-start gap-2">{section.icon} <span>{section.title}</span></div>
+                            </AccordionTrigger>
+                            <AccordionContent>
+                                {section.content}
+                            </AccordionContent>
+                        </AccordionItem>
+                    </Accordion>
                 ))}
             </div>
         </div>

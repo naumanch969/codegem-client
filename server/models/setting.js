@@ -44,6 +44,6 @@ const settingsSchema = new Schema(
   { timestamps: true } // Adding timestamps option
 );
 
-const settingModel = model("Setting", settingSchema);
+const settingModel = model("Setting", settingsSchema);
 
 export default settingModel;
