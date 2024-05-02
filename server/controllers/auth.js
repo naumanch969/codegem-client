@@ -85,7 +85,7 @@ export const verifyRegisterOTP = async (req, res, next) => {
 
     const otps = await OTP.find({ email });
     if (otps.length == 0)
-      return next(createError(res, 400, "You have entered an expired otp"));
+      return next(createError(res, 400, "No otp for this email."));
 
     const verify_register_otps = otps.filter(
       (otp) => otp.name == "verify_register_otp"
@@ -148,7 +148,7 @@ export const login = async (req, res, next) => {
     next(createError(res, 500, err.message));
   }
 };
-export const sendOTP = async (req, res) => {
+export const sendOTP = async (req, res, next) => {
   try {
     const { email } = req.body;
     if (!email)
@@ -197,7 +197,7 @@ export const sendOTP = async (req, res) => {
     });
   }
 };
-export const verifyOTP = async (req, res) => {
+export const verifyOTP = async (req, res, next) => {
   try {
     const { email, otp } = req.body;
     if (!email || !otp)
@@ -232,7 +232,7 @@ export const verifyOTP = async (req, res) => {
     });
   }
 };
-export const setNewPassword = async (req, res) => {
+export const setNewPassword = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     if (!password || !email)
