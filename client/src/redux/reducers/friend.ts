@@ -34,10 +34,7 @@ const friendSlice = createSlice({
     error: (state, action: PayloadAction<string>) => {
       state.error = action.payload;
     },
-    getFriendsReducer: (
-      state,
-      action: PayloadAction<{ count: number; result: User[] }>
-    ) => {
+    getFriendsReducer: (state, action: PayloadAction<{ count: number; result: User[] }>) => {
       state.friends = action.payload.result;
       state.count = action.payload.count;
     },
@@ -52,25 +49,17 @@ const friendSlice = createSlice({
     },
     sendFriendRequestReducer: (state, action: PayloadAction<User>) => {
       state.sentRequests = [...state.sentRequests, action.payload];
-      state.suggestedUsers = state.suggestedUsers.filter(
-        (user) => user._id != action.payload._id
-      );
+      state.suggestedUsers = state.suggestedUsers.filter((user) => user._id != action.payload._id);
     },
     acceptFriendRequestReducer: (state, action: PayloadAction<User>) => {
-      state.receivedRequests = state.receivedRequests.filter(
-        (user) => user._id != action.payload._id
-      );
+      state.receivedRequests = state.receivedRequests.filter((user) => user._id != action.payload._id);
       state.friends = [...state.friends, action.payload];
     },
     removeFriendRequestReducer: (state, action: PayloadAction<User>) => {
-      state.sentRequests = state.sentRequests.filter(
-        (user) => user._id != action.payload._id
-      ); // here sender is loggedUser
+      state.sentRequests = state.sentRequests.filter((user) => user._id != action.payload._id); // here sender is loggedUser
     },
     rejectFriendRequestReducer: (state, action: PayloadAction<User>) => {
-      state.receivedRequests = state.receivedRequests.filter(
-        (user) => user._id != action.payload._id
-      );
+      state.receivedRequests = state.receivedRequests.filter((user) => user._id != action.payload._id);
     },
   },
 });

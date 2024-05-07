@@ -16,8 +16,7 @@ import {
 import { AsyncAction } from "../store";
 import { getUsersReducer } from "../reducers/user";
 
-export const getSuggestedUsers =
-  (loading: boolean = false, query: string): AsyncAction =>
+export const getSuggestedUsers = (loading: boolean = false, query: string): AsyncAction =>
   async (dispatch) => {
     try {
       loading && dispatch(start());
@@ -31,13 +30,11 @@ export const getSuggestedUsers =
     }
   };
 
-export const getFriends =
-  (loading: boolean = false, query: string): AsyncAction =>
+export const getFriends = (loading: boolean = false, query: string): AsyncAction =>
   async (dispatch) => {
     try {
       loading && dispatch(start());
-      const { data }: { data: { count: number; result: User[] } } =
-        await api.getFriends(query);
+      const { data }: { data: { count: number; result: User[] } } = await api.getFriends(query);
       dispatch(getFriendsReducer({ result: data.result, count: data.count }));
       dispatch(end());
     } catch (err: any) {
@@ -46,13 +43,11 @@ export const getFriends =
         : dispatch(error(err.message));
     }
   };
-export const searchFriends =
-  (loading: boolean = false, query: string): AsyncAction =>
+export const searchFriends = (loading: boolean = false, query: string): AsyncAction =>
   async (dispatch) => {
     try {
       loading && dispatch(start());
-      const { data }: { data: { count: number; result: User[] } } =
-        await api.searchFriends(query);
+      const { data }: { data: { count: number; result: User[] } } = await api.searchFriends(query);
       dispatch(getFriendsReducer({ result: data.result, count: data.count }));
       dispatch(end());
     } catch (err: any) {
@@ -61,13 +56,11 @@ export const searchFriends =
         : dispatch(error(err.message));
     }
   };
-export const searchUsers =
-  (loading: boolean = false, query: string): AsyncAction =>
+export const searchUsers = (loading: boolean = false, query: string): AsyncAction =>
   async (dispatch) => {
     try {
       loading && dispatch(start());
-      const { data }: { data: { count: number; result: User[] } } =
-        await api.searchUsers(query);
+      const { data }: { data: { count: number; result: User[] } } = await api.searchUsers(query);
       dispatch(getUsersReducer({ result: data.result, count: data.count }));
       dispatch(end());
     } catch (err: any) {
@@ -77,8 +70,7 @@ export const searchUsers =
     }
   };
 
-export const getSentRequests =
-  (loading: boolean = false, query: string): AsyncAction =>
+export const getSentRequests = (loading: boolean = false, query: string): AsyncAction =>
   async (dispatch) => {
     try {
       loading && dispatch(start());
@@ -92,8 +84,7 @@ export const getSentRequests =
     }
   };
 
-export const getReceivedRequests =
-  (loading: boolean = false, query: string): AsyncAction =>
+export const getReceivedRequests = (loading: boolean = false, query: string): AsyncAction =>
   async (dispatch) => {
     try {
       loading && dispatch(start());
@@ -107,8 +98,7 @@ export const getReceivedRequests =
     }
   };
 
-export const sendFriendRequest =
-  (receiverId: string): AsyncAction =>
+export const sendFriendRequest = (receiverId: string): AsyncAction =>
   async (dispatch) => {
     try {
       const { data } = await api.sendFriendRequest(receiverId);
@@ -121,8 +111,7 @@ export const sendFriendRequest =
     }
   };
 
-export const acceptFriendRequest =
-  (senderId: string): AsyncAction =>
+export const acceptFriendRequest = (senderId: string): AsyncAction =>
   async (dispatch) => {
     // in this request, user is the accepter
     try {
@@ -136,8 +125,7 @@ export const acceptFriendRequest =
     }
   };
 
-export const removeFriendRequest =
-  (receiverId: string): AsyncAction =>
+export const removeFriendRequest = (receiverId: string): AsyncAction =>
   async (dispatch) => {
     try {
       const { data } = await api.removeFriendRequest(receiverId);
@@ -150,8 +138,7 @@ export const removeFriendRequest =
     }
   };
 
-export const rejectFriendRequest =
-  (receiverId: string): AsyncAction =>
+export const rejectFriendRequest = (receiverId: string): AsyncAction =>
   async (dispatch) => {
     try {
       const { data } = await api.rejectFriendRequest(receiverId);
