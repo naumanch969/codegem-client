@@ -7,7 +7,7 @@ import { logo } from '../../assets'
 import { RootState } from "../../redux/store";
 
 
-const ForgotPassword = ({ snackbarText, setSnackbarText }: { snackbarText?: string, setSnackbarText?: any }) => {
+const VerifyEmail = ({ snackbarText, setSnackbarText }: { snackbarText?: string, setSnackbarText?: any }) => {
 
   ////////////////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////////
   const dispatch = useDispatch();
@@ -77,4 +77,4 @@ const ForgotPassword = ({ snackbarText, setSnackbarText }: { snackbarText?: stri
   );
 };
 
-export default ForgotPassword;
+export default VerifyEmail;
