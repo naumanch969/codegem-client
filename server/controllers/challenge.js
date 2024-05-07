@@ -9,19 +9,9 @@ import { createError, isUndefined } from "../utils/functions.js";
 
 export const getChallenges = async (req, res, next) => {
   try {
-    const {
-      page,
-      pageSize,
-      count,
-      userId,
-      filter,
-      query: searchQuery,
-      languages: languagesString,
-    } = req.query;
+    const { page, pageSize, count, userId, filter, query: searchQuery, languages: languagesString, } = req.query;
 
-    let aggregationPipeline = userId
-      ? [{ $match: { user: { $regex: new RegExp(userId, "i") } } }]
-      : [];
+    let aggregationPipeline = userId ? [{ $match: { user: { $regex: new RegExp(userId, "i") } } }] : [];
 
     if (filter === "famous") {
       aggregationPipeline.push({ $sort: { likes: -1 } });
