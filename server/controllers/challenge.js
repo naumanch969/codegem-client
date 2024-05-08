@@ -18,19 +18,8 @@ export const getChallenges = async (req, res, next) => {
     } else if (filter == "trending") {
       // TODO: add shares in it aswell, same for other gets (getCodes, getStreaks etc.)
       aggregationPipeline.push(
-        {
-          $lookup: {
-            from: "comments",
-            localField: "comments",
-            foreignField: "_id",
-            as: "comments",
-          },
-        },
-        {
-          $addFields: {
-            commentsCount: { $size: "$comments" },
-          },
-        },
+        { $lookup: { from: "comments", localField: "comments", foreignField: "_id", as: "comments", }, },
+        { $addFields: { commentsCount: { $size: "$comments" }, }, },
         { $sort: { commentsCount: -1 } }
       );
     } else if (filter === "latest") {
@@ -63,11 +52,7 @@ export const getChallenges = async (req, res, next) => {
     if (languagesString) {
       aggregationPipeline.push({
         $match: {
-          $or: [
-            ...languages.map((l) => ({
-              language: { $regex: new RegExp(l, "i") },
-            })),
-          ],
+          $or: [...languages.map((l) => ({ language: { $regex: new RegExp(l, "i") }, })),],
         },
       });
     }
@@ -81,12 +66,7 @@ export const getChallenges = async (req, res, next) => {
 
     aggregationPipeline.push(
       {
-        $lookup: {
-          from: "users",
-          localField: "user",
-          foreignField: "_id",
-          as: "user",
-        },
+        $lookup: { from: "users", localField: "user", foreignField: "_id", as: "user", },
       },
       {
         $addFields: {
@@ -145,9 +125,7 @@ export const getUserChallenges = async (req, res, next) => {
 };
 export const getLikedChallenges = async (req, res, next) => {
   try {
-    const result = await Challenge.find({ likes: { $in: [req.user._id] } })
-      .populate("user")
-      .exec();
+    const result = await Challenge.find({ likes: { $in: [req.user._id] } }).populate("user").exec();
     res.status(200).json(result);
   } catch (error) {
     next(createError(res, 500, error.message));
@@ -155,10 +133,7 @@ export const getLikedChallenges = async (req, res, next) => {
 };
 export const getSavedChallenges = async (req, res, next) => {
   try {
-    const result = await Collection.findOne(
-      { name: "Saved", owner: req.user._id },
-      { challenges: 1, _id: 0 }
-    )
+    const result = await Collection.findOne({ name: "Saved", owner: req.user._id }, { challenges: 1, _id: 0 })
       .populate("challenges")
       .exec();
     res.status(200).json(result.challenges);
