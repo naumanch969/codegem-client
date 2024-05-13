@@ -154,13 +154,7 @@ export const createChallenge = async (req, res, next) => {
 
     var result;
     if (group) {
-      result = await Challenge.create({
-        user: userId,
-        title,
-        challenge,
-        group,
-        ...rest,
-      });
+      result = await Challenge.create({ user: userId, title, challenge, group, ...rest, });
       const findedGroup = await Group.findByIdAndUpdate(
         group,
         { $addToSet: { challenges: result._id } },
@@ -318,33 +312,21 @@ export const shareChallenge = async (req, res, next) => {
     // updating challenge, adding user to shares array
     await Promise.all(
       shares.map(async (shareId) => {
-        await Challenge.findByIdAndUpdate(
-          challengeId,
-          { $push: { shares: shareId } },
-          { new: true }
-        );
+        await Challenge.findByIdAndUpdate(challengeId, { $push: { shares: shareId } }, { new: true });
       })
     );
 
     // updating each friend, adding shares to receiver
     await Promise.all(
       shares.map(async (shareId, index) => {
-        await User.findByIdAndUpdate(
-          friendIds[index],
-          { $addToSet: { receivedShares: shareId } },
-          { new: true }
-        );
+        await User.findByIdAndUpdate(friendIds[index], { $addToSet: { receivedShares: shareId } }, { new: true });
       })
     );
 
     // updating current user, adding shares to sender
     await Promise.all(
       shares.map(async (shareId) => {
-        await User.findByIdAndUpdate(
-          req.user._id,
-          { $addToSet: { sentShares: shareId } },
-          { new: true }
-        );
+        await User.findByIdAndUpdate(req.user._id, { $addToSet: { sentShares: shareId } }, { new: true });
       })
     );
 
@@ -360,10 +342,7 @@ export const shareChallengeInGroups = async (req, res, next) => {
     let { groupIds } = req.body;
 
     // Validate that friendIds is an array of valid user IDs
-    if (
-      !Array.isArray(groupIds) ||
-      groupIds.some((groupId) => typeof groupId !== "string")
-    ) {
+    if (!Array.isArray(groupIds) || groupIds.some((groupId) => typeof groupId !== "string")) {
       return res.status(400).json({ error: "Invalid groupIds format" });
     }
 
@@ -389,11 +368,7 @@ export const shareChallengeInGroups = async (req, res, next) => {
     // updating challenge, adding user to shares array
     await Promise.all(
       shares.map(async (shareId) => {
-        await Challenge.findByIdAndUpdate(
-          challengeId,
-          { $push: { shares: shareId } },
-          { new: true }
-        );
+        await Challenge.findByIdAndUpdate(challengeId, { $push: { shares: shareId } }, { new: true });
       })
     );
 
@@ -411,11 +386,7 @@ export const shareChallengeInGroups = async (req, res, next) => {
     // updating current user, adding shares to sender
     await Promise.all(
       shares.map(async (shareId) => {
-        await User.findByIdAndUpdate(
-          req.user._id,
-          { $addToSet: { sentShares: shareId } },
-          { new: true }
-        );
+        await User.findByIdAndUpdate(req.user._id, { $addToSet: { sentShares: shareId } }, { new: true });
       })
     );
 
