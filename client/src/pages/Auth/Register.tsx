@@ -46,9 +46,9 @@ const Register = ({ snackbarText, setSnackbarText }: { snackbarText?: string, se
 
 
             <div className="text-center">
-                <div className="flex justify-center">
-                    <img className="h-32" src={logo} />
-                </div>
+                <Link to='/' className="flex justify-center">
+                    <img className="h-32" src={logo} alt='Logo' />
+                </Link>
             </div>
 
             <div className="flex justify-center py-6 pl-0 ml-0 rounded-lg">

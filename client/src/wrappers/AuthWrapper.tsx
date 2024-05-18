@@ -4,9 +4,7 @@ import { RootState } from '../redux/store';
 import { Snackbar } from '../utils/Components';
 import { error } from '../redux/reducers/user';
 
-interface AuthWrapperProps {
-    children: ReactNode;
-}
+interface AuthWrapperProps { children: ReactNode }
 
 const AuthWrapper = ({ children }: AuthWrapperProps) => {
 

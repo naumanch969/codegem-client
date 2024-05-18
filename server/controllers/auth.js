@@ -14,14 +14,19 @@ export const register = async (req, res, next) => {
   try {
     let { firstName, lastName, username, email, password } = req.body;
 
-    if (!firstName || !lastName || !username || !email || !password)
-      return next(createError(res, 400, "Make sure to provide all the fields"));
-    if (email && !validator.isEmail(email))
-      return next(createError(res, 400, "Invalid Email Address"));
+    if (!firstName) return next(createError(res, 400, "First name is missing."));
+    if (!lastName) return next(createError(res, 400, "Last name is missing."));
+    if (!username) return next(createError(res, 400, "Username is missing."));
+    if (!email) return next(createError(res, 400, "Email is missing."));
+    if (!password) return next(createError(res, 400, "Password is missing."));
 
-    const findedUser = await User.findOne({ username });
-    if (Boolean(findedUser))
-      return next(createError(res, res, 400, "Username already exist"));
+    if (email && !validator.isEmail(email)) return next(createError(res, 400, "Invalid Email Address."));
+
+    const findedUserByUsername = await User.findOne({ username });
+    if (Boolean(findedUserByUsername)) return next(createError(res, res, 400, "Username already exist."));
+
+    const findedUserByEmail = await User.findOne({ email });
+    if (Boolean(findedUserByEmail)) return next(createError(res, res, 400, "Email already exist."));
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -29,47 +34,22 @@ export const register = async (req, res, next) => {
     if (username == process.env.ADMIN_USERNAME) role = "Admin";
     else role = role || "User";
 
-    const newUser = await User.create({
-      firstName,
-      lastName,
-      username,
-      email,
-      password: hashedPassword,
-      role,
-    });
-    const otp = otpGenerator.generate(5, {
-      digits: true,
-      lowerCaseAlphabets: false,
-      upperCaseAlphabets: false,
-      specialChars: false,
-    });
-    // const hashedOTP = await bcrypt.hash(otp, 12)
-    await OTP.create({
-      email,
-      otp,
-      name: "verify_register_otp",
-    });
+    const newUser = await User.create({ firstName, lastName, username, email, password: hashedPassword, role, });
 
+    const otp = otpGenerator.generate(5, { digits: true, lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false, });
+    await OTP.create({ email, otp, name: "verify_register_otp", });
     sendMail(email, "Verification", `<p>Your OTP code is ${otp}</p>`);
 
-    const token = jwt.sign(
-      { _id: newUser._id, role: newUser.role },
-      process.env.JWT_SECRET
-    );
+    const token = jwt.sign({ _id: newUser._id, role: newUser.role }, process.env.JWT_SECRET);
 
-    await createNotification(
-      "Welcome to Codegem!",
-      "Congratulations! You've successfully joined Codegem. Start connecting and sharing your moments with friends"
-    );
+    await createNotification("Welcome to Codegem!", "Congratulations! You've successfully joined Codegem. Start connecting and sharing your moments with friends");
 
-    res
-      .cookie("code.connect", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // Enable secure cookie in production
-        // expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
-      })
-      .status(200)
-      .json({ message: "Registered successfully.", token }); // token is being passed just for development
+    res.status(200).json({ result: newUser, message: "Registered successfully.", token }); // token is being passed just for development
+    // .cookie("code.connect", token, {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production", // Enable secure cookie in production
+    //   // expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+    // })
   } catch (err) {
     next(createError(res, 500, err.message));
   }

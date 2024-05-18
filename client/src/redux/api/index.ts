@@ -39,7 +39,7 @@ export const login = (userData: { username: string; password: string }) => API.p
 export const sendOTP = (email: string) => API.put(`/auth/send_otp`, { email });
 export const verifyOTP = ({ email, otp }: { email: string; otp: string }) => API.put(`/auth/verify_otp`, { email, otp });
 export const setNewPassword = ({ email, password, }: { email: string; password: string; }) => API.put(`/auth/newpassword`, { email, password });
-export const changePassword = (userData: any) => API.put(`/auth/change_password`, userData);
+export const changePassword = (userData: { oldPassword: string, newPassword: string }) => API.put(`/auth/change_password`, userData);
 
 // users
 export const getUsers = () => API.get(`/user/get/all`);

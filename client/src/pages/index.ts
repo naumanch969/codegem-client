@@ -20,3 +20,8 @@ export { default as VerifyEmail } from "./Auth/VerifyEmail";
 export { default as InputOTP } from "./Auth/InputOTP";
 export { default as InputRegisterationOTP } from "./Auth/InputRegisterationOTP";
 export { default as NewPassword } from "./Auth/NewPassword";
+export { default as LandingPage } from "./LandingPage";
+export { default as Pricing } from "./Pricing";
+export { default as About } from "./About";
+export { default as Contact } from "./Contact";
+export { default as Features } from "./Features";

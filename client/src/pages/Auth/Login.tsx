@@ -1,4 +1,4 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import { Person } from '@mui/icons-material';
 import { Input } from "@mui/material";
 import { login } from '../../redux/actions/auth';
@@ -33,15 +33,13 @@ const Login = ({ snackbarText, setSnackbarText }: { snackbarText?: string, setSn
         setUserData((pre) => ({ ...pre, [e.target.name]: e.target.value }))
     }
 
-
-
     return (
         <div className="flex flex-col justify-center items-center gap-4 w-full ">
 
             <div className="text-center">
-                <div className="flex justify-center">
-                    <img className="h-32" src={logo} />
-                </div>
+                <Link to='/' className="flex justify-center">
+                    <img className="h-32" src={logo} alt='Logo' />
+                </Link>
             </div>
 
             <div className="flex justify-center py-6 pl-0 ml-0 rounded-lg">

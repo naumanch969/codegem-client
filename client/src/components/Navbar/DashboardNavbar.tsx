@@ -3,20 +3,15 @@ import { useState, } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { Link } from "react-router-dom"
-import { logout } from "../redux/actions/auth"
-import { } from 'lucide-react'
-import { useStateContext } from "../contexts/ContextProvider"
-import { RootState } from '../redux/store'
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
-import { ChangeCircle, Dehaze, Logout, Person, Person2TwoTone } from '@mui/icons-material'
-import { Button } from './ui/button'
-const Navbar = () => {
+import { logout } from "@/redux/actions/auth"
+import { useStateContext } from "@/contexts/ContextProvider"
+import { RootState } from '@/redux/store'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Dehaze, Logout, Person, Person2TwoTone } from '@mui/icons-material'
+import { Button } from '@/components/ui/button'
+
+const DashboardNavbar = () => {
 
     ////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////
     const dispatch = useDispatch()
@@ -25,7 +20,6 @@ const Navbar = () => {
     const { loggedUser, loggedUserToken } = useSelector((state: RootState) => state.user)
 
     ////////////////////////////////////////// STATES /////////////////////////////////////////////////////
-    const [openAccountMenu, setOpenAccountMenu] = useState(false)
 
     ////////////////////////////////////////// USE EFFECTS ////////////////////////////////////////////////
 
@@ -95,4 +89,4 @@ const Navbar = () => {
     )
 }
 
-export default Navbar;
+export default DashboardNavbar;

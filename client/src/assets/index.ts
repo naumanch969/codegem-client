@@ -17,3 +17,14 @@ export { default as SampleProfileCoverImage } from "./sample_cover_image.jpg";
 
 export { default as logo } from "./logo.png";
 export { default as empty } from "./empty.png";
+
+export { default as About1 } from './code.svg'
+export { default as About2 } from './dev_focus.svg'
+export { default as About3 } from './version_control.svg'
+
+export { default as Contact } from './contact.svg'
+
+export { default as Streak } from './streak.svg'
+export { default as Group } from './group.svg'
+export { default as Collection } from './collection.svg'
+export { default as Challenge } from './challenge.svg'

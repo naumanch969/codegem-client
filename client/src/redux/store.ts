@@ -5,6 +5,7 @@ import { AnyAction } from "redux";
 import codeReducer from "./reducers/code";
 import friendReducer from "./reducers/friend";
 import userReducer from "./reducers/user";
+import authReducer from "./reducers/authSlice";
 import collectionReducer from "./reducers/collection";
 import groupReducer from "./reducers/group";
 import generalReducer from "./reducers/general";
@@ -13,6 +14,7 @@ import challengeReducer from "./reducers/challenge";
 import notificationReducer from "./reducers/notification";
 
 const reducer = combineReducers({
+  auth: authReducer,
   friend: friendReducer,
   code: codeReducer,
   collection: collectionReducer,
