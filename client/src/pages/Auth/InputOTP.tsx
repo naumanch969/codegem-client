@@ -37,13 +37,13 @@ const InputOTP = ({ snackbarText, setSnackbarText }: { snackbarText?: string, se
         <div className="w-full flex flex-col justify-center items-center ">
             <div className="w-full h-screen ">
                 <div className="flex justify-center pt-16">
-                    <img className="h-32" src={logo} />
+                    <img className="h-32" src={logo} alt='Logo' />
                 </div>
                 <div className="flex justify-center pt-6 pl-0 ml-0 rounded-lg">
                     <div className="w-[26rem] h-auto flex flex-col gap-6 shadow-xl rounded bg-white px-[2rem] py-[2rem] ">
                         <div className="flex flex-col gap-2">
                             <div className="flex justify-start items-center w-full ">
-                                <button onClick={goBack} className="text-sky-400 hover:text-sky-600">
+                                <button title='button' onClick={goBack} className="text-sky-400 hover:text-sky-600">
                                     <ArrowBack />
                                 </button>
                             </div>
