@@ -51,15 +51,7 @@ const MorePage = () => {
   /////////////////////////////////////////////////////// FUNCTIONS //////////////////////////////////////////////////////////
 
   /////////////////////////////////////////////////////// COMPONENTS //////////////////////////////////////////////////////////
-  const SettingsItem = ({
-    icon,
-    label,
-    value,
-  }: {
-    icon: any;
-    label: string;
-    value: string;
-  }) => {
+  const SettingsItem = ({   icon,   label,   value, }: {icon: any;    label: string;    value: string; }) => {
     return (
       <div className="flex items-center py-2 px-4 rounded-md hover:bg-light-gray transition duration-200 cursor-pointer">
         {icon && <div className="mr-2 text-cool-gray">{icon}</div>}
