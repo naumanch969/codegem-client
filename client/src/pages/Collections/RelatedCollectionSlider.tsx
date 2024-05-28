@@ -19,20 +19,26 @@ import { LucideGroup, Star } from 'lucide-react';
 
 const RelatedCollectionSlider = () => {
 
+    //////////////////////////////////////////////////////// VARIABLES /////////////////////////////////////////////////////////
     const dispatch = useDispatch()
     const { userCollections, isFetching }: { userCollections: Collection[], isFetching: boolean } = useSelector((state: RootState) => state.collection)
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
 
+    //////////////////////////////////////////////////////// STATES ////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////// USE EFFECTS ///////////////////////////////////////////////////////
     useEffect(() => {
         if (userCollections.length == 0) {
             // Place User Collection
         }
     }, [])
 
+    //////////////////////////////////////////////////////// FUNCTIONS /////////////////////////////////////////////////////////
     const onStar = (collectionId: string) => {
         dispatch<any>(starCollection(collectionId, loggedUser?._id!))
     }
 
+    //////////////////////////////////////////////////////// RENDER ////////////////////////////////////////////////////////////
     return (
         <div className="w-full h-[16rem] flex justify-center items-center bg-light-gray p-[12px] rounded ">
             {
