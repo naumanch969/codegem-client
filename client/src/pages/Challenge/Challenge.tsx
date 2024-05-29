@@ -16,20 +16,8 @@ import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { getComments } from '../../redux/actions/comment';
 import { Loader } from '../../utils/Components';
 import { useChallengeModal } from '../../hooks/useChallengeModal';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, } from "@/components/ui/card"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -172,7 +160,11 @@ const ChallengeComponent = ({ challenge }: { challenge: Challenge }) => {
                   ?
                   <button className='w-16 h-8 rounded-full text-white ' >Copied!</button>
                   :
-                  <Tooltip placement='top-start' title='Copy'  ><button onClick={() => hanldeCopy(challenge?.challenge)} className='w-8 h-8 rounded-full ' ><CopyAllOutlined className='text-white' /></button></Tooltip>
+                  <Tooltip placement='top-start' title='Copy'  >
+                    <button title='Copy' onClick={() => hanldeCopy(challenge?.challenge)} className='w-8 h-8 rounded-full ' >
+                      <CopyAllOutlined className='text-white' />
+                    </button>
+                  </Tooltip>
               }
             </div>
             <SyntaxHighlighter
