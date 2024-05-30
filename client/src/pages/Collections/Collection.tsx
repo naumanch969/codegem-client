@@ -32,9 +32,7 @@ const SingleCollectionView = () => {
     const { onOpen: onChallengeOpen, onSetChallenge, onSetCollectionId: onSetCollectionIdForChallenge, onSetGroupId: onSetGroupIdForChallenge } = useChallengeModal()
     const { currentCollection, isFetching }: { currentCollection: Collection | null, isFetching: boolean } = useSelector((state: RootState) => state.collection)
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
-    const collectionName = (
-        currentCollection?.name ? currentCollection.name.charAt(0).toUpperCase() + currentCollection.name.slice(1).toLowerCase() : ''
-    );
+    const collectionName = currentCollection?.name ? currentCollection.name.charAt(0).toUpperCase() + currentCollection.name.slice(1).toLowerCase() : ''
     const starred = currentCollection?.stars?.some(id => id == loggedUser?._id as string)
     const segments = [
         { name: 'Home', link: '/home' },

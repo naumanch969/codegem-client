@@ -27,10 +27,14 @@ const Topbar = ({
     setSearchedQuery,
 }: Props) => {
 
+    //////////////////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////////////////
     const filterButtons = ["All", "Latest", "Famous", "Trending", "Recommended to you"];
     const { onOpen } = useChallengeModal()
+
+    //////////////////////////////////////////////////////// STATES ///////////////////////////////////////////////////////////
     const [searchValue, setSearchValue] = useState('');
 
+    //////////////////////////////////////////////////////// FUNCTIONS ///////////////////////////////////////////////////////////
     const onLanguageFilter = (value: string) => {
         setLanguages((pre: string[]) => pre.filter(item => item.toLowerCase() != value.toLowerCase()))
     }
@@ -42,6 +46,7 @@ const Topbar = ({
             setLanguages((pre: string[]) => ([...pre, value]))
     }
 
+    //////////////////////////////////////////////////////// RENDER ///////////////////////////////////////////////////////////
     return (
         <div className="w-full flex flex-col gap-4 ">
             <div className="flex justify-between items-center gap-8 ">
