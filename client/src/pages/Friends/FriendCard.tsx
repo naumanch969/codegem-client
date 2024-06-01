@@ -1,18 +1,19 @@
 import React from 'react';
 import { User } from '../../interfaces';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
 import { acceptFriendRequest, rejectFriendRequest, removeFriendRequest, sendFriendRequest } from '../../redux/actions/friend';
 import { useNavigate } from 'react-router-dom';
 
 const FriendCard = ({ friend, type }: { friend: User, type: string }) => {
 
+  //////////////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////////////////
   // const mutualFriendsCount = user?.friends && friend?.friends
   //   ? user?.friends.filter(userFriend => friend?.friends.includes(userFriend)).length
   //   : 0;
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
+  //////////////////////////////////////////////////////// FUNCTIONS ////////////////////////////////////////////////////////////
   const handleSendFriendRequest = () => {
     dispatch<any>(sendFriendRequest(friend?._id as string))
   }
@@ -26,6 +27,7 @@ const FriendCard = ({ friend, type }: { friend: User, type: string }) => {
     dispatch<any>(rejectFriendRequest(friend?._id as string))
   }
 
+  //////////////////////////////////////////////////////// RENDER ////////////////////////////////////////////////////////////
   return (
     <div className="bg-secondary p-4 shadow-md rounded-md flex flex-col justify-between">
       <div className='w-full ' >
