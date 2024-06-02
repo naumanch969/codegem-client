@@ -10,21 +10,21 @@ import { RootState } from "../../redux/store";
 
 const InputRegisterationOTP = ({ snackbarText, setSnackbarText }: { snackbarText?: string, setSnackbarText?: any }) => {
 
-    /////////////////////////////////// VARIABLES /////////////////////////////////
+    /////////////////////////////////////////////////// VARIABLES //////////////////////////////////////////////
     const { isFetching } = useSelector((state: RootState) => state.user)
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    /////////////////////////////////// STATES /////////////////////////////////////
+    /////////////////////////////////////////////////// STATES //////////////////////////////////////////////////
     const [otp, setOtp] = useState<string>("");
 
-    /////////////////////////////////// USE EFFECTS ////////////////////////////////
+    /////////////////////////////////////////////////// USE EFFECTS /////////////////////////////////////////////
 
-    /////////////////////////////////// FUNCTIONS //////////////////////////////////
+    /////////////////////////////////////////////////// FUNCTIONS ///////////////////////////////////////////////
     const handleSubmit = (e: any) => {
         e.preventDefault();
         if (otp.length != 5) return alert('Please enter a valid OTP')
-        dispatch<any>(verifyRegisterationEmail(otp, navigate, setSnackbarText));
+            dispatch<any>(verifyRegisterationEmail(otp, navigate, setSnackbarText));
     }
     const goBack = () => {
         navigate(-1)
@@ -33,7 +33,8 @@ const InputRegisterationOTP = ({ snackbarText, setSnackbarText }: { snackbarText
         e.preventDefault();
         dispatch<any>(resendOTP(setSnackbarText))
     }
-
+    
+    /////////////////////////////////////////////////// RENDER ///////////////////////////////////////////////
     return (
         <div className="w-full flex flex-col justify-center items-center ">
             <div className="w-full h-screen ">

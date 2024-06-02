@@ -13,12 +13,16 @@ interface InputProps {
 }
 
 const Input: FC<InputProps> = ({ type, placeholder, attribute, blurFunction, showEyeIcon, data, setData }) => {
-  const [showPassword, setShowPassword] = useState<boolean>(false);
 
+  /////////////////////////////////////////////////////// STATES //////////////////////////////////////////////////////////
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  
+  /////////////////////////////////////////////////////// FUNCTIONS //////////////////////////////////////////////////////////
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setData({ ...data, [attribute]: e.target.value });
   };
-
+  
+  /////////////////////////////////////////////////////// RENDER //////////////////////////////////////////////////////////
   return (
     <div className="flex flex-col gap-1w-full">
       <div className="relative flex flex-col gap-[4px]">
