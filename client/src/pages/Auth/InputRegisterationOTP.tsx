@@ -1,6 +1,5 @@
-import { Input } from "@mui/material";
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import OTPInput from "react-otp-input";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyRegisterationEmail, resendOTP } from "../../redux/actions/auth";
@@ -24,7 +23,7 @@ const InputRegisterationOTP = ({ snackbarText, setSnackbarText }: { snackbarText
     const handleSubmit = (e: any) => {
         e.preventDefault();
         if (otp.length != 5) return alert('Please enter a valid OTP')
-            dispatch<any>(verifyRegisterationEmail(otp, navigate, setSnackbarText));
+        dispatch<any>(verifyRegisterationEmail(otp, navigate, setSnackbarText));
     }
     const goBack = () => {
         navigate(-1)
@@ -33,19 +32,19 @@ const InputRegisterationOTP = ({ snackbarText, setSnackbarText }: { snackbarText
         e.preventDefault();
         dispatch<any>(resendOTP(setSnackbarText))
     }
-    
+
     /////////////////////////////////////////////////// RENDER ///////////////////////////////////////////////
     return (
         <div className="w-full flex flex-col justify-center items-center ">
             <div className="w-full h-screen ">
                 <div className="flex justify-center pt-16">
-                    <img className="h-32" src={logo} />
+                    <img className="h-32" src={logo} alt='Logo' />
                 </div>
                 <div className="flex justify-center pt-6 pl-0 ml-0 rounded-lg">
                     <div className="w-[26rem] h-auto flex flex-col gap-6 shadow-xl rounded bg-white px-[2rem] py-[2rem] ">
                         <div className="flex flex-col gap-2">
                             <div className="flex justify-start items-center w-full ">
-                                <button onClick={goBack} className="text-sky-400 hover:text-sky-600">
+                                <button title='Go Back' onClick={goBack} className="text-sky-400 hover:text-sky-600">
                                     <ArrowBack />
                                 </button>
                             </div>

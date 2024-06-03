@@ -36,11 +36,12 @@ const Register = ({ snackbarText, setSnackbarText }: { snackbarText?: string, se
         if (!firstName || !lastName || !username || !email || !password) return alert('Make sure to provide all the fields');
         dispatch<any>(register(userData as User, navigate, setSnackbarText));
     };
-
+    
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserData((pre) => ({ ...pre, [e.target.name]: e.target.value }))
     }
-
+    
+    ///////////////////////////////////////////////////////// RENDER /////////////////////////////////////////////////////
     return (
         <div className="flex flex-col justify-center items-center gap-4 w-full p-[3rem]">
 

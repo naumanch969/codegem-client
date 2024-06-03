@@ -1,4 +1,4 @@
-import React, {  ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import { Input } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,7 +6,7 @@ import { setNewPassword } from '../../redux/actions/auth';
 import { logo } from "../../assets";
 import { RootState } from "../../redux/store";
 
-const NewPassword = ({ snackbarText, setSnackbarText }: { snackbarText?: string, setSnackbarText?: any }) => {
+const NewPassword = ({ setSnackbarText }: { snackbarText?: string, setSnackbarText?: any }) => {
 
   //////////////////////////////////////////////////// VARIABLES /////////////////////////////////////////////////////
   const { isFetching } = useSelector((state: RootState) => state.user)
@@ -37,7 +37,7 @@ const NewPassword = ({ snackbarText, setSnackbarText }: { snackbarText?: string,
 
       <div className="w-full h-screen ">
         <div className="flex justify-center pt-16">
-          <img className="h-32" src={logo} />
+          <img className="h-32" src={logo} alt='Logo' />
         </div>
         <div className="flex justify-center pt-6 pl-0 ml-0 rounded-lg">
           <div className="w-96 h-auto shadow-xl rounded bg-white">
