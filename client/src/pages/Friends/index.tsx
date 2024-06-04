@@ -51,7 +51,7 @@ const FriendsPage = () => {
                         onKeyDown={(e) => e.key == 'Enter' && onSearch()}
                         className="w-full px-4 py-2"
                     />
-                    <button onClick={onSearch} className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                    <button title='Search' onClick={onSearch} className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer">
                         <Search />
                     </button>
                 </div>

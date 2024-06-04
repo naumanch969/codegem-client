@@ -14,19 +14,9 @@ import {
 } from "../utils/functions.js";
 export const getCodes = async (req, res, next) => {
   try {
-    const {
-      page,
-      pageSize,
-      count,
-      userId,
-      filter,
-      query: searchQuery,
-      languages: languagesString,
-    } = req.query;
+    const { page, pageSize, count, userId, filter, query: searchQuery, languages: languagesString, } = req.query;
 
-    let aggregationPipeline = userId
-      ? [{ $match: { user: { $regex: new RegExp(userId, "i") } } }]
-      : [];
+    let aggregationPipeline = userId ? [{ $match: { user: { $regex: new RegExp(userId, "i") } } }] : [];
 
     // Active Menu Filter
     if (filter === "famous") {
@@ -35,19 +25,8 @@ export const getCodes = async (req, res, next) => {
       );
     } else if (filter == "trending") {
       aggregationPipeline.push(
-        {
-          $lookup: {
-            from: "comments",
-            localField: "comments",
-            foreignField: "_id",
-            as: "comments",
-          },
-        },
-        {
-          $addFields: {
-            commentsCount: { $size: "$comments" },
-          },
-        },
+        { $lookup: { from: "comments", localField: "comments", foreignField: "_id", as: "comments" } },
+        { $addFields: { commentsCount: { $size: "$comments" } } },
         { $sort: { commentsCount: -1 } }
       );
     } else if (filter === "latest") {
@@ -73,17 +52,11 @@ export const getCodes = async (req, res, next) => {
     }
 
     // Language Filter
-    const languages = languagesString
-      ?.split(",")
-      ?.map((l) => new RegExp(l, "i"));
+    const languages = languagesString?.split(",")?.map((l) => new RegExp(l, "i"));
     if (languagesString) {
       aggregationPipeline.push({
         $match: {
-          $or: [
-            ...languages.map((l) => ({
-              language: { $regex: new RegExp(l, "i") },
-            })),
-          ],
+          $or: [...languages.map((l) => ({ language: { $regex: new RegExp(l, "i") } }))]
         },
       });
     }
@@ -97,12 +70,7 @@ export const getCodes = async (req, res, next) => {
 
     aggregationPipeline.push(
       {
-        $lookup: {
-          from: "users",
-          localField: "user",
-          foreignField: "_id",
-          as: "user",
-        },
+        $lookup: { from: "users", localField: "user", foreignField: "_id", as: "user", },
       },
       {
         $addFields: {
@@ -166,9 +134,7 @@ export const getUserCodes = async (req, res, next) => {
 
 export const getLikedCodes = async (req, res, next) => {
   try {
-    const result = await Code.find({ likes: { $in: [req.user._id] } })
-      .populate("user")
-      .exec();
+    const result = await Code.find({ likes: { $in: [req.user._id] } }).populate("user").exec();
     res.status(200).json(result);
   } catch (error) {
     next(createError(res, 500, error.message));
@@ -190,27 +156,17 @@ export const getSavedCodes = async (req, res, next) => {
 export const createCode = async (req, res, next) => {
   try {
     let { title, code, group, collection, ...rest } = req.body;
-    
-    if (isUndefined(title))return next(createError(res, 400, "Title is required."));
-    if (isUndefined(code))return next(createError(res, 400, "Code is required."));
+
+    if (isUndefined(title)) return next(createError(res, 400, "Title is required."));
+    if (isUndefined(code)) return next(createError(res, 400, "Code is required."));
 
     const userId = req.user._id;
     const findedUser = await User.findById(req.user._id);
 
     var result;
     if (group) {
-      result = await Code.create({
-        user: userId,
-        title,
-        code,
-        group,
-        ...rest,
-      });
-      const findedGroup = await Group.findByIdAndUpdate(
-        group,
-        { $addToSet: { codes: result._id } },
-        { new: true }
-      );
+      result = await Code.create({ user: userId, title, code, group, ...rest });
+      const findedGroup = await Group.findByIdAndUpdate(group, { $addToSet: { codes: result._id } }, { new: true });
       // Notifiying user who created the post
       await Notification.create({
         title: `New Post: ${title}`,
@@ -228,13 +184,7 @@ export const createCode = async (req, res, next) => {
         })
       );
     } else if (collection) {
-      result = await Code.create({
-        user: userId,
-        title,
-        code,
-        collectionRef: collection,
-        ...rest,
-      });
+      result = await Code.create({ user: userId, title, code, collectionRef: collection, ...rest });
       result = await Code.findById(result._id).populate("collectionRef").exec();
 
       const findedCollection = await Collection.findByIdAndUpdate(
@@ -249,12 +199,7 @@ export const createCode = async (req, res, next) => {
         user: req.user._id,
       });
     } else {
-      result = await Code.create({
-        user: userId,
-        title,
-        code,
-        ...rest,
-      });
+      result = await Code.create({ user: userId, title, code, ...rest });
       // Notifying user who created the post
       await Notification.create({
         title: `New Code - ${title}`,
@@ -285,16 +230,9 @@ export const updateCode = async (req, res, next) => {
 
     const { collection, ...rest } = req.body;
 
-    const updatedCode = await Code.findByIdAndUpdate(
-      codeId,
-      { $set: { collectionRef: collection, ...rest } },
-      { new: true }
-    );
+    const updatedCode = await Code.findByIdAndUpdate(codeId, { $set: { collectionRef: collection, ...rest } }, { new: true });
 
-    await createNotification(
-      "Code Update",
-      `Your code post updated: ${updatedCode.title}`
-    );
+    await createNotification("Code Update", `Your code post updated: ${updatedCode.title}`);
 
     res.status(200).json(updatedCode);
   } catch (error) {
@@ -312,18 +250,10 @@ export const likeCode = async (req, res, next) => {
     const userHasLiked = code.likes.includes(req.user?._id);
 
     if (userHasLiked) {
-      await Code.findByIdAndUpdate(
-        codeId,
-        { $pull: { likes: req.user?._id } },
-        { new: true }
-      );
+      await Code.findByIdAndUpdate(codeId, { $pull: { likes: req.user?._id } }, { new: true });
       res.status(200).json({ message: "Removed like successfully" });
     } else {
-      await Code.findByIdAndUpdate(
-        codeId,
-        { $addToSet: { likes: req.user?._id } },
-        { new: true }
-      );
+      await Code.findByIdAndUpdate(codeId, { $addToSet: { likes: req.user?._id } }, { new: true });
       res.status(200).json({ message: "Liked successfully" });
     }
   } catch (error) {
@@ -377,22 +307,14 @@ export const shareCode = async (req, res, next) => {
     // updating each friend, adding shares to receiver
     await Promise.all(
       shares.map(async (shareId, index) => {
-        await User.findByIdAndUpdate(
-          friendIds[index],
-          { $addToSet: { receivedShares: shareId } },
-          { new: true }
-        );
+        await User.findByIdAndUpdate(friendIds[index], { $addToSet: { receivedShares: shareId } }, { new: true });
       })
     );
 
     // updating current user, adding shares to sender
     await Promise.all(
       shares.map(async (shareId) => {
-        await User.findByIdAndUpdate(
-          req.user._id,
-          { $addToSet: { sentShares: shareId } },
-          { new: true }
-        );
+        await User.findByIdAndUpdate(req.user._id, { $addToSet: { sentShares: shareId } }, { new: true });
       })
     );
 
@@ -437,33 +359,21 @@ export const shareCodeInGroups = async (req, res, next) => {
     // updating code, adding user to shares array
     await Promise.all(
       shares.map(async (shareId) => {
-        await Code.findByIdAndUpdate(
-          codeId,
-          { $push: { shares: shareId } },
-          { new: true }
-        );
+        await Code.findByIdAndUpdate(codeId, { $push: { shares: shareId } }, { new: true });
       })
     );
 
     // updating groups, adding codeId to shares array
     await Promise.all(
       shares.map(async (shareId, index) => {
-        await Group.findByIdAndUpdate(
-          groupIds[index],
-          { $push: { shares: shareId } }, // shareId is the id of the share of post
-          { new: true }
-        );
+        await Group.findByIdAndUpdate(groupIds[index], { $push: { shares: shareId } }, { new: true }); // shareId is the id of the share of post
       })
     );
 
     // updating current user, adding shares to sender
     await Promise.all(
       shares.map(async (shareId) => {
-        await User.findByIdAndUpdate(
-          req.user._id,
-          { $addToSet: { sentShares: shareId } },
-          { new: true }
-        );
+        await User.findByIdAndUpdate(req.user._id, { $addToSet: { sentShares: shareId } }, { new: true });
       })
     );
 
@@ -484,11 +394,7 @@ export const saveCode = async (req, res, next) => {
       name: "Saved",
       owner: req.user._id,
     });
-    await Collection.findByIdAndUpdate(
-      findedCollection._id,
-      { $addToSet: { codes: codeId } },
-      { new: true }
-    );
+    await Collection.findByIdAndUpdate(findedCollection._id, { $addToSet: { codes: codeId } }, { new: true });
 
     res.status(200).json({ message: "Code saved successfully." });
   } catch (error) {
@@ -506,9 +412,7 @@ export const saveCodeInCollections = async (req, res, next) => {
     await Promise.all(
       collections.map(
         async (collectionId) =>
-          await Collection.findByIdAndUpdate(collectionId, {
-            $addToSet: { codes: codeId },
-          })
+          await Collection.findByIdAndUpdate(collectionId, { $addToSet: { codes: codeId } })
       )
     );
 
@@ -527,11 +431,7 @@ export const dislikeCode = async (req, res, next) => {
     const code = await Code.findById(codeId);
     if (!code) return next(createError(res, 403, "Code not exist."));
 
-    const result = await Code.findByIdAndUpdate(
-      codeId,
-      { $addToSet: { likes: req.user?._id } },
-      { new: true }
-    );
+    const result = await Code.findByIdAndUpdate(codeId, { $addToSet: { likes: req.user?._id } }, { new: true });
     res.status(200).json(result);
   } catch (error) {
     next(createError(res, 500, error.message));
@@ -546,17 +446,9 @@ export const commentCode = async (req, res, next) => {
     const code = await Code.findById(codeId);
     if (!code) return next(createError(res, 403, "Code not exist"));
 
-    const comment = await Comment.create({
-      user: req.user._id,
-      post: codeId,
-      content,
-    });
+    const comment = await Comment.create({ user: req.user._id, post: codeId, content, });
 
-    await Code.findByIdAndUpdate(
-      codeId,
-      { $addToSet: { comments: comment } },
-      { new: true }
-    );
+    await Code.findByIdAndUpdate(codeId, { $addToSet: { comments: comment } }, { new: true });
     res.status(200).json({ message: "Commented Successfully" });
   } catch (error) {
     next(createError(res, 500, error.message));
