@@ -8,43 +8,23 @@ import { createError, isUndefined } from "../utils/functions.js";
 
 export const getCollections = async (req, res, next) => {
   try {
-    const {
-      page,
-      pageSize,
-      count,
-      userId,
-      query: searchQuery,
-      languages: languagesString,
-      popular,
-    } = req.query;
+    const { page, pageSize, count, userId, query: searchQuery, languages: languagesString, popular, } = req.query;
     let query;
 
     // Constructing base query based on userId
     if (userId) {
       query = Collection.find({ owner: userId });
     } else if (!searchQuery && !languagesString) {
-      query = Collection.find({
-        name: { $ne: "Saved" },
-        owner: { $ne: req.user._id },
-      });
+      query = Collection.find({ name: { $ne: "Saved" }, owner: { $ne: req.user._id } });
     } else {
-      query = Collection.find({
-        name: { $ne: "Saved" },
-      });
+      query = Collection.find({ name: { $ne: "Saved" } });
     }
 
     // If userId matches logged user, ensure "Saved" collection exists
     if (userId == req.user._id) {
-      const savedCollection = await Collection.findOne({
-        owner: userId,
-        name: "Saved",
-      });
+      const savedCollection = await Collection.findOne({ owner: userId, name: "Saved", });
       if (!savedCollection) {
-        await Collection.create({
-          name: "Saved",
-          description: "The collection of your saved codes.",
-          owner: userId,
-        });
+        await Collection.create({ name: "Saved", description: "The collection of your saved codes.", owner: userId, });
       }
     }
 
@@ -61,14 +41,8 @@ export const getCollections = async (req, res, next) => {
 
     // Language Filter
     if (languagesString) {
-      const languages = languagesString
-        ?.split(",")
-        ?.map((l) => new RegExp(l, "i"));
-      query = query.or([
-        ...languages.map((l) => ({
-          language: { $regex: new RegExp(l, "i") },
-        })),
-      ]);
+      const languages = languagesString?.split(",")?.map((l) => new RegExp(l, "i"));
+      query = query.or([...languages.map((l) => ({ language: { $regex: new RegExp(l, "i") } }))]);
     }
 
     if (popular) {
@@ -104,9 +78,7 @@ export const getCollections = async (req, res, next) => {
 };
 export const getCollectionCategories = async (req, res, next) => {
   try {
-    const collections = await Collection.find({
-      categories: { $gte: 1 },
-    });
+    const collections = await Collection.find({ categories: { $gte: 1 }, });
 
     const categories = collections.map((item) => item.categories.map((c) => c));
 
@@ -133,10 +105,7 @@ export const getCollection = async (req, res, next) => {
 export const getCollectionCodes = async (req, res, next) => {
   try {
     const { collectionId } = req.params;
-    const collection = await Collection.findById(collectionId, {
-      codes: 1,
-      _id: 0,
-    })
+    const collection = await Collection.findById(collectionId, { codes: 1, _id: 0 })
       .populate("codes")
       .exec();
 
@@ -149,10 +118,7 @@ export const getCollectionCodes = async (req, res, next) => {
 export const getCollectionStreaks = async (req, res, next) => {
   try {
     const { collectionId } = req.params;
-    const collection = await Collection.findById(collectionId, {
-      streaks: 1,
-      _id: 0,
-    })
+    const collection = await Collection.findById(collectionId, { streaks: 1, _id: 0 })
       .populate("streaks")
       .exec();
     res.status(200).json(collection?.streaks || []);
@@ -164,10 +130,7 @@ export const getCollectionStreaks = async (req, res, next) => {
 export const getCollectionChallenges = async (req, res, next) => {
   try {
     const { collectionId } = req.params;
-    const collection = await Collection.findById(collectionId, {
-      challenges: 1,
-      _id: 0,
-    })
+    const collection = await Collection.findById(collectionId, { challenges: 1, _id: 0 })
       .populate("challenges")
       .exec();
 
@@ -179,10 +142,7 @@ export const getCollectionChallenges = async (req, res, next) => {
 
 export const createCollections = async (req, res, next) => {
   try {
-    const collections = await Collection.create({
-      ...req.body,
-      owner: req?.user?._id,
-    });
+    const collections = await Collection.create({ ...req.body, owner: req?.user?._id });
     res.status(200).json(collections);
   } catch (error) {
     next(createError(res, 500, error.message));
@@ -192,23 +152,11 @@ export const createCollectionCode = async (req, res, next) => {
   try {
     const { collectionId } = req.params;
     let { title, code, ...rest } = req.body;
-    if (isUndefined(title) || isUndefined(code))
-      return next(
-        createError(res, 400, "Make sure to provide all the fields.")
-      );
+    if (isUndefined(title) || isUndefined(code)) return next(createError(res, 400, "Make sure to provide all the fields."));
 
-    const createdCode = await Code.create({
-      user: req.user._id,
-      title,
-      code,
-      ...rest,
-    });
+    const createdCode = await Code.create({ user: req.user._id, title, code, ...rest, });
 
-    await Collection.findByIdAndUpdate(
-      collectionId,
-      { $push: { codes: createdCode._id } },
-      { new: true }
-    );
+    await Collection.findByIdAndUpdate(collectionId, { $push: { codes: createdCode._id } }, { new: true });
 
     res.status(200).json(createdCode);
   } catch (error) {
@@ -219,21 +167,12 @@ export const createCollectionStreak = async (req, res, next) => {
   try {
     const { collectionId } = req.params;
     let { title, streak, ...rest } = req.body;
-    if (isUndefined(title) || isUndefined(streak[0].code))
-      return next(createError(res, 400, "Title and Streak, both are required"));
 
-    const createdStreak = await Streak.create({
-      user: req.user._id,
-      title,
-      streak,
-      ...rest,
-    });
+    if (isUndefined(title) || isUndefined(streak[0].code)) return next(createError(res, 400, "Title and Streak, both are required"));
 
-    await Collection.findByIdAndUpdate(
-      collectionId,
-      { $push: { streaks: createdStreak._id } },
-      { new: true }
-    );
+    const createdStreak = await Streak.create({ user: req.user._id, title, streak, ...rest, });
+
+    await Collection.findByIdAndUpdate(collectionId, { $push: { streaks: createdStreak._id } }, { new: true });
 
     res.status(200).json(createdStreak);
   } catch (error) {
@@ -244,24 +183,12 @@ export const createCollectionChallenge = async (req, res, next) => {
   try {
     const { collectionId } = req.params;
     let { title, challenge, solution, groupId, ...rest } = req.body;
-    if (isUndefined(title) || isUndefined(challenge) || isUndefined(solution))
-      return next(
-        createError(res, 400, "Title, Challenge and Solution are required")
-      );
 
-    const createdChallenge = await Challenge.create({
-      user: req.user._id,
-      title,
-      challenge,
-      solution,
-      ...rest,
-    });
+    if (isUndefined(title) || isUndefined(challenge) || isUndefined(solution)) return next(createError(res, 400, "Title, Challenge and Solution are required"));
 
-    await Collection.findByIdAndUpdate(
-      collectionId,
-      { $push: { challenges: createdChallenge._id } },
-      { new: true }
-    );
+    const createdChallenge = await Challenge.create({ user: req.user._id, title, challenge, solution, ...rest, });
+
+    await Collection.findByIdAndUpdate(collectionId, { $push: { challenges: createdChallenge._id } }, { new: true });
 
     res.status(200).json(createdChallenge);
   } catch (error) {
@@ -272,11 +199,7 @@ export const createCollectionChallenge = async (req, res, next) => {
 export const updateCollections = async (req, res, next) => {
   try {
     const { collectionId } = req.params;
-    const collections = await Collection.findByIdAndUpdate(
-      collectionId,
-      { $set: { ...req.body } },
-      { new: true }
-    );
+    const collections = await Collection.findByIdAndUpdate(collectionId, { $set: { ...req.body } }, { new: true });
     res.status(200).json(collections);
   } catch (error) {
     next(createError(res, 500, error.message));
@@ -293,13 +216,10 @@ export const shareCollection = async (req, res, next) => {
     if (
       !Array.isArray(friendIds) ||
       friendIds.some((userId) => typeof userId !== "string")
-    ) {
-      return res.status(400).json({ error: "Invalid friendIds format" });
-    }
+    ) return res.status(400).json({ error: "Invalid friendIds format" });
+
     let collection = await Collection.findById(collectionId);
-    if (!collection) {
-      return res.status(404).json({ error: "Collection not found" });
-    }
+    if (!collection) return res.status(404).json({ error: "Collection not found" });
 
     const shares = await Promise.all(
       friendIds.map(async (id) => {
@@ -318,33 +238,21 @@ export const shareCollection = async (req, res, next) => {
     // updating code, adding user to shares array
     await Promise.all(
       shares.map(async (shareId) => {
-        await Collection.findByIdAndUpdate(
-          collectionId,
-          { $push: { shares: shareId } },
-          { new: true }
-        );
+        await Collection.findByIdAndUpdate(collectionId, { $push: { shares: shareId } }, { new: true });
       })
     );
 
     // updating each friend, adding shares to receiver
     await Promise.all(
       shares.map(async (shareId, index) => {
-        await User.findByIdAndUpdate(
-          friendIds[index],
-          { $addToSet: { receivedShares: shareId } },
-          { new: true }
-        );
+        await User.findByIdAndUpdate(friendIds[index], { $addToSet: { receivedShares: shareId } }, { new: true });
       })
     );
 
     // updating current user, adding shares to sender
     await Promise.all(
       shares.map(async (shareId) => {
-        await User.findByIdAndUpdate(
-          req.user._id,
-          { $addToSet: { sentShares: shareId } },
-          { new: true }
-        );
+        await User.findByIdAndUpdate(req.user._id, { $addToSet: { sentShares: shareId } }, { new: true });
       })
     );
 
@@ -364,18 +272,11 @@ export const starCollection = async (req, res, next) => {
     const userHasStared = collection.stars.includes(req.user?._id);
 
     if (userHasStared) {
-      await Collection.findByIdAndUpdate(
-        collectionId,
-        { $pull: { stars: req.user?._id } },
-        { new: true }
-      );
+      await Collection.findByIdAndUpdate(collectionId, { $pull: { stars: req.user?._id } }, { new: true });
       res.status(200).json({ message: "Removed star successfully" });
-    } else {
-      await Collection.findByIdAndUpdate(
-        collectionId,
-        { $addToSet: { stars: req.user?._id } },
-        { new: true }
-      );
+    }
+    else {
+      await Collection.findByIdAndUpdate(collectionId, { $addToSet: { stars: req.user?._id } }, { new: true });
       res.status(200).json({ message: "Stared successfully" });
     }
   } catch (error) {
@@ -388,8 +289,7 @@ export const deleteCollection = async (req, res, next) => {
     const { collectionId } = req.params;
 
     const colleciton = await Collection.findById(collectionId);
-    if (!colleciton)
-      return next(createError(res, 404, "Collection not found."));
+    if (!colleciton) return next(createError(res, 404, "Collection not found."));
 
     await Code.deleteMany({ collectionRef: collectionId });
     await Streak.deleteMany({ collectionRef: collectionId });

@@ -8,13 +8,10 @@ export const getComments = async (req, res, next) => {
     postType = postType.charAt(0).toUpperCase() + postType.slice(1);
 
     const comments = await Comment.find({ post: postId })
-      .populate({
-        path: "post",
-        model: postType,
-      })
+      .populate({ path: "post", model: postType })
       .populate("user")
       .exec();
- 
+
 
     res.status(200).json(comments);
   } catch (error) {
