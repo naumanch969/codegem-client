@@ -7,7 +7,7 @@ export const getFriends = async (req, res, next) => {
     const userId = req.user._id;
     const { page, pageSize, count } = req.query;
 
-    let query = User.findById(userId, { friends: 1 }) 
+    let query = User.findById(userId, { friends: 1 })
 
     const pageNumber = parseInt(page, 10) || 1;
     const size = parseInt(pageSize, 10) || 10;
@@ -36,7 +36,7 @@ export const searchFriends = async (req, res, next) => {
     const userId = req.user._id;
     const { page, pageSize, count, query: searchQuery } = req.query; // count is boolean
 
-    let query = User.findById(userId, { friends: 1 }) 
+    let query = User.findById(userId, { friends: 1 })
     if (searchQuery) {
       const regex = new RegExp(searchQuery, "i"); // 'i' for case-insensitive search
       query = query.or([
@@ -158,11 +158,8 @@ export const getSentRequests = async (req, res, next) => {
   // this request is made by the sender
   try {
     const userId = req.user._id;
-    const user = await User.findById(
-      userId,
-      { sentRequests: 1 },
-      { firstName: 1, lastName: 1, username: 1, email: 1, profilePicture: 1 }
-    ).populate("sentRequests");
+    const user = await User.findById(userId, { sentRequests: 1 }, { firstName: 1, lastName: 1, username: 1, email: 1, profilePicture: 1 })
+      .populate("sentRequests");
     res.status(200).json(user.sentRequests);
   } catch (error) {
     next(createError(res, 500, error.message));
@@ -172,11 +169,8 @@ export const getReceivedRequests = async (req, res, next) => {
   // this request is made by the sender
   try {
     const userId = req.user._id;
-    const user = await User.findById(
-      userId,
-      { receivedRequests: 1 },
-      { firstName: 1, lastName: 1, username: 1, email: 1, profilePicture: 1 }
-    ).populate("receivedRequests");
+    const user = await User.findById(userId, { receivedRequests: 1 }, { firstName: 1, lastName: 1, username: 1, email: 1, profilePicture: 1 })
+      .populate("receivedRequests");
     res.status(200).json(user.receivedRequests);
   } catch (error) {
     next(createError(res, 500, error.message));
@@ -201,17 +195,9 @@ export const sendFriendRequest = async (req, res, next) => {
     if (!receiver) return next(createError(res, 400, "Wrong Receiver Id"));
 
     // Update sender's sentRequests and receiver's receivedRequests
-    await User.findByIdAndUpdate(
-      userId,
-      { $addToSet: { sentRequests: receiver._id.toString() } }, // Fix: removed unnecessary `$` before sentRequests
-      { new: true }
-    );
+    await User.findByIdAndUpdate(userId, { $addToSet: { sentRequests: receiver._id.toString() } }, { new: true });// Fix: removed unnecessary `$` before sentRequests
 
-    const updatedReceiver = await User.findByIdAndUpdate(
-      receiverId,
-      { $addToSet: { receivedRequests: loggedUser._id.toString() } }, // Fix: removed unnecessary `$` before receivedRequests
-      { new: true }
-    );
+    const updatedReceiver = await User.findByIdAndUpdate(receiverId, { $addToSet: { receivedRequests: loggedUser._id.toString() } }, { new: true });// Fix: removed unnecessary `$` before receivedRequests
 
     res.status(200).json(updatedReceiver);
   } catch (error) {
@@ -230,17 +216,9 @@ export const rejectFriendRequest = async (req, res, next) => {
     const loggedUser = await User.findById(userId);
     if (!loggedUser) return next(createError(res, 400, "Wrong Receiver Id"));
 
-    const updatedSender = await User.findByIdAndUpdate(
-      senderId,
-      { $pull: { sentRequests: String(loggedUser._id) } },
-      { new: true }
-    );
+    const updatedSender = await User.findByIdAndUpdate(senderId, { $pull: { sentRequests: String(loggedUser._id) } }, { new: true });
 
-    await User.findByIdAndUpdate(
-      userId,
-      { $pull: { receivedRequests: String(sender._id) } },
-      { new: true }
-    );
+    await User.findByIdAndUpdate(userId, { $pull: { receivedRequests: String(sender._id) } }, { new: true });
 
     res.status(200).json(updatedSender);
   } catch (error) {
@@ -259,17 +237,9 @@ export const removeFriendRequest = async (req, res, next) => {
     const loggedUser = await User.findById(userId);
     if (!loggedUser) return next(createError(res, 400, "Wrong Sender Id"));
 
-    const updatedReceiver = await User.findByIdAndUpdate(
-      receiverId,
-      { $pull: { receivedRequests: String(loggedUser._id) } }, // sender is loggedUser
-      { new: true }
-    );
+    const updatedReceiver = await User.findByIdAndUpdate(receiverId, { $pull: { receivedRequests: String(loggedUser._id) } }, { new: true }); // sender is loggedUser
 
-    await User.findByIdAndUpdate(
-      userId,
-      { $pull: { sentRequests: String(receiver._id) } },
-      { new: true }
-    );
+    await User.findByIdAndUpdate(userId, { $pull: { sentRequests: String(receiver._id) } }, { new: true });
 
     res.status(200).json(updatedReceiver);
   } catch (error) {
@@ -289,19 +259,13 @@ export const acceptFriendRequest = async (req, res, next) => {
 
     const updatedSender = await User.findByIdAndUpdate(
       sender._id,
-      {
-        $addToSet: { friends: loggedUser._id },
-        $pull: { sentRequests: String(loggedUser._id) },
-      },
+      { $addToSet: { friends: loggedUser._id }, $pull: { sentRequests: String(loggedUser._id) } },
       { new: true }
     );
 
     await User.findByIdAndUpdate(
       loggedUser._id,
-      {
-        $addToSet: { friends: sender._id },
-        $pull: { receivedRequests: String(sender._id) },
-      },
+      { $addToSet: { friends: sender._id }, $pull: { receivedRequests: String(sender._id) } },
       { new: true }
     );
 
