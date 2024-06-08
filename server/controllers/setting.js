@@ -13,11 +13,8 @@ export const getSettings = async (req, res, next) => {
 export const createSettings = async (req, res, next) => {
   try {
     const userId = req.user._id;
-    const {} = req.body;
-    const newSettings = await Setting.create({
-      user: userId,
-      ...req.body,
-    });
+    const { } = req.body;
+    const newSettings = await Setting.create({ user: userId, ...req.body, });
     res.status(201).json(newSettings);
   } catch (error) {
     next(createError(res, 500, error.message));
@@ -27,12 +24,8 @@ export const createSettings = async (req, res, next) => {
 export const updateSettings = async (req, res, next) => {
   try {
     const userId = req.user._id;
-    const {} = req.body;
-    const updatedSettings = await Setting.findOneAndUpdate(
-      { user: userId },
-      { $set: req.body },
-      { new: true }
-    );
+    const { } = req.body;
+    const updatedSettings = await Setting.findOneAndUpdate({ user: userId }, { $set: req.body }, { new: true });
     res.status(200).json(updatedSettings);
   } catch (error) {
     next(createError(res, 500, error.message));

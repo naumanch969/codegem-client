@@ -12,15 +12,7 @@ import {
 } from "../utils/functions.js";
 export const getStreaks = async (req, res, next) => {
   try {
-    const {
-      page,
-      pageSize,
-      count,
-      userId,
-      filter,
-      query: searchQuery,
-      languages: languagesString,
-    } = req.query;
+    const { page, pageSize, count, userId, filter, query: searchQuery, languages: languagesString, } = req.query;
 
     let aggregationPipeline = userId
       ? [{ $match: { user: { $regex: new RegExp(userId, "i") } } }]
@@ -30,19 +22,8 @@ export const getStreaks = async (req, res, next) => {
       aggregationPipeline.push({ $sort: { likes: -1 } });
     } else if (filter === "trending") {
       aggregationPipeline.push(
-        {
-          $lookup: {
-            from: "comments",
-            localField: "comments",
-            foreignField: "_id",
-            as: "comments",
-          },
-        },
-        {
-          $addFields: {
-            commentsCount: { $size: "$comments" },
-          },
-        },
+        { $lookup: { from: "comments", localField: "comments", foreignField: "_id", as: "comments", }, },
+        { $addFields: { commentsCount: { $size: "$comments" }, } },
         { $sort: { commentsCount: -1 } }
       );
     } else if (filter === "latest") {
@@ -76,11 +57,9 @@ export const getStreaks = async (req, res, next) => {
       aggregationPipeline.push({
         $match: {
           $or: [
-            ...languages.map((l) => ({
-              language: { $regex: new RegExp(l, "i") },
-            })),
-          ],
-        },
+            ...languages.map((l) => ({ language: { $regex: new RegExp(l, "i") } }))
+          ]
+        }
       });
     }
 
@@ -92,17 +71,10 @@ export const getStreaks = async (req, res, next) => {
     aggregationPipeline.push({ $skip: skip }, { $limit: size });
     aggregationPipeline.push(
       {
-        $lookup: {
-          from: "users",
-          localField: "user",
-          foreignField: "_id",
-          as: "user",
-        },
+        $lookup: { from: "users", localField: "user", foreignField: "_id", as: "user" }
       },
       {
-        $addFields: {
-          user: { $arrayElemAt: ["$user", 0] }, // Convert user from array to single object
-        },
+        $addFields: { user: { $arrayElemAt: ["$user", 0] } } // Convert user from array to single object
       }
     );
 
@@ -192,18 +164,8 @@ export const createStreak = async (req, res, next) => {
 
     var result;
     if (group) {
-      result = await Streak.create({
-        user: userId,
-        title,
-        streak,
-        group,
-        ...rest,
-      });
-      const findedGroup = await Group.findByIdAndUpdate(
-        group,
-        { $addToSet: { streaks: result._id } },
-        { new: true }
-      );
+      result = await Streak.create({ user: userId, title, streak, group, ...rest, });
+      const findedGroup = await Group.findByIdAndUpdate(group, { $addToSet: { streaks: result._id } }, { new: true });
       // Notifiying user who created the post
       await Notification.create({
         title: `New Post: ${title}`,
@@ -221,20 +183,10 @@ export const createStreak = async (req, res, next) => {
         })
       );
     } else if (collection) {
-      result = await Streak.create({
-        user: userId,
-        title,
-        streak,
-        collectionRef: collection,
-        ...rest,
-      });
+      result = await Streak.create({ user: userId, title, streak, collectionRef: collection, ...rest, });
       result = await Streak.findById(result._id).populate('collectionRef').exec();
 
-      const findedCollection = await Collection.findByIdAndUpdate(
-        collection,
-        { $addToSet: { streaks: result._id } },
-        { new: true }
-      );
+      const findedCollection = await Collection.findByIdAndUpdate(collection, { $addToSet: { streaks: result._id } }, { new: true });
       // Notifiying user who created the post
       await Notification.create({
         title: `New Post: ${title}`,
@@ -242,12 +194,7 @@ export const createStreak = async (req, res, next) => {
         user: req.user._id,
       });
     } else {
-      result = await Streak.create({
-        user: userId,
-        title,
-        streak,
-        ...rest,
-      });
+      result = await Streak.create({ user: userId, title, streak, ...rest, });
       // Notifying user who created the post
       await Notification.create({
         title: `New Streak - ${title}`,
@@ -277,11 +224,7 @@ export const updateStreak = async (req, res, next) => {
     const { streakId } = req.params;
     const { collection, ...rest } = req.body;
 
-    const result = await Streak.findByIdAndUpdate(
-      streakId,
-      { $set: { collectionRef: collection, ...rest } },
-      { new: true }
-    );
+    const result = await Streak.findByIdAndUpdate(streakId, { $set: { collectionRef: collection, ...rest } }, { new: true });
 
     await createNotification("Streak Update", "You updated your post.");
 
@@ -301,18 +244,10 @@ export const likeStreak = async (req, res, next) => {
     const userHasLiked = streak.likes.includes(req.user?._id);
 
     if (userHasLiked) {
-      await Streak.findByIdAndUpdate(
-        streakId,
-        { $pull: { likes: req.user?._id } },
-        { new: true }
-      );
+      await Streak.findByIdAndUpdate(streakId, { $pull: { likes: req.user?._id } }, { new: true });
       res.status(200).json({ message: "Removed like successfully" });
     } else {
-      await Streak.findByIdAndUpdate(
-        streakId,
-        { $addToSet: { likes: req.user?._id } },
-        { new: true }
-      );
+      await Streak.findByIdAndUpdate(streakId, { $addToSet: { likes: req.user?._id } }, { new: true });
       res.status(200).json({ message: "Liked successfully" });
     }
   } catch (error) {
@@ -355,33 +290,21 @@ export const shareStreak = async (req, res, next) => {
     // updating streak, adding user to shares array
     await Promise.all(
       shares.map(async (shareId) => {
-        await Streak.findByIdAndUpdate(
-          streakId,
-          { $push: { shares: shareId } },
-          { new: true }
-        );
+        await Streak.findByIdAndUpdate(streakId, { $push: { shares: shareId } }, { new: true });
       })
     );
 
     // updating each friend, adding shares to receiver
     await Promise.all(
       shares.map(async (shareId, index) => {
-        await User.findByIdAndUpdate(
-          friendIds[index],
-          { $addToSet: { receivedShares: shareId } },
-          { new: true }
-        );
+        await User.findByIdAndUpdate(friendIds[index], { $addToSet: { receivedShares: shareId } }, { new: true });
       })
     );
 
     // updating current user, adding shares to sender
     await Promise.all(
       shares.map(async (shareId) => {
-        await User.findByIdAndUpdate(
-          req.user._id,
-          { $addToSet: { sentShares: shareId } },
-          { new: true }
-        );
+        await User.findByIdAndUpdate(req.user._id, { $addToSet: { sentShares: shareId } }, { new: true });
       })
     );
 
@@ -426,33 +349,21 @@ export const shareStreakInGroups = async (req, res, next) => {
     // updating streak, adding user to shares array
     await Promise.all(
       shares.map(async (shareId) => {
-        await Streak.findByIdAndUpdate(
-          streakId,
-          { $push: { shares: shareId } },
-          { new: true }
-        );
+        await Streak.findByIdAndUpdate(streakId, { $push: { shares: shareId } }, { new: true });
       })
     );
 
     // updating groups, adding streakId to shares array
     await Promise.all(
       shares.map(async (shareId, index) => {
-        await Group.findByIdAndUpdate(
-          groupIds[index],
-          { $push: { shares: shareId } }, // shareId is the id of the share of post
-          { new: true }
-        );
+        await Group.findByIdAndUpdate(groupIds[index], { $push: { shares: shareId } }, { new: true }); // shareId is the id of the share of post
       })
     );
 
     // updating current user, adding shares to sender
     await Promise.all(
       shares.map(async (shareId) => {
-        await User.findByIdAndUpdate(
-          req.user._id,
-          { $addToSet: { sentShares: shareId } },
-          { new: true }
-        );
+        await User.findByIdAndUpdate(req.user._id, { $addToSet: { sentShares: shareId } }, { new: true });
       })
     );
 
@@ -473,11 +384,7 @@ export const saveStreak = async (req, res, next) => {
       name: "Saved",
       owner: req.user._id,
     });
-    await Collection.findByIdAndUpdate(
-      findedCollection._id,
-      { $addToSet: { streaks: streakId } },
-      { new: true }
-    );
+    await Collection.findByIdAndUpdate(findedCollection._id, { $addToSet: { streaks: streakId } }, { new: true });
 
     res.status(200).json({ message: "Streak saved successfully." });
   } catch (error) {
@@ -495,9 +402,7 @@ export const saveStreakInCollections = async (req, res, next) => {
     await Promise.all(
       collections.map(
         async (collectionId) =>
-          await Collection.findByIdAndUpdate(collectionId, {
-            $addToSet: { streaks: streakId },
-          })
+          await Collection.findByIdAndUpdate(collectionId, { $addToSet: { streaks: streakId } })
       )
     );
 
@@ -516,11 +421,7 @@ export const dislikeStreak = async (req, res, next) => {
     const streak = await Streak.findById(streakId);
     if (!streak) return next(createError(res, 403, "Streak not exist."));
 
-    const result = await Streak.findByIdAndUpdate(
-      streakId,
-      { $addToSet: { likes: req.user?._id } },
-      { new: true }
-    );
+    const result = await Streak.findByIdAndUpdate(streakId, { $addToSet: { likes: req.user?._id } }, { new: true });
     res.status(200).json(result);
   } catch (error) {
     next(createError(res, 500, error.message));
@@ -534,17 +435,9 @@ export const commentStreak = async (req, res, next) => {
     const code = await Streak.findById(streakId);
     if (!code) return next(createError(res, 403, "Streak not exist"));
 
-    const comment = await Comment.create({
-      user: req.user._id,
-      post: streakId,
-      content,
-    });
+    const comment = await Comment.create({ user: req.user._id, post: streakId, content, });
 
-    await Streak.findByIdAndUpdate(
-      streakId,
-      { $addToSet: { comments: comment } },
-      { new: true }
-    );
+    await Streak.findByIdAndUpdate(streakId, { $addToSet: { comments: comment } }, { new: true });
     res.status(200).json({ message: "Commented Successfully" });
   } catch (error) {
     next(createError(res, 500, error.message));
