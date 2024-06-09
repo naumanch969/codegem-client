@@ -76,11 +76,7 @@ export const updateProfile = async (req, res, next) => {
     if (isEmailExist && email != loggedInUser.email)
       return next(createError(res, 400, "Email already exist."));
 
-    const result = await User.findByIdAndUpdate(
-      req.user._id,
-      { $set: { ...req.body } },
-      { new: true }
-    );
+    const result = await User.findByIdAndUpdate(req.user._id, { $set: { ...req.body } }, { new: true });
     res.status(200).json(result);
   } catch (error) {
     next(createError(res, 500, error.message));
@@ -91,11 +87,7 @@ export const editPersonalDetails = async (req, res, next) => {
     const { type } = req.query;
     const { values } = req.body;
 
-    const result = await User.findByIdAndUpdate(
-      req.user._id,
-      { $set: { [type.split(" ")[0]]: values } },
-      { new: true }
-    );
+    const result = await User.findByIdAndUpdate(req.user._id, { $set: { [type.split(" ")[0]]: values } }, { new: true });
     res.status(200).json(result);
   } catch (error) {
     next(createError(res, 500, error.message));
@@ -104,11 +96,7 @@ export const editPersonalDetails = async (req, res, next) => {
 export const updateUser = async (req, res, next) => {
   try {
     const { userId } = req.params;
-    const result = await User.findByIdAndUpdate(
-      userId,
-      { $set: { ...req.body } },
-      { new: true }
-    );
+    const result = await User.findByIdAndUpdate(userId, { $set: { ...req.body } }, { new: true });
     return res.status(200).json(result);
   } catch (error) {
     next(createError(res, 500, error.message));
@@ -128,23 +116,11 @@ export const deleteUser = async (req, res, next) => {
     await Collection.deleteMany({ owner: user._id });
     await Group.deleteMany({ admin: user._id });
     // remove being member from all groups
-    await Group.updateMany(
-      { members: user._id },
-      { $pull: { members: user._id } }
-    );
+    await Group.updateMany({ members: user._id }, { $pull: { members: user._id } });
     // remove if from friend list of others
-    await User.updateMany(
-      { friends: user._id },
-      { $pull: { friends: user._id } }
-    );
-    await User.updateMany(
-      { sentRequests: user._id },
-      { $pull: { sentRequests: user._id } }
-    );
-    await User.updateMany(
-      { receivedRequests: user._id },
-      { $pull: { receivedRequests: user._id } }
-    );
+    await User.updateMany({ friends: user._id }, { $pull: { friends: user._id } });
+    await User.updateMany({ sentRequests: user._id }, { $pull: { sentRequests: user._id } });
+    await User.updateMany({ receivedRequests: user._id }, { $pull: { receivedRequests: user._id } });
     // delete all shares
     await Share.deleteMany({ from: user._id });
     // delete all comments
