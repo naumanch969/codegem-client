@@ -10,6 +10,7 @@ router.get('/search', verifyToken, searchFriends);
 router.get('/search-user', verifyToken, searchUsers);
 router.get('/sent-requests', verifyToken, getSentRequests);
 router.get('/received-requests', verifyToken, getReceivedRequests);
+
 router.put('/request/send/:receiverId', verifyToken, sendFriendRequest)
 router.put('/request/reject/:senderId', verifyToken, rejectFriendRequest)
 router.put('/request/remove/:receiverId', verifyToken, removeFriendRequest)

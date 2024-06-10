@@ -32,6 +32,7 @@ router.put("/save-in-collections/:challengeId", verifyToken, saveChallengeInColl
 router.put("/share/:challengeId", verifyToken, shareChallenge);
 router.put("/share-in-groups/:challengeId", verifyToken, shareChallengeInGroups);
 router.put("/comment/:challengeId", verifyToken, commentChallenge);
+
 router.delete("/delete/:challengeId", verifyToken, deleteChallenge);
 router.delete("/delete-collection", verifyToken, deleteChallengeCollection);
 

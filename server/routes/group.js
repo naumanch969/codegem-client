@@ -29,11 +29,7 @@ router.get("/get/challenges/:groupId", verifyToken, getGroupChallenges);
 router.post("/create", verifyToken, createGroups);
 router.post("/code/create/:groupId", verifyToken, createGroupCode);
 router.post("/streak/create/:groupId", verifyToken, createGroupStreak);
-router.post(
-  "/challenge/create/:groupId",
-  verifyToken,
-  createGroupChallenge
-);
+router.post("/challenge/create/:groupId", verifyToken, createGroupChallenge);
 
 router.put("/update/:groupId", verifyToken, updateGroups);
 router.put("/join/:groupId", verifyToken, joinGroup);

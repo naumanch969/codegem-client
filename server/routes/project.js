@@ -18,6 +18,7 @@ router.put('/save-in-collections/:projectId', verifyToken, saveProjectInCollecti
 router.put('/share/:projectId', verifyToken, shareProject)
 router.put('/share-in-groups/:projectId', verifyToken, shareProjectInGroups)
 router.put('/comment/:projectId', verifyToken, commentProject)
+
 router.delete('/delete/:projectId', verifyToken, deleteProject)
 router.delete('/delete-collection', verifyToken, deleteProjectCollection)
 
