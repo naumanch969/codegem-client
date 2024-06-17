@@ -1,13 +1,6 @@
 import { Modal } from '@/components/ui/modal'
 import React from 'react'
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, } from "@/components/ui/form"
 import { z } from "zod"
 import { useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -17,7 +10,7 @@ import { RootState } from '@/redux/store';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { User } from '@/interfaces';
-import { updateProfile } from '@/redux/actions/user';
+import { updateProfile } from '@/redux/reducers/userSlice';
 
 export const BasicInfo = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
 

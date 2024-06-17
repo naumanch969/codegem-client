@@ -3,7 +3,7 @@ import { useState, } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { Link } from "react-router-dom"
-import { logout } from "@/redux/actions/auth"
+import { logout } from "@/redux/reducers/authSlice"
 import { useStateContext } from "@/contexts/ContextProvider"
 import { RootState } from '@/redux/store'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"

@@ -1,12 +1,6 @@
 import { Modal } from '@/components/ui/modal'
 import React, { useState } from 'react'
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormMessage,
-} from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormMessage, } from "@/components/ui/form"
 import { z } from "zod"
 import { useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -16,7 +10,7 @@ import { RootState } from '@/redux/store';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { X } from 'lucide-react';
-import { editPersonalDetails } from '@/redux/actions/user';
+import { editPersonalDetails } from '@/redux/reducers/userSlice';
 import { User } from '@/interfaces';
 
 export const PersonalDetails = ({ title, description, isOpen, onClose }: { title: string, description: string, isOpen: boolean, onClose: () => void }) => {
@@ -49,10 +43,10 @@ export const PersonalDetails = ({ title, description, isOpen, onClose }: { title
 
     // <---------------------------------------------------- FUNCTIONS ----------------------------------------------------------->
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        dispatch<any>(editPersonalDetails(
-            title.split(" ")[0].toLowerCase() as "interests" | "hobbies" | "books" | "programming",
-            values[title.toLowerCase()]
-        ))
+        dispatch<any>(editPersonalDetails({
+            type: title.split(" ")[0].toLowerCase() as "interests" | "hobbies" | "books" | "programming",
+            values: values[title.toLowerCase()]
+        }))
 
         onClose()
         form.reset(initialData);

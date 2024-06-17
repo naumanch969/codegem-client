@@ -8,11 +8,11 @@ import {
 } from "../controllers/setting.js";
 import { verifyToken } from "../middleware/auth.js";
 
-router.get("/get/all", getSettings);
+router.get("/get/all", verifyToken, getSettings);
 
 router.post("/create", createSettings);
 
-router.put("/update", updateSettings);
+router.put("/update", verifyToken, updateSettings);
 
 router.delete("/delete-collection", verifyToken, deleteCollection);
 

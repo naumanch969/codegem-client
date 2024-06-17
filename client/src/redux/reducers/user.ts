@@ -50,10 +50,7 @@ const userSlice = createSlice({
     setLoggedUserToken: (state, action: PayloadAction<any>) => {
       state.loggedUserToken = action.payload;
     },
-    getUsersReducer: (
-      state,
-      action: PayloadAction<{ count: number; result: User[] }>
-    ) => {
+    getUsersReducer: (state, action: PayloadAction<{ count: number; result: User[] }>) => {
       state.users = action.payload.result;
       state.count = action.payload.count;
     },
@@ -63,17 +60,8 @@ const userSlice = createSlice({
     getProfileReducer: (state, action: PayloadAction<User>) => {
       state.loggedUser = action.payload;
     },
-    editPersonalDetailsReducer: (
-      state,
-      action: PayloadAction<{
-        type: "interests" | "hobbies" | "books" | "programming";
-        values: string[];
-      }>
-    ) => {
-      state.loggedUser = {
-        ...state.loggedUser!,
-        [action.payload.type]: action.payload.values,
-      };
+    editPersonalDetailsReducer: (state, action: PayloadAction<{ type: "interests" | "hobbies" | "books" | "programming"; values: string[]; }>) => {
+      state.loggedUser = { ...state.loggedUser!, [action.payload.type]: action.payload.values, };
     },
     registerReducer: (state, action: PayloadAction<User>) => {
       state.users = [...state.users, action.payload];

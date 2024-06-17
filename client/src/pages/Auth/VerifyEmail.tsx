@@ -2,7 +2,7 @@ import React, { ChangeEvent, FormEvent, useState } from "react";
 import { Input } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { sendOTP } from "../../redux/actions/auth";
+import { sendOTP } from "../../redux/reducers/authSlice";
 import { logo } from '../../assets'
 import { RootState } from "../../redux/store";
 
@@ -24,7 +24,11 @@ const VerifyEmail = ({ snackbarText, setSnackbarText }: { snackbarText?: string,
 
   const handleSubmit = (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    dispatch<any>(sendOTP(email, navigate, setSnackbarText));
+    dispatch<any>(sendOTP(email))
+      .then(() => {
+        localStorage.setItem("email", JSON.stringify({ email }));
+        navigate('/auth/verify_otp')
+      })
     setEmail("");
   };
 

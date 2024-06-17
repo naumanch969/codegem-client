@@ -18,8 +18,8 @@ export const Upload = ({ image, handleFileChange, handleFileClear }: { image: st
 
     // const handleUploadImage = (e: any) => {
     //     const image = e.target.files[0]
-    //     const formData = new FormData();
-    //     formData.append('image', image);
+        const formData = new FormData();
+        formData.append('image', URL.createObjectURL(selectedFile));
     //     dispatch<any>(uploadImage(formData));
     // };
 

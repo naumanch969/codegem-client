@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import OTPInput from "react-otp-input";
 import { useDispatch, useSelector } from "react-redux";
-import { verifyRegisterationEmail, resendOTP } from "../../redux/actions/auth";
+import { verifyRegisterationEmail, resendOTP } from "../../redux/reducers/authSlice";
 import { logo } from "../../assets";
 import { ArrowBack } from "@mui/icons-material";
 import { RootState } from "../../redux/store";
+import Cookies from "js-cookie";
 
 const InputRegisterationOTP = ({ snackbarText, setSnackbarText }: { snackbarText?: string, setSnackbarText?: any }) => {
 
@@ -23,7 +24,14 @@ const InputRegisterationOTP = ({ snackbarText, setSnackbarText }: { snackbarText
     const handleSubmit = (e: any) => {
         e.preventDefault();
         if (otp.length != 5) return alert('Please enter a valid OTP')
-        dispatch<any>(verifyRegisterationEmail(otp, navigate, setSnackbarText));
+        dispatch<any>(verifyRegisterationEmail(otp))
+            .then(() => {
+                const connect = Cookies.get("code.connect");
+                connect ? navigate("/") : navigate("/auth/login");
+
+                localStorage.removeItem("email");
+
+            })
     }
     const goBack = () => {
         navigate(-1)

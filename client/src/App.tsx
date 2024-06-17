@@ -1,32 +1,35 @@
 import React from 'react'
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect } from "react";
-import {
-  Login, Register, InputRegisterationOTP, Home, Friends, Groups, Collections, Notifications, Create, Profile, More, Codes, Collection, Group, UserProfile, ChangePassword, InputOTP, VerifyEmail, NewPassword, EditProfile, Streaks, Challenges, LandingPage, Contact, About, Pricing, Features
-} from "./pages";
-import { useSelector } from "react-redux";
+import { Login, Register, InputRegisterationOTP, Home, Friends, Groups, Collections, Notifications, Create, Profile, More, Codes, Collection, Group, UserProfile, ChangePassword, InputOTP, VerifyEmail, NewPassword, EditProfile, Streaks, Challenges, LandingPage, Contact, About, Pricing, Features } from "./pages";
+import { useDispatch, useSelector } from "react-redux";
 import { NotFound } from '@/components'
 import { AuthWrapper, DashboardWrapper, LandingPageWrapper } from "@/wrappers";
 import { RootState } from "@/redux/store";
 import { Collection as TCollection } from '@/interfaces'
 import { useRole } from '@/hooks/useRole';
 import { adminEmail } from '@/constant';
+import { getProfile, getUsers } from './redux/reducers/userSlice';
 
 const Apps = () => {
   /////////////////////////////////////////////// VARIABLES /////////////////////////////////////////////////////
   const { loggedUser } = useSelector((state: RootState) => state.user);
   const { userCollections }: { userCollections: TCollection[] } = useSelector((state: RootState) => state.collection);
   const { onSetRole } = useRole()
+  const dispatch = useDispatch()
 
   /////////////////////////////////////////////// STATES /////////////////////////////////////////////////////
 
   /////////////////////////////////////////////// USE EFFECTS /////////////////////////////////////////////////////
   useEffect(() => {
-    // dispatch<any>(getUsers());
+    dispatch<any>(getUsers(''));
     if (userCollections.length == 0) {
       // Place User Collection
     }
   }, [userCollections]);
+  useEffect(() => {
+    dispatch<any>(getProfile())
+  }, [])
   useEffect(() => {
     loggedUser?.email == adminEmail && onSetRole('Admin')
   }, [loggedUser])

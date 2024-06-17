@@ -4,26 +4,13 @@ import { RootState } from '../../redux/store';
 import { Upload } from '../../utils/Components/Upload';
 import { User } from '../../interfaces';
 import * as api from '../../redux/api';
-import { updateProfile } from '../../redux/actions/user';
+import { updateProfile } from '@/redux/reducers/userSlice';
 import { z } from "zod"
 import { useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, } from "@/components/ui/form"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { X } from 'lucide-react'

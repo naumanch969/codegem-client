@@ -2,46 +2,34 @@ import { Schema, model } from "mongoose";
 
 const settingsSchema = new Schema(
   {
-    accountSettings: {
-      username: String,
-      fullName: String,
-      email: String,
-      location: String,
-      bio: String,
-    },
+    user: { type: Schema.Types.ObjectId, ref: 'User' },
     privacySettings: {
-      manageVisibilityOfProfile: String,
-      controlWhoCanSendFriendRequests: String,
-      controlWhoCanSeeMyFriendsList: String,
-      controlWhoCanSeeMyPosts: String,
-      controlWhoCanTagMeInPosts: String,
-      blockUsers: Number,
-      manageAppPermissions: Number,
+      profileVisibility: { type: String, enum: ['Everyone', 'Friends'], default: 'Everyone' },
+      whoCanSendFriendRequests: { type: String, enum: ['Everyone', 'Friends'], default: 'Everyone' },
+      whoCanSeeMyFriendsList: { type: String, enum: ['Everyone', 'Friends'], default: 'Everyone' },
+      whoCanSeeMyPosts: { type: String, enum: ['Everyone', 'Friends'], default: 'Everyone' },
+      whoCanTagMeInPosts: { type: String, enum: ['Everyone', 'Friends'], default: 'Everyone' },
+      blockUsers: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
     },
     notificationSettings: {
-      emailNotifications: String,
-      pushNotifications: String,
-      manageNotificationPreferences: Number,
+      emailNotifications: { type: Boolean, default: false },
+      pushNotifications: { type: Boolean, default: false },
+      manageNotificationPreferences: { type: Number, enum: [0, 1], default: 0 },  // 0: emailNotification, 1: pushNotification
     },
     themeAndDisplaySettings: {
-      chooseDarkLightTheme: String,
-      adjustFontSize: String,
+      mode: { type: String, enum: ['Dark', 'Light'], default: 'Light' },
+      adjustFontSize: { type: String, enum: ['Large', 'Medium', 'Small'], default: 'Medium' },
     },
     connectedAccounts: {
-      facebook: String,
-      twitter: String,
-      github: String,
+      facebook: { type: String, default: '' },
+      twitter: { type: String, default: '' },
+      github: { type: String, default: '' },
     },
     accessibilitySettings: {
-      enableAccessibilityFeatures: String,
-    },
-    helpAndSupport: {
-      contactSupport: String,
-      helpCenter: String,
-    },
-    logOut: String, 
+      enableAccessibilityFeatures: { type: Boolean, default: false },
+    }
   },
-  { timestamps: true } // Adding timestamps option
+  { timestamps: true }
 );
 
 const settingModel = model("Setting", settingsSchema);

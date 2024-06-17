@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookie from "js-cookie";
-import { Challenge, Code, Collection, Group, Streak, User, } from "../../interfaces";
+import { Challenge, Code, Collection, Group, Setting, Streak, User, } from "../../interfaces";
 import { baseURL } from "../../constant";
 
 // const API = axios.create({ baseURL: process.env.REACT_APP_BASEURL })
@@ -42,10 +42,10 @@ export const setNewPassword = ({ email, password, }: { email: string; password: 
 export const changePassword = (userData: { oldPassword: string, newPassword: string }) => API.put(`/auth/change_password`, userData);
 
 // users
-export const getUsers = () => API.get(`/user/get/all`);
+export const getUsers = (query: string) => API.get(`/user/get/all${query}`);
 export const getUser = (userId: string) => API.get(`/user/get/single/${userId}`);
 export const getProfile = () => API.get(`/user/get/profile`);
-export const updateProfile = (profileData: User) => API.put(`/user/update/profile`, profileData);
+export const updateProfile = (profileData: any) => API.put(`/user/update/profile`, profileData);
 export const editPersonalDetails = (type: "interests" | "hobbies" | "books" | "programming", values: string[]) => API.put(`/user/update/personal-details?type=${type}`, { values });
 export const deleteUser = (userId: string) => API.delete(`/user/delete/${userId}`);
 
@@ -141,3 +141,7 @@ export const markAsRead = (notificationId: string) => API.post(`/notification/ma
 export const markAllAsRead = () => API.post(`/notification/mark_read/all`);
 export const deleteNotification = (notificationId: string) => API.delete(`/notification/delete/single/${notificationId}`);
 export const deleteNotifications = () => API.delete(`/notification/delete/all`);
+
+// Settings
+export const getSettings = () => API.get(`/setting/get/all`);
+export const updateSettings = (formData: Setting) => API.put(`/setting/update`, formData);

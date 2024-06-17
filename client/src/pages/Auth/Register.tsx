@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Input } from "@mui/material";
 import { Person } from '@mui/icons-material';
-import { register } from '../../redux/actions/auth';
+import { register } from '../../redux/reducers/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { User } from '../../interfaces';
 import { logo } from '../../assets';
+import { setLoggedUserSlice } from '@/redux/reducers/userSlice';
+import Cookies from 'js-cookie';
 
 interface UserState {
     firstName: string;
@@ -34,13 +36,19 @@ const Register = ({ snackbarText, setSnackbarText }: { snackbarText?: string, se
     const handleSubmit = () => {
         const { firstName, lastName, username, email, password } = userData;
         if (!firstName || !lastName || !username || !email || !password) return alert('Make sure to provide all the fields');
-        dispatch<any>(register(userData as User, navigate, setSnackbarText));
+        dispatch<any>(register(userData as User))
+            .then(({ payload }: { payload: { result: User, token: string } }) => {
+                Cookies.set("code.connect", JSON.stringify(payload?.token)); // just for development
+                localStorage.setItem("email", JSON.stringify({ email: userData.email })); // for verifyRegisterationEmail        
+                navigate("/auth/verify_register_otp");
+                dispatch(setLoggedUserSlice(payload?.result));
+            })
     };
-    
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserData((pre) => ({ ...pre, [e.target.name]: e.target.value }))
     }
-    
+
     ///////////////////////////////////////////////////////// RENDER /////////////////////////////////////////////////////
     return (
         <div className="flex flex-col justify-center items-center gap-4 w-full p-[3rem]">

@@ -77,8 +77,10 @@ export const updateProfile = async (req, res, next) => {
       return next(createError(res, 400, "Email already exist."));
 
     const result = await User.findByIdAndUpdate(req.user._id, { $set: { ...req.body } }, { new: true });
+    console.log('result', result)
     res.status(200).json(result);
   } catch (error) {
+    console.log('error', error)
     next(createError(res, 500, error.message));
   }
 };

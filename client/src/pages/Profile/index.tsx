@@ -11,7 +11,7 @@ import Groups from './Sections/Groups'
 import Friends from './Sections/Friends'
 import Notifications from './Sections/Notifications'
 import Settings from './Sections/Settings'
-import { getProfile } from '../../redux/actions/user'
+import { getProfile } from '@/redux/reducers/userSlice';
 
 const ProfilePage = () => {
 

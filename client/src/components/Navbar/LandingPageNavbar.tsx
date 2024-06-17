@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import Cookies from 'js-cookie'
 import toast from 'react-hot-toast'
+import { logout } from '@/redux/reducers/authSlice'
 
 const LandingPageNavbar = () => {
 
@@ -19,8 +20,7 @@ const LandingPageNavbar = () => {
 
     ///////////////////////////////////////////////////////// FUNCTIONS ///////////////////////////////////////////////////////////
     const onLogout = () => {
-        navigate('/')
-        Cookies.remove('echo.token')
+        dispatch<any>(logout(navigate))
         toast.success('Logout successfully.')
     }
 

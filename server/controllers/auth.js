@@ -1,10 +1,7 @@
 import User from "../models/user.js";
 import OTP from "../models/otp.js";
-import {
-  createError,
-  createNotification,
-  sendMail,
-} from "../utils/functions.js";
+import Setting from "../models/setting.js";
+import { createError, createNotification, sendMail, } from "../utils/functions.js";
 import validator from "validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -36,6 +33,10 @@ export const register = async (req, res, next) => {
 
     const newUser = await User.create({ firstName, lastName, username, email, password: hashedPassword, role, });
 
+    // Create Setting Document of user
+    await Setting.create({ user: newUser?._id })
+
+    // Send OTP to user
     const otp = otpGenerator.generate(5, { digits: true, lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false, });
     await OTP.create({ email, otp, name: "verify_register_otp", });
     sendMail(email, "Verification", `<p>Your OTP code is ${otp}</p>`);
@@ -90,31 +91,27 @@ export const login = async (req, res, next) => {
   try {
     const { username: input, password: input_password } = req.body;
 
-    if (!input || !input_password)
-      return next(createError(res, 400, "Make sure to provide all the fields"));
+    if (!input) return next(createError(res, 400, "Username is required"));
+    if (!input) return next(createError(res, 400, "Password is required"));
 
     const findedUserByUsername = await User.findOne({ username: input });
     const findedUserByEmail = await User.findOne({ email: input });
-    if (!findedUserByEmail && !findedUserByUsername)
-      return next(createError(res, 400, "Wrong Credentials - username/email"));
+    if (!findedUserByEmail && !findedUserByUsername) return next(createError(res, 400, "Wrong Credentials - username/email"));
 
-    const findedUser = findedUserByUsername
-      ? findedUserByUsername
-      : findedUserByEmail;
+    const findedUser = findedUserByUsername ? findedUserByUsername : findedUserByEmail;
 
-    const isPasswordCorrect = await bcrypt.compare(
-      input_password,
-      findedUser.password
-    );
+    const isPasswordCorrect = await bcrypt.compare(input_password, findedUser.password);
     if (!isPasswordCorrect)
       return next(createError(res, 401, "Wrong Credentials - password"));
 
-    const token = jwt.sign(
-      { _id: findedUser._id, role: findedUser.role },
-      process.env.JWT_SECRET
-    );
+    const token = jwt.sign({ _id: findedUser._id, role: findedUser.role }, process.env.JWT_SECRET);
 
     const isDevelopment = process.env.NODE_ENV === "development";
+
+    const findedSettingsObj = await Setting.findOne({ user: String(findedUser?._id) })
+    if (!findedSettingsObj) {
+      await Setting.create({ user: findedUser?._id })
+    }
 
     res
       .cookie("code.connect", token, {
@@ -131,10 +128,7 @@ export const login = async (req, res, next) => {
 export const sendOTP = async (req, res, next) => {
   try {
     const { email } = req.body;
-    if (!email)
-      return res
-        .status(400)
-        .json({ message: "email field is required", success: false });
+    if (!email) return next(createError(res, 400, "Email is required"));
 
     const findedUser = await User.findOne({ email });
 

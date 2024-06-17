@@ -1,3 +1,8 @@
+import { setLoggedUserSlice, setLoggedUserTokenSlice } from "@/redux/reducers/userSlice";
+import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 // 1)
 export const limitText = (str: string | undefined, limit: number): string | undefined => {
     if (str) {
@@ -49,3 +54,6 @@ export const generateRandom = (from: number, to: number): number => {
     let random = Math.floor(Math.random() * to) + from;
     return random;
 };
+
+
+ 

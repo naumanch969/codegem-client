@@ -9,7 +9,7 @@ import Saved from './Sections/Saved'
 import Collections from './Sections/Collections'
 import Codes from './Sections/Codes'
 import Groups from './Sections/Groups'
-import { getUser } from '../../redux/actions/user'
+import { getUser } from '@/redux/reducers/userSlice';
 
 const ProfilePage = () => {
 

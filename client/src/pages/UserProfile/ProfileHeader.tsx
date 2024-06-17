@@ -6,8 +6,8 @@ import { SampleProfileCoverImage } from '../../assets';
 import { Button } from '@/components/ui/button';
 import { removeFriendRequest, sendFriendRequest, getSentRequests, getFriends, getReceivedRequests, acceptFriendRequest } from '@/redux/actions/friend';
 import { useRole } from '@/hooks/useRole';
-import { deleteUser } from '@/redux/actions/user';
 import { useNavigate } from 'react-router-dom';
+import { deleteUser } from '@/redux/reducers/userSlice';
 
 const ProfilePage = () => {
 
@@ -54,7 +54,10 @@ const ProfilePage = () => {
 
     const onDeleteUser = () => {
         if (role == 'Admin') {
-            dispatch<any>(deleteUser(currentUser?._id as string, navigate))
+            dispatch<any>(deleteUser(currentUser?._id as string))
+                .then(() => {
+                    navigate("/friends");
+                })
         }
     }
 

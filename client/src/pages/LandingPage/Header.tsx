@@ -15,7 +15,7 @@ const Header = () => {
                 <h1 className="pb-3 text-7xl text-foreground font-bold mb-8 text-start">Code, Collaborate, Connect</h1>
                 <p className=" text-gray-700 text-lg text-start">Discover a dedicated space for programmers on Codegem. Share your code, collaborate on exciting projects, and connect with like-minded individuals</p>
                 <div className="relative flex justify-start gap-2 w-full ">
-                    <Button onClick={() => navigate('/dashboard')} size='lg' className="text-lg py-7 px-8 mt-8" >Get Started</Button>
+                    <Button onClick={() => navigate('/home')} size='lg' className="text-lg py-7 px-8 mt-8" >Get Started</Button>
                     <Button onClick={() => navigate('/about')} variant='outline' size='lg' className="text-lg py-7 px-8 mt-8" >Learn more</Button>
                     <Tooltip title='Chat' placement='top' >
                         <Button onClick={() => navigate('/chat')} className='fixed bottom-4 right-4 rounded-full w-12 h-12 flex justify-center items-center '>

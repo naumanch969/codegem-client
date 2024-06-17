@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Person } from '@mui/icons-material';
 import { Input } from "@mui/material";
-import { login } from '../../redux/actions/auth';
+import { login } from '../../redux/reducers/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logo } from '../../assets';
+import { setLoggedUserSlice, setLoggedUserTokenSlice } from '@/redux/reducers/userSlice';
+import Cookies from 'js-cookie';
+import { User } from '@/interfaces';
 
 interface UserState {
     username: string;
@@ -26,7 +29,15 @@ const Login = ({ snackbarText, setSnackbarText }: { snackbarText?: string, setSn
     const handleSubmit = () => {
         const { username, password } = userData;
         if (!username || !password) return alert('Make sure to provide all the fields');
-        dispatch<any>(login(userData, navigate, setSnackbarText));
+        dispatch<any>(login(userData))
+            .then(({ payload: { result, token } }: { payload: { result: User, token: string } }) => {
+                Cookies.set("code.connect", JSON.stringify(token));
+                localStorage.setItem("profile", JSON.stringify(result));
+
+                dispatch(setLoggedUserTokenSlice(token));
+                dispatch(setLoggedUserSlice(result));
+                navigate("/");
+            })
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

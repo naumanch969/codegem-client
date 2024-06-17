@@ -42,3 +42,4 @@ export const createNotification = async (title, description, userId) => {
     console.log("Error in createNotification: ", error);
   }
 };
+

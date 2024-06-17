@@ -146,3 +146,42 @@ export interface Notification {
   type: "GENERAL" | "POST_CREATE" | "FRIEND_REQUEST";
   isRead: boolean;
 }
+
+/////////////////////////////////////////////////////// SETTINGS //////////////////////////////////////////////////////////////
+// Define interfaces for nested objects first
+interface PrivacySettings {
+  profileVisibility: 'Everyone' | 'Friends';
+  whoCanSendFriendRequests: 'Everyone' | 'Friends';
+  whoCanSeeMyFriendsList: 'Everyone' | 'Friends';
+  whoCanSeeMyPosts: 'Everyone' | 'Friends';
+  whoCanTagMeInPosts: 'Everyone' | 'Friends';
+  blockUsers: string[];
+}
+interface NotificationSettings {
+  emailNotifications: boolean;
+  pushNotifications: boolean;
+  manageNotificationPreferences: 0 | 1; // 0: emailNotification, 1: pushNotification
+}
+interface ThemeAndDisplaySettings {
+  mode: 'Dark' | 'Light';
+  adjustFontSize: 'Large' | 'Medium' | 'Small';
+}
+interface ConnectedAccounts {
+  facebook: string;
+  twitter: string;
+  github: string;
+}
+interface AccessibilitySettings {
+  enableAccessibilityFeatures: boolean;
+}
+// Define the main interface for the document
+export interface Setting {
+  user: string;
+  privacySettings: PrivacySettings;
+  notificationSettings: NotificationSettings;
+  themeAndDisplaySettings: ThemeAndDisplaySettings;
+  connectedAccounts: ConnectedAccounts;
+  accessibilitySettings: AccessibilitySettings;
+  createdAt?: Date;
+  updatedAt?: Date;
+}

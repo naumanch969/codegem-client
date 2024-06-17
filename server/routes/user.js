@@ -1,13 +1,4 @@
-import {
-  getUsers,
-  getUser,
-  getProfile,
-  updateUser,
-  editPersonalDetails,
-  deleteUser,
-  deleteUserCollection,
-  updateProfile,
-} from "../controllers/user.js";
+import { getUsers, getUser, getProfile, updateUser, editPersonalDetails, deleteUser, deleteUserCollection, updateProfile, } from "../controllers/user.js";
 
 import { verifyToken } from "../middleware/auth.js";
 import express from "express";

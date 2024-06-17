@@ -4,7 +4,7 @@ import { AnyAction } from "redux";
 
 import codeReducer from "./reducers/code";
 import friendReducer from "./reducers/friend";
-import userReducer from "./reducers/user";
+import userReducer from "./reducers/userSlice";
 import authReducer from "./reducers/authSlice";
 import collectionReducer from "./reducers/collection";
 import groupReducer from "./reducers/group";
@@ -12,6 +12,7 @@ import generalReducer from "./reducers/general";
 import streakReducer from "./reducers/streak";
 import challengeReducer from "./reducers/challenge";
 import notificationReducer from "./reducers/notification";
+import settingReducer from "./reducers/settingSlice";
 
 const reducer = combineReducers({
   auth: authReducer,
@@ -24,6 +25,7 @@ const reducer = combineReducers({
   streak: streakReducer,
   challenge: challengeReducer,
   notification: notificationReducer,
+  setting: settingReducer,
 });
 
 export const store = configureStore({
@@ -31,6 +33,4 @@ export const store = configureStore({
 });
 
 export type RootState = ReturnType<typeof reducer>;
-
-// Define the async action creator type
 export type AsyncAction = ThunkAction<void, RootState, null, AnyAction>;

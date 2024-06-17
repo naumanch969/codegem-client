@@ -2,7 +2,7 @@ import React, { useState, FormEvent } from "react";
 import { Input } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { changePassword } from "../../redux/actions/auth";
+import { changePassword } from "../../redux/reducers/authSlice";
 import { logo } from "../../assets";
 
 
@@ -34,12 +34,12 @@ const ChangePassword = ({ setOpen, setSnackbarText }: { setOpen?: any, setSnackb
         if (!newPassword)
             return setInputError((prev) => ({ ...prev, newPassword: "New password is required" }));
         if (newPassword.length < 6)
-            return setInputError((prev) => ({
-                ...prev,
-                newPassword: "New password length should contain at least 6 characters.",
-            }));
+            return setInputError((prev) => ({ ...prev, newPassword: "New password length should contain at least 6 characters.", }));
 
-        dispatch<any>(changePassword(passwordData, navigate, setSnackbarText));
+        dispatch<any>(changePassword(passwordData))
+            .then(() => {
+                navigate("/");
+            })
         setOpen(false);
     };
 
@@ -50,7 +50,7 @@ const ChangePassword = ({ setOpen, setSnackbarText }: { setOpen?: any, setSnackb
 
             <div className="text-center">
                 <div className="flex justify-center">
-                    <img className="h-32" src={logo} />
+                    <img className="h-32" src={logo} alt='Logo' />
                 </div>
             </div>
 

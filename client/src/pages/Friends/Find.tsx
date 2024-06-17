@@ -6,8 +6,8 @@ import { Loader } from '../../utils/Components'
 import { RootState } from '../../redux/store'
 import FriendCard from './FriendCard'
 import { Pagination } from '@mui/material'
-import { getUsers } from '@/redux/actions/user'
 import { empty } from '@/assets'
+import { getUsers } from '@/redux/reducers/userSlice'
 
 const Find = ({ totalPages, page, setPage, pageSize }: { totalPages: number, page: number, setPage: any, pageSize: number }) => {
 
@@ -20,7 +20,7 @@ const Find = ({ totalPages, page, setPage, pageSize }: { totalPages: number, pag
 
   //////////////////////////////////////////////////// USE EFFECTS ////////////////////////////////////////////////
   useEffect(() => {
-    dispatch<any>(getUsers(users.length == 0, `?page=${page}&pageSize=${pageSize}`))
+    dispatch<any>(getUsers(`?page=${page}&pageSize=${pageSize}`))
   }, [])
   useEffect(() => {
     // TODO: if data of particular page is available then dont call api

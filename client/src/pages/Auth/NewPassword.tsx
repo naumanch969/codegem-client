@@ -2,7 +2,7 @@ import React, { ChangeEvent, FormEvent, useState } from "react";
 import { Input } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setNewPassword } from '../../redux/actions/auth';
+import { setNewPassword } from '../../redux/reducers/authSlice';
 import { logo } from "../../assets";
 import { RootState } from "../../redux/store";
 
@@ -27,7 +27,12 @@ const NewPassword = ({ setSnackbarText }: { snackbarText?: string, setSnackbarTe
     e.preventDefault();
     if (password.password !== password.confirmPassword) return alert('Password and Confirm Password should be same.');
 
-    dispatch<any>(setNewPassword(password.password, navigate, setSnackbarText))
+    dispatch<any>(setNewPassword(password.password))
+      .then(() => {
+        localStorage.removeItem("email");
+        localStorage.removeItem("emailVerified");
+        navigate("/auth/login");
+      })
     setPassword({ confirmPassword: '', password: '' })
   };
 

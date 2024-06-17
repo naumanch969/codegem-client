@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import OTPInput from "react-otp-input";
 import { useDispatch, useSelector } from "react-redux";
-import { resendOTP, verifyOTP } from "../../redux/actions/auth";
+import { resendOTP, verifyOTP } from "../../redux/reducers/authSlice";
 import { logo } from "../../assets";
 import { ArrowBack } from "@mui/icons-material";
 import { RootState } from "../../redux/store";
@@ -23,14 +23,18 @@ const InputOTP = ({ snackbarText, setSnackbarText }: { snackbarText?: string, se
     const handleSubmit = (e: any) => {
         e.preventDefault();
         if (otp.length != 5) return alert('Please enter a valid OTP')
-        dispatch<any>(verifyOTP(otp, navigate, setSnackbarText));
+        dispatch<any>(verifyOTP(otp))
+            .then(() => {
+                localStorage.setItem("emailVerified", JSON.stringify({ isVerified: true }));
+                navigate("/auth/new_password");
+            })
     }
     const goBack = () => {
         navigate(-1)
     }
     const handleResend = (e: any) => {
         e.preventDefault();
-        dispatch<any>(resendOTP(setSnackbarText))
+        dispatch<any>(resendOTP())
     }
 
     return (
