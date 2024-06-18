@@ -105,6 +105,12 @@ const userSlice = createSlice({
         setLoggedUserTokenSlice: (state, action: PayloadAction<string | null>) => {
             state.loggedUserToken = action.payload;
         },
+        setUsersSlice: (state, action: PayloadAction<User[]>) => {
+            state.users = action.payload;
+        },
+        setUsersCountSlice: (state, action: PayloadAction<number>) => {
+            state.count = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -178,5 +184,5 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
-export const { resetState, setLoggedUserSlice, setLoggedUserTokenSlice } = userSlice.actions;
+export const { resetState, setLoggedUserSlice, setLoggedUserTokenSlice, setUsersCountSlice, setUsersSlice } = userSlice.actions;
 export const { actions: userActions } = userSlice;

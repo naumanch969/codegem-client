@@ -14,7 +14,7 @@ import {
   rejectFriendRequestReducer,
 } from "../reducers/friend";
 import { AsyncAction } from "../store";
-import { getUsersReducer } from "../reducers/user";
+import { setUsersCountSlice, setUsersSlice } from "../reducers/userSlice";
 
 export const getSuggestedUsers = (loading: boolean = false, query: string): AsyncAction =>
   async (dispatch) => {
@@ -61,7 +61,8 @@ export const searchUsers = (loading: boolean = false, query: string): AsyncActio
     try {
       loading && dispatch(start());
       const { data }: { data: { count: number; result: User[] } } = await api.searchUsers(query);
-      dispatch(getUsersReducer({ result: data.result, count: data.count }));
+      dispatch(setUsersCountSlice(data.count))
+      dispatch(setUsersSlice(data.result))
       dispatch(end());
     } catch (err: any) {
       err.response?.data?.message

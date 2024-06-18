@@ -55,7 +55,7 @@ export const changePassword = createAsyncThunk<boolean, { oldPassword: string, n
     }
 });
 
-export const sendOTP = createAsyncThunk<undefined, string>('sendOTP', async (email) => {
+export const sendOTP = createAsyncThunk('sendOTP', async (email: string) => {
     try {
         const { data: { message } } = await api.sendOTP(email);
         toast.success(message);
@@ -111,7 +111,7 @@ export const setNewPassword = createAsyncThunk('setNewPassword', async (password
     }
 });
 
-export const logout = createAsyncThunk<undefined, ReturnType<typeof useNavigate>>('setNewPassword', async (navigate, { dispatch }) => {
+export const logout = createAsyncThunk('setNewPassword', async (navigate: ReturnType<typeof useNavigate>, { dispatch }) => {
     try {
         Cookies.remove("code.connect");
         localStorage.removeItem("profile");

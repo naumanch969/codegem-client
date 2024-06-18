@@ -38,7 +38,7 @@ const InputRegisterationOTP = ({ snackbarText, setSnackbarText }: { snackbarText
     }
     const handleResend = (e: any) => {
         e.preventDefault();
-        dispatch<any>(resendOTP(setSnackbarText))
+        dispatch<any>(resendOTP())
     }
 
     /////////////////////////////////////////////////// RENDER ///////////////////////////////////////////////
