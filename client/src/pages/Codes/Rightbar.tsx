@@ -1,25 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { User } from '../../interfaces';
-import { getFriends, getSuggestedUsers } from '../../redux/actions/friend';
+import { getFriends, getSuggestedUsers } from '../../redux/reducers/friendSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const CodesRightbar = () => {
 
-    //////////////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////
+    //////////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const { friends, suggestedUsers, isFetching }: { friends: User[], suggestedUsers: User[], isFetching: boolean } = useSelector((state: RootState) => state.friend)
+    const { friends, suggestedUsers }: { friends: User[], suggestedUsers: User[], isFetching: boolean } = useSelector((state: RootState) => state.friend)
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
 
     //////////////////////////////////////////////////// STATES ///////////////////////////////////////////////
+    const [isFetching, setIsFetching] = useState(false)
 
-    //////////////////////////////////////////////////// USE EFFECTS ///////////////////////////////////////////////
+    //////////////////////////////////////////////////// USE EFFECTS ///////////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getFriends(friends.length == 0, `?page=${1}&pageSize=${10}`))
-        dispatch<any>(getSuggestedUsers(suggestedUsers.length == 0, `?page=${1}&pageSize=${10}`))
+        if (friends.length == 0 || suggestedUsers?.length == 0) setIsFetching(true)
+        dispatch<any>(getFriends(`?page=${1}&pageSize=${10}`)).finally(() => setIsFetching(false))
+        dispatch<any>(getSuggestedUsers(`?page=${1}&pageSize=${10}`)).finally(() => setIsFetching(false))
     }, [])
 
     //////////////////////////////////////////////////// FUNCTIONS ///////////////////////////////////////////////
@@ -89,7 +91,7 @@ const CodesRightbar = () => {
                                 <Friend.Skeleton key={index} />
                             ))
                             :
-                            suggestedUsers.slice(0, 4).map((friend, index) => (
+                            suggestedUsers?.slice(0, 4)?.map((friend, index) => (
                                 <Friend friend={friend} key={index} />
                             ))
                     }
@@ -108,7 +110,7 @@ const CodesRightbar = () => {
                                 <Friend.Skeleton key={index} />
                             ))
                             :
-                            friends.map((friend, index) => (
+                            friends?.map((friend, index) => (
                                 <Friend friend={friend} key={index} />
                             ))
                     }

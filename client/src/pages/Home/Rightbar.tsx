@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PeopleAlt, Update, PersonAdd, Image } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { User } from '../../interfaces';
-import { getFriends, getSuggestedUsers } from '../../redux/actions/friend';
+import { getFriends, getSuggestedUsers } from '../../redux/reducers/friendSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { SampleProfileCoverImage, image1 } from '../../assets';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -13,15 +13,17 @@ const RightSidebar = () => {
     //////////////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const { friends, suggestedUsers, isFetching }: { friends: User[], suggestedUsers: User[], isFetching: boolean } = useSelector((state: RootState) => state.friend)
+    const { friends, suggestedUsers }: { friends: User[], suggestedUsers: User[] } = useSelector((state: RootState) => state.friend)
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
 
     //////////////////////////////////////////////////// STATES ///////////////////////////////////////////////
+    const [isFetching, setIsFetching] = useState<boolean>(false)
 
     //////////////////////////////////////////////////// USE EFFECTS ///////////////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getFriends(friends.length == 0, `?page=${1}&pageSize=${10}`))
-        dispatch<any>(getSuggestedUsers(suggestedUsers.length == 0, `?page=${1}&pageSize=${10}`))
+        if (friends.length == 0 || suggestedUsers.length == 0) setIsFetching(true)
+        dispatch<any>(getFriends(`?page=${1}&pageSize=${10}`)).finally(() => { setIsFetching(false) })
+        dispatch<any>(getSuggestedUsers(`?page=${1}&pageSize=${10}`)).finally(() => { setIsFetching(false) })
     }, [])
 
     //////////////////////////////////////////////////// FUNCTIONS ///////////////////////////////////////////////

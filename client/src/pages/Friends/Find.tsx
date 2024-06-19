@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getFriends } from '../../redux/actions/friend'
+import { getFriends } from '../../redux/reducers/friendSlice'
 import { User } from '../../interfaces'
-import { Loader } from '../../utils/Components'
 import { RootState } from '../../redux/store'
 import FriendCard from './FriendCard'
 import { Pagination } from '@mui/material'
@@ -14,9 +13,9 @@ const Find = ({ totalPages, page, setPage, pageSize }: { totalPages: number, pag
   //////////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////
   const dispatch = useDispatch()
   const { users, isFetching: usersFetching }: { users: User[], isFetching: boolean } = useSelector((state: RootState) => state.user)
-  const { isFetching: friendsFetching }: { isFetching: boolean } = useSelector((state: RootState) => state.friend)
 
   //////////////////////////////////////////////////// STATES ////////////////////////////////////////////////
+  const [friendsFetching, setFriendsFetching] = useState(false)
 
   //////////////////////////////////////////////////// USE EFFECTS ////////////////////////////////////////////////
   useEffect(() => {
@@ -29,7 +28,8 @@ const Find = ({ totalPages, page, setPage, pageSize }: { totalPages: number, pag
 
   /////////////////////////////////////// FUNCTIONS /////////////////////////////////////////
   const fetchMore = async () => {
-    dispatch<any>(getFriends(true, `?page=${page}&pageSize=${pageSize}`))
+    setFriendsFetching(true)
+    dispatch<any>(getFriends(`?page=${page}&pageSize=${pageSize}`)).finally(() => setFriendsFetching(false))
   }
 
 

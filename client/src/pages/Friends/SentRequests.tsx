@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getSentRequests, getSuggestedUsers } from '../../redux/actions/friend'
+import { getSentRequests, getSuggestedUsers } from '../../redux/reducers/friendSlice'
 import { User } from '../../interfaces'
 import { RootState } from '../../redux/store'
 import FriendCard from './FriendCard'
@@ -11,13 +11,15 @@ const SentRequest = ({ totalPages, page, setPage, pageSize }: { totalPages: numb
 
     //////////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////
     const dispatch = useDispatch()
-    const { sentRequests, isFetching }: { sentRequests: User[], isFetching: boolean } = useSelector((state: RootState) => state.friend)
+    const { sentRequests }: { sentRequests: User[] } = useSelector((state: RootState) => state.friend)
 
     //////////////////////////////////////////////////// STATES ////////////////////////////////////////////////
+    const [isFetching, setIsFetching] = useState(false)
 
     //////////////////////////////////////////////////// USE EFFECTS ////////////////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getSentRequests(sentRequests.length == 0, `?page=${page}&pageSize=${pageSize}`))
+        if (sentRequests?.length == 0) setIsFetching(true)
+        dispatch<any>(getSentRequests(`?page=${page}&pageSize=${pageSize}`)).finally(() => setIsFetching(false))
     }, [])
     useEffect(() => {
         // TODO: if data of particular page is available then dont call api
@@ -26,7 +28,8 @@ const SentRequest = ({ totalPages, page, setPage, pageSize }: { totalPages: numb
 
     /////////////////////////////////////// FUNCTIONS /////////////////////////////////////////
     const fetchMore = async () => {
-        dispatch<any>(getSuggestedUsers(sentRequests.length == 0, `?page=${page}&pageSize=${pageSize}`))
+        if (sentRequests?.length == 0) setIsFetching(true)
+        dispatch<any>(getSuggestedUsers(`?page=${page}&pageSize=${pageSize}`)).finally(() => setIsFetching(false))
     }
 
     return (

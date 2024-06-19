@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { getFriends } from '../../redux/actions/friend';
+import { getFriends } from '../../redux/reducers/friendSlice';
 import { shareStreak, shareStreakInGroups } from '../../redux/actions/streak';
 import { Streak, Group, User } from '../../interfaces';
 import { getGroups } from '../../redux/actions/group';
@@ -26,7 +26,7 @@ const ShareStreak = ({ open, setOpen, streak }: { open: boolean, setOpen: any, s
 
     /////////////////////////////////////////////// USE EFFECTS ///////////////////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getFriends(friends.length == 0, ``))
+        dispatch<any>(getFriends(''))
         dispatch<any>(getGroups(groups.length == 0, ``))
     }, [])
 

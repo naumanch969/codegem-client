@@ -1,18 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import FriendCard from '../../Friends/FriendCard';
 import { User } from '../../../interfaces';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
-import { getFriends } from '../../../redux/actions/friend';
+import { getFriends } from '../../../redux/reducers/friendSlice';
 
 const FriendsPage = () => {
 
+  //////////////////////////////////////////////////////// VARIABLES /////////////////////////////////////////////////////////////
   const dispatch = useDispatch()
-  const { friends, isFetching }: { friends: User[], isFetching: boolean } = useSelector((state: RootState) => state.friend)
+  const { friends }: { friends: User[] } = useSelector((state: RootState) => state.friend)
+
+  //////////////////////////////////////////////////////// STATES /////////////////////////////////////////////////////////////
+  const [isFetching, setIsFetching] = useState(false)
+
+  //////////////////////////////////////////////////////// USE EFFECTS /////////////////////////////////////////////////////////////
   useEffect(() => {
-    dispatch<any>(getFriends(friends?.length == 0, `?page=${1}&pageSize=${20}`))
+    if (friends?.length == 0) setIsFetching(true)
+    dispatch<any>(getFriends(`?page=${1}&pageSize=${20}`)).finally(() => setIsFetching(false))
   }, [])
 
+  //////////////////////////////////////////////////////// RENDER /////////////////////////////////////////////////////////////
   return (
     <div className="p-6 flex flex-col gap-4 w-full ">
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

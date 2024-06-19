@@ -3,7 +3,7 @@ import { Close, } from '@mui/icons-material';
 import { IconButton, } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { getFriends } from '../../redux/actions/friend';
+import { getFriends } from '../../redux/reducers/friendSlice';
 import { Facebook, Instagram, Linkedin, Twitter, Whatsapp } from '../../assets';
 import { shareCode, shareCodeInGroups } from '../../redux/actions/code';
 import { Code, Group, User } from '../../interfaces';
@@ -31,7 +31,7 @@ const ShareCode = ({ open, setOpen, code }: { open: boolean, setOpen: any, code:
 
     /////////////////////////////////////////////// USE EFFECTS ///////////////////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getFriends(friends.length == 0, ``))
+        dispatch<any>(getFriends(''))
         dispatch<any>(getGroups(groups.length == 0, ``))
     }, [])
 

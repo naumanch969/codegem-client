@@ -20,8 +20,8 @@ export const getFriends = async (req, res, next) => {
       resultPromise,
       count ? User.countDocuments(query) : Promise.resolve(null),
     ]);
-
-    let response = { result: result.friends };
+console.log('result', result)
+    let response = { result: result?.friends };
     if (totalCount !== null) {
       response.count = totalCount;
     }

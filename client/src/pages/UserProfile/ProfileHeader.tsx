@@ -4,7 +4,7 @@ import { User } from '../../interfaces';
 import { RootState } from '../../redux/store';
 import { SampleProfileCoverImage } from '../../assets';
 import { Button } from '@/components/ui/button';
-import { removeFriendRequest, sendFriendRequest, getSentRequests, getFriends, getReceivedRequests, acceptFriendRequest } from '@/redux/actions/friend';
+import { removeFriendRequest, sendFriendRequest, getSentRequests, getFriends, getReceivedRequests, acceptFriendRequest } from '@/redux/reducers/friendSlice';
 import { useRole } from '@/hooks/useRole';
 import { useNavigate } from 'react-router-dom';
 import { deleteUser } from '@/redux/reducers/userSlice';
@@ -15,17 +15,19 @@ const ProfilePage = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { currentUser, isFetching: userFetching }: { currentUser: User | null, isFetching: boolean } = useSelector((state: RootState) => state.user)
-    const { sentRequests, receivedRequests, isFetching: friendsFetching, friends } = useSelector((state: RootState) => state.friend)
+    const { sentRequests, receivedRequests, friends } = useSelector((state: RootState) => state.friend)
     const { role } = useRole()
 
     ///////////////////////////////////////////////// STATES //////////////////////////////////////////////////////////
     const [userType, setUserType] = useState<'friend' | 'request_sent' | 'request_received' | 'none'>('none')
+    const [friendsFetching, setFriendsFetching] = useState(false)
 
     ///////////////////////////////////////////////// USE EFFECTS //////////////////////////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getReceivedRequests(receivedRequests.length == 0, ``))
-        dispatch<any>(getSentRequests(sentRequests.length == 0, ``))
-        dispatch<any>(getFriends(friends.length == 0, ``))
+        if (friends.length == 0 || sentRequests.length == 0 || receivedRequests.length == 0) setFriendsFetching(true)
+        dispatch<any>(getReceivedRequests('')).finally(() => setFriendsFetching(false))
+        dispatch<any>(getSentRequests('')).finally(() => setFriendsFetching(false))
+        dispatch<any>(getFriends('')).finally(() => setFriendsFetching(false))
     }, [])
     useEffect(() => {
         if (friends.some(user => user._id == currentUser?._id)) { // if friend

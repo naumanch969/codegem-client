@@ -1,7 +1,7 @@
 import React from 'react';
 import { User } from '../../interfaces';
-import { useDispatch, useSelector } from 'react-redux';
-import { acceptFriendRequest, rejectFriendRequest, removeFriendRequest, sendFriendRequest } from '../../redux/actions/friend';
+import { useDispatch } from 'react-redux';
+import { acceptFriendRequest, rejectFriendRequest, removeFriendRequest, sendFriendRequest } from '../../redux/reducers/friendSlice';
 import { useNavigate } from 'react-router-dom';
 
 const FriendCard = ({ friend, type }: { friend: User, type: string }) => {
@@ -42,7 +42,12 @@ const FriendCard = ({ friend, type }: { friend: User, type: string }) => {
             :
             <div className='w-full h-[160px] rounded-md mb-2 capitalize flex justify-center items-center bg-black text-white font-semibold text-[5rem] '>{friend?.username?.charAt(0)}</div>
         }
-        <p onClick={() => navigate(`/user/${friend._id}`)} className="cursor-pointer text-center text-sm font-medium text-dark-slate-blue-darken capitalize ">{friend?.firstName} {friend?.lastName}</p>
+        <p onClick={() => navigate(`/user/${friend._id}`)} className="cursor-pointer text-center text-sm font-medium text-dark-slate-blue-darken capitalize ">
+          {friend?.firstName} {friend?.lastName}
+        </p>
+        <p onClick={() => navigate(`/user/${friend._id}`)} className="cursor-pointer text-center text-sm font-medium text-dark-slate-blue-darken/50 capitalize ">
+          @{friend?.username}
+        </p>
       </div>
       <div className="mt-2">
         <p className="text-cool-gray text-xs mb-1">

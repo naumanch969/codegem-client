@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PersonAdd } from '@mui/icons-material';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -7,7 +7,7 @@ import 'swiper/css/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { User } from '../../interfaces';
-import { getSuggestedUsers, sendFriendRequest } from '../../redux/actions/friend';
+import { getSuggestedUsers, sendFriendRequest } from '../../redux/reducers/friendSlice';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,19 +16,27 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const PeopleYouMayKnow = () => {
 
+    //////////////////////////////////////////////////////// VARIABLES /////////////////////////////////////////////////////////////
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const { suggestedUsers, isFetching }: { suggestedUsers: User[], isFetching: boolean } = useSelector((state: RootState) => state.friend)
+    const { suggestedUsers }: { suggestedUsers: User[] } = useSelector((state: RootState) => state.friend)
 
+    //////////////////////////////////////////////////////// STATES /////////////////////////////////////////////////////////////
+    const [isFetching, setIsFetching] = useState(false)
+
+    //////////////////////////////////////////////////////// USE EFFECTS /////////////////////////////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getSuggestedUsers(suggestedUsers.length == 0, `?page=${1}&pageSize=${20}`))
+        if (suggestedUsers.length == 0) setIsFetching(true)
+        dispatch<any>(getSuggestedUsers(`?page=${1}&pageSize=${20}`)).finally(() => setIsFetching(false))
     }, [])
 
+    //////////////////////////////////////////////////////// FUNCTIONS /////////////////////////////////////////////////////////////
     const handleSendFriendRequest = (friendId: string) => {
         dispatch<any>(sendFriendRequest(friendId))
     }
 
 
+    //////////////////////////////////////////////////////// COMPONENTS /////////////////////////////////////////////////////////////
     const FriendCard = ({ person }: { person: User }) => {
         return (
             <Card className="h-full flex flex-col justify-between shadow-box rounded-md bg-secondary">
@@ -67,6 +75,7 @@ const PeopleYouMayKnow = () => {
     }
 
 
+    //////////////////////////////////////////////////////// RENDER /////////////////////////////////////////////////////////////
     return (
         <div className='w-full ' >
 

@@ -6,7 +6,7 @@ import SentRequests from './SentRequests';
 import ReceivedRequests from './ReceivedRequests';
 import Find from './Find';
 import { useDispatch } from 'react-redux';
-import { searchFriends, searchUsers } from '@/redux/actions/friend';
+import { searchFriends, searchUsers } from '@/redux/reducers/friendSlice';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
@@ -31,9 +31,9 @@ const FriendsPage = () => {
     const onSearch = () => {
         setSearchedValue(searchValue)
         if (activeMenuItem == 'find')
-            dispatch<any>(searchUsers(true, `?page=${page}&pageSize=${pageSize}&count=${true}&query=${searchValue}`))
+            dispatch<any>(searchUsers(`?page=${page}&pageSize=${pageSize}&count=${true}&query=${searchValue}`))
         else
-            dispatch<any>(searchFriends(true, `?page=${page}&pageSize=${pageSize}&count=${true}&query=${searchValue}`))
+            dispatch<any>(searchFriends(`?page=${page}&pageSize=${pageSize}&count=${true}&query=${searchValue}`))
     }
 
     return (

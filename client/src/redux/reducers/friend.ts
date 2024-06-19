@@ -47,6 +47,7 @@ const friendSlice = createSlice({
     getReceivedRequestsReducer: (state, action: PayloadAction<User[]>) => {
       state.receivedRequests = action.payload;
     },
+    
     sendFriendRequestReducer: (state, action: PayloadAction<User>) => {
       state.sentRequests = [...state.sentRequests, action.payload];
       state.suggestedUsers = state.suggestedUsers.filter((user) => user._id != action.payload._id);

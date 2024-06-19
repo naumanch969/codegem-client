@@ -13,15 +13,14 @@ const Collections = () => {
   const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
 
   useEffect(() => {
-            // Place User Collection
-  }, [])
+    // Place User Collection
+  }, []) 
 
   return (
 
     <div className="w-full flex flex-col gap-8 ">
       {/* Your Collections */}
       <div className="flex flex-col">
-        <h2 className="text-3xl font-bold mb-6 text-dark-slate-blue">Your Collections</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {
             isFetching ?

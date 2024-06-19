@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getReceivedRequests } from '../../redux/actions/friend'
+import { getReceivedRequests } from '../../redux/reducers/friendSlice'
 import { User } from '../../interfaces'
 import { RootState } from '../../redux/store'
 import FriendCard from './FriendCard'
@@ -11,13 +11,15 @@ const ReceivedRequests = ({ totalPages, page, setPage, pageSize }: { totalPages:
 
   //////////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////
   const dispatch = useDispatch()
-  const { receivedRequests, isFetching }: { receivedRequests: User[], isFetching: boolean } = useSelector((state: RootState) => state.friend)
+  const { receivedRequests }: { receivedRequests: User[] } = useSelector((state: RootState) => state.friend)
 
   //////////////////////////////////////////////////// STATES ////////////////////////////////////////////////
+  const [isFetching, setIsFetching] = useState(false)
 
   //////////////////////////////////////////////////// USE EFFECTS ////////////////////////////////////////////////
   useEffect(() => {
-    dispatch<any>(getReceivedRequests(receivedRequests.length == 0, `?page=${page}&pageSize=${pageSize}`))
+    if (receivedRequests?.length == 0) setIsFetching(true)
+    dispatch<any>(getReceivedRequests(`?page=${page}&pageSize=${pageSize}`)).finally(() => setIsFetching(false))
   }, [])
   useEffect(() => {
     // TODO: if data of particular page is available then dont call api
@@ -26,7 +28,7 @@ const ReceivedRequests = ({ totalPages, page, setPage, pageSize }: { totalPages:
 
   /////////////////////////////////////// FUNCTIONS /////////////////////////////////////////
   const fetchMore = async () => {
-    dispatch<any>(getReceivedRequests(receivedRequests.length == 0, `?page=${page}&pageSize=${pageSize}`))
+    dispatch<any>(getReceivedRequests(`?page=${page}&pageSize=${pageSize}`))
   }
 
 

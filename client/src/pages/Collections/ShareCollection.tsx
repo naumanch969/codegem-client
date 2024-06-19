@@ -3,7 +3,7 @@ import { Close, } from '@mui/icons-material';
 import { IconButton, Modal } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { getFriends } from '../../redux/actions/friend';
+import { getFriends } from '../../redux/reducers/friendSlice';
 import { Facebook, Instagram, Linkedin, Twitter, Whatsapp } from '../../assets';
 import { shareCollection, shareCollectionInGroups } from '../../redux/actions/collection';
 import { Collection, Group, User } from '../../interfaces';
@@ -27,7 +27,7 @@ const ShareCollection = ({ open, setOpen, collection }: { open: boolean, setOpen
 
     /////////////////////////////////////////////// USE EFFECTS ///////////////////////////////////////////////////
     useEffect(() => {
-        dispatch<any>(getFriends(friends.length == 0))
+        dispatch<any>(getFriends(''))
         dispatch<any>(getGroups(groups.length == 0))
     }, [])
 
@@ -125,11 +125,11 @@ const ShareCollection = ({ open, setOpen, collection }: { open: boolean, setOpen
                         <div className="flex flex-col gap-4">
                             {/* social shares */}
                             <div className="flex justify-start items-center gap-4 p-2 bg-cool-gray-light rounded-md ">
-                                <button className='flex justify-center items-center ' ><img src={Whatsapp} className='object-cover rounded-full w-8 h-8 ' /></button>
-                                <button className='flex justify-center items-center ' ><img src={Facebook} className='object-cover rounded-full w-8 h-8 ' /></button>
-                                <button className='flex justify-center items-center ' ><img src={Linkedin} className='object-cover rounded-full w-8 h-8 ' /></button>
-                                <button className='flex justify-center items-center ' ><img src={Instagram} className='object-cover rounded-full w-8 h-8 ' /></button>
-                                <button className='flex justify-center items-center ' ><img src={Twitter} className='object-cover rounded-full w-8 h-8 ' /></button>
+                                <button title='Whatsapp' className='flex justify-center items-center ' ><img src={Whatsapp} alt='Whatsapp Logo' className='object-cover rounded-full w-8 h-8 ' /></button>
+                                <button title='Facebook' className='flex justify-center items-center ' ><img src={Facebook} alt='Facebook Logo' className='object-cover rounded-full w-8 h-8 ' /></button>
+                                <button title='Linkedin' className='flex justify-center items-center ' ><img src={Linkedin} alt='Linkedin Logo' className='object-cover rounded-full w-8 h-8 ' /></button>
+                                <button title='Instagram' className='flex justify-center items-center ' ><img src={Instagram} alt='Instagram Logo' className='object-cover rounded-full w-8 h-8 ' /></button>
+                                <button title='Twitter' className='flex justify-center items-center ' ><img src={Twitter} alt='Twitter Logo' className='object-cover rounded-full w-8 h-8 ' /></button>
                             </div>
 
                             <div className="flex flex-col gap-4 ">
