@@ -8,7 +8,7 @@ import { ArrowBack } from "@mui/icons-material";
 import { RootState } from "../../redux/store";
 import Cookies from "js-cookie";
 
-const InputRegisterationOTP = ({ snackbarText, setSnackbarText }: { snackbarText?: string, setSnackbarText?: any }) => {
+const InputRegisterationOTP = () => {
 
     /////////////////////////////////////////////////// VARIABLES //////////////////////////////////////////////
     const { isFetching } = useSelector((state: RootState) => state.user)

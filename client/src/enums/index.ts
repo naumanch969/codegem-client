@@ -21,7 +21,6 @@ export enum SettingSubField {
     blockUsers = 'blockUsers',
     emailNotifications = 'emailNotifications',
     pushNotifications = 'pushNotifications',
-    manageNotificationPreferences = 'manageNotificationPreferences',
     mode = 'mode',
     adjustFontSize = 'adjustFontSize',
     facebook = 'facebook',

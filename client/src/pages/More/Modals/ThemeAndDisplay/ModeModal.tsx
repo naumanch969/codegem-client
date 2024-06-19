@@ -14,44 +14,44 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "
 import { updateSettings } from '@/redux/reducers/settingSlice';
 
 
-export const WhoCanSeeMyPostsModal = () => {
+export const ModaModal = () => {
 
     // <--------------------------------------------------- VARIABLES ---------------------------------------------------->
     const dispatch = useDispatch();
-    const { isOpen: { privacy: { whoCanSeeMyPosts: isOpen } }, onClose } = useSettingModals()
+    const { isOpen: { themeAndDisplay: { mode: isOpen } }, onClose } = useSettingModals()
     const { isFetching }: { loggedUser: User | null, isFetching: boolean } = useSelector((state: RootState) => state.user)
     const { setting } = useSelector((state: RootState) => state.setting)
     const formSchema = z.object({
-        whoCanSeeMyPosts: z.string().min(1, { message: 'WhoCanSeeMyPosts is required.' }),
+        mode: z.string().min(1, { message: 'Mode is required.' }),
     })
 
     const initialData: z.infer<typeof formSchema> = {
-        whoCanSeeMyPosts: '',
+        mode: '',
     }
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: { whoCanSeeMyPosts: setting?.privacySettings?.whoCanSeeMyPosts } 
+        defaultValues: { mode: setting?.themeAndDisplaySettings?.mode }
     })
 
 
     // <---------------------------------------------------- FUNCTIONS ----------------------------------------------------------->
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        const input = { privacySettings: { ...setting?.privacySettings, whoCanSeeMyPosts: values.whoCanSeeMyPosts } }
+        const input = { themeAndDisplaySettings: { ...setting?.themeAndDisplaySettings, mode: values.mode } }
         dispatch<any>(updateSettings(input))
             .then(() => {
                 onCancel()
             })
     }
     const onCancel = () => {
-        onClose(SettingParentField?.privacy, SettingSubField?.whoCanSeeMyPosts)
+        onClose(SettingParentField?.themeAndDisplay, SettingSubField?.mode)
         form.reset(initialData);
     }
 
     return (
         <Modal
-            title={'Privacy Settings'}
-            description={'Manage who can see your posts.'}
+            title={'Theme and display settings'}
+            description={'Change mode.'}
             isOpen={isOpen}
             onClose={onCancel}
             className='md:w-[35rem] sm:w-[90vw] w-full  '
@@ -61,19 +61,19 @@ export const WhoCanSeeMyPostsModal = () => {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-1 ">
                     <FormField
                         control={form.control}
-                        name="whoCanSeeMyPosts"
+                        name="mode"
                         render={({ field }: { field: any }) => (
                             <FormItem>
-                                <FormLabel>Who can see my posts</FormLabel>
+                                <FormLabel>Mode</FormLabel>
                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <FormControl>
                                         <SelectTrigger>
-                                        <SelectValue placeholder="Select" />
+                                            <SelectValue placeholder="Select" />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        <SelectItem value="Everyone">Everyone</SelectItem>
-                                        <SelectItem value="Friends">Friends</SelectItem>
+                                        <SelectItem value="Dark">Dark</SelectItem>
+                                        <SelectItem value="Light">Light</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />

@@ -7,14 +7,17 @@ import { getSettings } from "@/redux/reducers/settingSlice";
 import SettingItem from "./SettingItem";
 import { useSettingModals } from "@/hooks/useSettingModals";
 import { SettingParentField, SettingSubField } from "@/enums";
+import { logout } from "@/redux/reducers/authSlice";
+import { useNavigate } from "react-router-dom";
 
 
 const MorePage = () => {
   /////////////////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////////////
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { loggedUser: fetchedLoggedUser } = useSelector((state: RootState) => state.user)
   const { setting: fetchedSetting } = useSelector((state: RootState) => state.setting)
-  const { onOpen, isOpen } = useSettingModals()
+  const { onOpen } = useSettingModals()
 
   /////////////////////////////////////////////////////// STATES //////////////////////////////////////////////////////////
   const [settings, setSettings] = useState(fetchedSetting)
@@ -29,12 +32,12 @@ const MorePage = () => {
   useEffect(() => {
     setLoggedUser(fetchedLoggedUser)
   }, [fetchedLoggedUser])
-  useEffect(() => {
-    console.log('loggedUser', loggedUser)
-  }, [loggedUser])
   /////////////////////////////////////////////////////// FUNCTIONS //////////////////////////////////////////////////////////
   const onOpenModal = (parentField: SettingParentField, field: SettingSubField) => {
     onOpen(parentField, field)
+  }
+  const onLogout = () => {
+    dispatch<any>(logout(navigate))
   }
 
 
@@ -156,12 +159,6 @@ const MorePage = () => {
                 icon={<Notifications />}
                 onClick={() => onOpenModal(SettingParentField.notification, SettingSubField.pushNotifications)}
               />
-              <SettingItem
-                field="Manage Notification Preferences"
-                value={`${settings?.notificationSettings?.manageNotificationPreferences}`}
-                icon={<SettingsIcon />}
-                onClick={() => onOpenModal(SettingParentField.notification, SettingSubField.manageNotificationPreferences)}
-              />
             </AccordionContent>
           </AccordionItem>
         </Accordion>
@@ -254,11 +251,13 @@ const MorePage = () => {
                 field="Contact Support"
                 value="support@example.com"
                 icon={<ContactSupport />}
+                onClick={() => navigate('/contact-support')}
               />
               <SettingItem
                 field="Help Center"
                 value="Visit Help Center"
                 icon={<Help />}
+                onClick={() => navigate('/help-center')}
               />
             </AccordionContent>
           </AccordionItem>
@@ -273,7 +272,7 @@ const MorePage = () => {
               </div>
             </AccordionTrigger>
             <AccordionContent className='space-y-1' >
-              <button className="mt-6 px-4 py-2 bg-teal-blue  text-white rounded-lg hover:bg-teal-blue -dark transition duration-200">
+              <button onClick={onLogout} className="mt-6 px-4 py-2 bg-teal-blue  text-white rounded-lg hover:bg-teal-blue -dark transition duration-200">
                 <Logout className="mr-2 w-5 h-5" />
                 Log Out
               </button>

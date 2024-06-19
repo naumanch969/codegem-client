@@ -12,9 +12,8 @@ const settingsSchema = new Schema(
       blockUsers: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
     },
     notificationSettings: {
-      emailNotifications: { type: Boolean, default: false },
-      pushNotifications: { type: Boolean, default: false },
-      manageNotificationPreferences: { type: Number, enum: [0, 1], default: 0 },  // 0: emailNotification, 1: pushNotification
+      emailNotifications: { type: String, enum: ['Enabled', 'Disabled'], default: 'Disabled' },
+      pushNotifications: { type: String, enum: ['Enabled', 'Disabled'], default: 'Disabled' },
     },
     themeAndDisplaySettings: {
       mode: { type: String, enum: ['Dark', 'Light'], default: 'Light' },
@@ -26,7 +25,7 @@ const settingsSchema = new Schema(
       github: { type: String, default: '' },
     },
     accessibilitySettings: {
-      enableAccessibilityFeatures: { type: Boolean, default: false },
+      enableAccessibilityFeatures: { type: String, enum: ['Enabled', 'Disabled'], default: 'Disabled' },
     }
   },
   { timestamps: true }

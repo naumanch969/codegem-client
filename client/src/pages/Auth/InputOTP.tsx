@@ -7,7 +7,7 @@ import { logo } from "../../assets";
 import { ArrowBack } from "@mui/icons-material";
 import { RootState } from "../../redux/store";
 
-const InputOTP = ({ snackbarText, setSnackbarText }: { snackbarText?: string, setSnackbarText?: any }) => {
+const InputOTP = () => {
 
     /////////////////////////////////// VARIABLES /////////////////////////////////
     const { isFetching } = useSelector((state: RootState) => state.user)

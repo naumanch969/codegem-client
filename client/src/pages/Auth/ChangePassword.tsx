@@ -6,7 +6,7 @@ import { changePassword } from "../../redux/reducers/authSlice";
 import { logo } from "../../assets";
 
 
-const ChangePassword = ({ setOpen, setSnackbarText }: { setOpen?: any, setSnackbarText?: any }) => {
+const ChangePassword = ({ setOpen }: { setOpen?: any }) => {
 
     ////////////////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////////
     const PasswordButtonInitialStyle = { opacity: 0 };

@@ -7,16 +7,20 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import { RootState } from '@/redux/store';
-import { Input } from '@/components/ui/input';
 import { User } from '@/interfaces';
-import { updateProfile } from '@/redux/reducers/userSlice';
 import { useSettingModals } from '@/hooks/useSettingModals';
+import { SettingParentField, SettingSubField } from '@/enums';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select"
+import { updateSettings } from '@/redux/reducers/settingSlice';
+
 
 export const BlockUsersModal = () => {
 
     // <--------------------------------------------------- VARIABLES ---------------------------------------------------->
+    const dispatch = useDispatch();
     const { isOpen: { privacy: { blockUsers: isOpen } }, onClose } = useSettingModals()
-    const { loggedUser, isFetching }: { loggedUser: User | null, isFetching: boolean } = useSelector((state: RootState) => state.user)
+    const { isFetching }: { loggedUser: User | null, isFetching: boolean } = useSelector((state: RootState) => state.user)
+    const { setting } = useSelector((state: RootState) => state.setting)
     const formSchema = z.object({
         blockUsers: z.string().min(1, { message: 'BlockUsers is required.' }),
     })
@@ -27,25 +31,27 @@ export const BlockUsersModal = () => {
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: loggedUser! || initialData,
+        defaultValues: { blockUsers: setting?.privacySettings?.blockUsers } || initialData,
     })
-    const dispatch = useDispatch();
 
 
     // <---------------------------------------------------- FUNCTIONS ----------------------------------------------------------->
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        dispatch<any>(updateProfile(values))
-        onCancel()
+        const input = { privacySettings: { ...setting?.privacySettings, blockUsers: values.blockUsers } }
+        dispatch<any>(updateSettings(input))
+            .then(() => {
+                onCancel()
+            })
     }
     const onCancel = () => {
-        onClose('account', 'blockUsers')
+        onClose(SettingParentField?.privacy, SettingSubField?.blockUsers)
         form.reset(initialData);
     }
 
     return (
         <Modal
             title={'Basic Info'}
-            description={'Edit your blockUsers.'}
+            description={'Edit your Profile Visibility.'}
             isOpen={isOpen}
             onClose={onCancel}
             className='md:w-[35rem] sm:w-[90vw] w-full  '
@@ -59,9 +65,17 @@ export const BlockUsersModal = () => {
                         render={({ field }: { field: any }) => (
                             <FormItem>
                                 <FormLabel>BlockUsers</FormLabel>
-                                <FormControl>
-                                    <Input className='bg-secondary' placeholder="johndoe" {...field} />
-                                </FormControl>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select a verified email to display" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        <SelectItem value="Everyone">Everyone</SelectItem>
+                                        <SelectItem value="Friends">Friends</SelectItem>
+                                    </SelectContent>
+                                </Select>
                                 <FormMessage />
                             </FormItem>
                         )}

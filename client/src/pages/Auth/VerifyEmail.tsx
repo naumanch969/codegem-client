@@ -7,7 +7,7 @@ import { logo } from '../../assets'
 import { RootState } from "../../redux/store";
 
 
-const VerifyEmail = ({ snackbarText, setSnackbarText }: { snackbarText?: string, setSnackbarText?: any }) => {
+const VerifyEmail = () => {
 
   ////////////////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////////
   const dispatch = useDispatch();

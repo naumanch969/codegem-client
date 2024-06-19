@@ -10,48 +10,46 @@ import { RootState } from '@/redux/store';
 import { User } from '@/interfaces';
 import { useSettingModals } from '@/hooks/useSettingModals';
 import { SettingParentField, SettingSubField } from '@/enums';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select"
 import { updateSettings } from '@/redux/reducers/settingSlice';
+import { Input } from '@/components/ui/input';
 
 
-export const WhoCanSeeMyPostsModal = () => {
+export const TwitterModal = () => {
 
     // <--------------------------------------------------- VARIABLES ---------------------------------------------------->
     const dispatch = useDispatch();
-    const { isOpen: { privacy: { whoCanSeeMyPosts: isOpen } }, onClose } = useSettingModals()
+    const { isOpen: { connectedAccounts: { twitter: isOpen } }, onClose } = useSettingModals()
     const { isFetching }: { loggedUser: User | null, isFetching: boolean } = useSelector((state: RootState) => state.user)
     const { setting } = useSelector((state: RootState) => state.setting)
     const formSchema = z.object({
-        whoCanSeeMyPosts: z.string().min(1, { message: 'WhoCanSeeMyPosts is required.' }),
+        twitter: z.string().min(1, { message: 'Twitter is required.' }),
     })
 
-    const initialData: z.infer<typeof formSchema> = {
-        whoCanSeeMyPosts: '',
-    }
+    const initialData: z.infer<typeof formSchema> = { twitter: '', }
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: { whoCanSeeMyPosts: setting?.privacySettings?.whoCanSeeMyPosts } 
+        defaultValues: { twitter: setting?.connectedAccounts?.twitter }
     })
 
 
     // <---------------------------------------------------- FUNCTIONS ----------------------------------------------------------->
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        const input = { privacySettings: { ...setting?.privacySettings, whoCanSeeMyPosts: values.whoCanSeeMyPosts } }
+        const input = { connectedAccounts: { ...setting?.connectedAccounts, twitter: values.twitter } }
         dispatch<any>(updateSettings(input))
             .then(() => {
                 onCancel()
             })
     }
     const onCancel = () => {
-        onClose(SettingParentField?.privacy, SettingSubField?.whoCanSeeMyPosts)
+        onClose(SettingParentField?.connectedAccounts, SettingSubField?.twitter)
         form.reset(initialData);
     }
 
     return (
         <Modal
-            title={'Privacy Settings'}
-            description={'Manage who can see your posts.'}
+            title={'Connected Accounts'}
+            description={'Link/Unlink your twitter account.'}
             isOpen={isOpen}
             onClose={onCancel}
             className='md:w-[35rem] sm:w-[90vw] w-full  '
@@ -61,21 +59,13 @@ export const WhoCanSeeMyPostsModal = () => {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-1 ">
                     <FormField
                         control={form.control}
-                        name="whoCanSeeMyPosts"
+                        name="twitter"
                         render={({ field }: { field: any }) => (
                             <FormItem>
-                                <FormLabel>Who can see my posts</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl>
-                                        <SelectTrigger>
-                                        <SelectValue placeholder="Select" />
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        <SelectItem value="Everyone">Everyone</SelectItem>
-                                        <SelectItem value="Friends">Friends</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <FormLabel>Twitter</FormLabel>
+                                <FormControl>
+                                    <Input className='bg-secondary' placeholder="Twitter Link" {...field} />
+                                </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -86,7 +76,6 @@ export const WhoCanSeeMyPostsModal = () => {
                     </div>
                 </form>
             </Form>
-
 
         </Modal>
     )

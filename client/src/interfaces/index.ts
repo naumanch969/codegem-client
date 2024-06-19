@@ -158,9 +158,8 @@ interface PrivacySettings {
   blockUsers: string[];
 }
 interface NotificationSettings {
-  emailNotifications: boolean;
-  pushNotifications: boolean;
-  manageNotificationPreferences: 0 | 1; // 0: emailNotification, 1: pushNotification
+  emailNotifications: 'Enabled' | 'Disabled';
+  pushNotifications: 'Enabled' | 'Disabled';
 }
 interface ThemeAndDisplaySettings {
   mode: 'Dark' | 'Light';
@@ -172,7 +171,7 @@ interface ConnectedAccounts {
   github: string;
 }
 interface AccessibilitySettings {
-  enableAccessibilityFeatures: boolean;
+  enableAccessibilityFeatures: 'Enabled' | 'Disabled';
 }
 // Define the main interface for the document
 export interface Setting {

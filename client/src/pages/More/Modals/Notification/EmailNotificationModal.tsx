@@ -14,44 +14,42 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "
 import { updateSettings } from '@/redux/reducers/settingSlice';
 
 
-export const WhoCanSeeMyPostsModal = () => {
+export const EmailNotificationsModal = () => {
 
     // <--------------------------------------------------- VARIABLES ---------------------------------------------------->
     const dispatch = useDispatch();
-    const { isOpen: { privacy: { whoCanSeeMyPosts: isOpen } }, onClose } = useSettingModals()
+    const { isOpen: { notification: { emailNotifications: isOpen } }, onClose } = useSettingModals()
     const { isFetching }: { loggedUser: User | null, isFetching: boolean } = useSelector((state: RootState) => state.user)
     const { setting } = useSelector((state: RootState) => state.setting)
     const formSchema = z.object({
-        whoCanSeeMyPosts: z.string().min(1, { message: 'WhoCanSeeMyPosts is required.' }),
+        emailNotifications: z.string().min(1, { message: 'EmailNotifications is required.' }),
     })
 
-    const initialData: z.infer<typeof formSchema> = {
-        whoCanSeeMyPosts: '',
-    }
+    const initialData: z.infer<typeof formSchema> = { emailNotifications: '', }
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: { whoCanSeeMyPosts: setting?.privacySettings?.whoCanSeeMyPosts } 
+        defaultValues: { emailNotifications: setting?.notificationSettings?.emailNotifications }
     })
 
 
     // <---------------------------------------------------- FUNCTIONS ----------------------------------------------------------->
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        const input = { privacySettings: { ...setting?.privacySettings, whoCanSeeMyPosts: values.whoCanSeeMyPosts } }
+        const input = { notificationSettings: { ...setting?.notificationSettings, emailNotifications: values.emailNotifications } }
         dispatch<any>(updateSettings(input))
             .then(() => {
                 onCancel()
             })
     }
     const onCancel = () => {
-        onClose(SettingParentField?.privacy, SettingSubField?.whoCanSeeMyPosts)
+        onClose(SettingParentField?.notification, SettingSubField?.emailNotifications)
         form.reset(initialData);
     }
 
     return (
         <Modal
-            title={'Privacy Settings'}
-            description={'Manage who can see your posts.'}
+            title={'Notification settings'}
+            description={'Edit your email notification setting.'}
             isOpen={isOpen}
             onClose={onCancel}
             className='md:w-[35rem] sm:w-[90vw] w-full  '
@@ -61,19 +59,19 @@ export const WhoCanSeeMyPostsModal = () => {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-1 ">
                     <FormField
                         control={form.control}
-                        name="whoCanSeeMyPosts"
+                        name="emailNotifications"
                         render={({ field }: { field: any }) => (
                             <FormItem>
-                                <FormLabel>Who can see my posts</FormLabel>
+                                <FormLabel>Email Notifications</FormLabel>
                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <FormControl>
                                         <SelectTrigger>
-                                        <SelectValue placeholder="Select" />
+                                            <SelectValue placeholder="Select" />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        <SelectItem value="Everyone">Everyone</SelectItem>
-                                        <SelectItem value="Friends">Friends</SelectItem>
+                                        <SelectItem value="Enabled">Enable</SelectItem>
+                                        <SelectItem value="Disabled">Disable</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />

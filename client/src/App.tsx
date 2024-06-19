@@ -1,10 +1,10 @@
 import React from 'react'
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect } from "react";
-import { Login, Register, InputRegisterationOTP, Home, Friends, Groups, Collections, Notifications, Create, Profile, More, Codes, Collection, Group, UserProfile, ChangePassword, InputOTP, VerifyEmail, NewPassword, EditProfile, Streaks, Challenges, LandingPage, Contact, About, Pricing, Features } from "./pages";
+import { Login, Register, InputRegisterationOTP, Home, Friends, Groups, Collections, Notifications, Create, Profile, More, Codes, Collection, Group, UserProfile, ChangePassword, InputOTP, VerifyEmail, NewPassword, EditProfile, Streaks, Challenges, LandingPage, Contact, About, Pricing, Features, HelpCenter, ContactSupport } from "./pages";
 import { useDispatch, useSelector } from "react-redux";
 import { NotFound } from '@/components'
-import { AuthWrapper, DashboardWrapper, LandingPageWrapper } from "@/wrappers";
+import {  DashboardWrapper, LandingPageWrapper } from "@/wrappers";
 import { RootState } from "@/redux/store";
 import { Collection as TCollection } from '@/interfaces'
 import { useRole } from '@/hooks/useRole';
@@ -41,13 +41,13 @@ const Apps = () => {
       <Routes>
 
         {/* Auth pages */}
-        <Route path="/auth/register" element={<AuthWrapper><Register /></AuthWrapper>} />
-        <Route path="/auth/verify_register_otp" element={<AuthWrapper><InputRegisterationOTP /></AuthWrapper>} />
-        <Route path="/auth/login" element={<AuthWrapper><Login /></AuthWrapper>} />
-        <Route path="/auth/verify_email" element={<AuthWrapper><VerifyEmail /></AuthWrapper>} />
-        <Route path="/auth/verify_otp" element={<AuthWrapper><InputOTP /></AuthWrapper>} />
-        <Route path="/auth/new_password" element={<AuthWrapper><NewPassword /></AuthWrapper>} />
-        <Route path="/auth/change_password" element={<AuthWrapper><ChangePassword /></AuthWrapper>} />
+        <Route path="/auth/register" element={<Register />} />
+        <Route path="/auth/verify_register_otp" element={<InputRegisterationOTP />} />
+        <Route path="/auth/login" element={<Login />} />
+        <Route path="/auth/verify_email" element={<VerifyEmail />} />
+        <Route path="/auth/verify_otp" element={<InputOTP />} />
+        <Route path="/auth/new_password" element={<NewPassword />} />
+        <Route path="/auth/change_password" element={<ChangePassword />} />
 
         {/* Landing Page */}
         <Route path="/" element={<LandingPageWrapper />}>
@@ -80,6 +80,9 @@ const Apps = () => {
           <Route path="profile/edit" element={<EditProfile />} />
           <Route path={`more`} element={<More />} />
         </Route>
+
+        <Route path="/contact-support" element={<ContactSupport />} />
+        <Route path="/help-center" element={<HelpCenter />} />
 
         {/* 404 */}
         <Route path="*" element={<NotFound />} />

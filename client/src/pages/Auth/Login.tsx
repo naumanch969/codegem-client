@@ -14,7 +14,7 @@ interface UserState {
     password: string;
 }
 
-const Login = ({ snackbarText, setSnackbarText }: { snackbarText?: string, setSnackbarText?: any }) => {
+const Login = () => {
 
     ////////////////////////////////////////////////////// VARIABLS //////////////////////////////////////////////////////
     const navigate = useNavigate();

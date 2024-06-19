@@ -67,7 +67,6 @@ export const getProfile = createAsyncThunk<User, undefined>('user/getProfile', a
 export const updateProfile = createAsyncThunk<any, any>('user/updateProfile', async (formData) => {
     try {
         const { data } = await api.updateProfile(formData)
-        console.log('dat', data)
         return data
     } catch (error) {
         console.error('Error updateProfile', error)

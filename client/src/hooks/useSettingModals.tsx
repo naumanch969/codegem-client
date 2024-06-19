@@ -19,7 +19,6 @@ interface PrivacyModals {
 interface NotificationModals {
     emailNotifications: boolean;
     pushNotifications: boolean;
-    manageNotificationPreferences: boolean;
 }
 interface ThemeAndDisplayModals {
     mode: boolean;
@@ -52,7 +51,7 @@ export const useSettingModals = create<Props>((set, get) => ({
     isOpen: {
         account: { username: false, fullName: false, email: false, location: false, bio: false, },
         privacy: { profileVisibility: false, whoCanSendFriendRequests: false, whoCanSeeMyFriendsList: false, whoCanSeeMyPosts: false, whoCanTagMeInPosts: false, blockUsers: false },
-        notification: { emailNotifications: false, pushNotifications: false, manageNotificationPreferences: false },
+        notification: { emailNotifications: false, pushNotifications: false },
         themeAndDisplay: { mode: false, adjustFontSize: false },
         connectedAccounts: { facebook: false, twitter: false, github: false },
         accessibility: { enableAccessibilityFeatures: false },

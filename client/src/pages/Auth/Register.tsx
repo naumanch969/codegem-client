@@ -17,7 +17,7 @@ interface UserState {
     password: string;
 }
 
-const Register = ({ snackbarText, setSnackbarText }: { snackbarText?: string, setSnackbarText?: any }) => {
+const Register = () => {
 
     ///////////////////////////////////////////////////////// VARIABLES /////////////////////////////////////////////////////
     const navigate = useNavigate();
@@ -27,7 +27,6 @@ const Register = ({ snackbarText, setSnackbarText }: { snackbarText?: string, se
     ///////////////////////////////////////////////////////// STATES /////////////////////////////////////////////////////
     const { isFetching, error } = useSelector((state: any) => state.user);
     const [userData, setUserData] = useState<typeof initialUserState>(initialUserState);
-    // const [snackbarText, setSnackbarText] = useState<string>('');
 
     ///////////////////////////////////////////////////////// USE EFFECTS /////////////////////////////////////////////////////
 
