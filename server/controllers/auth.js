@@ -43,7 +43,7 @@ export const register = async (req, res, next) => {
 
     const token = jwt.sign({ _id: newUser._id, role: newUser.role }, process.env.JWT_SECRET);
 
-    await createNotification("Welcome to Codegem!", "Congratulations! You've successfully joined Codegem. Start connecting and sharing your moments with friends");
+    await createNotification(newUser?._id, "Welcome to Codegem!", "Congratulations! You've successfully joined Codegem. Start connecting and sharing your moments with friends");
 
     res.status(200).json({ result: newUser, message: "Registered successfully.", token }); // token is being passed just for development
     // .cookie("code.connect", token, {
@@ -134,41 +134,19 @@ export const sendOTP = async (req, res, next) => {
 
     // in forget password route, user should be registered already
     if (!findedUser)
-      return res
-        .status(400)
-        .json({ message: `No user exist with email ${email}`, success: false });
+      return res.status(400).json({ message: `No user exist with email ${email}`, success: false });
     if (!validator.isEmail(email))
-      return res
-        .status(400)
-        .json({ message: `Please provide a valid email.`, success: false });
+      return res.status(400).json({ message: `Please provide a valid email.`, success: false });
 
-    const otp = otpGenerator.generate(5, {
-      digits: true,
-      lowerCaseAlphabets: false,
-      upperCaseAlphabets: false,
-      specialChars: false,
-    });
-    // const hashedOTP = await bcrypt.hash(otp, 12)
-    const newOTP = await OTP.create({
-      email,
-      otp,
-      name: "forget_password_otp",
-    });
+    const otp = otpGenerator.generate(5, { digits: true, lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false, });
+
+    await OTP.create({ email, otp, name: "forget_password_otp", });
 
     sendMail(email, "Verification", `<p>Your OTP code is ${otp}</p>`);
 
-    res.status(200).json({
-      result: newOTP,
-      otp,
-      message: "Otp send successfully",
-      success: true,
-    });
+    res.status(200).json({ message: "Otp send successfully", success: true, });
   } catch (error) {
-    res.status(404).json({
-      message: "error in requestResetPassword - controllers/user.js",
-      error,
-      success: false,
-    });
+    next(createError(res, 500, err.message));
   }
 };
 export const verifyOTP = async (req, res, next) => {

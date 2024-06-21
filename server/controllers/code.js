@@ -232,7 +232,7 @@ export const updateCode = async (req, res, next) => {
 
     const updatedCode = await Code.findByIdAndUpdate(codeId, { $set: { collectionRef: collection, ...rest } }, { new: true });
 
-    await createNotification("Code Update", `Your code post updated: ${updatedCode.title}`);
+    await createNotification(req.user?._id, "Code Update", `Your code post updated: ${updatedCode.title}`);
 
     res.status(200).json(updatedCode);
   } catch (error) {

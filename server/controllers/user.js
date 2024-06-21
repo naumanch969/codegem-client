@@ -31,9 +31,7 @@ export const getUsers = async (req, res, next) => {
     ]);
 
     let response = { result };
-    if (totalCount !== null) {
-      response.count = totalCount;
-    }
+    response.count = totalCount || 0;
 
     res.status(200).json(response);
   } catch (error) {

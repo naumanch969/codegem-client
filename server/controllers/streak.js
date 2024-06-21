@@ -5,11 +5,7 @@ import Group from "../models/group.js";
 import User from "../models/user.js";
 import Notification from "../models/notification.js";
 import Collection from "../models/collection.js";
-import {
-  createError,
-  createNotification,
-  isUndefined,
-} from "../utils/functions.js";
+import { createError, createNotification, isUndefined, } from "../utils/functions.js";
 export const getStreaks = async (req, res, next) => {
   try {
     const { page, pageSize, count, userId, filter, query: searchQuery, languages: languagesString, } = req.query;
@@ -226,7 +222,7 @@ export const updateStreak = async (req, res, next) => {
 
     const result = await Streak.findByIdAndUpdate(streakId, { $set: { collectionRef: collection, ...rest } }, { new: true });
 
-    await createNotification("Streak Update", "You updated your post.");
+    await createNotification(req.user?._id, "Streak Update", "You updated your post.");
 
     res.status(200).json(result);
   } catch (error) {

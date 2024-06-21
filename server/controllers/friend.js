@@ -20,7 +20,7 @@ export const getFriends = async (req, res, next) => {
       resultPromise,
       count ? User.countDocuments(query) : Promise.resolve(null),
     ]);
-console.log('result', result)
+
     let response = { result: result?.friends };
     if (totalCount !== null) {
       response.count = totalCount;
@@ -109,24 +109,29 @@ export const searchUsers = async (req, res, next) => {
     next(createError(res, 500, error.message));
   }
 };
-
 export const getSuggestedUsers = async (req, res, next) => {
   try {
-    const userId = Types.ObjectId(req?.user?._id);
+    const { page, pageSize, count } = req.query;
 
-    const allUsers = await User.find(
+    let query = User.find(
       {},
-      {
-        firstName: 1,
-        lastName: 1,
-        username: 1,
-        email: 1,
-        profilePicture: 1,
-        friends: 1,
-        sentRequests: 1,
-        receivedRequests: 1,
-      }
+      { firstName: 1, lastName: 1, username: 1, email: 1, profilePicture: 1, friends: 1, sentRequests: 1, receivedRequests: 1, }
     );
+
+    const pageNumber = parseInt(page, 10) || 1;
+    const size = parseInt(pageSize, 10) || 10;
+    const skip = (pageNumber - 1) * size;
+
+    query = query.skip(skip).limit(size);
+    const resultPromise = query.exec();
+
+    const [allUsers, totalCount] = await Promise.all([
+      resultPromise,
+      count ? User.countDocuments(query) : Promise.resolve(null),
+    ]);
+
+    const userId = req?.user?._id;
+
     const loggedUser = await User.findById(userId);
 
     const suggestedUsers = allUsers.filter((user) => {
@@ -139,39 +144,75 @@ export const getSuggestedUsers = async (req, res, next) => {
     });
 
     const usersWithMutualFriends = suggestedUsers.map((user) => {
-      const mutualFriends = user.friends.filter((friendId) =>
-        loggedUser.friends.includes(friendId)
-      );
-      return {
-        ...user._doc, // Use _doc to get the raw document data
-        mutualFriends: mutualFriends.length,
-      };
+      const mutualFriends = user.friends.filter((friendId) => loggedUser.friends.includes(friendId));
+      return { ...user._doc, mutualFriends: mutualFriends.length }; // Use _doc to get the raw document data
     });
 
-    res.status(200).json(usersWithMutualFriends);
+    let response = { result: usersWithMutualFriends };
+    if (totalCount !== null) {
+      response.count = totalCount;
+    }
+
+    res.status(200).json(response);
   } catch (err) {
+    console.error(err)
     next(createError(res, 500, "Internal Server Error"));
   }
 };
-
 export const getSentRequests = async (req, res, next) => {
-  // this request is made by the sender
   try {
+    const { page, pageSize, count } = req.query;
+
     const userId = req.user._id;
-    const user = await User.findById(userId, { sentRequests: 1 }, { firstName: 1, lastName: 1, username: 1, email: 1, profilePicture: 1 })
-      .populate("sentRequests");
-    res.status(200).json(user.sentRequests);
+    let query = User.findById(userId, { sentRequests: 1 }, { firstName: 1, lastName: 1, username: 1, email: 1, profilePicture: 1 })
+
+    const pageNumber = parseInt(page, 10) || 1;
+    const size = parseInt(pageSize, 10) || 10;
+    const skip = (pageNumber - 1) * size;
+
+    query = query.skip(skip).limit(size);
+    const resultPromise = query.populate("sentRequests").exec();
+
+    const [result, totalCount] = await Promise.all([
+      resultPromise,
+      count ? User.countDocuments(query) : Promise.resolve(null),
+    ]);
+
+    let response = { result: result?.sentRequests };
+    if (totalCount !== null) {
+      response.count = totalCount;
+    }
+
+    res.status(200).json(response);
   } catch (error) {
     next(createError(res, 500, error.message));
   }
 };
 export const getReceivedRequests = async (req, res, next) => {
-  // this request is made by the sender
   try {
+    const { page, pageSize, count } = req.query;
+
     const userId = req.user._id;
-    const user = await User.findById(userId, { receivedRequests: 1 }, { firstName: 1, lastName: 1, username: 1, email: 1, profilePicture: 1 })
-      .populate("receivedRequests");
-    res.status(200).json(user.receivedRequests);
+    let query = User.findById(userId, { receivedRequests: 1 }, { firstName: 1, lastName: 1, username: 1, email: 1, profilePicture: 1 })
+
+    const pageNumber = parseInt(page, 10) || 1;
+    const size = parseInt(pageSize, 10) || 10;
+    const skip = (pageNumber - 1) * size;
+
+    query = query.skip(skip).limit(size);
+    const resultPromise = query.populate("receivedRequests").exec();
+
+    const [result, totalCount] = await Promise.all([
+      resultPromise,
+      count ? User.countDocuments(query) : Promise.resolve(null),
+    ]);
+
+    let response = { result: result?.receivedRequests };
+    if (totalCount !== null) {
+      response.count = totalCount;
+    }
+
+    res.status(200).json(response);
   } catch (error) {
     next(createError(res, 500, error.message));
   }

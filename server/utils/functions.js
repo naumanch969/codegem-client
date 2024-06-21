@@ -35,8 +35,11 @@ export const sendMail = (to, subject, html) => {
   }
 };
 
-export const createNotification = async (title, description, userId) => {
+export const createNotification = async (userId, title, description) => {
   try {
+    if (!title) return console.error('Title is required for notificaiton')
+    if (!description) return console.error('Description is required for notificaiton')
+    if (!userId) return console.error('UserId is required for notificaiton')
     await Notification.create({ title, description, user: userId });
   } catch (error) {
     console.log("Error in createNotification: ", error);
