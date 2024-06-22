@@ -25,8 +25,8 @@ const Register = () => {
     const initialUserState: UserState = { firstName: '', lastName: '', username: '', email: '', password: '' };
 
     ///////////////////////////////////////////////////////// STATES /////////////////////////////////////////////////////
-    const { isFetching, error } = useSelector((state: any) => state.user);
     const [userData, setUserData] = useState<typeof initialUserState>(initialUserState);
+    const [isFetching, setIsFetching] = useState(false)
 
     ///////////////////////////////////////////////////////// USE EFFECTS /////////////////////////////////////////////////////
 
@@ -35,12 +35,19 @@ const Register = () => {
     const handleSubmit = () => {
         const { firstName, lastName, username, email, password } = userData;
         if (!firstName || !lastName || !username || !email || !password) return alert('Make sure to provide all the fields');
+
+        setIsFetching(true);
         dispatch<any>(register(userData as User))
-            .then(({ payload }: { payload: { result: User, token: string } }) => {
-                Cookies.set("code.connect", JSON.stringify(payload?.token)); // just for development
+            .then(({ payload: { result, token } }: { payload: { result: User, token: string } }) => {
+
+                token && Cookies.set("code.connect", JSON.stringify(token)); // just for development
                 localStorage.setItem("email", JSON.stringify({ email: userData.email })); // for verifyRegisterationEmail        
                 navigate("/auth/verify_register_otp");
-                dispatch(setLoggedUserSlice(payload?.result));
+                dispatch(setLoggedUserSlice(result));
+
+            })
+            .finally(() => {
+                setIsFetching(false)
             })
     };
 

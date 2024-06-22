@@ -1,13 +1,13 @@
 import axios from "axios";
 import Cookie from "js-cookie";
-import { Challenge, Code, Collection, Group, Setting, Streak, User, } from "../../interfaces";
+import { Challenge, Chat, Code, Collection, Group, Message, Setting, Streak, User, } from "../../interfaces";
 import { baseURL } from "../../constant";
 
 // const API = axios.create({ baseURL: process.env.REACT_APP_BASEURL })
 const API = axios.create({ baseURL });
 API.interceptors.request.use((req) => {
   const stringifiedUser = Cookie.get("code.connect");
-  if (stringifiedUser) {
+  if (stringifiedUser && stringifiedUser != 'undefined') {
     const token = JSON.parse(stringifiedUser);
     if (req.headers) {
       req.headers.authtoken = token;
@@ -145,3 +145,14 @@ export const deleteNotifications = () => API.delete(`/notification/delete/all`);
 // Settings
 export const getSettings = () => API.get(`/setting/get/all`);
 export const updateSettings = (formData: Setting) => API.put(`/setting/update`, formData);
+
+// Chat
+export const getChats = () => API.get(`/chat/all`)
+export const getMessages = (chatId: string) => API.get(`/chat/messages/${chatId}`)
+export const getUnreadMessageCount = (chatId: string) => API.get(`/chat/unread/${chatId}`)
+export const getChat = (chatId: string) => API.get(`/chat/single/${chatId}`)
+export const createChat = (chat: Chat) => API.post(`/chat/single`, chat)
+export const updateChat = (chatId: string, chat: Chat) => API.put(`/chat/single/${chatId}`, chat)
+export const sendMessage = (chatId: string, message: Message) => API.put(`/chat/message/${chatId}`, message)
+export const markMessageAsRead = (chatId: string, messageId: string) => API.put(`/chat/mark-as-read/${chatId}/${messageId}`)
+export const markAllMessagesAsRead = (chatId: string) => API.put(`/chat/mark-all-as-read/${chatId}`)

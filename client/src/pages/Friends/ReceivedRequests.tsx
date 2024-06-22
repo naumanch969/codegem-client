@@ -7,19 +7,22 @@ import FriendCard from './FriendCard'
 import { Pagination } from '@mui/material'
 import { empty } from '@/assets'
 
-const ReceivedRequests = ({ totalPages, page, setPage, pageSize }: { totalPages: number, page: number, setPage: any, pageSize: number }) => {
+const ReceivedRequests = () => {
 
   //////////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////
   const dispatch = useDispatch()
-  const { receivedRequests }: { receivedRequests: User[] } = useSelector((state: RootState) => state.friend)
+  const { receivedRequests, count } = useSelector((state: RootState) => state.friend)
+  const pageSize = 20;
+  const totalPages = Math.ceil(count.receivedRequests / pageSize);
 
   //////////////////////////////////////////////////// STATES ////////////////////////////////////////////////
   const [isFetching, setIsFetching] = useState(false)
+  const [page, setPage] = useState(1)
 
   //////////////////////////////////////////////////// USE EFFECTS ////////////////////////////////////////////////
   useEffect(() => {
     if (receivedRequests?.length == 0) setIsFetching(true)
-    dispatch<any>(getReceivedRequests(`?page=${page}&pageSize=${pageSize}`)).finally(() => setIsFetching(false))
+    dispatch<any>(getReceivedRequests(`?page=${page}&pageSize=${pageSize}?count=${true}`)).finally(() => setIsFetching(false))
   }, [])
   useEffect(() => {
     // TODO: if data of particular page is available then dont call api

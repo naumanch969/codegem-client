@@ -12,10 +12,10 @@ const VerifyEmail = () => {
   ////////////////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////////
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isFetching } = useSelector((state: RootState) => state.user)
 
   ////////////////////////////////////////////////////// STATES //////////////////////////////////////////////////////
   const [email, setEmail] = useState<string>("");
+  const [isFetching, setIsFetching] = useState(false)
 
   ////////////////////////////////////////////////////// FUNCTIONS //////////////////////////////////////////////////////
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -24,12 +24,18 @@ const VerifyEmail = () => {
 
   const handleSubmit = (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
+    setIsFetching(true)
     dispatch<any>(sendOTP(email))
       .then(() => {
         localStorage.setItem("email", JSON.stringify({ email }));
         navigate('/auth/verify_otp')
+        setEmail("");
       })
-    setEmail("");
+      .finally(() => {
+        setIsFetching(false)
+      })
+
   };
 
 

@@ -1,15 +1,16 @@
 import React from 'react'
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect } from "react";
-import { Login, Register, InputRegisterationOTP, Home, Friends, Groups, Collections, Notifications, Create, Profile, More, Codes, Collection, Group, UserProfile, ChangePassword, InputOTP, VerifyEmail, NewPassword, EditProfile, Streaks, Challenges, LandingPage, Contact, About, Pricing, Features, HelpCenter, ContactSupport } from "./pages";
+import { Login, Register, InputRegisterationOTP, Home, Friends, Groups, Collections, Notifications, Create, Profile, More, Codes, Collection, Group, UserProfile, ChangePassword, InputOTP, VerifyEmail, NewPassword, EditProfile, Streaks, Challenges, LandingPage, Contact, About, Pricing, Features, HelpCenter, ContactSupport, Chat } from "./pages";
 import { useDispatch, useSelector } from "react-redux";
 import { NotFound } from '@/components'
-import {  DashboardWrapper, LandingPageWrapper } from "@/wrappers";
+import { DashboardWrapper, LandingPageWrapper } from "@/wrappers";
 import { RootState } from "@/redux/store";
 import { Collection as TCollection } from '@/interfaces'
 import { useRole } from '@/hooks/useRole';
 import { adminEmail } from '@/constant';
 import { getProfile, getUsers } from './redux/reducers/userSlice';
+import { getChats } from './redux/reducers/chatSlice';
 
 const Apps = () => {
   /////////////////////////////////////////////// VARIABLES /////////////////////////////////////////////////////
@@ -29,6 +30,7 @@ const Apps = () => {
   }, [userCollections]);
   useEffect(() => {
     dispatch<any>(getProfile())
+    dispatch<any>(getChats())
   }, [])
   useEffect(() => {
     loggedUser?.email == adminEmail && onSetRole('Admin')
@@ -65,20 +67,21 @@ const Apps = () => {
           <Route path="codes" element={<Codes />} />
           <Route path="streaks" element={<Streaks />} />
           <Route path="challenges" element={<Challenges />} />
-          <Route path={`friends`} element={<Friends />} />
-          <Route path={`friends/:selectedItem`} element={<Friends />} />
-          <Route path={`friends/:selectedItem/:accountId`} element={<Friends />} />
-          <Route path={`groups`} element={<Groups />} />
-          <Route path={`groups/:groupId`} element={<Group />} />
-          <Route path={`collections`} element={<Collections />} />
-          <Route path={`collections/:collectionId`} element={<Collection />} />
-          <Route path={`notifications`} element={<Notifications />} />
-          <Route path={`notifications/:notificationId`} element={<Notifications />} />
-          <Route path={`create`} element={<Create />} />
-          <Route path={`user/:userId`} element={<UserProfile />} />
-          <Route path={`profile`} element={<Profile />} />
+          <Route path='users' element={<Friends />} />
+          <Route path='users/:selectedItem' element={<Friends />} />
+          <Route path='users/:selectedItem/:accountId' element={<Friends />} />
+          <Route path='groups' element={<Groups />} />
+          <Route path='groups/:groupId' element={<Group />} />
+          <Route path='collections' element={<Collections />} />
+          <Route path='collections/:collectionId' element={<Collection />} />
+          <Route path='notifications' element={<Notifications />} />
+          <Route path='notifications/:notificationId' element={<Notifications />} />
+          <Route path='create' element={<Create />} />
+          <Route path='user/:userId' element={<UserProfile />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path='profile' element={<Profile />} />
           <Route path="profile/edit" element={<EditProfile />} />
-          <Route path={`more`} element={<More />} />
+          <Route path='more' element={<More />} />
         </Route>
 
         <Route path="/contact-support" element={<ContactSupport />} />

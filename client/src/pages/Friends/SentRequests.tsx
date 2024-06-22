@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getSentRequests, getSuggestedUsers } from '../../redux/reducers/friendSlice'
-import { User } from '../../interfaces'
 import { RootState } from '../../redux/store'
 import FriendCard from './FriendCard'
 import { Pagination } from '@mui/material'
 import { empty } from '@/assets'
 
-const SentRequest = ({ totalPages, page, setPage, pageSize }: { totalPages: number, page: number, setPage: any, pageSize: number }) => {
+const SentRequest = ( ) => {
 
     //////////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////
     const dispatch = useDispatch()
-    const { sentRequests }: { sentRequests: User[] } = useSelector((state: RootState) => state.friend)
+    const { sentRequests, count } = useSelector((state: RootState) => state.friend)
+    const pageSize = 20;
+    const totalPages = Math.ceil(count.sentRequests / pageSize);
 
     //////////////////////////////////////////////////// STATES ////////////////////////////////////////////////
     const [isFetching, setIsFetching] = useState(false)
+    const [page, setPage] = useState(1)
 
     //////////////////////////////////////////////////// USE EFFECTS ////////////////////////////////////////////////
     useEffect(() => {

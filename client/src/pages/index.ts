@@ -27,3 +27,4 @@ export { default as Contact } from "./Contact";
 export { default as Features } from "./Features";
 export { default as ContactSupport } from "./ContactSupport";
 export { default as HelpCenter } from "./HelpCenter";
+export { default as Chat } from "./Chat";

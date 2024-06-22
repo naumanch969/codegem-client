@@ -19,8 +19,9 @@ interface InitialState {
 }
 
 const stringifiedToken = Cookies.get("code.connect");
+console.log('stringifiedToken', stringifiedToken, typeof stringifiedToken)
 const stringifiedUser = localStorage.getItem("profile");
-const stringifiedAccounts = Cookies.get("accounts");
+// const stringifiedAccounts = Cookies.get("accounts");
 
 const initialState: InitialState = {
     isFetching: false,
@@ -29,9 +30,10 @@ const initialState: InitialState = {
     liked: [],
     saved: [],
     currentUser: null,
-    loggedUserToken: stringifiedToken ? JSON.parse(stringifiedToken) : null,
+    loggedUserToken: stringifiedToken && stringifiedToken != 'undefined' ? JSON.parse(stringifiedToken) : null,
     loggedUser: stringifiedUser ? JSON.parse(stringifiedUser) : null,
-    accounts: stringifiedAccounts ? JSON.parse(stringifiedAccounts) : [],
+    // accounts: stringifiedAccounts ? JSON.parse(stringifiedAccounts) : [],
+    accounts: [],
     count: 20,
 };
 
@@ -61,7 +63,6 @@ export const getProfile = createAsyncThunk<User, undefined>('user/getProfile', a
         return data
     } catch (error) {
         console.error('Error getProfile', error)
-        toast.error('Something went wrong!')
     }
 })
 export const updateProfile = createAsyncThunk<any, any>('user/updateProfile', async (formData) => {
@@ -127,8 +128,10 @@ const userSlice = createSlice({
                 state.isFetching = true
             })
             .addCase(getUsers.fulfilled, (state, action) => {
-                state.users = action.payload.result;
-                state.count = action.payload.count;
+                if (action.payload?.result)
+                    state.users = action.payload.result;
+                if (action.payload?.count)
+                    state.count = action.payload.count;
                 state.isFetching = false
             })
             .addCase(getUsers.rejected, (state) => {

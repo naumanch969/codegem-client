@@ -1,25 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getFriends } from '../../redux/reducers/friendSlice'
-import { User } from '../../interfaces'
 import { RootState } from '../../redux/store'
 import FriendCard from './FriendCard'
 import { Pagination } from '@mui/material'
 import { empty } from '@/assets'
 
-const Friends = ({ totalPages, page, setPage, pageSize }: { totalPages: number, page: number, setPage: any, pageSize: number }) => {
+const Friends = () => {
 
   //////////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////
   const dispatch = useDispatch()
-  const { friends }: { friends: User[] } = useSelector((state: RootState) => state.friend)
+  const { friends, count } = useSelector((state: RootState) => state.friend)
+  const pageSize = 20;
+  const totalPages = Math.ceil(count.friends / pageSize);
 
   //////////////////////////////////////////////////// STATES ////////////////////////////////////////////////
   const [isFetching, setIsFetching] = useState(false)
+  const [page, setPage] = useState(1)
 
   //////////////////////////////////////////////////// USE EFFECTS ////////////////////////////////////////////////
   useEffect(() => {
     if (friends.length == 0) setIsFetching(true)
-    dispatch<any>(getFriends(`?page=${page}&pageSize=${pageSize}`)).finally(() => setIsFetching(false))
+    dispatch<any>(getFriends(`?page=${page}&pageSize=${pageSize}&count=${true}`)).finally(() => setIsFetching(false))
   }, [])
   useEffect(() => {
     // TODO: if data of particular page is available then dont call api

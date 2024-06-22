@@ -9,10 +9,7 @@ import { setLoggedUserSlice, setLoggedUserTokenSlice } from '@/redux/reducers/us
 import Cookies from 'js-cookie';
 import { User } from '@/interfaces';
 
-interface UserState {
-    username: string;
-    password: string;
-}
+interface UserState { username: string; password: string; }
 
 const Login = () => {
 
@@ -20,23 +17,28 @@ const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const initialUserState: UserState = { username: '', password: '' };
-    const { isFetching, error } = useSelector((state: any) => state.user);
 
     ////////////////////////////////////////////////////// STATES //////////////////////////////////////////////////////
     const [userData, setUserData] = useState<UserState>(initialUserState);
+    const [isFetching, setIsFetching] = useState(false)
 
     ////////////////////////////////////////////////////// FUNCTIONS //////////////////////////////////////////////////////
     const handleSubmit = () => {
         const { username, password } = userData;
         if (!username || !password) return alert('Make sure to provide all the fields');
+        setIsFetching(true)
         dispatch<any>(login(userData))
             .then(({ payload: { result, token } }: { payload: { result: User, token: string } }) => {
-                Cookies.set("code.connect", JSON.stringify(token));
+
+                token && Cookies.set("code.connect", JSON.stringify(token));
                 localStorage.setItem("profile", JSON.stringify(result));
 
                 dispatch(setLoggedUserTokenSlice(token));
                 dispatch(setLoggedUserSlice(result));
-                navigate("/");
+                navigate("/home");
+            })
+            .finally(() => {
+                setIsFetching(false)
             })
     };
 

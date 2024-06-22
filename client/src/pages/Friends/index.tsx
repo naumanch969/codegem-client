@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Friends from './Friends'
 import Menubar from './Menubar';
 import SuggestedFriends from './SuggestedFriends';
@@ -9,23 +9,29 @@ import { useDispatch } from 'react-redux';
 import { searchFriends, searchUsers } from '@/redux/reducers/friendSlice';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { useLocation } from 'react-router-dom';
 
 const FriendsPage = () => {
 
-    ////////////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////
+    //////////////////  //////////////////////////////// VARIABLES //////////////////////////////////////////////////
     const dispatch = useDispatch()
     const pageSize = 20;
-    const maxLength = 50;
-    const totalPages = Math.ceil(maxLength / pageSize);
+    const { pathname } = useLocation()
+    const page = 1
 
     ////////////////////////////////////////////////// STATES //////////////////////////////////////////////////
     const [searchValue, setSearchValue] = useState<string>('');
     const [searchedQuery, setSearchedValue] = useState<string>('');
-    const [activeMenuItem, setActiveMenuItem] = useState<string>('find');
-    const [page, setPage] = useState<number>(1)
+    const [activeMenuItem, setActiveMenuItem] = useState<'find' | 'friends' | 'suggested' | 'received' | 'sent'>('find');
 
     ////////////////////////////////////////////////// USE EFFECTS //////////////////////////////////////////////////
-
+    useEffect(() => {
+        if (pathname.includes('/users/find')) setActiveMenuItem('find')
+        else if (pathname.includes('/users/friends')) setActiveMenuItem('friends')
+        else if (pathname.includes('/users/suggested')) setActiveMenuItem('suggested')
+        else if (pathname.includes('/users/received')) setActiveMenuItem('received')
+        else if (pathname.includes('/users/sent')) setActiveMenuItem('sent')
+    }, [pathname])
 
     ////////////////////////////////////////////////// FUNCTIONS //////////////////////////////////////////////////
     const onSearch = () => {
@@ -61,11 +67,11 @@ const FriendsPage = () => {
                 <Menubar activeMenuItem={activeMenuItem} setActiveMenuItem={setActiveMenuItem} />
             </div>
 
-            {activeMenuItem === 'find' && <Find totalPages={totalPages} page={page} setPage={setPage} pageSize={pageSize} />}
-            {activeMenuItem === 'friends' && <Friends totalPages={totalPages} page={page} setPage={setPage} pageSize={pageSize} />}
-            {activeMenuItem === 'suggested' && <SuggestedFriends totalPages={totalPages} page={page} setPage={setPage} pageSize={pageSize} />}
-            {activeMenuItem === 'sent' && <SentRequests totalPages={totalPages} page={page} setPage={setPage} pageSize={pageSize} />}
-            {activeMenuItem === 'received' && <ReceivedRequests totalPages={totalPages} page={page} setPage={setPage} pageSize={pageSize} />}
+            {activeMenuItem === 'find' && <Find />}
+            {activeMenuItem === 'friends' && <Friends />}
+            {activeMenuItem === 'suggested' && <SuggestedFriends />}
+            {activeMenuItem === 'sent' && <SentRequests />}
+            {activeMenuItem === 'received' && <ReceivedRequests />}
 
         </div>
     );

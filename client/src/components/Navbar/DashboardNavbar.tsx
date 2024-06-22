@@ -24,19 +24,19 @@ const DashboardNavbar = () => {
     ////////////////////////////////////////// USE EFFECTS ////////////////////////////////////////////////
 
     ////////////////////////////////////////// FUNCTIONS ///////////////////////////////////////////////////
-    const handleSignUpClick = () => {
+    const onRegisterClick = () => {
         navigate('/auth/register')
     }
 
-    const hanldeLoginClick = () => {
+    const onLoginClick = () => {
         navigate('/auth/login')
     }
 
-    const handleLogout = () => {
+    const onLogout = () => {
         dispatch<any>(logout(navigate))
     }
 
-    const handleAccountClick = () => {
+    const onAccountClick = () => {
         navigate("/profile")
     }
 
@@ -66,21 +66,21 @@ const DashboardNavbar = () => {
                                 </Avatar>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
-                                <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={handleAccountClick} >
+                                <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={onAccountClick} >
                                     <Link to='/profile' ><Person />Profile</Link>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={handleAccountClick} >
+                                <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={onAccountClick} >
                                     <Link to='/more' ><Person2TwoTone />Personalize</Link>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={handleLogout} >
+                                <DropdownMenuItem className='cursor-pointer flex gap-x-1' onClick={onLogout} >
                                     <Link to='/profile' ><Logout />Logout</Link>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                         :
                         <div className="flex justify-between items-center h-full gap-4 " >
-                            <Button onClick={handleSignUpClick} variant='default' >Register</Button>
-                            <Button onClick={hanldeLoginClick} variant='secondary' >Login</Button>
+                            <Button onClick={onRegisterClick} variant='default' >Register</Button>
+                            <Button onClick={onLoginClick} variant='secondary' >Login</Button>
                         </div>
                 }
             </div>

@@ -1,21 +1,20 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import OTPInput from "react-otp-input";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { resendOTP, verifyOTP } from "../../redux/reducers/authSlice";
 import { logo } from "../../assets";
 import { ArrowBack } from "@mui/icons-material";
-import { RootState } from "../../redux/store";
 
 const InputOTP = () => {
 
     /////////////////////////////////// VARIABLES /////////////////////////////////
-    const { isFetching } = useSelector((state: RootState) => state.user)
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
     /////////////////////////////////// STATES /////////////////////////////////////
     const [otp, setOtp] = useState<string>("");
+    const [isFetching, setIsFetching] = useState(false)
 
     /////////////////////////////////// USE EFFECTS ////////////////////////////////
 
@@ -23,10 +22,15 @@ const InputOTP = () => {
     const handleSubmit = (e: any) => {
         e.preventDefault();
         if (otp.length != 5) return alert('Please enter a valid OTP')
+
+        setIsFetching(true)
         dispatch<any>(verifyOTP(otp))
             .then(() => {
                 localStorage.setItem("emailVerified", JSON.stringify({ isVerified: true }));
                 navigate("/auth/new_password");
+            })
+            .finally(() => {
+                setIsFetching(false)
             })
     }
     const goBack = () => {

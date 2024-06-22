@@ -8,18 +8,21 @@ import { Pagination } from '@mui/material'
 import { empty } from '@/assets'
 import { getUsers } from '@/redux/reducers/userSlice'
 
-const Find = ({ totalPages, page, setPage, pageSize }: { totalPages: number, page: number, setPage: any, pageSize: number }) => {
+const Find = () => {
 
   //////////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////
   const dispatch = useDispatch()
-  const { users, isFetching: usersFetching }: { users: User[], isFetching: boolean } = useSelector((state: RootState) => state.user)
+  const { users, isFetching: usersFetching, count } = useSelector((state: RootState) => state.user)
+  const pageSize = 20;
+  const totalPages = Math.ceil(count / pageSize);
 
   //////////////////////////////////////////////////// STATES ////////////////////////////////////////////////
   const [friendsFetching, setFriendsFetching] = useState(false)
+  const [page, setPage] = useState(1)
 
   //////////////////////////////////////////////////// USE EFFECTS ////////////////////////////////////////////////
   useEffect(() => {
-    dispatch<any>(getUsers(`?page=${page}&pageSize=${pageSize}`))
+    dispatch<any>(getUsers(`?page=${page}&pageSize=${pageSize}&count=${true}`))
   }, [])
   useEffect(() => {
     // TODO: if data of particular page is available then dont call api
@@ -45,7 +48,7 @@ const Find = ({ totalPages, page, setPage, pageSize }: { totalPages: number, pag
             :
             users.length == 0
               ?
-              <div className='w-full flex flex-col justify-center items-center grayscale '>
+              <div className='col-span-4 w-full flex flex-col justify-center items-center grayscale '>
                 <img src={empty} alt='Empty' className='w-96 h-96 grayscale ' />
                 <span className='text-foreground text-center text-lg font-semibold ' >Nothing Found.</span>
                 <span className='text-muted-foreground text-center text-md ' >It's our fault not yours.</span>

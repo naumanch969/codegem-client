@@ -58,7 +58,7 @@ const ProfilePage = () => {
         if (role == 'Admin') {
             dispatch<any>(deleteUser(currentUser?._id as string))
                 .then(() => {
-                    navigate("/friends");
+                    navigate("/users");
                 })
         }
     }

@@ -9,29 +9,30 @@ import { RootState } from "../../redux/store";
 const NewPassword = () => {
 
   //////////////////////////////////////////////////// VARIABLES /////////////////////////////////////////////////////
-  const { isFetching } = useSelector((state: RootState) => state.user)
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   //////////////////////////////////////////////////// STATES /////////////////////////////////////////////////////
   const [password, setPassword] = useState<{ password: string, confirmPassword: string }>({ password: '', confirmPassword: '' });
+  const [isFetching, setIsFetching] = useState(false)
 
   //////////////////////////////////////////////////// FUNCTIONS /////////////////////////////////////////////////////
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword({
-      ...password,
-      [e.target.name]: e.target.value,
-    });
+    setPassword({ ...password, [e.target.name]: e.target.value, });
   };
   const handleSubmit = (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (password.password !== password.confirmPassword) return alert('Password and Confirm Password should be same.');
 
+    setIsFetching(true)
     dispatch<any>(setNewPassword(password.password))
       .then(() => {
         localStorage.removeItem("email");
         localStorage.removeItem("emailVerified");
         navigate("/auth/login");
+      })
+      .finally(() => {
+        setIsFetching(false)
       })
     setPassword({ confirmPassword: '', password: '' })
   };

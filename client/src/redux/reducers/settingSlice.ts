@@ -47,29 +47,15 @@ const settingSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getSettings.pending, (state) => {
-                state.isLoading = true
-                state.error = null
-            })
             .addCase(getSettings.fulfilled, (state, action) => {
                 state.isLoading = false
                 if (action.payload)
                     state.setting = action.payload
             })
-            .addCase(getSettings.rejected, (state) => {
-                state.isLoading = false
-            })
-            .addCase(updateSettings.pending, (state) => {
-                state.isLoading = true
-                state.error = null
-            })
             .addCase(updateSettings.fulfilled, (state, action) => {
                 state.isLoading = false
                 if (action.payload)
                     state.setting = action.payload
-            })
-            .addCase(updateSettings.rejected, (state) => {
-                state.isLoading = false
             })
             .addCase(settingActions.resetState, (state) => {
                 state.setting = undefined;

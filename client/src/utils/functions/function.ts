@@ -1,7 +1,8 @@
+import { SOCKET_URL } from "@/constant";
+import { User } from "@/interfaces";
 import { setLoggedUserSlice, setLoggedUserTokenSlice } from "@/redux/reducers/userSlice";
-import Cookies from "js-cookie";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { io } from "socket.io-client";
+import { formatDistanceToNow } from 'date-fns';
 
 // 1)
 export const limitText = (str: string | undefined, limit: number): string | undefined => {
@@ -55,5 +56,31 @@ export const generateRandom = (from: number, to: number): number => {
     return random;
 };
 
+// 7)
+export const connectToSocketIO = (setIsConnectedToSocket: any, loggedUser: User, setLiveUsers: any, setArrivalMessage: any) => {
+    const serverURL = SOCKET_URL;
+    const socket = io(serverURL);
+    socket.on("connect", () => {
+        setIsConnectedToSocket(true);
+        socket.emit('addUser', { userId: loggedUser?._id, socketId: socket.id, email: loggedUser?.email });
+        socket.on('getUsers', (lUsers: any) => { setLiveUsers(lUsers) })
+        socket.on('getMessage', (message: any) => { setArrivalMessage(message) })
+    })
+    socket.on("disconnect", () => {
+        setIsConnectedToSocket(false);
+    })
+};
 
- 
+// 8)
+export const disconnectToSocketIO = (setIsConnectedToSocket: any) => {
+    const serverURL = SOCKET_URL;
+    const socket = io(serverURL);
+    setIsConnectedToSocket(false);
+    socket.disconnect();
+};
+
+// 9)
+export const getRelativeTime = (date: Date) => {
+    if (!date) return ''
+    return formatDistanceToNow(new Date(date), { addSuffix: true });
+};

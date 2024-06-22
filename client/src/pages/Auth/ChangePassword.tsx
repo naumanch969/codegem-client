@@ -6,17 +6,16 @@ import { changePassword } from "../../redux/reducers/authSlice";
 import { logo } from "../../assets";
 
 
-const ChangePassword = ({ setOpen }: { setOpen?: any }) => {
+const ChangePassword = () => {
 
     ////////////////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////////
-    const PasswordButtonInitialStyle = { opacity: 0 };
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { isFetching } = useSelector((state: any) => state.user);
 
     ////////////////////////////////////////////////////// STATES //////////////////////////////////////////////////////
     const [passwordData, setPasswordData] = useState({ newPassword: "", oldPassword: "" });
     const [inputError, setInputError] = useState({ newPassword: "", oldPassword: "" });
+    const [isFetching, setIsFetching] = useState(false)
 
     ////////////////////////////////////////////////////// FUNCTIONS //////////////////////////////////////////////////////
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,11 +35,14 @@ const ChangePassword = ({ setOpen }: { setOpen?: any }) => {
         if (newPassword.length < 6)
             return setInputError((prev) => ({ ...prev, newPassword: "New password length should contain at least 6 characters.", }));
 
+        setIsFetching(true)
         dispatch<any>(changePassword(passwordData))
             .then(() => {
                 navigate("/");
             })
-        setOpen(false);
+            .finally(() => {
+                setIsFetching(false)
+            })
     };
 
 

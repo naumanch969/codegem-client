@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, Dispatch, SetStateAction } from 'react';
 import moment from 'moment-timezone';
+import { Message } from '@/interfaces';
 
 interface StateContextProps {
     Months: string[];
@@ -21,15 +22,19 @@ interface StateContextProps {
         second: number;
     };
     showSnackbar: boolean;
-    setShowSnackbar: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowSnackbar: Dispatch<SetStateAction<boolean>>;
     urlPath: string[];
-    setUrlPath: React.Dispatch<React.SetStateAction<string[]>>;
+    setUrlPath: Dispatch<SetStateAction<string[]>>;
     rightbar: boolean;
-    setRightbar: React.Dispatch<React.SetStateAction<boolean>>;
+    setRightbar: Dispatch<SetStateAction<boolean>>;
     showSidebar: boolean;
-    setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowSidebar: Dispatch<SetStateAction<boolean>>;
     showFriendSidebar: boolean;
-    setShowFriendSidebar: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowFriendSidebar: Dispatch<SetStateAction<boolean>>;
+
+    isConnectedToSocket: boolean, setIsConnectedToSocket: Dispatch<SetStateAction<boolean>>;
+    arrivalMessage: Message | null, setArrivalMessage: Dispatch<SetStateAction<Message | null>>
+    liveUsers: { userId: string, socketId: string, email: string }[], setLiveUsers: Dispatch<SetStateAction<{ userId: string, socketId: string, email: string }[]>>
 }
 
 const StateContext = createContext<StateContextProps | undefined>(undefined);
@@ -57,6 +62,12 @@ export const ContextProvider: React.FC<{ children: ReactNode }> = ({ children })
     const [showSidebar, setShowSidebar] = useState(true);
     const [showFriendSidebar, setShowFriendSidebar] = useState(true);
 
+    // chat
+    const [isConnectedToSocket, setIsConnectedToSocket] = useState(false);
+    const [arrivalMessage, setArrivalMessage] = useState<Message | null>(null);
+    const [liveUsers, setLiveUsers] = useState<{ userId: string, socketId: string, email: string }[]>([]);
+
+
     const contextValues: StateContextProps = {
         Months,
         Days,
@@ -68,16 +79,15 @@ export const ContextProvider: React.FC<{ children: ReactNode }> = ({ children })
         currentMinute,
         currentSecond,
         resetedDate,
-        showSnackbar,
-        setShowSnackbar,
-        urlPath,
-        setUrlPath,
-        rightbar,
-        setRightbar,
-        showSidebar,
-        setShowSidebar,
-        showFriendSidebar,
-        setShowFriendSidebar,
+        showSnackbar, setShowSnackbar,
+        urlPath, setUrlPath,
+        rightbar, setRightbar,
+        showSidebar, setShowSidebar,
+        showFriendSidebar, setShowFriendSidebar,
+
+        isConnectedToSocket, setIsConnectedToSocket,
+        arrivalMessage, setArrivalMessage,
+        liveUsers, setLiveUsers,
     };
 
     return <StateContext.Provider value={contextValues}>{children}</StateContext.Provider>;

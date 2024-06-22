@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Menubar = ({ activeMenuItem, setActiveMenuItem }: { activeMenuItem: any, setActiveMenuItem: any }) => {
     const menuItems = [
@@ -8,6 +9,7 @@ const Menubar = ({ activeMenuItem, setActiveMenuItem }: { activeMenuItem: any, s
         'Received',
         'Sent',
     ];
+    const navigate = useNavigate()
 
     return (
         <div className="flex justify-center ">
@@ -19,7 +21,10 @@ const Menubar = ({ activeMenuItem, setActiveMenuItem }: { activeMenuItem: any, s
                             ? 'bg-teal-blue text-white'
                             : 'text-cool-gray'
                             } hover:bg-teal-blue-lighten hover:text-white transition-all duration-200 focus:outline-none`}
-                        onClick={() => setActiveMenuItem(item.toLowerCase())}
+                        onClick={() => {
+                            navigate(`/users/${item.toLowerCase()}`)
+                            setActiveMenuItem(item.toLowerCase())
+                        }}
                     >
                         {item}
                     </button>

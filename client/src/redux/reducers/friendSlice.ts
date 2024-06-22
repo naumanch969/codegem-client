@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 
 import { User } from '../../interfaces';
 import * as api from '../api'
+import { setUsersCountSlice, setUsersSlice } from './userSlice';
 
 interface InitialState {
     isFetching: boolean;
@@ -11,7 +12,7 @@ interface InitialState {
     receivedRequests: User[];
     suggestedUsers: User[];
     friends: User[];
-    count: number;
+    count: { friends: number, sentRequests: number, receivedRequests: number, suggestedUsers: number };
 }
 const initialState: InitialState = {
     isFetching: false,
@@ -20,7 +21,7 @@ const initialState: InitialState = {
     friends: [],
     sentRequests: [],
     receivedRequests: [],
-    count: 0,
+    count: { friends: 0, sentRequests: 0, receivedRequests: 0, suggestedUsers: 0 }
 };
 
 
@@ -51,12 +52,12 @@ export const searchFriends = createAsyncThunk('friend/searchFriends', async (que
         toast.error('Something went wrong!')
     }
 })
-export const searchUsers = createAsyncThunk('friend/searchUsers', async (query: string) => {
+export const searchUsers = createAsyncThunk('friend/searchUsers', async (query: string, { dispatch }) => {
     try {
         const { data }: { data: { count: number; result: User[] } } = await api.searchUsers(query);
-        // dispatch(setUsersCountSlice(data.count))
-        // dispatch(setUsersSlice(data.result))
-        return data.count
+        dispatch(setUsersCountSlice(data.count))
+        dispatch(setUsersSlice(data.result))
+        return
     } catch (error) {
         console.error(error)
         toast.error('Something went wrong!')
@@ -127,23 +128,34 @@ const friendSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getSuggestedUsers.fulfilled, (state, action) => {
-                state.suggestedUsers = action.payload;
+                if (action.payload?.result)
+                    state.suggestedUsers = action.payload?.result;
+                if (action.payload?.count)
+                    state.count = { ...state.count, friends: action.payload.count };
             })
             .addCase(getFriends.fulfilled, (state, action) => {
-                if (!action.payload) return
-                state.friends = action.payload.result;
-                state.count = action.payload.count;
+                if (action.payload?.result)
+                    state.friends = action.payload.result;
+                if (action.payload?.count)
+                    state.count = { ...state.count, friends: action.payload.count };
             })
             .addCase(searchFriends.fulfilled, (state, action) => {
-                if (!action.payload) return
-                state.friends = action.payload.result;
-                state.count = action.payload.count;
+                if (action.payload?.result)
+                    state.friends = action.payload.result;
+                if (action.payload?.count)
+                    state.count = { ...state.count, friends: action.payload.count };
             })
             .addCase(getSentRequests.fulfilled, (state, action) => {
-                state.sentRequests = action.payload;
+                if (action.payload?.result)
+                    state.sentRequests = action.payload.result;
+                if (action.payload?.count)
+                    state.count = { ...state.count, sentRequests: action.payload.count };
             })
             .addCase(getReceivedRequests.fulfilled, (state, action) => {
-                state.receivedRequests  = action.payload;
+                if (action.payload?.result)
+                    state.receivedRequests = action.payload.result;
+                if (action.payload?.count)
+                    state.count = { ...state.count, receivedRequests: action.payload.count };
             })
             .addCase(sendFriendRequest.fulfilled, (state, action) => {
                 state.sentRequests = [...state.sentRequests, action.payload];

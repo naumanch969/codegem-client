@@ -46,10 +46,10 @@ const Sidebar = () => {
             active: pathname.includes('/challenges')
         },
         {
-            name: 'Friends',
+            name: 'Users',
             iconFilled: Person,
             iconOutlined: PersonOutlined,
-            active: pathname.includes('/friends')
+            active: pathname.includes('/users')
         },
         {
             name: 'Groups',
@@ -106,7 +106,7 @@ const Sidebar = () => {
                                 <Link
                                     key={index}
                                     to={`/${lowercase(item.name)}`}
-                                    className={`${item.active && 'font-extrabold bg-dark-slate-blue-lighten text-teal-blue '} hover:bg-dark-slate-blue-lighten group hover:text-white flex gap-[12px] py-[10px] px-[6px] w-full capitalize rounded-[4px] cursor-pointer `}
+                                    className={`${item.active && 'font-extrabold bg-dark-slate-blue-lighten text-teal-blue '} hover:bg-dark-slate-blue-lighten group hover:text-white flex gap-[12px] py-[10px] px-[6px] w-full rounded-[4px] cursor-pointer `}
                                 >
                                     {
                                         item.active
@@ -131,16 +131,16 @@ const Sidebar = () => {
                                 >
                                     <Link
                                         to={`/${lowercase(item.name)!.split('/')}`}
-                                        className={`py-[4px] px-[6px] w-full rounded-[4px]   cursor-pointer flex justify-center items-center `}
+                                        className={`py-[4px] px-[6px] w-full rounded-[4px] cursor-pointer flex justify-center items-center `}
                                     >
                                         {
                                             item.active
                                                 ?
-                                                <button className={`${item.active && 'font-extrabold bg-dark-slate-blue-lighten text-teal-blue '} hover:bg-dark-slate-blue-lighten hover:text-white w-[40px] h-[40px] rounded-full `} >
+                                                <button title='Active' className={`${item.active && 'font-extrabold bg-dark-slate-blue-lighten text-teal-blue '} hover:bg-dark-slate-blue-lighten hover:text-white w-[40px] h-[40px] rounded-full `} >
                                                     <item.iconFilled className={``} />
                                                 </button>
                                                 :
-                                                <button className={`${item.active && 'font-extrabold bg-dark-slate-blue-lighten text-teal-blue '} hover:bg-dark-slate-blue-lighten hover:text-white w-[40px] h-[40px] rounded-full `} >
+                                                <button title='Disactive' className={`${item.active && 'font-extrabold bg-dark-slate-blue-lighten text-teal-blue '} hover:bg-dark-slate-blue-lighten hover:text-white w-[40px] h-[40px] rounded-full `} >
                                                     <item.iconOutlined className={``} />
                                                 </button>
                                         }

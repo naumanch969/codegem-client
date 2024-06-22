@@ -1,22 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import OTPInput from "react-otp-input";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { verifyRegisterationEmail, resendOTP } from "../../redux/reducers/authSlice";
 import { logo } from "../../assets";
 import { ArrowBack } from "@mui/icons-material";
-import { RootState } from "../../redux/store";
 import Cookies from "js-cookie";
 
 const InputRegisterationOTP = () => {
 
     /////////////////////////////////////////////////// VARIABLES //////////////////////////////////////////////
-    const { isFetching } = useSelector((state: RootState) => state.user)
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
     /////////////////////////////////////////////////// STATES //////////////////////////////////////////////////
     const [otp, setOtp] = useState<string>("");
+    const [isFetching, setIsFetching] = useState(false)
 
     /////////////////////////////////////////////////// USE EFFECTS /////////////////////////////////////////////
 
@@ -24,13 +23,17 @@ const InputRegisterationOTP = () => {
     const handleSubmit = (e: any) => {
         e.preventDefault();
         if (otp.length != 5) return alert('Please enter a valid OTP')
+
+        setIsFetching(true)
         dispatch<any>(verifyRegisterationEmail(otp))
             .then(() => {
                 const connect = Cookies.get("code.connect");
                 connect ? navigate("/") : navigate("/auth/login");
 
                 localStorage.removeItem("email");
-
+            })
+            .finally(() => {
+                setIsFetching(false)
             })
     }
     const goBack = () => {

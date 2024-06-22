@@ -28,6 +28,7 @@ export const verifyRegisterationEmail = createAsyncThunk<boolean, string>('verif
         toast.success(message)
         return true;
     } catch (error) {
+        console.error(error)
         toast.error('Something went wrong!')
         throw error as string;
     }
@@ -36,6 +37,7 @@ export const verifyRegisterationEmail = createAsyncThunk<boolean, string>('verif
 export const login = createAsyncThunk<{ result: User, token: string }, { username: string, password: string }>('login', async (userCredentials) => {
     try {
         const { data: { token, message, result } } = await api.login(userCredentials);
+        console.log('token', token, message, result)
         toast.success(message)
         return { result, token };
     } catch (error) {
@@ -59,10 +61,6 @@ export const sendOTP = createAsyncThunk('sendOTP', async (email: string) => {
     try {
         const { data: { message } } = await api.sendOTP(email);
         toast.success(message);
-        localStorage.setItem("email", JSON.stringify({ email }));
-        // AFTER:
-        // dispatch(sendForgetPasswordOTPReducer())
-        // navigate("/auth/verify_otp");
         return
     } catch (error) {
         toast.error('Something went wrong!')
@@ -114,7 +112,7 @@ export const setNewPassword = createAsyncThunk('setNewPassword', async (password
 export const logout = createAsyncThunk('setNewPassword', async (navigate: ReturnType<typeof useNavigate>, { dispatch }) => {
     try {
         Cookies.remove("code.connect");
-        localStorage.removeItem("profile");
+        localStorage.clear();
         dispatch(setLoggedUserSlice(null));
         dispatch(setLoggedUserTokenSlice(null)); // to remove token from the state
         navigate("/auth/login");
