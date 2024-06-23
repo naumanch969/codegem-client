@@ -6,17 +6,18 @@ import FriendCard from './FriendCard'
 import { Pagination } from '@mui/material'
 import { empty } from '@/assets'
 
-const SentRequest = ( ) => {
+const SentRequest = ({ searchValue }: { searchValue: string }) => {
 
     //////////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////
     const dispatch = useDispatch()
-    const { sentRequests, count } = useSelector((state: RootState) => state.friend)
+    const { sentRequests: fetchedSentRequests, count } = useSelector((state: RootState) => state.friend)
     const pageSize = 20;
     const totalPages = Math.ceil(count.sentRequests / pageSize);
 
     //////////////////////////////////////////////////// STATES ////////////////////////////////////////////////
     const [isFetching, setIsFetching] = useState(false)
     const [page, setPage] = useState(1)
+    const [sentRequests, setSentRequests] = useState(fetchedSentRequests)
 
     //////////////////////////////////////////////////// USE EFFECTS ////////////////////////////////////////////////
     useEffect(() => {
@@ -27,6 +28,13 @@ const SentRequest = ( ) => {
         // TODO: if data of particular page is available then dont call api
         fetchMore()
     }, [page])
+    useEffect(() => {
+        setSentRequests(fetchedSentRequests)
+    }, [fetchedSentRequests])
+    useEffect(() => {
+        const filtered = fetchedSentRequests.filter(u => u.username.includes(searchValue) || u.firstName?.includes(searchValue) || u.lastName.includes(searchValue))
+        setSentRequests(filtered)
+    }, [searchValue])
 
     /////////////////////////////////////// FUNCTIONS /////////////////////////////////////////
     const fetchMore = async () => {

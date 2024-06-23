@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { removeFriendRequest, sendFriendRequest, getSentRequests, getFriends, getReceivedRequests, acceptFriendRequest } from '@/redux/reducers/friendSlice';
 import { useRole } from '@/hooks/useRole';
 import { useNavigate } from 'react-router-dom';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { deleteUser } from '@/redux/reducers/userSlice';
 
 const ProfilePage = () => {
@@ -43,7 +44,9 @@ const ProfilePage = () => {
             setUserType('none')
         }
     }, [sentRequests, currentUser, friends, receivedRequests])
-
+    useEffect(() => {
+        console.log('currentUser', currentUser)
+    }, [currentUser])
     ///////////////////////////////////////////////// FUNCTIONS //////////////////////////////////////////////////////////
     const onClick = () => {
         if (userType == 'request_sent')
@@ -78,11 +81,17 @@ const ProfilePage = () => {
                 <div className="flex items-end gap-4 relative">
                     <div className="relative w-[10rem]">
                         <div className="w-[10rem] h-[10rem] absolute bottom-[-1rem] rounded-full border-[1px] border-gray-500">
-                            <img
+                            {/* <img
                                 src={currentUser?.profilePicture ? currentUser?.profilePicture : "https://via.placeholder.com/50"}
                                 className="w-full h-full object-cover rounded-full"
                                 alt="Profile"
-                            />
+                            /> */}
+                            <Avatar className='w-full h-full object-cover' >
+                                <AvatarImage src={currentUser?.profilePicture} alt={currentUser?.username} />
+                                <AvatarFallback className='text-primary text-9xl font-semibold flex justify-center items-center' >
+                                    {currentUser?.username?.charAt(0)}
+                                </AvatarFallback>
+                            </Avatar>
                         </div>
                     </div>
                     <div>

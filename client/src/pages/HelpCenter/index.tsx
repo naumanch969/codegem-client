@@ -24,8 +24,8 @@ const HelpCenter = () => {
           </p>
         </div>
         <div className="flex justify-center">
-          <Button onClick={() => navigate('/')}>
-            Return to Home
+          <Button onClick={() => navigate(-1)}>
+            Go Back
           </Button>
         </div>
       </div>

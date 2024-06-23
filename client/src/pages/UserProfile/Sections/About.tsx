@@ -42,13 +42,13 @@ const About = () => {
               <Tooltip placement='top' title="Title" arrow>
                 <Info className="text-cool-gray mr-2" />
               </Tooltip>
-              <p className="text-cool-gray">{currentUser?.title ?? "Null"}</p>
+              <p className="text-cool-gray">{currentUser?.title ?? "Not included yet"}</p>
             </div>
             <div className="flex items-center mb-2">
               <Tooltip placement='top' title="Location" arrow>
                 <LocationOn className="text-cool-gray mr-2" />
               </Tooltip>
-              <p className="text-cool-gray">{currentUser?.location ?? "Null"}</p>
+              <p className="text-cool-gray">{currentUser?.location ?? "Not included yet"}</p>
             </div>
           </CardContent>
 
@@ -57,25 +57,25 @@ const About = () => {
             <div className="flex flex-col justify-between items-start">
               <h3 className="text-md font-semibold mb-1">Interests</h3>
               <p className="text-cool-gray">
-                {currentUser?.interests?.length != 0 ? currentUser?.interests?.map((i, index) => <span key={index} >{i} {currentUser?.interests?.length != index + 1 && ', '}</span>) : "Null"}
+                {currentUser?.interests?.length != 0 ? currentUser?.interests?.map((i, index) => <span key={index} >{i} {currentUser?.interests?.length != index + 1 && ', '}</span>) : "Not included yet"}
               </p>
             </div>
             <div className="flex flex-col justify-between items-start">
               <h3 className="text-md font-semibold mb-1">Hobbies</h3>
               <p className="text-cool-gray">
-                {currentUser?.hobbies?.length != 0 ? currentUser?.hobbies?.map((i, index) => <span key={index} >{i} {currentUser?.hobbies?.length != index + 1 && ', '}</span>) : "Null"}
+                {currentUser?.hobbies?.length != 0 ? currentUser?.hobbies?.map((i, index) => <span key={index} >{i} {currentUser?.hobbies?.length != index + 1 && ', '}</span>) : "Not included yet"}
               </p>
             </div>
             <div className="flex flex-col justify-between items-start">
               <h3 className="text-md font-semibold mb-1">Favorite Books</h3>
               <p className="text-cool-gray">
-                {currentUser?.books?.length != 0 ? currentUser?.books?.map((i, index) => <span key={index} >{i} {currentUser?.books?.length != index + 1 && ', '}</span>) : "Null"}
+                {currentUser?.books?.length != 0 ? currentUser?.books?.map((i, index) => <span key={index} >{i} {currentUser?.books?.length != index + 1 && ', '}</span>) : "Not included yet"}
               </p>
             </div>
             <div className="flex flex-col justify-between items-start">
               <h3 className="text-md font-semibold mb-1">Programming Languages</h3>
               <p className="text-cool-gray">
-                {currentUser?.programming?.length != 0 ? currentUser?.programming?.map((i, index) => <span key={index} >{i} {currentUser?.programming?.length != index + 1 && ', '}</span>) : "Null"}
+                {currentUser?.programming?.length != 0 ? currentUser?.programming?.map((i, index) => <span key={index} >{i} {currentUser?.programming?.length != index + 1 && ', '}</span>) : "Not included yet"}
               </p>
             </div>
           </CardContent>

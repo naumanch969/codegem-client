@@ -6,17 +6,18 @@ import FriendCard from './FriendCard'
 import { Pagination } from '@mui/material'
 import { empty } from '@/assets'
 
-const Friends = () => {
+const Friends = ({ searchValue }: { searchValue: string }) => {
 
   //////////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////
   const dispatch = useDispatch()
-  const { friends, count } = useSelector((state: RootState) => state.friend)
+  const { friends: fetchedFriends, count } = useSelector((state: RootState) => state.friend)
   const pageSize = 20;
   const totalPages = Math.ceil(count.friends / pageSize);
 
   //////////////////////////////////////////////////// STATES ////////////////////////////////////////////////
   const [isFetching, setIsFetching] = useState(false)
   const [page, setPage] = useState(1)
+  const [friends, setFriends] = useState(fetchedFriends)
 
   //////////////////////////////////////////////////// USE EFFECTS ////////////////////////////////////////////////
   useEffect(() => {
@@ -27,6 +28,13 @@ const Friends = () => {
     // TODO: if data of particular page is available then dont call api
     fetchMore()
   }, [page])
+  useEffect(() => {
+    setFriends(fetchedFriends)
+  }, [fetchedFriends])
+  useEffect(() => {
+    const filtered = fetchedFriends.filter(u => u.username.includes(searchValue) || u.firstName?.includes(searchValue) || u.lastName.includes(searchValue))
+    setFriends(filtered)
+  }, [searchValue])
 
   /////////////////////////////////////// FUNCTIONS /////////////////////////////////////////
   const fetchMore = async () => {

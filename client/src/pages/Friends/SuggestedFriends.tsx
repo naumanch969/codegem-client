@@ -6,17 +6,18 @@ import FriendCard from './FriendCard'
 import { Pagination } from '@mui/material'
 import { empty } from '@/assets'
 
-const SuggestedFriends = () => {
+const SuggestedFriends = ({ searchValue }: { searchValue: string }) => {
 
     //////////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////
     const dispatch = useDispatch()
-    const { suggestedUsers, count } = useSelector((state: RootState) => state.friend)
+    const { suggestedUsers: fetchedSuggestedUsers, count } = useSelector((state: RootState) => state.friend)
     const pageSize = 20;
     const totalPages = Math.ceil(count.suggestedUsers / pageSize);
 
     //////////////////////////////////////////////////// STATES ////////////////////////////////////////////////
     const [isFetching, setIsFetching] = useState(false)
     const [page, setPage] = useState(1)
+    const [suggestedUsers, setSuggestedUsers] = useState(fetchedSuggestedUsers)
 
     //////////////////////////////////////////////////// USE EFFECTS ////////////////////////////////////////////////
     useEffect(() => {
@@ -27,6 +28,13 @@ const SuggestedFriends = () => {
         // TODO: if data of particular page is available then dont call api
         fetchMore()
     }, [page])
+    useEffect(() => {
+        setSuggestedUsers(fetchedSuggestedUsers)
+    }, [fetchedSuggestedUsers])
+    useEffect(() => {
+        const filtered = fetchedSuggestedUsers.filter(u => u.username.includes(searchValue) || u.firstName?.includes(searchValue) || u.lastName.includes(searchValue))
+        setSuggestedUsers(filtered)
+    }, [searchValue])
 
     /////////////////////////////////////// FUNCTIONS /////////////////////////////////////////
     const fetchMore = async () => {

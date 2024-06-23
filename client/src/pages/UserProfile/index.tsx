@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom'; // Use React Router's Link for navigation
+import { useParams } from 'react-router-dom';
 import ProfileHeader from './ProfileHeader';
 import PeopleYouMayKnow from './PeopleYouMayKnow';
 import MenuBar from './MenuBar';
@@ -13,15 +13,22 @@ import { getUser } from '@/redux/reducers/userSlice';
 
 const ProfilePage = () => {
 
+    //////////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////
     const dispatch = useDispatch()
     const { userId } = useParams()
+
+    //////////////////////////////////////////////////// STATES ////////////////////////////////////////////////
     const [activeMenuItem, setActiveMenuItem] = useState('about');
 
+    //////////////////////////////////////////////////// USE EFFECTS ////////////////////////////////////////////////
     useEffect(() => {
         dispatch<any>(getUser(userId as string))
     }, [userId])
 
+    //////////////////////////////////////////////////// FUNCTIONS ////////////////////////////////////////////////
 
+
+    //////////////////////////////////////////////////// RENDER ////////////////////////////////////////////////
     return (
         <div className="container mx-auto p-4 w-full flex flex-col gap-8 ">
 

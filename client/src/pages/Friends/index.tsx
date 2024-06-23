@@ -47,11 +47,11 @@ const FriendsPage = () => {
 
             <div className="flex justify-between items-center w-full">
                 <h1 className="text-3xl font-bold text-dark-slate-blue " >
-                    Friends {searchedQuery && <span className="font-medium"> {" > "} <span className='text-teal-blue ' >{searchedQuery}</span></span>}
+                    Users {searchedQuery && <span className="font-medium"> {" > "} <span className='text-teal-blue ' >{searchedQuery}</span></span>}
                 </h1>
                 <div className="relative w-1/3 ">
                     <Input
-                        placeholder="Search Friends..."
+                        placeholder={`Search`}
                         value={searchValue}
                         onChange={(e) => setSearchValue(e.target.value)}
                         onKeyDown={(e) => e.key == 'Enter' && onSearch()}
@@ -67,11 +67,11 @@ const FriendsPage = () => {
                 <Menubar activeMenuItem={activeMenuItem} setActiveMenuItem={setActiveMenuItem} />
             </div>
 
-            {activeMenuItem === 'find' && <Find />}
-            {activeMenuItem === 'friends' && <Friends />}
-            {activeMenuItem === 'suggested' && <SuggestedFriends />}
-            {activeMenuItem === 'sent' && <SentRequests />}
-            {activeMenuItem === 'received' && <ReceivedRequests />}
+            {activeMenuItem === 'find' && <Find searchValue={searchValue} />}
+            {activeMenuItem === 'friends' && <Friends searchValue={searchValue} />}
+            {activeMenuItem === 'suggested' && <SuggestedFriends searchValue={searchValue} />}
+            {activeMenuItem === 'sent' && <SentRequests searchValue={searchValue} />}
+            {activeMenuItem === 'received' && <ReceivedRequests searchValue={searchValue} />}
 
         </div>
     );

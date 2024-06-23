@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Folder, ExitToApp, Settings, Person2TwoTone } from '@mui/icons-material';
+import { Folder, Person2TwoTone } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { Collection, User } from '../../interfaces';
 import { useDispatch, useSelector } from 'react-redux';

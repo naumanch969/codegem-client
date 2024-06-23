@@ -8,16 +8,17 @@ import { Pagination } from '@mui/material'
 import { empty } from '@/assets'
 import { getUsers } from '@/redux/reducers/userSlice'
 
-const Find = () => {
+const Find = ({ searchValue }: { searchValue: string }) => {
 
   //////////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////
   const dispatch = useDispatch()
-  const { users, isFetching: usersFetching, count } = useSelector((state: RootState) => state.user)
+  const { users: fetchedUsers, isFetching: usersFetching, count } = useSelector((state: RootState) => state.user)
   const pageSize = 20;
   const totalPages = Math.ceil(count / pageSize);
 
   //////////////////////////////////////////////////// STATES ////////////////////////////////////////////////
   const [friendsFetching, setFriendsFetching] = useState(false)
+  const [users, setUsers] = useState(fetchedUsers)
   const [page, setPage] = useState(1)
 
   //////////////////////////////////////////////////// USE EFFECTS ////////////////////////////////////////////////
@@ -28,6 +29,13 @@ const Find = () => {
     // TODO: if data of particular page is available then dont call api
     fetchMore()
   }, [page])
+  useEffect(() => {
+    setUsers(fetchedUsers)
+  }, [fetchedUsers])
+  useEffect(() => {
+    const filtered = fetchedUsers.filter(u => u.username.includes(searchValue) || u.firstName?.includes(searchValue) || u.lastName.includes(searchValue))
+    setUsers(filtered)
+  }, [searchValue])
 
   /////////////////////////////////////// FUNCTIONS /////////////////////////////////////////
   const fetchMore = async () => {
