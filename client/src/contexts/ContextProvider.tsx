@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode, Dispatch, SetStateAction } from 'react';
 import moment from 'moment-timezone';
-import { Message } from '@/interfaces';
+import { ChatMessage, SelectedChat } from '@/interfaces';
 
 interface StateContextProps {
     Months: string[];
@@ -12,29 +12,19 @@ interface StateContextProps {
     currentHour: number;
     currentMinute: number;
     currentSecond: number;
-    resetedDate: {
-        day: number;
-        date: number;
-        month: number;
-        year: number;
-        hour: number;
-        minute: number;
-        second: number;
-    };
-    showSnackbar: boolean;
-    setShowSnackbar: Dispatch<SetStateAction<boolean>>;
-    urlPath: string[];
-    setUrlPath: Dispatch<SetStateAction<string[]>>;
-    rightbar: boolean;
-    setRightbar: Dispatch<SetStateAction<boolean>>;
-    showSidebar: boolean;
-    setShowSidebar: Dispatch<SetStateAction<boolean>>;
-    showFriendSidebar: boolean;
-    setShowFriendSidebar: Dispatch<SetStateAction<boolean>>;
+    resetedDate: { day: number; date: number; month: number; year: number; hour: number; minute: number; second: number; };
 
+    showSnackbar: boolean; setShowSnackbar: Dispatch<SetStateAction<boolean>>;
+    urlPath: string[]; setUrlPath: Dispatch<SetStateAction<string[]>>;
+    rightbar: boolean; setRightbar: Dispatch<SetStateAction<boolean>>;
+    showSidebar: boolean; setShowSidebar: Dispatch<SetStateAction<boolean>>;
+    showFriendSidebar: boolean; setShowFriendSidebar: Dispatch<SetStateAction<boolean>>;
+    selectedChat: SelectedChat | null; setSelectedChat: Dispatch<SetStateAction<SelectedChat | null>>
     isConnectedToSocket: boolean, setIsConnectedToSocket: Dispatch<SetStateAction<boolean>>;
-    arrivalMessage: Message | null, setArrivalMessage: Dispatch<SetStateAction<Message | null>>
+    arrivalMessage: ChatMessage | null, setArrivalMessage: Dispatch<SetStateAction<ChatMessage | null>>
     liveUsers: { userId: string, socketId: string, email: string }[], setLiveUsers: Dispatch<SetStateAction<{ userId: string, socketId: string, email: string }[]>>
+
+    mode: 'DARK' | 'LIGHT', setMode: Dispatch<SetStateAction<'DARK' | 'LIGHT'>>
 }
 
 const StateContext = createContext<StateContextProps | undefined>(undefined);
@@ -64,8 +54,11 @@ export const ContextProvider: React.FC<{ children: ReactNode }> = ({ children })
 
     // chat
     const [isConnectedToSocket, setIsConnectedToSocket] = useState(false);
-    const [arrivalMessage, setArrivalMessage] = useState<Message | null>(null);
+    const [arrivalMessage, setArrivalMessage] = useState<ChatMessage | null>(null);
     const [liveUsers, setLiveUsers] = useState<{ userId: string, socketId: string, email: string }[]>([]);
+    const [selectedChat, setSelectedChat] = useState<SelectedChat | null>(null);
+
+    const [mode, setMode] = useState<'LIGHT' | 'DARK'>('LIGHT');
 
 
     const contextValues: StateContextProps = {
@@ -84,10 +77,13 @@ export const ContextProvider: React.FC<{ children: ReactNode }> = ({ children })
         rightbar, setRightbar,
         showSidebar, setShowSidebar,
         showFriendSidebar, setShowFriendSidebar,
+        selectedChat, setSelectedChat,
 
         isConnectedToSocket, setIsConnectedToSocket,
         arrivalMessage, setArrivalMessage,
         liveUsers, setLiveUsers,
+
+        mode, setMode,
     };
 
     return <StateContext.Provider value={contextValues}>{children}</StateContext.Provider>;

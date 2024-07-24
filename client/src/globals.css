@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -70,6 +72,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -77,28 +80,42 @@
 
 /* Vertical scrollbar */
 ::-webkit-scrollbar {
-  width: 5px; /* Width of the vertical scrollbar */
+  width: 5px;
+  /* Width of the vertical scrollbar */
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #f1f1f1; /* Color of the scrollbar track */
+  background-color: #f1f1f1;
+  /* Color of the scrollbar track */
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #888; /* Color of the scrollbar thumb */
-  border-radius: 5px; /* Border radius of the scrollbar thumb */
+  background-color: #888;
+  /* Color of the scrollbar thumb */
+  border-radius: 5px;
+  /* Border radius of the scrollbar thumb */
 }
 
 /* Horizontal scrollbar */
 ::-webkit-scrollbar-horizontal {
-  width: 4px; /* Height of the horizontal scrollbar */
+  width: 4px;
+  /* Height of the horizontal scrollbar */
 }
 
 ::-webkit-scrollbar-track-horizontal {
-  background-color: #f1f1f1; /* Color of the scrollbar track */
+  background-color: #f1f1f1;
+  /* Color of the scrollbar track */
 }
 
 ::-webkit-scrollbar-thumb-horizontal {
-  background-color: #888; /* Color of the scrollbar thumb */
-  border-radius: 5px; /* Border radius of the scrollbar thumb */
+  background-color: #888;
+  /* Color of the scrollbar thumb */
+  border-radius: 5px;
+  /* Border radius of the scrollbar thumb */
+}
+
+
+/* General */
+.font-dancing-script {
+  font-family: 'Dancing Script', cursive;
 }

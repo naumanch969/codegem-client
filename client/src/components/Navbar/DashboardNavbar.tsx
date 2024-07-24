@@ -8,15 +8,17 @@ import { useStateContext } from "@/contexts/ContextProvider"
 import { RootState } from '@/redux/store'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Dehaze, Logout, Person, Person2TwoTone } from '@mui/icons-material'
+import { Dehaze, Logout, NotificationImportant, Person, Person2TwoTone } from '@mui/icons-material'
 import { Button } from '@/components/ui/button'
+import { IconButton, Tooltip } from '@mui/material'
+import { Bell, Moon, Sun } from 'lucide-react'
 
 const DashboardNavbar = () => {
 
     ////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const { setShowSidebar } = useStateContext()
+    const { setShowSidebar, mode } = useStateContext()
     const { loggedUser, loggedUserToken } = useSelector((state: RootState) => state.user)
 
     ////////////////////////////////////////// STATES /////////////////////////////////////////////////////
@@ -51,8 +53,21 @@ const DashboardNavbar = () => {
                 <Link to='/' style={{ fontFamily: 'cursive' }} className="font-bolder text-2xl font-bold " >CodeGem</Link>
             </div>
 
-
-            <div className=" " >
+            <div className="flex gap-4 " >
+                <Tooltip title='Notifications' placement='top' >
+                    <IconButton>
+                        <Bell className='text-white' />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title={`${mode == 'DARK' ? 'Light' : 'Dark'} Mode`} placement='top' >
+                    <IconButton>
+                        {
+                            mode == 'DARK'
+                                ? <Sun className='text-white' />
+                                : <Moon className='text-white' />
+                        }
+                    </IconButton>
+                </Tooltip>
                 {
                     loggedUserToken ?
                         <DropdownMenu>

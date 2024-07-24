@@ -41,8 +41,9 @@ const Friends = ({ searchValue }: { searchValue: string }) => {
     setIsFetching(true)
     dispatch<any>(getFriends(`?page=${page}&pageSize=${pageSize}`)).finally(() => setIsFetching(false))
   }
-
-
+  
+  
+  /////////////////////////////////////// FUNCTIONS /////////////////////////////////////////
   return (
     <div className='flex flex-col gap-y-8 w-full' >
       <div className='w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>

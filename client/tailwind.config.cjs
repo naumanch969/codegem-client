@@ -17,6 +17,9 @@ module.exports = {
       },
     },
     extend: {
+      backgroundColor: {
+        'gradient-45deg': 'linear-gradient(45deg, #000, #008C99, #1D253B)',
+      },
       boxShadow: {
         box: "0px 0px 10px -2px #0d0d0d",
       },

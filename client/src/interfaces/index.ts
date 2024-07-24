@@ -147,6 +147,43 @@ export interface Notification {
   isRead: boolean;
 }
 
+// export interface ChatMessage {
+//   _id?: string;
+//   receiver: User | string;
+//   sender: User | string;
+//   timestamp: Date;
+//   readBy: User[] | string[];
+//   text: string;
+//   createdAt?: Date
+//   updatedAt?: Date
+// }
+export interface Chat {
+  id?: string;
+  lastMessage: string;
+  lastMessageTimestamp: any;
+  participantIds: string[];
+  participants: User[];
+  messages?: ChatMessage[];
+  createdAt?: any
+  updatedAt?: any
+}
+export interface ChatMessage {
+  id?: string;
+  receiverId: string;
+  senderId: string;
+  timestamp: any;
+  readBy: string[];
+  receiverInfo: { displayName: string; photoUrl: string; lastMessage: string };
+  senderInfo: { displayName: string; photoUrl: string };
+  text: string;
+  updatedAt: any;
+  createdAt: any;
+}
+
+export interface SelectedChat extends Chat {
+  otherUser: User;
+}
+
 /////////////////////////////////////////////////////// SETTINGS //////////////////////////////////////////////////////////////
 // Define interfaces for nested objects first
 interface PrivacySettings {
@@ -183,24 +220,4 @@ export interface Setting {
   accessibilitySettings: AccessibilitySettings;
   createdAt?: Date;
   updatedAt?: Date;
-}
-
-export interface Message {
-  _id?: string;
-  receiver: User | string;
-  sender: User | string;
-  timestamp: Date;
-  readBy: User[] | string[];
-  text: string;
-  createdAt?: Date
-  updatedAt?: Date
-}
-export interface Chat {
-  _id?: string;
-  lastMessage: string;
-  lastMessageTimestamp: Date;
-  participants: User[] | string[];
-  messages?: Message[];
-  createdAt?: Date
-  updatedAt?: Date
 }

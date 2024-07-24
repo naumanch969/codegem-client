@@ -10,7 +10,7 @@ import { Collection as TCollection } from '@/interfaces'
 import { useRole } from '@/hooks/useRole';
 import { adminEmail } from '@/constant';
 import { getProfile, getUsers } from './redux/reducers/userSlice';
-import { getChats } from './redux/reducers/chatSlice';
+import { fetchChats } from './redux/reducers/chatSlice';
 
 const Apps = () => {
   /////////////////////////////////////////////// VARIABLES /////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ const Apps = () => {
   }, [userCollections]);
   useEffect(() => {
     dispatch<any>(getProfile())
-    dispatch<any>(getChats())
+    dispatch<any>(fetchChats(''))
   }, [])
   useEffect(() => {
     loggedUser?.email == adminEmail && onSetRole('Admin')

@@ -39,6 +39,7 @@
     "dayjs": "^1.11.7",
     "email-validator": "^2.0.4",
     "esbuild": "^0.16.9",
+    "firebase": "^10.12.4",
     "framer-motion": "^10.8.5",
     "geo-tz": "^7.0.6",
     "js-cookie": "^3.0.1",

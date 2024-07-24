@@ -84,3 +84,60 @@ export const getRelativeTime = (date: Date) => {
     if (!date) return ''
     return formatDistanceToNow(new Date(date), { addSuffix: true });
 };
+
+
+// 10)
+export const getOtherUserDetail = (chatParticipantIds: string[], users: User[], currentUserId: string) => {
+
+    if (!currentUserId) return
+
+    const otherUserId = chatParticipantIds?.find((pId) => pId != currentUserId); // user to chat with
+    const otherUser = users?.find((user) => user?._id === otherUserId); // Finding userToChatWith details
+
+    return otherUser;
+};
+
+// 11)
+export const removeUndefinedFields = (obj: any): any => {
+    const newObj: any = {};
+
+    for (const key in obj) {
+        if (obj.hasOwnProperty(key) && obj[key] !== undefined) {
+            newObj[key] = obj[key];
+        }
+    }
+
+    return newObj;
+}
+
+// 12)
+export const formatChatTimestamp = (timestamp: any) => {
+    let dateObject;
+    if (timestamp?.seconds)
+        dateObject = timestamp.toDate(); // if firebase timestamp is provided
+    else dateObject = new Date(timestamp); // if js Date object is  provided
+
+    const now: any = new Date();
+    const diffInDays = Math.floor((now - dateObject) / (1000 * 60 * 60 * 24));
+
+    if (diffInDays === 0) {
+        // If the timestamp is from today, format time with AM/PM
+        const hours = dateObject.getHours();
+        const minutes = dateObject.getMinutes();
+        const amOrPm = hours < 12 ? 'AM' : 'PM';
+        const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+        return `${formattedHours}:${formattedMinutes} ${amOrPm}`;
+    } else {
+        // If the timestamp is from a previous date, format date along with time in AM/PM
+        const options = {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true,
+        };
+        return dateObject.toLocaleDateString(undefined, options);
+    }
+};
