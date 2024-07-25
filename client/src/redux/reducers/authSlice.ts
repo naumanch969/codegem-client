@@ -37,7 +37,6 @@ export const verifyRegisterationEmail = createAsyncThunk<boolean, string>('verif
 export const login = createAsyncThunk<{ result: User, token: string }, { username: string, password: string }>('login', async (userCredentials) => {
     try {
         const { data: { token, message, result } } = await api.login(userCredentials);
-        console.log('token', token, message, result)
         toast.success(message)
         return { result, token };
     } catch (error) {

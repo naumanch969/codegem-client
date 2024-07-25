@@ -4,7 +4,6 @@ import CodeCard from '../../Codes/Code';
 import { RootState } from '../../../redux/store';
 import { Code, User } from '../../../interfaces';
 import { getUserCodes } from '../../../redux/actions/code';
-import { Loader } from '../../../utils/Components';
 
 const Codes = () => {
 
@@ -17,9 +16,13 @@ const Codes = () => {
   }, [])
 
   return (
-    <div className="w-full flex flex-col gap-8 ">
+    <div className="w-full flex flex-col gap-3 ">
+
+      {/* Heading */}
+      <h3 className="text-3xl font-bold text-dark-slate-blue">Codes</h3>
+
       {
-        <div className="flex flex-col gap-6 lg:px-60 md:px-50 sm:px-10 px-4 ">
+        <div className="flex flex-col gap-6 ">
           {
             isFetching
               ?

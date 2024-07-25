@@ -3,6 +3,7 @@ import { User } from "@/interfaces";
 import { setLoggedUserSlice, setLoggedUserTokenSlice } from "@/redux/reducers/userSlice";
 import { io } from "socket.io-client";
 import { formatDistanceToNow } from 'date-fns';
+import { Timestamp } from "firebase/firestore";
 
 // 1)
 export const limitText = (str: string | undefined, limit: number): string | undefined => {
@@ -99,16 +100,36 @@ export const getOtherUserDetail = (chatParticipantIds: string[], users: User[], 
 
 // 11)
 export const removeUndefinedFields = (obj: any): any => {
-    const newObj: any = {};
-
-    for (const key in obj) {
-        if (obj.hasOwnProperty(key) && obj[key] !== undefined) {
-            newObj[key] = obj[key];
+    if (Array.isArray(obj)) {
+        return obj.map(item => removeUndefinedFields(item));
+    } else if (obj !== null && typeof obj === 'object') {
+        // Handle Date objects
+        if (obj instanceof Date) {
+            return obj;
         }
+
+        const newObj: any = {};
+
+        for (const key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                if (obj[key] === undefined) {
+                    newObj[key] = '';
+                } else if (Array.isArray(obj[key])) {
+                    newObj[key] = obj[key].map((item: any) => removeUndefinedFields(item));
+                } else if (obj[key] !== null && typeof obj[key] === 'object') {
+                    newObj[key] = removeUndefinedFields(obj[key]);
+                } else {
+                    newObj[key] = obj[key];
+                }
+            }
+        }
+
+        return newObj;
     }
 
-    return newObj;
-}
+    return obj;
+};
+
 
 // 12)
 export const formatChatTimestamp = (timestamp: any) => {
@@ -139,5 +160,40 @@ export const formatChatTimestamp = (timestamp: any) => {
             hour12: true,
         };
         return dateObject.toLocaleDateString(undefined, options);
+    }
+};
+
+// 13)
+export const formatChatMessageTimestamp = (date: any): string => {
+
+    if (!date) return ''
+
+    const now = new Date();
+    const thisDate = date?.seconds ? date?.toDate() : new Date(date as Date)
+
+    const isToday = thisDate?.toDateString() === now?.toDateString();
+
+    const timeOptions: Intl.DateTimeFormatOptions = {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true,
+    };
+
+    const dateOptions: Intl.DateTimeFormatOptions = {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    };
+
+    const timeFormatter = new Intl.DateTimeFormat('en-US', timeOptions);
+    const dateFormatter = new Intl.DateTimeFormat('en-US', dateOptions);
+
+    const timeString = timeFormatter?.format(thisDate);
+
+    if (isToday) {
+        return timeString;
+    } else {
+        const dateString = dateFormatter?.format(thisDate);
+        return `${dateString}, ${timeString}`;
     }
 };

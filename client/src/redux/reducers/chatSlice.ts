@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { collection, doc, getDocs, addDoc, setDoc, getDoc, query, where, updateDoc, arrayUnion, orderBy, writeBatch, onSnapshot, } from 'firebase/firestore';
+import { collection, doc, getDocs, addDoc, setDoc, getDoc, query, where, updateDoc, arrayUnion, orderBy, writeBatch, onSnapshot, Timestamp } from 'firebase/firestore';
 import { Chat, ChatMessage } from '../../interfaces';
 import { chatCollection, db } from '@/configs/firebase';
 import { removeUndefinedFields } from '@/utils/functions/function';
@@ -31,143 +31,142 @@ const setChatDoc = (chatRef: any): Chat | undefined => {
 };
 
 
-// Fetch all chats for a user
 export const fetchChats = createAsyncThunk('chats/fetchChats', async (userId: string, { dispatch }) => {
     try {
         if (!userId) return [];
+        const q = query(
+            chatCollection,
+            where('participantIds', 'array-contains', userId),
+            orderBy('lastMessageTimestamp', 'desc')
+        );
 
-        const q = query(chatCollection, where('participants', 'array-contains', userId), orderBy('lastMessageTimestamp', 'desc'));
-
-        // Order by lastMessageTimestamp in descending order
-        const unsubscribe = onSnapshot(q, async (snapshot) => {
+        onSnapshot(q, (snapshot) => {
             const chats = snapshot.docs.map((doc) => setChatDoc(doc));
-            let filteredChats = chats.filter((chat) => chat !== undefined) as Chat[];
+            let filteredChats: Chat[] = chats.filter((chat) => chat !== undefined)
             dispatch(setChatsSlice(filteredChats));
         });
 
-        // Unsubscribe from the snapshot listener when no longer needed
-        return () => unsubscribe();
+        return [];
 
     } catch (error) {
-        console.error('chat get error ', error);
+        console.error('Error [fetchChats]', error);
+        throw error;
+    }
+});
+
+export const fetchMessages = createAsyncThunk('chats/fetchMessages', async ({ chatId }: { chatId: string }, { dispatch }) => {
+    try {
+
+        const messagesRef = collection(db, 'chats', chatId, 'messages');
+        const q = query(messagesRef, orderBy('createdAt'));
+
+        var messages;
+        onSnapshot(q, (snapshot) => {
+            messages = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data(), }));
+            dispatch(setCurrentChatMessagesSlice({ chatId, messages }));
+        });
+    } catch (error) {
+        console.error('Error [fetchMessages]', error);
         throw error;
     }
 }
 );
 
-// Fetch messages for a specific chat
-export const fetchMessages = createAsyncThunk('chats/fetchMessages',
-    async ({ chatId }: { chatId: string }, { dispatch }) => {
-        try {
+export const getUnreadMessageCount = createAsyncThunk('chats/getUnreadMessageCount', async ({ chatId, userId }: { chatId: string; userId: string }) => {
+    try {
+        const messagesRef = collection(db, 'chats', chatId, 'messages');
 
-            const messagesRef = collection(db, 'chats', chatId, 'messages');
-            const q = query(messagesRef, orderBy('timestamp'));
+        // Query to fetch all messages
+        const allMessagesQuery = query(messagesRef);
 
-            var messages;
-            onSnapshot(q, (snapshot) => {
-                messages = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data(), }));
-                dispatch(setCurrentChatMessagesSlice({ chatId, messages }));
-            });
-        } catch (error) {
-            console.error('fetch chat messages error', error);
-            throw error;
-        }
+        // Query to fetch messages read by the user
+        const readMessagesQuery = query(messagesRef, where('readBy', 'array-contains', userId.trim()));
+
+        // Execute both queries
+        const allMessagesSnapshot = await getDocs(allMessagesQuery);
+        const readMessagesSnapshot = await getDocs(readMessagesQuery);
+
+        // Calculate unread messages count
+        const totalMessagesCount = allMessagesSnapshot.docs.length;
+        const readMessagesCount = readMessagesSnapshot.docs.length;
+        const unreadMessagesCount = totalMessagesCount - readMessagesCount;
+
+        return unreadMessagesCount;
+    } catch (error) {
+        console.error('Error [getUnreadMessageCount]', error);
+        throw error;
     }
+}
 );
 
-export const getUnreadMessageCount = createAsyncThunk(
-    'chats/getUnreadMessageCount',
-    async ({ chatId, userId }: { chatId: string; userId: string }) => {
-        try {
-            const messagesRef = collection(db, 'chats', chatId, 'messages');
-
-            // Query to fetch all messages
-            const allMessagesQuery = query(messagesRef);
-
-            // Query to fetch messages read by the user
-            const readMessagesQuery = query(messagesRef, where('readBy', 'array-contains', userId.trim()));
-
-            // Execute both queries
-            const allMessagesSnapshot = await getDocs(allMessagesQuery);
-            const readMessagesSnapshot = await getDocs(readMessagesQuery);
-
-            // Calculate unread messages count
-            const totalMessagesCount = allMessagesSnapshot.docs.length;
-            const readMessagesCount = readMessagesSnapshot.docs.length;
-            const unreadMessagesCount = totalMessagesCount - readMessagesCount;
-
-            return unreadMessagesCount;
-        } catch (error) {
-            console.error('Error in count', error);
-            throw error;
-        }
-    }
-);
-
-// Fetch a specific chat by ID
-export const fetchChat = createAsyncThunk(
-    'chats/fetchChat',
-    async (chatId: string) => {
+export const fetchChat = createAsyncThunk('chats/fetchChat', async (chatId: string) => {
+    try {
         const chatDoc = await getDoc(doc(db, 'chats', chatId));
         return setChatDoc(chatDoc);
     }
+    catch (error) {
+        console.error('Error [fetchChat]', error)
+    }
+}
 );
 
-// Create or update a chat
 export const setChat = createAsyncThunk('chats/setChat', async (chatData: Chat) => {
     try {
-        chatData.id = chatData?.id || doc(chatCollection).id;
+        if (!chatData) throw new Error('Chat data is required');
 
-        chatData = removeUndefinedFields(chatData)
+        chatData.id = chatData.id || doc(chatCollection).id;
+        chatData = removeUndefinedFields(chatData);
+        chatData.updatedAt = new Date()
 
-        const chatRef = doc(chatCollection, chatData?.id);
+        const chatRef = doc(chatCollection, chatData.id);
+
         await setDoc(chatRef, chatData, { merge: true });
-        // return { id: chatRef.id };
+
         return chatData;
     } catch (error) {
-        console.error(error)
+        console.error('Error [setChat]', error);
+        throw error; // Ensure to throw the error to handle it in the component
     }
-}
-);
+});
 
-// Add a message to a chat
-export const sendMessage = createAsyncThunk('chats/sendMessage', async ({ chatId, messageData }: { chatId: string; messageData: any },
-) => {
+
+
+export const sendMessage = createAsyncThunk('chats/sendMessage', async ({ chatId, messageData }: { chatId: string; messageData: ChatMessage }) => {
     try {
-        const messagesRef = collection(db, 'chats', chatId, 'messages');
-        const messageRef = await addDoc(messagesRef, { ...messageData, chatId });
 
+        if (!chatId) return
+
+        const input = { ...messageData, createdAt: new Date(), updatedAt: new Date() }
+        const messagesRef = collection(db, 'chats', chatId, 'messages');
+        const messageRef = await addDoc(messagesRef, { ...removeUndefinedFields(input), chatId });
         if (messageRef.id) {
-            // Update the chats collection with the last message info
             const chatRef = doc(db, 'chats', chatId);
             await updateDoc(chatRef, {
-                lastMessage: messageData?.text, // Assuming messageData contains a 'text' field
-                lastMessageTimestamp: new Date(), // Update with the timestamp of the message
+                lastMessage: input?.text,
+                lastMessageTimestamp: new Date(),
             });
         }
 
-        return { ...messageData, chatId, id: messageRef.id, timestamp: messageData?.timestamp, };
+        return { ...input, chatId, id: messageRef.id };
     } catch (error) {
-        console.error('send message erro ', error);
+        console.error('Error [sendMessage]', error);
     }
 }
 );
 
-// Mark a single message as read
-export const markMessageAsRead = createAsyncThunk('chats/markMessageAsRead',
-    async ({ chatId, messageId, userId, }: { chatId: string; messageId: string; userId: string },) => {
-        try {
-            const messageRef = doc(db, 'chats', chatId, 'messages', messageId);
-            await updateDoc(messageRef, {
-                readBy: arrayUnion(userId),
-            });
-            return { messageId, userId };
-        } catch (error) {
-        }
+export const markMessageAsRead = createAsyncThunk('chats/markMessageAsRead', async ({ chatId, messageId, userId, }: { chatId: string; messageId: string; userId: string },) => {
+    try {
+        const messageRef = doc(db, 'chats', chatId, 'messages', messageId);
+        await updateDoc(messageRef, {
+            readBy: arrayUnion(userId),
+        });
+        return { messageId, userId };
+    } catch (error) {
+        console.error('Error [markMessageAsRead]', error)
     }
+}
 );
 
-// Mark all messages in a single chat as read
 export const markAllMessagesAsRead = createAsyncThunk('chats/markAllMessagesAsRead', async ({ chatId, userId }: { chatId: string; userId: string },) => {
     try {
         const messagesRef = collection(db, 'chats', chatId, 'messages');
@@ -189,19 +188,15 @@ export const markAllMessagesAsRead = createAsyncThunk('chats/markAllMessagesAsRe
 
         return { chatId, userId };
     } catch (error) {
+        console.error('Error [markAllMessagesAsRead]', error)
     }
-}
-);
+});
 
 const sortChats = (chats: Chat[]) => {
     return chats.sort((a, b) => {
-        const aTimestamp = a?.lastMessageTimestamp?.seconds
-            ? a?.lastMessageTimestamp?.toDate()
-            : new Date(a?.lastMessageTimestamp);
-        const bTimestamp = b?.lastMessageTimestamp?.seconds
-            ? b?.lastMessageTimestamp?.toDate()
-            : new Date(b?.lastMessageTimestamp);
-        return bTimestamp.getTime() - aTimestamp.getTime();
+        const aTimestamp = a?.lastMessageTimestamp?.seconds ? a?.lastMessageTimestamp?.toDate() : new Date(a?.lastMessageTimestamp);
+        const bTimestamp = b?.lastMessageTimestamp?.seconds ? b?.lastMessageTimestamp?.toDate() : new Date(b?.lastMessageTimestamp);
+        return bTimestamp?.getTime() - aTimestamp?.getTime();
     })
         .filter((c) => c !== undefined);
 }
@@ -213,30 +208,19 @@ const chatsSlice = createSlice({
     reducers: {
         resetState: () => initialState,
         setCurrentChatMessagesSlice: (state, action) => {
-            if (state.currentChat?.id == action.payload?.chatId)
+            if (state.currentChat?.id == action.payload?.chatId) {
                 state.currentChatMessages = action.payload.messages
+            }
         },
         setCurrentChatSlice: (state, action) => {
             state.currentChat = action.payload
         },
         setChatsSlice: (state, action: { payload: Chat[] }) => {
-            state.chats = action.payload?.sort((a, b) => {
-                const aTimestamp = a?.lastMessageTimestamp?.seconds
-                    ? a?.lastMessageTimestamp?.toDate()
-                    : new Date(a?.lastMessageTimestamp);
-                const bTimestamp = b?.lastMessageTimestamp?.seconds
-                    ? b?.lastMessageTimestamp?.toDate()
-                    : new Date(b?.lastMessageTimestamp);
-                return bTimestamp?.getTime() - aTimestamp?.getTime();
-            })
+            state.chats = sortChats(action.payload)
         },
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchChats.fulfilled, (state, action) => {
-                state.isLoading = false;
-                state.chats = sortChats(action.payload as Chat[])
-            })
             .addCase(setChat.fulfilled, (state, action) => {
                 state.isLoading = false;
                 const isChatAlreadyExists = state.chats.some((chat) => chat?.id === action.payload?.id);

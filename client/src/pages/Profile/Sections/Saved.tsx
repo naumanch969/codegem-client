@@ -16,9 +16,13 @@ const Saved = () => {
   }, [])
 
   return (
-
     <div className="w-full flex flex-col gap-8 ">
-      <div className="flex flex-col gap-6 lg:px-60 md:px-50 sm:px-10 px-4 ">
+
+      {/* Heading */}
+      <h3 className="text-3xl font-bold mb-6 text-dark-slate-blue">Saved Snippets</h3>
+
+      {/* Codes */}
+      <div className="flex flex-col gap-6 ">
         {
           isFetching
             ?

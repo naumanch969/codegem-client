@@ -27,11 +27,11 @@ export const sendMail = (to, subject, html) => {
       html,
     };
     transporter.sendMail(mailOptions, function (err, info) {
-      if (err) console.log("err in sending mail", err);
+      if (err) console.error("err in sending mail", err);
       else console.log("Mail transfered successfully.");
     });
   } catch (error) {
-    console.log("error", error);
+    console.error("error", error);
   }
 };
 
@@ -42,7 +42,7 @@ export const createNotification = async (userId, title, description) => {
     if (!userId) return console.error('UserId is required for notificaiton')
     await Notification.create({ title, description, user: userId });
   } catch (error) {
-    console.log("Error in createNotification: ", error);
+    console.error("Error in createNotification: ", error);
   }
 };
 

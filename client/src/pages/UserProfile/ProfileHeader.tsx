@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { User } from '../../interfaces';
+import { Chat, User } from '../../interfaces';
 import { RootState } from '../../redux/store';
 import { SampleProfileCoverImage } from '../../assets';
 import { Button } from '@/components/ui/button';
@@ -9,19 +9,27 @@ import { useRole } from '@/hooks/useRole';
 import { useNavigate } from 'react-router-dom';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { deleteUser } from '@/redux/reducers/userSlice';
+import { fetchChats, setChat, setCurrentChatSlice } from '@/redux/reducers/chatSlice';
+import toast from 'react-hot-toast';
+import { MessageCircle } from 'lucide-react';
+import { Loader, Loading } from '@/utils/Components';
+import { useStateContext } from '@/contexts/ContextProvider';
 
 const ProfilePage = () => {
 
     ///////////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////////////
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const { currentUser, isFetching: userFetching }: { currentUser: User | null, isFetching: boolean } = useSelector((state: RootState) => state.user)
+    const { loggedUser, currentUser, isFetching: userFetching } = useSelector((state: RootState) => state.user)
+    const { chats } = useSelector((state: RootState) => state.chat)
     const { sentRequests, receivedRequests, friends } = useSelector((state: RootState) => state.friend)
     const { role } = useRole()
+    const { setSelectedChat } = useStateContext()
 
     ///////////////////////////////////////////////// STATES //////////////////////////////////////////////////////////
     const [userType, setUserType] = useState<'friend' | 'request_sent' | 'request_received' | 'none'>('none')
     const [friendsFetching, setFriendsFetching] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     ///////////////////////////////////////////////// USE EFFECTS //////////////////////////////////////////////////////////
     useEffect(() => {
@@ -30,6 +38,10 @@ const ProfilePage = () => {
         dispatch<any>(getSentRequests('')).finally(() => setFriendsFetching(false))
         dispatch<any>(getFriends('')).finally(() => setFriendsFetching(false))
     }, [])
+    useEffect(() => {
+        if (chats?.length > 0) return
+        dispatch<any>(fetchChats(loggedUser?._id!))
+    }, []);
     useEffect(() => {
         if (friends.some(user => user._id == currentUser?._id)) { // if friend
             setUserType('friend')
@@ -44,9 +56,6 @@ const ProfilePage = () => {
             setUserType('none')
         }
     }, [sentRequests, currentUser, friends, receivedRequests])
-    useEffect(() => {
-        console.log('currentUser', currentUser)
-    }, [currentUser])
     ///////////////////////////////////////////////// FUNCTIONS //////////////////////////////////////////////////////////
     const onClick = () => {
         if (userType == 'request_sent')
@@ -66,6 +75,45 @@ const ProfilePage = () => {
         }
     }
 
+    const onChat = () => {
+
+        const findedChat = chats?.find(c => c?.participantIds?.includes(currentUser?._id!))
+        if (findedChat) {
+            localStorage.setItem('lastChat', findedChat?.id!);
+            setSelectedChat({ ...findedChat, otherUser: currentUser! });
+            dispatch(setCurrentChatSlice({ ...findedChat, otherUser: currentUser! }))
+            navigate('/messages')
+        }
+        else {
+            const input: Chat = {
+                id: '',
+                createdAt: new Date(),
+                participantIds: [loggedUser?._id!, currentUser?._id!],
+                lastMessage: '',
+                lastMessageTimestamp: new Date(),
+                participants: [loggedUser!, currentUser!],
+                messages: []
+            }
+
+            setLoading(true)
+            dispatch<any>(setChat(input))
+                .then(({ payload }: { payload: Chat }) => {
+                    localStorage.setItem('lastChat', payload?.id!);
+                    setSelectedChat({ ...payload, otherUser: currentUser! });
+                    dispatch(setCurrentChatSlice({ ...payload, otherUser: currentUser! }))
+                    navigate('/messages')
+                })
+                .catch(() => {
+                    toast.error('Something went wrong!')
+                })
+                .finally(() => {
+                    setLoading(false)
+                })
+        }
+
+    }
+
+    ///////////////////////////////////////////////// RENDER //////////////////////////////////////////////////////////
     return (
         <div className="flex flex-col w-full">
             <div className="w-full h-[20rem] rounded-[6px] overflow-hidden " >
@@ -101,6 +149,9 @@ const ProfilePage = () => {
                 </div>
 
                 <div className="flex justify-end gap-4">
+                    <Button onClick={onChat} variant='secondary' className='flex items-center gap-2' >
+                        <MessageCircle className='w-4 h-4' /> {loading ? <Loading size='sm' /> : <>Message</>}
+                    </Button>
                     {
                         userType != 'friend' &&
                         <Button onClick={onClick} disabled={friendsFetching || userFetching} >

@@ -171,10 +171,9 @@ export interface ChatMessage {
   id?: string;
   receiverId: string;
   senderId: string;
-  timestamp: any;
   readBy: string[];
-  receiverInfo: { displayName: string; photoUrl: string; lastMessage: string };
-  senderInfo: { displayName: string; photoUrl: string };
+  receiverInfo: { username: string; photoUrl: string; };
+  senderInfo: { username: string; photoUrl: string };
   text: string;
   updatedAt: any;
   createdAt: any;

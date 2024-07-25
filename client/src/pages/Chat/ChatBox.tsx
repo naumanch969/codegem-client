@@ -1,11 +1,11 @@
-import React, { KeyboardEventHandler, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Send } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import { RootState } from '@/redux/store';
 import { useStateContext } from '@/contexts/ContextProvider';
-import { formatChatTimestamp, getOtherUserDetail } from '@/utils/functions/function';
+import { formatChatMessageTimestamp, getOtherUserDetail } from '@/utils/functions/function';
 import { Chat, ChatMessage, User } from '@/interfaces';
 import { fetchMessages, sendMessage, setChatsSlice, setCurrentChatMessagesSlice, setCurrentChatSlice } from '@/redux/reducers/chatSlice';
 
@@ -15,9 +15,9 @@ export const ChatBox = () => {
   const { pathname } = useLocation()
   const scrollRef = useRef(null);
   const { selectedChat, setSelectedChat, } = useStateContext();
-  const { users } = useSelector((state: RootState) => state.user);
+  const { users, loggedUser } = useSelector((state: RootState) => state.user);
   const { chats, currentChatMessages } = useSelector((state: RootState) => state.chat);
-  const currentUserId = String(localStorage.getItem('userId'));
+  const currentUserId = loggedUser?._id!
   const lastChatId = localStorage.getItem('lastChat') ? String(localStorage.getItem('lastChat')) : null;
 
   ///////////////////////////////////////////////////// STATES ////////////////////////////////////////////////////
@@ -32,7 +32,7 @@ export const ChatBox = () => {
     if ((lastChatId && !selectedChat) || !selectedChat?.otherUser) {
       const finded = chats?.find((c: Chat) => c?.id == lastChatId);
       if (!finded) return;
-      const otherUser: User = getOtherUserDetail(finded?.participantIds, users, currentUserId) as User
+      const otherUser: User = finded?.participants?.find(p => p?._id != currentUserId) as User
       setSelectedChat({ ...finded, otherUser });
       dispatch(setCurrentChatSlice({ ...finded, otherUser }))
     }
@@ -57,7 +57,16 @@ export const ChatBox = () => {
 
     if (inputMessage.trim() == '') return;
 
-    const newMessage = { senderId: currentUserId, text: inputMessage, timestamp: new Date(), readBy: [currentUserId] };
+    const newMessage: ChatMessage = {
+      senderId: currentUserId,
+      text: inputMessage,
+      readBy: [currentUserId],
+      receiverId: selectedChat?.otherUser?._id!,
+      receiverInfo: { username: selectedChat?.otherUser?.username!, photoUrl: selectedChat?.otherUser?.profilePicture! },
+      senderInfo: { username: loggedUser?.firstName!, photoUrl: loggedUser?.profilePicture! },
+      updatedAt: new Date(),
+      createdAt: new Date()
+    };
 
     dispatch(setCurrentChatMessagesSlice({ messages: [...currentChatMessages, newMessage], chatId: selectedChat?.id }));
 
@@ -70,6 +79,7 @@ export const ChatBox = () => {
         dispatch<any>(fetchMessages({ chatId: selectedChat?.id! }));
       });
 
+    setInputMessage('');
     scrollToBottom();
   };
 
@@ -93,24 +103,22 @@ export const ChatBox = () => {
 
   ///////////////////////////////////////////////////// COMPONENTS ////////////////////////////////////////////////////
   const MessageComponent = ({ message }: { message: ChatMessage }) => {
-
     const msg = message?.text
-    const time = formatChatTimestamp(message?.timestamp)
+    const time = formatChatMessageTimestamp(message?.createdAt?.seconds ? message?.createdAt?.toDate() : new Date(message?.createdAt))
     const isMe = message?.senderId == currentUserId
-    const name = users.find((u) => u?._id == message?.senderId)?.username || selectedChat?.otherUser?.username;
-
+    const selectedUser = users.find((u) => u?._id == message?.senderId) || selectedChat?.otherUser
+    const name = selectedUser?.firstName?.length == 0 && selectedUser?.lastName?.length == 0 ? `@${selectedUser?.username}` : `${selectedUser?.firstName} ${selectedUser?.lastName}`
     return (
-      <div className={isMe ? 'ml-auto max-w-125' : 'max-w-125'}>
-        {!isMe && <p className="mb-2.5 text-sm font-medium">{name}</p>}
+      <div className={`w-fit ${isMe ? 'ml-auto max-w-125' : 'max-w-125'}`}>
         <div
-          className={`mb-2.5 rounded-2xl px-5 py-3 dark:bg-boxdark-2 ${isMe
-            ? 'rounded-br-none bg-primary text-white'
-            : 'rounded-tl-none bg-whiten'
+          className={`mb-2.5 rounded-2xl px-5 py-1.5 dark:bg-boxdark-2 ${isMe
+            ? 'rounded-br-none bg-teal-blue text-white'
+            : 'rounded-tl-none bg-warm-gray text-black '
             } `}
         >
           <p>{msg}</p>
+          <p className={`text-[10px] mt-1 ${isMe ? 'text-end text-white' : 'text-start text-black'}`}>{time}</p>
         </div>
-        <p className={`text-xs ${isMe ? 'text-end' : 'text-start'}`}>{time}</p>
       </div>
     );
   };
@@ -138,9 +146,10 @@ export const ChatBox = () => {
           <p className="text-3xl font-semibold ">No current conversation</p>
         </div>
       ) : (
-        <div className="flex h-full flex-col border-l border-stroke dark:border-strokedark xl:w-3/4 ">
+        <div className="flex h-full flex-col border-l border-stroke w-full ">
+
           {/* <!-- ====== Chat Box Start --> */}
-          <div className="sticky flex items-center justify-between border-b border-stroke px-6 py-4.5 dark:border-strokedark">
+          <div className="sticky bg-gray-100 flex items-center justify-between gap-2 border-b border-stroke px-4 py-2 ">
             <div className="flex items-center gap-1">
               <div className="h-13 w-13 overflow-hidden rounded-full cursor-pointer">
                 {(selectedChat?.otherUser?.profilePicture) ? (
@@ -157,12 +166,15 @@ export const ChatBox = () => {
               </div>
               <div>
                 <h5 className="w-max font-medium text-black dark:text-white ">
-                  <span className='cursor-pointer'>{selectedChat?.otherUser?.username}</span>
+                  <span className='cursor-pointer capitalize '>
+                    {selectedChat?.otherUser?.firstName?.length == 0 && selectedChat?.otherUser?.lastName?.length == 0 && `@${selectedChat?.otherUser?.username}`} {selectedChat?.otherUser?.firstName} {selectedChat?.otherUser?.lastName}
+                  </span>
                 </h5>
               </div>
             </div>
           </div>
-          <div ref={scrollRef} className="n-scrollbar h-full max-h-full space-y-3.5 overflow-y-auto px-6 py-7.5 "   >
+
+          <div ref={scrollRef} className="n-scrollbar h-full max-h-full space-y-3.5 overflow-y-auto px-3 py-2 "   >
             {
               loadingMessages
                 ?
@@ -175,29 +187,28 @@ export const ChatBox = () => {
                 ))
             }
           </div>
-          <div className="sticky bottom-0 border-t border-stroke bg-white px-6 py-5 dark:border-strokedark dark:bg-boxdark">
-            <div className="flex items-center justify-between space-x-4.5">
-              <div className="relative w-full">
-                <input
-                  type="text"
-                  placeholder={'Type your message'}
-                  className="h-13 w-full rounded-md border border-stroke bg-gray pl-5 pr-19 text-black placeholder-body outline-none focus:border-primary dark:border-strokedark dark:bg-boxdark-2 dark:text-white"
-                  value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value as string)}
-                  onKeyUp={onKeyUp}
-                />
-              </div>
+
+          <div className="sticky flex bottom-0 border-t bg-gray-100 border-stroke px-3 py-2 dark:bg-boxdark">
+            <div className="relative w-full h-12 ">
+              <input
+                type="text"
+                placeholder={'Type your message'}
+                className="w-full h-full px-2 bg-white rounded-md border border-stroke bg-gray text-black placeholder-body outline-none focus:border-teal-blue dark:bg-boxdark-2 dark:text-white"
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value as string)}
+                onKeyUp={onKeyUp}
+              />
               <button
                 type="button"
                 title="Send Message"
                 onClick={(e) => { onSendMessage(); }}
-                className="flex h-13 w-full max-w-13 items-center justify-center rounded-md bg-primary text-white hover:bg-opacity-90 disabled:cursor-not-allowed disabled:bg-primary/75"
+                className="absolute right-1 top-1/2 h-10 transform -translate-y-1/2 px-2 flex w-fit items-center justify-center rounded-md bg-teal-blue text-white hover:bg-opacity-90 disabled:cursor-not-allowed disabled:bg-teal-blue/75"
               >
                 <Send />
               </button>
-
             </div>
           </div>
+
           {/* <!-- ====== Chat Box End --> */}
         </div>
       )}

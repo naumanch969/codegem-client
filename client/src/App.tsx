@@ -21,6 +21,7 @@ const Apps = () => {
 
   /////////////////////////////////////////////// STATES /////////////////////////////////////////////////////
 
+  
   /////////////////////////////////////////////// USE EFFECTS /////////////////////////////////////////////////////
   useEffect(() => {
     dispatch<any>(getUsers(''));
@@ -78,7 +79,7 @@ const Apps = () => {
           <Route path='notifications/:notificationId' element={<Notifications />} />
           <Route path='create' element={<Create />} />
           <Route path='user/:userId' element={<UserProfile />} />
-          <Route path="/chat" element={<Chat />} />
+          <Route path="/messages" element={<Chat />} />
           <Route path='profile' element={<Profile />} />
           <Route path="profile/edit" element={<EditProfile />} />
           <Route path='more' element={<More />} />

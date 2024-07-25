@@ -34,8 +34,8 @@ const Settings = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h1 className="text-3xl font-bold mb-6 text-dark-slate-blue">Settings</h1>
+    <div className="w-full flex flex-col ">
+      <h2 className="text-3xl font-bold mb-6 text-dark-slate-blue">Settings</h2>
 
       {/* Account Settings */}
       <SettingsSection title="Account Settings">

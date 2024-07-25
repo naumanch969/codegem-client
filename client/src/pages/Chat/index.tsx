@@ -12,18 +12,17 @@ const Chat = () => {
   /////////////////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////
   const dispatch = useDispatch();
   const { chats } = useSelector((state: RootState) => state.chat);
-  const currentUserId = String(localStorage.getItem('userId'));
+  const { loggedUser } = useSelector((state: RootState) => state.user)
 
   /////////////////////////////////////////////////////// STATES //////////////////////////////////////////////////
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedFilter, setSelectedFilter] = useState<'all' | 'userApplications' | 'groups' | 'candidates'>('all');
   const [userChats, setUserChats] = useState(chats);
 
   /////////////////////////////////////////////////////// USE EFFECTS //////////////////////////////////////////////////
   useEffect(() => {
     if (chats?.length > 0) return
     setIsLoading(true);
-    dispatch<any>(fetchChats(currentUserId)).then(() => setIsLoading(false));
+    dispatch<any>(fetchChats(loggedUser?._id!)).then(() => setIsLoading(false));
   }, []);
   useEffect(() => {
     dispatch<any>(getUsers(''));
@@ -33,28 +32,25 @@ const Chat = () => {
   }, [chats]);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full">
 
-      <div className="grid grid-cols-12 gap-4 md:gap-6 2xl:gap-7.5">
-
-        <div className="col-span-12 xl:col-span-12">
-          <div className="h-[calc(110vh-186px)] overflow-hidden sm:h-[calc(110vh-174px)]">
-            {isLoading ? (
-              <div className="flex h-full w-full items-center justify-center">
-                <Loader />
-              </div>
-            ) : (
-              <div className="h-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark xl:flex">
-                <ChatList
-                  chats={userChats}
-                  setChats={setUserChats}
-                />
-                <ChatBox />
-              </div>
-            )}
+      <div className="h-[calc(100vh-4rem)] overflow-hidden w-full ">
+        {isLoading ? (
+          <div className="flex h-full w-full items-center justify-center">
+            <Loader />
           </div>
-        </div>
+        ) : (
+          <div className="grid xl:grid-cols-10 grid-cols-6 gap-4 w-full h-full rounded-lg p-4 bg-white shadow-default ">
+            <div className="xl:col-span-3 col-span-2 bg-gray-100 border-[2px] border-dark-slate-blue-darken rounded-lg overflow-hidden ">
+              <ChatList chats={userChats} setChats={setUserChats} />
+            </div>
+            <div className="xl:col-span-7 col-span-4 bg-dark-slate-50 border-[2px] border-dark-slate-blue-darken rounded-lg overflow-hidden ">
+              <ChatBox />
+            </div>
+          </div>
+        )}
       </div>
+
     </div>
   );
 };

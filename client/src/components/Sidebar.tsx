@@ -1,22 +1,24 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 import {
     HomeOutlined, PersonOutlined, GroupOutlined, CollectionsBookmarkOutlined, NotificationsNoneOutlined, AddBoxOutlined, AccountCircleOutlined, DensityMediumOutlined,
     Home, Person, Group, CollectionsBookmark, NotificationsNone, AddBox, AccountCircle, DensityMedium, Code, CodeOutlined,
-    FormatAlignCenterSharp,
     SyncProblem,
     SyncProblemOutlined,
     CodeOff,
-    CodeOffOutlined
+    CodeOffOutlined,
+    ChatBubble,
+    ChatBubbleOutlined
 } from "@mui/icons-material"
 import { lowercase } from '../utils/functions/function'
 import { Tooltip } from '@mui/material'
 import { Link, useLocation } from 'react-router-dom'
 import { useStateContext } from "../contexts/ContextProvider"
+import { MessageCircle, MessageCircleDashedIcon, MessageCircleIcon } from "lucide-react"
 
 
 const Sidebar = () => {
 
-    //////////////////////////////// VARIABLES //////////////////////////////////////
+    ///////////////////////////////////////////////////////// VARIABLES /////////////////////////////////////////////////////////
     const location = useLocation()
     const { showSidebar, setShowSidebar } = useStateContext()
     const { pathname } = useLocation()
@@ -70,10 +72,10 @@ const Sidebar = () => {
             active: pathname.includes('/notifications')
         },
         {
-            name: 'Create',
-            iconFilled: AddBox,
-            iconOutlined: AddBoxOutlined,
-            active: pathname.includes('/create')
+            name: 'Messages',
+            iconFilled: MessageCircleIcon,
+            iconOutlined: MessageCircle,
+            active: pathname.includes('/messages')
         },
         {
             name: 'Profile',
@@ -88,25 +90,25 @@ const Sidebar = () => {
             active: pathname.includes('/more')
         },
     ]
-    //////////////////////////////// STATES /////////////////////////////////////////
+    ///////////////////////////////////////////////////////// STATES /////////////////////////////////////////////////////////
 
-    //////////////////////////////// USE EFFECTS ////////////////////////////////////
+    ///////////////////////////////////////////////////////// USE EFFECTS /////////////////////////////////////////////////////////
 
 
-    //////////////////////////////// FUNCTIONS //////////////////////////////////////
+    ///////////////////////////////////////////////////////// FUNCTIONS /////////////////////////////////////////////////////////
 
     return (
-        <div style={{ height: 'calc(100vh-4rem)' }} className={`h-full w-full flex gap-[1.5rem] py-[1.5rem] overflow-y-scroll ${showSidebar ? 'px-[1rem]' : 'px-0 '} `}>
+        <div style={{ height: 'calc(100vh-4rem)' }} className={`h-full w-full flex gap-6 py-6 overflow-y-auto ${showSidebar ? 'px-3' : 'px-0 '} `}>
             {
                 showSidebar
                     ?
-                    <div className={`flex flex-col justify-start gap-4 w-full h-full`}>
+                    <div className={`flex flex-col justify-start gap-1.5 w-full h-full`}>
                         {
                             sidebarLinks.map((item, index) => (
                                 <Link
                                     key={index}
                                     to={`/${lowercase(item.name)}`}
-                                    className={`${item.active && 'font-extrabold bg-dark-slate-blue-lighten text-teal-blue '} hover:bg-dark-slate-blue-lighten group hover:text-white flex gap-[12px] py-[10px] px-[6px] w-full rounded-[4px] cursor-pointer `}
+                                    className={`${item.active && 'font-extrabold bg-dark-slate-blue-lighten text-teal-blue '} hover:bg-dark-slate-blue-lighten group hover:text-white flex gap-3 py-2.5 px-2 w-full rounded-md cursor-pointer `}
                                 >
                                     {
                                         item.active

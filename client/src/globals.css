@@ -119,3 +119,9 @@
 .font-dancing-script {
   font-family: 'Dancing Script', cursive;
 }
+
+/*  */
+.profile-active-menubar-item {
+  color: #fff;
+  background: #00A5B5
+}

@@ -19,7 +19,6 @@ import settingRoutes from "./routes/setting.js";
 import streakRoutes from "./routes/streak.js";
 import challengeRoutes from "./routes/challenge.js";
 import commentRoutes from "./routes/comment.js";
-import chatRoutes from "./routes/chat.js";
 
 dotenv.config();
 const app = express();
@@ -36,7 +35,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 app.use("/uploads", express.static(join(__dirname, "uploads")));
 
-app.use("/", generalRoutes)
+app.use("/", generalRoutes);
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/friend", friendRoutes);
@@ -48,7 +47,6 @@ app.use("/code", codeRoutes);
 app.use("/streak", streakRoutes);
 app.use("/challenge", challengeRoutes);
 app.use("/comment", commentRoutes);
-app.use("/chat", chatRoutes);
 
 app.use((err, req, res, next) => {
   const messae = err.messae || "Something went wrong.";
@@ -63,9 +61,7 @@ app.get("/", (req, res) => {
 
 mongoose
   .connect(CONNECTION_URL)
-  .then(() => app.listen(PORT, () => console.log(`listening at port ${PORT}`)))
+  .then(() => app.listen(PORT, () => console.log(`Listening at port ${PORT}`)))
   .catch((err) =>
-    console.log(
-      `the error to connect to mongodb is ${err} and error message is ${err.message} `
-    )
+    console.error(`ERROR in connection with MONGODB: `, err)
   );

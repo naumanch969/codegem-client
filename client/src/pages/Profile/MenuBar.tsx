@@ -1,24 +1,34 @@
-import React, { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Card } from '@/components/ui/card';
+import { User } from '@/interfaces';
+import { RootState } from '@/redux/store';
+import React from 'react';
+import { useSelector } from 'react-redux';
 
-const ProfileMenuBar = ({ activeMenuItem, setActiveMenuItem }: { activeMenuItem: string, setActiveMenuItem: any }) => {
-    const menuItems = ['About', 'Codes', 'Saved', 'Collections', 'Groups', 'Friends', 'Notifications', 'Settings'];
+const Menubar = ({ menuItems }: { menuItems: { label: string, value: string, onClick: any }[] }) => {
+    const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user);
 
     return (
-        <div className="flex justify-center">
-            <div className="bg-white shadow-md rounded-lg flex overflow-hidden">
-                {menuItems.map(item => (
-                    <button
-                        key={item}
-                        className={`py-2 px-4 ${activeMenuItem.toLowerCase() === item.toLowerCase() ? 'bg-teal-blue text-white' : 'text-gray-700'
-                            } hover:bg-teal-blue-lighten hover:text-white transition-all duration-200 focus:outline-none`}
-                        onClick={() => setActiveMenuItem(item.toLocaleLowerCase())}
+        <Card className="flex flex-col justify-start items-start gap-2 p-2 w-full h-fit sticky top-20 shadow-lg ">
+            <h3 className="text-2xl text-dark-slate-blue font-medium px-2 ">
+                {loggedUser?.firstName} {loggedUser?.lastName}
+            </h3>
+
+            <div className="bg-white rounded-md flex flex-col gap-1 overflow-hidden w-full h-fit ">
+                {menuItems?.map((item, index) => (
+                    <span
+                        key={index}
+                        onClick={() => item.onClick()}
+                        className={`cursor-pointer rounded text-start py-3 px-2 text-cool-gray hover:bg-warm-gray-light hover:text-white transition-all duration-200 focus:outline-none
+                             ${false ? 'bg-warm-gray-light text-white' : ''
+                            }`}
                     >
-                        {item}
-                    </button>
+                        {item.label}
+                    </span>
                 ))}
             </div>
-        </div>
+        </Card>
     );
 };
 
-export default ProfileMenuBar;
+export default Menubar;

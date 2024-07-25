@@ -19,7 +19,6 @@ interface InitialState {
 }
 
 const stringifiedToken = Cookies.get("code.connect");
-console.log('stringifiedToken', stringifiedToken, typeof stringifiedToken)
 const stringifiedUser = localStorage.getItem("profile");
 // const stringifiedAccounts = Cookies.get("accounts");
 

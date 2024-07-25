@@ -45,7 +45,7 @@ export const register = async (req, res, next) => {
 
     await createNotification(newUser?._id, "Welcome to Codegem!", "Congratulations! You've successfully joined Codegem. Start connecting and sharing your moments with friends");
 
-    res.status(200).json({ result: newUser, message: "Registered successfully.", token }); // token is being passed just for development
+    res.status(200).json({ result: newUser, message: "Registered successfully.", token, otp }); // token is being passed just for development
     // .cookie("code.connect", token, {
     //   httpOnly: true,
     //   secure: process.env.NODE_ENV === "production", // Enable secure cookie in production

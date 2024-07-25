@@ -14,11 +14,15 @@ const Collections = () => {
 
   useEffect(() => {
     // Place User Collection
-  }, []) 
+  }, [])
 
   return (
 
-    <div className="w-full flex flex-col gap-8 ">
+    <div className="w-full flex flex-col gap-3 ">
+
+      {/* Heading */}
+      <h3 className="text-3xl font-bold text-dark-slate-blue">Collections</h3>
+
       {/* Your Collections */}
       <div className="flex flex-col">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
