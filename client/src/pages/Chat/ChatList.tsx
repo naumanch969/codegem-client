@@ -67,12 +67,12 @@ export const ChatList = ({ chats, setChats }: { chats: Chat[]; setChats: any }) 
     return (
       <div
         onClick={() => onChatClick(chat, otherUser as User)}
-        className={`${selectedChat?.id == chat?.id ? 'bg-teal-blue' : 'bg-white/80 hover:bg-white/60'} text-black flex cursor-pointer items-center gap-2 rounded-md px-3 py-2.5 `}
+        className={`${selectedChat?.id == chat?.id ? 'bg-copper' : 'bg-white/80 hover:bg-white/60'} text-black flex cursor-pointer items-center gap-2 rounded-md px-3 py-2.5 `}
       >
 
         <Avatar>
           <AvatarImage src={otherUser?.profilePicture} />
-          <AvatarFallback className='bg-white text-dark-slate-blue-darken text-3xl font-medium flex justify-center items-center ' >{otherUser?.username?.charAt(0)}</AvatarFallback>
+          <AvatarFallback className='bg-white text-blackish-darken text-3xl font-medium flex justify-center items-center ' >{otherUser?.username?.charAt(0)}</AvatarFallback>
         </Avatar>
 
         <div className="flex w-fit flex-col ">
@@ -97,7 +97,7 @@ export const ChatList = ({ chats, setChats }: { chats: Chat[]; setChats: any }) 
 
           <button
             title='Chat'
-            className='absolute bottom-3 right-3 bg-teal-blue text-white rounded-full p-3 w-fit'
+            className='absolute bottom-3 right-3 bg-copper text-white rounded-full p-3 w-fit'
             onClick={() => setOpenInitiateChat(true)}
           >
             <MessageCircle />
@@ -105,7 +105,7 @@ export const ChatList = ({ chats, setChats }: { chats: Chat[]; setChats: any }) 
 
           <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <h3 className="text-3xl font-bold text-dark-slate-blue">Chats</h3>
+              <h3 className="text-3xl font-bold text-blackish">Chats</h3>
               <IconButton><AlignRight /></IconButton>
             </div>
 

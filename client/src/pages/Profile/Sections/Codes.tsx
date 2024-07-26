@@ -19,7 +19,7 @@ const Codes = () => {
     <div className="w-full flex flex-col gap-3 ">
 
       {/* Heading */}
-      <h3 className="text-3xl font-bold text-dark-slate-blue">Codes</h3>
+      <h3 className="text-3xl font-bold text-blackish">Codes</h3>
 
       {
         <div className="flex flex-col gap-6 ">

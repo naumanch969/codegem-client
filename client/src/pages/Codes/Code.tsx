@@ -117,20 +117,20 @@ const CodeComponent = ({ code }: { code: Code }) => {
       <Card className='w-full flex flex-col bg-light-gray text-cool-gray-dark'>
 
         {/* username */}
-        <CardHeader className='flex flex-row justify-between items-center w-full p-4 pb-2 '>
+        <CardHeader className='flex flex-row justify-between items-center w-full px-4 py-3 pb-2 '>
           <div className='flex gap-4'>
             <Avatar>
               <AvatarImage src={code?.user?.profilePicture} alt="Profile" />
-              <AvatarFallback className='capitalize' >{code?.user?.firstName?.charAt(0)}</AvatarFallback>
+              <AvatarFallback className='capitalize bg-blackish text-white' >{code?.user?.firstName?.charAt(0)}</AvatarFallback>
             </Avatar>
             <CardTitle className='flex flex-col items-start justify-center'>
-              <Link to={`/user/${code?.user?._id}`} className='text-sm font-semibold capitalize hover:underline hover:text-teal-blue'>
+              <Link to={`/user/${code?.user?._id}`} className='text-sm font-semibold capitalize hover:underline hover:text-copper'>
                 {code?.user?.firstName} {code?.user?.lastName}
               </Link>
               <p className='text-xs font-light '>{code?.user?.username}</p>
             </CardTitle>
             <div className='flex items-center'>
-              <span className='text-teal-blue text-[14px] '>{format(code?.createdAt as Date)}</span>
+              <span className='text-copper text-[14px] '>{format(code?.createdAt as Date)}</span>
             </div>
           </div>
           <DropdownMenu>
@@ -151,27 +151,30 @@ const CodeComponent = ({ code }: { code: Code }) => {
         <CardContent className='flex flex-col gap-[8px] p-4 pb-2 pt-2'>
           {/* title, description, tags */}
           <div className='flex flex-col gap-[2px]'>
-            {/* <h3 className='font-semibold text-[20px] capitalize '>{code?.title}</h3> */}
+            <h3 className='font-semibold text-[20px] capitalize text-blackish-darken '>{code?.title}</h3>
             <CardDescription className='text-[14px]'>{code?.description}</CardDescription>
-            <div className='flex gap-[6px]'>
-              {code?.language && <span className='text-teal-blue italic hover:underline cursor-pointer lowercase '>#{code?.language}</span>}
+            <div className='flex gap-1.5 my-1'>
+              {code?.language && <span className='text-copper italic hover:underline cursor-pointer lowercase '>#{code?.language}</span>}
               {
                 code?.hashTags?.map((tag, index) => (
-                  <span key={index} className='text-muted-foreground italic hover:underline cursor-pointer lowercase '>#{tag}</span>
+                  <span key={index} className='text-link-blue italic hover:underline hover:text-blackish-darken cursor-pointer lowercase '>#{tag}</span>
                 ))
               }
             </div>
           </div>
           {/* code */}
-          <div className='relative rounded-[8px] text-[14px] bg-cool-gray-dark '>
-            <div className="flex justify-between items-center min-h-8 h-fit px-4 py-2 ">
-              <h3 className='font-semibold text-[20px] capitalize text-white ' >{code?.title}</h3>
+          <div className='relative rounded-md overflow-hidden text-sm bg-cool-gray-dark '>
+            <div className="absolute top-2 right-2">
               {
                 copy
                   ?
                   <button className='w-16 h-8 rounded-full text-white ' >Copied!</button>
                   :
-                  <Tooltip placement='top-start' title='Copy'  ><button onClick={() => hanldeCopy(code?.code)} className='w-8 h-8 rounded-full ' ><CopyAllOutlined className='text-white' /></button></Tooltip>
+                  <Tooltip placement='top-start' title='Copy'  >
+                    <button onClick={() => hanldeCopy(code?.code)} className='w-8 h-8 rounded-full ' >
+                      <CopyAllOutlined className='text-white' />
+                    </button>
+                  </Tooltip>
               }
             </div>
             <SyntaxHighlighter
@@ -185,9 +188,9 @@ const CodeComponent = ({ code }: { code: Code }) => {
           </div>
         </CardContent>
 
-        <Separator className='w-full h-[1px] bg-cool-gray-light border-none mb-[6px] mt-[6px]' />
+        <Separator className='w-full h-[1px] bg-cool-gray-light border-none mb-1 mt-1' />
         {/* likes, share, comments */}
-        <CardFooter className={`flex justify-between items-center p-4 pt-1 ${showComments ? 'pb-0' : 'pb-2'} `}>
+        <CardFooter className={`flex justify-between items-center px-4 pt-1 ${showComments ? 'pb-0' : 'pb-2'} `}>
           <div>
             <IconButton onClick={handleLikeCode} size='medium' >
               {code?.likes?.includes(loggedUser?._id as string) ? <ThumbUp fontSize="inherit" /> : <ThumbUpOutlined fontSize="inherit" />}
@@ -197,7 +200,7 @@ const CodeComponent = ({ code }: { code: Code }) => {
           <div className='flex gap-[4px]'>
             <IconButton onClick={() => setOpenShareModal(true)} size='medium' className='relative'>
               <Share fontSize="inherit" />
-              <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-teal-blue-lighten text-white'>
+              <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-copper-lighten text-white'>
                 {code?.shares?.length}
               </span>
             </IconButton>
@@ -212,7 +215,7 @@ const CodeComponent = ({ code }: { code: Code }) => {
             </IconButton>
             <IconButton size='medium' className='relative' onClick={() => setShowComments((pre) => !pre)}>
               <Comment fontSize="inherit" />
-              <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-teal-blue-lighten text-white'>{code?.comments?.length}</span>
+              <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-copper-lighten text-white'>{code?.comments?.length}</span>
             </IconButton>
           </div>
         </CardFooter>

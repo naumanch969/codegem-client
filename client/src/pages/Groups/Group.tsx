@@ -157,34 +157,34 @@ const SingleGroup = () => {
                             </div>
                             <p className="text-gray-600 mb-4">{currentGroup?.description?.charAt(0)?.toUpperCase()! + currentGroup?.description?.slice(1)!}</p>
                             <div className="flex items-center mb-4">
-                                <p className="text-teal-blue mr-2">{currentGroup?.members.length} Members</p>
+                                <p className="text-copper mr-2">{currentGroup?.members.length} Members</p>
                                 <p className="text-gray-500">{currentGroup?.shares?.length} Codes Shared</p>
                             </div>
                             <Tooltip placement='top-start' title='Admin' >
                                 <div className="flex items-center mb-4">
                                     <Person className="text-gray-500 mr-2" />
-                                    <p className="text-teal-blue capitalize ">{(currentGroup?.admin as User)?.firstName} {(currentGroup?.admin as User)?.lastName}</p>
+                                    <p className="text-copper capitalize ">{(currentGroup?.admin as User)?.firstName} {(currentGroup?.admin as User)?.lastName}</p>
                                 </div>
                             </Tooltip>
                             <Tooltip placement='top-start' title='Categories' >
                                 <div className="flex items-center mb-4">
                                     <Category className="text-gray-500 mr-2" />
-                                    <p className="text-teal-blue capitalize italic cursor-pointer ">{currentGroup?.categories.join(', ')}</p>
+                                    <p className="text-copper capitalize italic cursor-pointer ">{currentGroup?.categories.join(', ')}</p>
                                 </div>
                             </Tooltip>
                             <Tooltip placement='top-start' title='Programming Languages' >
                                 <div className="flex items-center mb-4">
                                     <CodeIcon className="text-gray-500 mr-2" />
-                                    <p className="text-teal-blue capitalize italic cursor-pointer ">{currentGroup?.languages.join(', ')}</p>
+                                    <p className="text-copper capitalize italic cursor-pointer ">{currentGroup?.languages.join(', ')}</p>
                                 </div>
                             </Tooltip>
                             <div className="flex items-center mb-4">
                                 <p className="text-gray-500 mr-2">Established:</p>
-                                <p className="text-teal-blue">{new Date(currentGroup?.createdAt as Date).getFullYear()}</p>
+                                <p className="text-copper">{new Date(currentGroup?.createdAt as Date).getFullYear()}</p>
                             </div>
                             <div className="flex justify-between items-center">
                                 {!isJoined &&
-                                    <button onClick={handleJoinGroup} className="px-4 py-2 bg-teal-blue text-white rounded-lg hover:bg-teal-blue-dark">
+                                    <button onClick={handleJoinGroup} className="px-4 py-2 bg-copper text-white rounded-lg hover:bg-copper-dark">
                                         Join Group
                                     </button>
                                 }
@@ -199,9 +199,9 @@ const SingleGroup = () => {
                                         <button
                                             key={item}
                                             className={`py-2 px-4 ${activeMenuItem.toLowerCase() === item.toLowerCase()
-                                                ? 'bg-teal-blue text-white'
+                                                ? 'bg-copper text-white'
                                                 : 'text-cool-gray'
-                                                } hover:bg-teal-blue-lighten hover:text-white transition-all duration-200 focus:outline-none`}
+                                                } hover:bg-copper-lighten hover:text-white transition-all duration-200 focus:outline-none`}
                                             onClick={() => setActiveMenuItem(item.toLowerCase() as 'codes' | 'streaks' | 'challenges')}
                                         >
                                             {item}
@@ -211,7 +211,7 @@ const SingleGroup = () => {
                             </div>
                             <button
                                 onClick={handleOpen}
-                                className="absolute top-0 right-4 flex justify-center items-center gap-1 bg-teal-blue hover:bg-teal-blue-lighten text-white py-2 px-2 rounded-lg shadow-md capitalize "
+                                className="absolute top-0 right-4 flex justify-center items-center gap-1 bg-copper hover:bg-copper-lighten text-white py-2 px-2 rounded-lg shadow-md capitalize "
                             >
                                 <Add /> Add {activeMenuItem.slice(0, -1)}
                             </button>
@@ -219,7 +219,7 @@ const SingleGroup = () => {
 
 
                         <div className="w-full flex justify-center">
-                            <div className="lg:w-[48rem] pt-1 px-3 w-full flex flex-col items-center gap-4 h-full">
+                            <div className="lg:w-full pt-1 px-3 w-full flex flex-col items-center gap-4 h-full">
                                 {
                                     <>
                                         {/* {[...(currentGroup?.codes || []), ...(currentGroup?.shares.map(codeObj => codeObj.code) || [])].map((code, index) => (
@@ -342,7 +342,7 @@ SingleGroup.Skeleton = function () {
             </div>
 
             <div className="w-full flex justify-center">
-                <div className="lg:w-[48rem] pt-1 px-3 w-full flex flex-col items-center gap-2 h-full">
+                <div className="lg:w-full pt-1 px-3 w-full flex flex-col items-center gap-2 h-full">
                     {Array(5).fill('').map((_, index) => (
                         <CodeComponent.Skeleton />
                     ))}

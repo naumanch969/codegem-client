@@ -28,16 +28,16 @@ const Notification = () => {
 
     return (
         <div className="container mx-auto p-4">
-            <h1 className="text-3xl font-bold mb-4 text-dark-slate-blue">Notifications</h1>
+            <h1 className="text-3xl font-bold mb-4 text-blackish">Notifications</h1>
             <div className="flex justify-between items-center mb-4">
                 <button
-                    className="text-teal-blue hover:text-teal-blue-dark"
+                    className="text-copper hover:text-copper-dark"
                     onClick={handleMarkAllAsRead}
                 >
                     Mark All as Read
                 </button>
                 <button
-                    className="text-teal-blue hover:text-teal-blue-dark"
+                    className="text-copper hover:text-copper-dark"
                     onClick={handleDismissAll}
                 >
                     Dismiss All

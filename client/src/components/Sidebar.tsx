@@ -108,7 +108,7 @@ const Sidebar = () => {
                                 <Link
                                     key={index}
                                     to={`/${lowercase(item.name)}`}
-                                    className={`${item.active && 'font-extrabold bg-dark-slate-blue-lighten text-teal-blue '} hover:bg-dark-slate-blue-lighten group hover:text-white flex gap-3 py-2.5 px-2 w-full rounded-md cursor-pointer `}
+                                    className={`${item.active && 'font-extrabold bg-blackish-lighten text-copper '} hover:bg-blackish-lighten group hover:text-white flex gap-3 py-2.5 px-2 w-full rounded-md cursor-pointer `}
                                 >
                                     {
                                         item.active
@@ -117,7 +117,7 @@ const Sidebar = () => {
                                             :
                                             <item.iconOutlined className='' />
                                     }
-                                    <span className={`${item.active && 'font-bold bg-dark-slate-blue-lighten text-teal-blue '} hover:bg-dark-slate-blue-lighten group-hover:text-white  text-[18px] font-medium `} >
+                                    <span className={`${item.active && 'font-bold bg-blackish-lighten text-copper '} hover:bg-blackish-lighten group-hover:text-white  text-[18px] font-medium `} >
                                         {item.name}
                                     </span>
                                 </Link>))
@@ -138,11 +138,11 @@ const Sidebar = () => {
                                         {
                                             item.active
                                                 ?
-                                                <button title='Active' className={`${item.active && 'font-extrabold bg-dark-slate-blue-lighten text-teal-blue '} hover:bg-dark-slate-blue-lighten hover:text-white w-[40px] h-[40px] rounded-full `} >
+                                                <button title='Active' className={`${item.active && 'font-extrabold bg-blackish-lighten text-copper '} hover:bg-blackish-lighten hover:text-white w-[40px] h-[40px] rounded-full `} >
                                                     <item.iconFilled className={``} />
                                                 </button>
                                                 :
-                                                <button title='Disactive' className={`${item.active && 'font-extrabold bg-dark-slate-blue-lighten text-teal-blue '} hover:bg-dark-slate-blue-lighten hover:text-white w-[40px] h-[40px] rounded-full `} >
+                                                <button title='Disactive' className={`${item.active && 'font-extrabold bg-blackish-lighten text-copper '} hover:bg-blackish-lighten hover:text-white w-[40px] h-[40px] rounded-full `} >
                                                     <item.iconOutlined className={``} />
                                                 </button>
                                         }

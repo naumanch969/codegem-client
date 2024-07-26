@@ -15,6 +15,7 @@ import { X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { empty } from '@/assets';
 import qs from "query-string";
+import { Button } from '@/components/ui/button';
 
 const Groups = () => {
 
@@ -88,16 +89,11 @@ const Groups = () => {
             <div className="flex justify-between items-center">
                 <div className="flex flex-col">
                     <Path segments={segments} />
-                    <h1 className="text-3xl font-bold mb-6 text-dark-slate-blue">Groups</h1>
+                    <h1 className="text-3xl font-bold mb-6 text-blackish">Groups</h1>
                 </div>
-                <Tooltip title="Create Group" placement="top">
-                    <button
-                        onClick={onOpen}
-                        className="bg-teal-blue text-white rounded-full px-3 py-3 hover:bg-teal-blue-dark transition-colors duration-300 flex items-center"
-                    >
-                        <Add />
-                    </button>
-                </Tooltip>
+                <Button onClick={onOpen} variant="default">
+                    <Add /> <span className="" >Add Group</span>
+                </Button>
             </div>
 
             <div className="flex flex-col mb-4 ">
@@ -111,7 +107,7 @@ const Groups = () => {
                             onChange={handleSearchChange}
                             className="w-full px-4 py-2 "
                         />
-                        <button onClick={() => fetch({ loading: true })} className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                        <button title='Search' onClick={() => fetch({ loading: true })} className="absolute right-2 top-1/2 transform -translate-y-1/2">
                             <Search />
                         </button>
                     </div>

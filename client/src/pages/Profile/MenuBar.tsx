@@ -10,7 +10,7 @@ const Menubar = ({ menuItems }: { menuItems: { label: string, value: string, onC
 
     return (
         <Card className="flex flex-col justify-start items-start gap-2 p-2 w-full h-fit sticky top-20 shadow-lg ">
-            <h3 className="text-2xl text-dark-slate-blue font-medium px-2 ">
+            <h3 className="text-2xl text-blackish font-medium px-2 ">
                 {loggedUser?.firstName} {loggedUser?.lastName}
             </h3>
 

@@ -7,14 +7,14 @@ const LandingPageWrapper: React.FC = () => {
     const { showSidebar } = useStateContext();
 
     return (
-        <div className="w-full h-screen overflow-y-scroll overflow-x-hidden flex flex-col">
-            <div className="sticky left-0 top-0 z-50 w-full bg-dark-slate-blue   text-white">
+        <div className="w-full h-screen overflow-y-auto overflow-x-hidden flex flex-col">
+            <div className="sticky left-0 top-0 z-50 w-full bg-blackish-lighten text-white">
                 <DashboardNavbar />
             </div>
             <div className="md:w-screen flex justify-between ">
                 <div
                     style={{ height: "calc(100vh - 4rem)" }}
-                    className={`${showSidebar ? "lg:w-[20%] md:w-[25%]" : "lg:w-[5%] md:w-[6%]"} bg-dark-slate-blue text-white sticky top-[4rem] transition-all border-r-[2px] border-gray-100`}
+                    className={`${showSidebar ? "lg:w-[20%] md:w-[25%]" : "lg:w-[5%] md:w-[6%]"} bg-blackish text-white sticky top-[4rem] transition-all border-r-[2px] border-gray-100`}
                 >
                     <Sidebar />
                 </div>

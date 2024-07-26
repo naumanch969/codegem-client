@@ -84,7 +84,7 @@ const ChangePassword = () => {
                                 style={{ fontFamily: "'Montserrat', sans-serif" }}
                             />
                         </div>
-                        <button onClick={handleSubmit} className={`w-[20rem] bg-dark-slate-blue hover:bg-dark-slate-blue-lighten p-2 rounded-lg transition-all text-white font-medium tracking-wider `}>
+                        <button onClick={handleSubmit} className={`w-[20rem] bg-blackish hover:bg-blackish-lighten p-2 rounded-lg transition-all text-white font-medium tracking-wider `}>
                             {isFetching ? 'Processing...' : 'Change Password'}
                         </button>
                         <div className="text-sm font-primary font-light text-slate-500 flex justify-center gap-2 p-2 pr-7">

@@ -91,7 +91,7 @@ const InputRegisterationOTP = () => {
                             </div>
                             <div className="flex flex-col gap-4">
                                 <div className="flex items-center justify-center gap-4">
-                                    <button onClick={handleSubmit} className={`w-2/4 bg-dark-slate-blue hover:bg-dark-slate-blue-lighten p-2 rounded-lg transition-all text-white font-medium tracking-wider `}>
+                                    <button onClick={handleSubmit} className={`w-2/4 bg-blackish hover:bg-blackish-lighten p-2 rounded-lg transition-all text-white font-medium tracking-wider `}>
                                         {isFetching ? 'Submitting...' : 'Submit'}
                                     </button>
                                 </div>

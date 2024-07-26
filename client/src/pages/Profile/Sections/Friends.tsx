@@ -25,7 +25,7 @@ const FriendsPage = () => {
     <div className="w-full flex flex-col gap-3 ">
 
       {/* Heading */}
-      <h3 className="text-3xl font-bold text-dark-slate-blue">Friends</h3>
+      <h3 className="text-3xl font-bold text-blackish">Friends</h3>
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {

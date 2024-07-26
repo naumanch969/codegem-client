@@ -68,13 +68,13 @@ const ShareCollection = ({ open, setOpen, collection }: { open: boolean, setOpen
                         className="w-full h-full object-cover"
                     />
                 ) : (
-                    <span className="w-10 h-10 rounded-full bg-teal-blue text-white text-lg capitalize flex items-center justify-center">
+                    <span className="w-10 h-10 rounded-full bg-copper text-white text-lg capitalize flex items-center justify-center">
                         {friend.username.charAt(0)}
                     </span>
                 )}
             </div>
             <div className="">
-                <p className="text-teal-blue font-medium capitalize">
+                <p className="text-copper font-medium capitalize">
                     {friend.username}
                 </p>
                 <p className="text-cool-gray text-sm">
@@ -94,13 +94,13 @@ const ShareCollection = ({ open, setOpen, collection }: { open: boolean, setOpen
                         className="w-full h-full object-cover"
                     />
                 ) : (
-                    <span className="w-10 h-10 rounded-full bg-teal-blue text-white text-lg capitalize flex items-center justify-center">
+                    <span className="w-10 h-10 rounded-full bg-copper text-white text-lg capitalize flex items-center justify-center">
                         {group.name.charAt(0)}
                     </span>
                 )}
             </div>
             <div className="">
-                <p className="text-teal-blue font-medium capitalize">
+                <p className="text-copper font-medium capitalize">
                     {group.name}
                 </p>
                 <p className="text-cool-gray text-sm">
@@ -114,11 +114,11 @@ const ShareCollection = ({ open, setOpen, collection }: { open: boolean, setOpen
     return (
         <>
             <Modal open={open} onClose={() => setOpen(false)} className='flex justify-center items-center ' >
-                <div className='bg-white md:w-[30rem] sm:w-[60vw] flex flex-col justify-between w-full min-h-[20rem] h-fit max-h-[90vh] overflow-y-scroll rounded-[8px] p-4 ' >
+                <div className='bg-white md:w-[30rem] sm:w-[60vw] flex flex-col justify-between w-full min-h-[20rem] h-fit max-h-[90vh] overflow-y-auto rounded-[8px] p-4 ' >
 
                     <div className="flex flex-col">
                         <div className='w-full relative flex justify-between items-center pb-[12px] ' >
-                            <h4 className='text-[22px] font-bold text-dark-slate-blue ' >Share Collection</h4>
+                            <h4 className='text-[22px] font-bold text-blackish ' >Share Collection</h4>
                             <IconButton onClick={() => setOpen(false)} className='w-8 h-8 rounded-full bg-transparent ' ><Close className='text-cool-gray' /></IconButton>
                         </div>
 
@@ -133,11 +133,11 @@ const ShareCollection = ({ open, setOpen, collection }: { open: boolean, setOpen
                             </div>
 
                             <div className="flex flex-col gap-4 ">
-                                <div className="w-full flex justify-start items-center gap-[1.5rem] border-b-[1px] border-teal-blue  ">
-                                    <button onClick={() => setType('friend')} className={` w-[49%] transition-all ${type == 'friend' ? "bg-teal-blue text-white py-[4px] px-[14px] rounded-t-[4px]  " : "text-dark-slate-blue-lighten "}  `}>
+                                <div className="w-full flex justify-start items-center gap-[1.5rem] border-b-[1px] border-copper  ">
+                                    <button onClick={() => setType('friend')} className={` w-[49%] transition-all ${type == 'friend' ? "bg-copper text-white py-[4px] px-[14px] rounded-t-[4px]  " : "text-blackish-lighten "}  `}>
                                         Friends
                                     </button>
-                                    <button onClick={() => setType('group')} className={` w-[49%] transition-all ${type == 'group' ? "bg-teal-blue text-white py-[4px] px-[14px] rounded-t-[4px]  " : "text-dark-slate-blue-lighten "}  `}>
+                                    <button onClick={() => setType('group')} className={` w-[49%] transition-all ${type == 'group' ? "bg-copper text-white py-[4px] px-[14px] rounded-t-[4px]  " : "text-blackish-lighten "}  `}>
                                         Groups
                                     </button>
                                 </div>
@@ -164,7 +164,7 @@ const ShareCollection = ({ open, setOpen, collection }: { open: boolean, setOpen
                     </div>
 
                     <div className="flex justify-end items-center">
-                        <button onClick={handleShare} className={` ${selectedFriends.length == 0 ? 'cursor-not-allowed ' : 'cursor-pointer '}  w-[6rem] rounded-[4px] p-[4px] bg-teal-blue text-white font-medium text-[18px] `} >
+                        <button onClick={handleShare} className={` ${selectedFriends.length == 0 ? 'cursor-not-allowed ' : 'cursor-pointer '}  w-[6rem] rounded-[4px] p-[4px] bg-copper text-white font-medium text-[18px] `} >
                             {isFetching ? 'Sharing' : 'Share'}
                         </button>
                     </div>

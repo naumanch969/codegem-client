@@ -69,7 +69,7 @@ const Register = () => {
             <div className="flex justify-center py-6 pl-0 ml-0 rounded-lg">
                 <div className="w-96 h-auto shadow-xl rounded bg-white px-[2rem] py-[2rem] ">
                     <div className="w-full flex justify-center items-center ">
-                        <div className="flex justify-center items-center w-20 h-20 rounded-full bg-dark-slate-blue">
+                        <div className="flex justify-center items-center w-20 h-20 rounded-full bg-blackish">
                             <Person style={{ fontSize: '4rem' }} className="text-white" />
                         </div>
                     </div>
@@ -128,7 +128,7 @@ const Register = () => {
                             />
                         </div>
                         <br />
-                        <button onClick={handleSubmit} className={`w-[20rem] bg-dark-slate-blue hover:bg-dark-slate-blue-lighten p-2 rounded-lg transition-all text-white font-medium tracking-wider `}>
+                        <button onClick={handleSubmit} className={`w-[20rem] bg-blackish hover:bg-blackish-lighten p-2 rounded-lg transition-all text-white font-medium tracking-wider `}>
                             {isFetching ? 'Registering...' : 'Register'}
                         </button>
                         <div className="text-sm font-primary font-light text-slate-500 flex justify-center gap-2 p-2 pr-7">

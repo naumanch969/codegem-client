@@ -32,19 +32,19 @@ const LandingPageNavbar = () => {
 
 
             <ul className="flex justify-center items-center gap-6 mt-2">
-                <li className='hover:text-dark-slate-blue hover:underline '  >
+                <li className='hover:text-blackish hover:underline '  >
                     <Link to='/home' >Dashboard</Link>
                 </li>
-                <li className='hover:text-dark-slate-blue hover:underline '  >
+                <li className='hover:text-blackish hover:underline '  >
                     <Link to='/features' >Features</Link>
                 </li>
-                <li className='hover:text-dark-slate-blue hover:underline '  >
+                <li className='hover:text-blackish hover:underline '  >
                     <Link to='/pricing' >Pricing</Link>
                 </li>
-                <li className='hover:text-dark-slate-blue hover:underline '  >
+                <li className='hover:text-blackish hover:underline '  >
                     <Link to='/about' >About</Link>
                 </li>
-                <li className='hover:text-dark-slate-blue hover:underline '  >
+                <li className='hover:text-blackish hover:underline '  >
                     <Link to='/contact' >Contact</Link>
                 </li>
             </ul>

@@ -46,8 +46,8 @@ const FriendsPage = () => {
         <div className="p-6 flex flex-col gap-4 w-full ">
 
             <div className="flex justify-between items-center w-full">
-                <h1 className="text-3xl font-bold text-dark-slate-blue " >
-                    Users {searchedQuery && <span className="font-medium"> {" > "} <span className='text-teal-blue ' >{searchedQuery}</span></span>}
+                <h1 className="text-3xl font-bold text-blackish " >
+                    Users {searchedQuery && <span className="font-medium"> {" > "} <span className='text-copper ' >{searchedQuery}</span></span>}
                 </h1>
                 <div className="relative w-1/3 ">
                     <Input

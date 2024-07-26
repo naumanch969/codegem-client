@@ -69,7 +69,7 @@ const VerifyEmail = () => {
               <br />
               <button
                 onClick={handleSubmit}
-                className={`w-[20rem] bg-dark-slate-blue hover:bg-dark-slate-blue-lighten p-2 rounded-lg transition-all text-white font-medium tracking-wider `}
+                className={`w-[20rem] bg-blackish hover:bg-blackish-lighten p-2 rounded-lg transition-all text-white font-medium tracking-wider `}
               >
                 {isFetching ? 'Sending...' : 'Send Code'}
               </button>

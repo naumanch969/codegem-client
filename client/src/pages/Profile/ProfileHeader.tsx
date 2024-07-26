@@ -12,32 +12,6 @@ const ProfilePage = () => {
     const navigate = useNavigate()
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
 
-    const colors = [
-        '#2E3A59',
-        '#1D253B',
-        '#445270',
-        '#00A5B5',
-        '#008C99',
-        'linear-gradient(45deg,#2E3A59, #1D253B)',
-        '#00BFC9',
-        '#9B9B9B',
-        '#7D7D7D',
-        '#F5F5F5',
-        '#000000',
-        '#0f0f0f',
-        'linear-gradient(45deg,#445270, #000, #fff)',
-        'linear-gradient(45deg,#00A5B5, #008C99)',
-        'linear-gradient(45deg,#00BFC9, #9B9B9B)',
-        'linear-gradient(45deg,#F5F5F5, #000000)',
-        'linear-gradient(45deg,#0f0f0f, #445270)',
-        'linear-gradient(45deg,#445270, #000, #fff)',
-        'linear-gradient(45deg,#2E3A59, #1D253B)',
-        'linear-gradient(45deg,#00A5B5, #008C99)',
-        'linear-gradient(45deg,#00BFC9, #9B9B9B)',
-        'linear-gradient(45deg,#F5F5F5, #000000)',
-        'linear-gradient(45deg,#0f0f0f, #445270)'
-    ]
-
     return (
         <div className="flex flex-col w-full">
             <div className="relative w-full h-[20rem] rounded-[6px] overflow-hidden " >
@@ -50,11 +24,10 @@ const ProfilePage = () => {
                             className="w-full h-full"
                         />
                         :
-                        <div style={{ gridTemplateColumns: 'repeat(48, minmax(0, 1fr))', gridTemplateRows: 'repeat(24, minmax(0, 1fr))' }} className="absolute inset-0 grid grid-rows-6 gap-1 bg-black/70 bg-gray-50 border border-gray-100 rounded-md ">
-                            {/* Grid lines */}
-                            {Array.from({ length: 1152 }).map((_, index) => (
-                                <div key={index} style={{ background: colors[index % colors.length] }} className="border border-dark-700 rounded-md"></div>
-                            ))}
+                        <div className="w-full h-full flex justify-end items-start p-4 bg-gradient-to-tr from-blackish-darken via-blackish to-copper-darken text-white border border-gray-100 rounded-md ">
+                            <span className="text-4xl font-dancing-script ">{loggedUser?.firstName} {loggedUser?.lastName}</span>
+
+                            {/* Upload icon here */}
                         </div>
                 }
             </div>
@@ -72,14 +45,14 @@ const ProfilePage = () => {
                                         alt="Profile"
                                     />
                                     :
-                                    <div className="font-dancing-script text-7xl flex justify-center items-center bg-gradient-to-r from-teal-blue-darken via-black to-dark-slate-blue w-full h-full rounded-full ">
+                                    <div className="font-dancing-script text-7xl flex justify-center items-center bg-gradient-to-r from-copper-darken via-black to-blackish w-full h-full rounded-full ">
                                         {loggedUser?.firstName.charAt(0)}{loggedUser?.lastName.charAt(0)}
                                     </div>
                             }
                         </div>
                     </div>
                     <div className='space-y-0.5' >
-                        <h1 className="text-4xl font-bold text-dark-slate-blue ">{loggedUser?.firstName} {loggedUser?.lastName}</h1>
+                        <h1 className="text-4xl font-bold text-blackish ">{loggedUser?.firstName} {loggedUser?.lastName}</h1>
                         <p className='flex-1 ' >{loggedUser?.title || 'Lorem, ipsum dolor si. Quas sint '}</p>
                         <p className="text-gray-600">{loggedUser?.username}</p>
                     </div>

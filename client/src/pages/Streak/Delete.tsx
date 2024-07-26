@@ -30,10 +30,10 @@ const DeleteModal = ({ open, setOpen, streakId }: { open: boolean, setOpen: any,
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <button onClick={handleClose} className='text-teal-blue bg-white hover:bg-light-gray text-[16px] px-[10px] py-[5px] rounded-[4px] ' >
+                <button onClick={handleClose} className='text-copper bg-white hover:bg-light-gray text-[16px] px-[10px] py-[5px] rounded-[4px] ' >
                     Close
                 </button>
-                <button onClick={handleDelete} className='bg-teal-blue  text-white hover:bg-teal-blue -darken text-[16px] px-[10px] py-[5px] rounded-[4px] ' >
+                <button onClick={handleDelete} className='bg-copper  text-white hover:bg-copper -darken text-[16px] px-[10px] py-[5px] rounded-[4px] ' >
                     {isFetching ? 'Deleting...' : 'Delete'}
                 </button>
             </DialogActions>

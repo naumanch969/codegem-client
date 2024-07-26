@@ -63,11 +63,11 @@ const CollectionCard = ({ collection }: { collection: Collection }) => {
                             <AvatarFallback className='capitalize' >{(collection?.owner as User)?.firstName?.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <h3 className='flex flex-col items-start justify-center space-y-0 '>
-                            <Link to={`/user/${(collection?.owner as User)?._id}`} className='text-xs font-semibold capitalize hover:underline hover:text-teal-blue'>
+                            <Link to={`/user/${(collection?.owner as User)?._id}`} className='text-xs font-semibold capitalize hover:underline hover:text-copper'>
                                 {(collection?.owner as User)?.firstName} {(collection?.owner as User)?.lastName}
                             </Link>
                         </h3>
-                        <span className='text-teal-blue text-[11px] '>{format(collection?.createdAt as Date)}</span>
+                        <span className='text-copper text-[11px] '>{format(collection?.createdAt as Date)}</span>
                     </div>
                     {
                         !isOwner &&
@@ -77,7 +77,7 @@ const CollectionCard = ({ collection }: { collection: Collection }) => {
 
                 <CardContent className='p-4 pt-0' >
                     <div className="flex justify-between items-center mb-2 ">
-                        <Link to={`/collections/${collection?._id}`} className='text-dark-slate-blue hover:text-dark-slate-blue-lighten hover:underline capitalize flex items-center text-2xl font-semibold '>
+                        <Link to={`/collections/${collection?._id}`} className='text-blackish hover:text-blackish-lighten hover:underline capitalize flex items-center text-2xl font-semibold '>
                             <LucideGroup className='mr-2' />
                             {collection.name}
                         </Link>
@@ -102,7 +102,7 @@ const CollectionCard = ({ collection }: { collection: Collection }) => {
                         {collection.description.charAt(0).toUpperCase() + collection.description.slice(1)}
                     </p>
                     <div className="flex justify-start flex-wrap gap-1">
-                        {collection?.language && <span className='text-teal-blue italic hover:underline cursor-pointer lowercase '>#{collection?.language}</span>}
+                        {collection?.language && <span className='text-copper italic hover:underline cursor-pointer lowercase '>#{collection?.language}</span>}
                         {
                             collection?.categories?.map((category, index) => (
                                 <span key={index} className='text-muted-foreground italic hover:underline cursor-pointer lowercase '>#{category}</span>
@@ -113,7 +113,7 @@ const CollectionCard = ({ collection }: { collection: Collection }) => {
                 <CardFooter className='p-4 pt-0' >
                     <Link
                         to={`/collections/${collection._id}`}
-                        className="cursor-pointer text-teal-blue hover:text-teal-blue-dark hover:underline transition-colors duration-300"
+                        className="cursor-pointer text-copper hover:text-copper-dark hover:underline transition-colors duration-300"
                     >
                         View Collection
                     </Link>
@@ -130,7 +130,7 @@ CollectionCard.Skeleton = function () {
     return (
         <div className={`w-full animate-pulse flex flex-col justify-between p-4 border rounded shadow-lg bg-light-gray`}>
             <div className="flex justify-between items-center">
-                <div className="text-dark-slate-blue w-full flex items-center ">
+                <div className="text-blackish w-full flex items-center ">
                     <Favorite fontSize="small" className='mr-2' style={{ fontSize: '24px' }} />
                     <div className='h-4 w-16 bg-warm-gray-dark rounded' />
                 </div>

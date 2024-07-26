@@ -18,9 +18,9 @@ const Menubar = ({ activeMenuItem, setActiveMenuItem }: { activeMenuItem: any, s
                     <button
                         key={item}
                         className={`py-2 px-4 ${activeMenuItem.toLowerCase() === item.toLowerCase()
-                            ? 'bg-teal-blue text-white'
+                            ? 'bg-copper text-white'
                             : 'text-cool-gray'
-                            } hover:bg-teal-blue-lighten hover:text-white transition-all duration-200 focus:outline-none`}
+                            } hover:bg-copper-lighten hover:text-white transition-all duration-200 focus:outline-none`}
                         onClick={() => {
                             navigate(`/users/${item.toLowerCase()}`)
                             setActiveMenuItem(item.toLowerCase())

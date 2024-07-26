@@ -111,8 +111,8 @@ export const ChatBox = () => {
     return (
       <div className={`w-fit ${isMe ? 'ml-auto max-w-125' : 'max-w-125'}`}>
         <div
-          className={`mb-2.5 rounded-2xl px-5 py-1.5 dark:bg-boxdark-2 ${isMe
-            ? 'rounded-br-none bg-teal-blue text-white'
+          className={`mb-2.5 rounded-2xl px-2.5 py-1.5 dark:bg-boxdark-2 ${isMe
+            ? 'rounded-br-none bg-copper text-white'
             : 'rounded-tl-none bg-warm-gray text-black '
             } `}
         >
@@ -193,7 +193,7 @@ export const ChatBox = () => {
               <input
                 type="text"
                 placeholder={'Type your message'}
-                className="w-full h-full px-2 bg-white rounded-md border border-stroke bg-gray text-black placeholder-body outline-none focus:border-teal-blue dark:bg-boxdark-2 dark:text-white"
+                className="w-full h-full px-2 bg-white rounded-md border border-stroke bg-gray text-black placeholder-body outline-none focus:border-copper dark:bg-boxdark-2 dark:text-white"
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value as string)}
                 onKeyUp={onKeyUp}
@@ -202,7 +202,7 @@ export const ChatBox = () => {
                 type="button"
                 title="Send Message"
                 onClick={(e) => { onSendMessage(); }}
-                className="absolute right-1 top-1/2 h-10 transform -translate-y-1/2 px-2 flex w-fit items-center justify-center rounded-md bg-teal-blue text-white hover:bg-opacity-90 disabled:cursor-not-allowed disabled:bg-teal-blue/75"
+                className="absolute right-1 top-1/2 h-10 transform -translate-y-1/2 px-2 flex w-fit items-center justify-center rounded-md bg-copper text-white hover:bg-opacity-90 disabled:cursor-not-allowed disabled:bg-copper/75"
               >
                 <Send />
               </button>

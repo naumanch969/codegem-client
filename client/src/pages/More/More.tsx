@@ -43,7 +43,7 @@ const MorePage = () => {
 
   return (
     <div className="p-6 w-full">
-      <h1 className="text-3xl font-bold mb-4 text-dark-slate-blue">More</h1>
+      <h1 className="text-3xl font-bold mb-4 text-blackish">More</h1>
       <div className="w-full flex flex-col gap-4">
 
         {/* Account Settings */}
@@ -272,7 +272,7 @@ const MorePage = () => {
               </div>
             </AccordionTrigger>
             <AccordionContent className='space-y-1' >
-              <button onClick={onLogout} className="mt-6 px-4 py-2 bg-teal-blue  text-white rounded-lg hover:bg-teal-blue -dark transition duration-200">
+              <button onClick={onLogout} className="mt-6 px-4 py-2 bg-copper  text-white rounded-lg hover:bg-copper -dark transition duration-200">
                 <Logout className="mr-2 w-5 h-5" />
                 Log Out
               </button>

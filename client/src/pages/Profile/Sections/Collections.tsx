@@ -21,7 +21,7 @@ const Collections = () => {
     <div className="w-full flex flex-col gap-3 ">
 
       {/* Heading */}
-      <h3 className="text-3xl font-bold text-dark-slate-blue">Collections</h3>
+      <h3 className="text-3xl font-bold text-blackish">Collections</h3>
 
       {/* Your Collections */}
       <div className="flex flex-col">

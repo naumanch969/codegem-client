@@ -126,7 +126,7 @@ const CreateChallenge = () => {
                             <AvatarImage src={loggedUser?.profilePicture} alt="Profile" />
                             <AvatarFallback>{loggedUser?.firstName.charAt(0)}</AvatarFallback>
                         </Avatar>
-                        <p className='font-semibold text-dark-slate-blue text-lg capitalize ' >{loggedUser?.firstName} {loggedUser?.lastName}</p>
+                        <p className='font-semibold text-blackish text-lg capitalize ' >{loggedUser?.firstName} {loggedUser?.lastName}</p>
                     </div>
                     <Select onValueChange={(value: string) => form.setValue("visibility", value)} >
                         <SelectTrigger className="w-[180px]">

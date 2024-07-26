@@ -42,10 +42,10 @@ const FriendCard = ({ friend, type }: { friend: User, type: string }) => {
             :
             <div className='w-full h-[160px] rounded-md mb-2 capitalize flex justify-center items-center bg-black text-white font-semibold text-[5rem] '>{friend?.username?.charAt(0)}</div>
         }
-        <p onClick={() => navigate(`/user/${friend._id}`)} className="cursor-pointer text-center text-sm font-medium text-dark-slate-blue-darken capitalize ">
+        <p onClick={() => navigate(`/user/${friend._id}`)} className="cursor-pointer text-center text-sm font-medium text-blackish-darken capitalize ">
           {friend?.firstName} {friend?.lastName}
         </p>
-        <p onClick={() => navigate(`/user/${friend._id}`)} className="cursor-pointer text-center text-sm font-medium text-dark-slate-blue-darken/50 capitalize ">
+        <p onClick={() => navigate(`/user/${friend._id}`)} className="cursor-pointer text-center text-sm font-medium text-blackish-darken/50 capitalize ">
           @{friend?.username}
         </p>
       </div>
@@ -54,12 +54,12 @@ const FriendCard = ({ friend, type }: { friend: User, type: string }) => {
           {friend?.mutualFriends as number > 0 ? `${friend?.mutualFriends} Mutual Friends` : 'No Mutual Friends'}
         </p>
         {type == 'friend' &&
-          <button onClick={() => navigate(`/user/${friend._id}`)} className="w-full py-2 bg-teal-blue hover:bg-teal-blue-lighten text-white rounded-md mb-1 text-xs">
+          <button onClick={() => navigate(`/user/${friend._id}`)} className="w-full py-2 bg-copper hover:bg-copper-lighten text-white rounded-md mb-1 text-xs">
             View Profile
           </button>
         }
         {type == 'suggestedUser' &&
-          <button onClick={handleSendFriendRequest} className="w-full py-2 bg-teal-blue hover:bg-teal-blue-lighten text-white rounded-md text-xs">
+          <button onClick={handleSendFriendRequest} className="w-full py-2 bg-copper hover:bg-copper-lighten text-white rounded-md text-xs">
             Add Friend
           </button>
         }
@@ -68,13 +68,13 @@ const FriendCard = ({ friend, type }: { friend: User, type: string }) => {
             <button onClick={handleRejectFriendRequest} className="w-1/2 py-2 bg-red-500 hover:bg-red-400 text-white rounded-md text-xs">
               Reject
             </button>
-            <button onClick={handleAcceptFriendRequest} className="w-1/2 py-2 bg-teal-blue hover:bg-teal-blue-lighten text-white rounded-md text-xs">
+            <button onClick={handleAcceptFriendRequest} className="w-1/2 py-2 bg-copper hover:bg-copper-lighten text-white rounded-md text-xs">
               Accept
             </button>
           </div>
         }
         {type == 'sentRequest' &&
-          <button onClick={handleRemoveFriendRequest} className="w-full py-2 bg-teal-blue hover:bg-teal-blue-lighten text-white rounded-md text-xs">
+          <button onClick={handleRemoveFriendRequest} className="w-full py-2 bg-copper hover:bg-copper-lighten text-white rounded-md text-xs">
             Remove
           </button>
         }

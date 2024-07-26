@@ -17,8 +17,8 @@ const Button = ({ loading = false, text, size = 'md', disabled = false, onClick,
 
     const sizeStyle = size === 'lg' ? 'px-6 py-4 text-xl' : size === 'md' ? 'px-4 py-3 text-base' : 'px-3 py-2 text-sm';
     const typeStyle = {
-        primary: 'bg-dark-slate-blue  text-white hover:bg-dark-slate-blue ',
-        secondary: 'bg-teal-blue  text-white hover:bg-teal-blue -darken',
+        primary: 'bg-blackish  text-white hover:bg-blackish ',
+        secondary: 'bg-copper  text-white hover:bg-copper -darken',
         success: 'bg-green-500 text-white hover:bg-green-darken',
         danger: 'bg-red-500 text-white hover:bg-red-darken',
         warning: 'bg-orange-500 text-white hover:bg-orange-darken',

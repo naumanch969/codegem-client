@@ -48,13 +48,13 @@ const RightSidebar = () => {
           <Person2TwoTone className="mr-2" />
           Personalize
         </Link>
-        <Link to="/profile" className="text-dark-slate-blue-lighten hover:underline flex items-center ">
+        <Link to="/profile" className="text-blackish-lighten hover:underline flex items-center ">
           <Edit className="mr-2 w-5 h-5 " />
           Profile Setting
         </Link>
       </div>
       <div className="mb-4">
-        <h3 className="text-dark-slate-blue font-semibold mb-2">Collection Categories</h3>
+        <h3 className="text-blackish font-semibold mb-2">Collection Categories</h3>
         <ul className="list-disc pl-6">
           {
             categories.map((category, index) => (
@@ -64,7 +64,7 @@ const RightSidebar = () => {
         </ul>
       </div>
       <div>
-        <h3 className="text-dark-slate-blue font-semibold mb-2">Popular Collections</h3>
+        <h3 className="text-blackish font-semibold mb-2">Popular Collections</h3>
         <ul className="list-disc">
           {
             popularCollections.map((collection, index) => (

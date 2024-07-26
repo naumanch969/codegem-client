@@ -13,7 +13,7 @@ const Search = ({ handleSearch }) => {
                 placeholder="Search Friends..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-blue-dark focus:border-transparent"
+                className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-copper-dark focus:border-transparent"
             />
             <span onClick={handleSearch} className="absolute right-2 top-1/2 transform -translate-y-1/2">
                 <SearchOff />

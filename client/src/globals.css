@@ -16,6 +16,8 @@
     --popover-foreground: 240 10% 3.9%;
 
     --primary: 240 5.9% 10%;
+    --primary-lighten: 240, 5.9%, 15%;
+    --primary-darken: 240, 5.9%, 5%;
     --primary-foreground: 0 0% 98%;
 
     --secondary: 240 4.8% 95.9%;

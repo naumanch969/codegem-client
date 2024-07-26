@@ -128,13 +128,13 @@ const StreakComponent = ({ streak }: { streak: Streak }) => {
               <AvatarFallback>{streak?.user?.firstName?.charAt(0) || 'X'}</AvatarFallback>
             </Avatar>
             <CardTitle className='flex flex-col items-start justify-center'>
-              <Link to={`/user/${streak?.user?._id}`} className='text-sm font-semibold capitalize hover:underline hover:text-teal-blue'>
+              <Link to={`/user/${streak?.user?._id}`} className='text-sm font-semibold capitalize hover:underline hover:text-copper'>
                 {streak?.user?.firstName} {streak?.user?.lastName}
               </Link>
               <p className='text-xs font-light '>{streak?.user?.username}</p>
             </CardTitle>
             <div className='flex items-center'>
-              <span className='text-teal-blue text-[14px] '>{format(streak?.createdAt as Date)}</span>
+              <span className='text-copper text-[14px] '>{format(streak?.createdAt as Date)}</span>
             </div>
           </div>
           <DropdownMenu>
@@ -158,7 +158,7 @@ const StreakComponent = ({ streak }: { streak: Streak }) => {
             {/* <h3 className='font-semibold text-[20px] capitalize '>{streak?.title}</h3> */}
             <CardDescription className='text-[14px]'>{streak?.description}</CardDescription>
             <div className='flex gap-[6px]'>
-              {streak?.language && <span className='text-teal-blue italic hover:underline cursor-pointer lowercase '>#{streak?.language}</span>}
+              {streak?.language && <span className='text-copper italic hover:underline cursor-pointer lowercase '>#{streak?.language}</span>}
               {
                 streak?.hashTags?.map((tag, index) => (
                   <span key={index} className='text-muted-foreground italic hover:underline cursor-pointer lowercase '>#{tag}</span>
@@ -210,7 +210,7 @@ const StreakComponent = ({ streak }: { streak: Streak }) => {
           <div className='flex gap-[4px]'>
             <IconButton onClick={() => setOpenShareModal(true)} size='medium' className='relative'>
               <Share fontSize="inherit" />
-              <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-teal-blue-lighten text-white'>{streak?.shares?.length}</span>
+              <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-copper-lighten text-white'>{streak?.shares?.length}</span>
             </IconButton>
             <IconButton onClick={handleSave} size='medium' className='relative'>
               {
@@ -223,7 +223,7 @@ const StreakComponent = ({ streak }: { streak: Streak }) => {
             </IconButton>
             <IconButton size='medium' className='relative' onClick={() => setShowComments((pre) => !pre)}>
               <Comment fontSize="inherit" />
-              <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-teal-blue-lighten text-white'>{streak?.comments?.length}</span>
+              <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-copper-lighten text-white'>{streak?.comments?.length}</span>
             </IconButton>
           </div>
         </CardFooter>

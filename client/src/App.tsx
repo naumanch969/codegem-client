@@ -40,7 +40,7 @@ const Apps = () => {
   /////////////////////////////////////////////// FUNCTIONS /////////////////////////////////////////////////////
 
   return (
-    <div className={` w-screen min-h-screen overflow-x-hidden flex justify-center bg-light-grayD text-dark-slate-blue`}>
+    <div className={` w-screen min-h-screen overflow-x-hidden flex justify-center bg-light-grayD text-blackish`}>
       <Routes>
 
         {/* Auth pages */}

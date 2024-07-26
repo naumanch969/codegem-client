@@ -131,15 +131,15 @@ const ProfileEditPage: React.FC = () => {
                 <div className="w-full h-[20rem] border bg-gray-200 rounded-[6px] overflow-hidden " >
                     <Upload image={coverImage} handleFileChange={handleCoverImageChange} handleFileClear={handleCoverImageClear} />
                 </div>
-                <h1 className="text-3xl text-dark-slate-blue font-bold ">Edit Profile</h1>
+                <h1 className="text-3xl text-blackish font-bold ">Edit Profile</h1>
                 <div className='grid grid-cols-8 '  >
                     <div className="col-span-3 flex flex-col justify-start items-center gap-4 py-4 px-6 ">
                         <div className="w-48 h-48 border border-gray-500 rounded-full overflow-hidden ">
                             <Upload image={profilePicture} handleFileChange={handleProfilePictureChange} handleFileClear={handleProfilePictureClear} />
                         </div>
                         <div className="flex flex-col items-center ">
-                            <h2 className='text-2xl font-medium text-dark-slate-blue-darken capitalize' >{loggedUser?.firstName} {loggedUser?.lastName}</h2>
-                            <h3 className='text-xl font-medium text-dark-slate-blue-lighten ' >{loggedUser?.username}</h3>
+                            <h2 className='text-2xl font-medium text-blackish-darken capitalize' >{loggedUser?.firstName} {loggedUser?.lastName}</h2>
+                            <h3 className='text-xl font-medium text-blackish-lighten ' >{loggedUser?.username}</h3>
                         </div>
                         <div className="flex flex-col items-center gap-4 ">
                             <h2 className='text-xl font-medium text-cool-gray-dark ' >Biography</h2>
@@ -151,7 +151,7 @@ const ProfileEditPage: React.FC = () => {
                         <div className="grid grid-cols-2 gap-4 w-full ">
                             <div className="col-span-2 flex flex-col justify-between items-start gap-4 w-full">
                                 <div className="flex justify-between items-center w-full ">
-                                    <h3 className='text-xl font-medium text-dark-slate-blue-darken ' >Basic Info</h3>
+                                    <h3 className='text-xl font-medium text-blackish-darken ' >Basic Info</h3>
                                     <div className="flex justify-end items-center gap-2 ">
                                         <Button onClick={handleSubmit} >Save</Button>
                                     </div>
@@ -227,7 +227,7 @@ const ProfileEditPage: React.FC = () => {
                         {/* About Me */}
                         <div className="flex flex-col gap-4 w-full ">
                             <div className="flex flex-col justify-between items-start gap-4 w-full ">
-                                <h3 className='text-xl font-medium text-dark-slate-blue-darken ' >About Me</h3>
+                                <h3 className='text-xl font-medium text-blackish-darken ' >About Me</h3>
                                 <Separator />
                             </div>
                             <FormField
@@ -252,7 +252,7 @@ const ProfileEditPage: React.FC = () => {
                         {/* External Links */}
                         <div className="flex flex-col gap-4 w-full ">
                             <div className="flex flex-col justify-between items-start gap-4 w-full ">
-                                <h3 className='text-xl font-medium text-dark-slate-blue-darken ' >External Links</h3>
+                                <h3 className='text-xl font-medium text-blackish-darken ' >External Links</h3>
                                 <Separator />
                             </div>
                             <FormField

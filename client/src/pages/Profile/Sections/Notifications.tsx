@@ -34,17 +34,17 @@ const Notifications = () => {
     <div className="mx-auto p-4 w-full ">
 
       {/* Heading */}
-      <h3 className="text-3xl font-bold mb-3 text-dark-slate-blue">Notifications</h3>
+      <h3 className="text-3xl font-bold mb-3 text-blackish">Notifications</h3>
 
       <div className="flex justify-between items-center mb-4">
         <button
-          className="text-teal-blue hover:text-teal-blue-dark"
+          className="text-copper hover:text-copper-dark"
           onClick={handleMarkAllAsRead}
         >
           Mark All as Read
         </button>
         <button
-          className="text-teal-blue hover:text-teal-blue-dark"
+          className="text-copper hover:text-copper-dark"
           onClick={handleDismissAll}
         >
           Dismiss All

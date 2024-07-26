@@ -41,10 +41,10 @@ const Chat = () => {
           </div>
         ) : (
           <div className="grid xl:grid-cols-10 grid-cols-6 gap-4 w-full h-full rounded-lg p-4 bg-white shadow-default ">
-            <div className="xl:col-span-3 col-span-2 bg-gray-100 border-[2px] border-dark-slate-blue-darken rounded-lg overflow-hidden ">
+            <div className="xl:col-span-3 col-span-2 bg-gray-100 border-[2px] border-blackish-darken rounded-lg overflow-hidden ">
               <ChatList chats={userChats} setChats={setUserChats} />
             </div>
-            <div className="xl:col-span-7 col-span-4 bg-dark-slate-50 border-[2px] border-dark-slate-blue-darken rounded-lg overflow-hidden ">
+            <div className="xl:col-span-7 col-span-4 bg-dark-slate-50 border-[2px] border-blackish-darken rounded-lg overflow-hidden ">
               <ChatBox />
             </div>
           </div>

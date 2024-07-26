@@ -113,13 +113,13 @@ const ChallengeComponent = ({ challenge }: { challenge: Challenge }) => {
               <AvatarFallback>{challenge?.user?.firstName?.charAt(0)}</AvatarFallback>
             </Avatar>
             <CardTitle className='flex flex-col items-start justify-center'>
-              <Link to={`/user/${challenge?.user?._id}`} className='text-sm font-semibold capitalize hover:underline hover:text-teal-blue'>
+              <Link to={`/user/${challenge?.user?._id}`} className='text-sm font-semibold capitalize hover:underline hover:text-copper'>
                 {challenge?.user?.firstName} {challenge?.user?.lastName}
               </Link>
               <p className='text-xs font-light '>{challenge?.user?.username}</p>
             </CardTitle>
             <div className='flex items-center'>
-              <span className='text-teal-blue text-[14px] '>{format(challenge?.createdAt as Date)}</span>
+              <span className='text-copper text-[14px] '>{format(challenge?.createdAt as Date)}</span>
             </div>
           </div>
           <DropdownMenu>
@@ -143,7 +143,7 @@ const ChallengeComponent = ({ challenge }: { challenge: Challenge }) => {
             {/* <h3 className='font-semibold text-[20px] capitalize '>{challenge?.title}</h3> */}
             <CardDescription className='text-[14px]'>{challenge?.description}</CardDescription>
             <div className='flex gap-[6px]'>
-              {challenge?.language && <span className='text-teal-blue italic hover:underline cursor-pointer lowercase '>#{challenge?.language}</span>}
+              {challenge?.language && <span className='text-copper italic hover:underline cursor-pointer lowercase '>#{challenge?.language}</span>}
               {
                 challenge?.hashTags?.map((tag, index) => (
                   <span key={index} className='text-muted-foreground italic hover:underline cursor-pointer lowercase '>#{tag}</span>
@@ -191,7 +191,7 @@ const ChallengeComponent = ({ challenge }: { challenge: Challenge }) => {
           <div className='flex gap-[4px]'>
             <IconButton onClick={() => setOpenShareModal(true)} size='medium' className='relative'>
               <Share fontSize="inherit" />
-              <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-teal-blue-lighten text-white'>{challenge?.shares?.length}</span>
+              <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-copper-lighten text-white'>{challenge?.shares?.length}</span>
             </IconButton>
             <IconButton onClick={handleSave} size='medium' className='relative'>
               {
@@ -204,7 +204,7 @@ const ChallengeComponent = ({ challenge }: { challenge: Challenge }) => {
             </IconButton>
             <IconButton size='medium' className='relative' onClick={() => setShowComments((pre) => !pre)}>
               <Comment fontSize="inherit" />
-              <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-teal-blue-lighten text-white'>{challenge?.comments?.length}</span>
+              <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-copper-lighten text-white'>{challenge?.comments?.length}</span>
             </IconButton>
           </div>
         </CardFooter>

@@ -119,7 +119,7 @@ const SingleCollectionView = () => {
 
                         <div className="flex flex-col gap-[8px] ">
                             <div className="flex justify-between items-center ">
-                                <h1 className="text-3xl font-bold text-dark-slate-blue capitalize ">{currentCollection?.name}</h1>
+                                <h1 className="text-3xl font-bold text-blackish capitalize ">{currentCollection?.name}</h1>
                                 {/* Interaction buttons */}
                                 <div className="flex justify-center space-x-2 px-4 ">
                                     <Tooltip placement='top' title='Star' >
@@ -147,9 +147,9 @@ const SingleCollectionView = () => {
                                             <button
                                                 key={index}
                                                 className={`py-2 px-4 ${activeMenuItem.toLowerCase() === item.toLowerCase()
-                                                    ? 'bg-teal-blue text-white'
+                                                    ? 'bg-copper text-white'
                                                     : 'text-cool-gray'
-                                                    } hover:bg-teal-blue-lighten hover:text-white transition-all duration-200 focus:outline-none`}
+                                                    } hover:bg-copper-lighten hover:text-white transition-all duration-200 focus:outline-none`}
                                                 onClick={() => setActiveMenuItem(item.toLowerCase() as 'codes' | 'streaks' | 'challenges')}
                                             >
                                                 {item}
@@ -159,14 +159,14 @@ const SingleCollectionView = () => {
                                 </div>
                                 <button
                                     onClick={onCreateModalOpen}
-                                    className="absolute top-0 right-4 flex justify-center items-center gap-1 bg-teal-blue hover:bg-teal-blue-lighten text-white py-2 px-2 rounded-lg shadow-md capitalize "
+                                    className="absolute top-0 right-4 flex justify-center items-center gap-1 bg-copper hover:bg-copper-lighten text-white py-2 px-2 rounded-lg shadow-md capitalize "
                                 >
                                     <Add /> Add {activeMenuItem.slice(0, -1)}
                                 </button>
                             </div>
 
                             <div className="flex justify-center items-center">
-                                <div className="lg:w-[48rem] pt-1 px-3 w-full flex flex-col gap-6 min-h-[16rem] ">
+                                <div className="lg:w-full pt-1 px-3 w-full flex flex-col gap-6 min-h-[16rem] ">
                                     {
                                         loading ?
                                             Array(5).fill('').map((_, index) => (
@@ -259,7 +259,7 @@ SingleCollectionView.Skeleton = function () {
             </div>
 
             <div className="w-full flex justify-center">
-                <div className="lg:w-[48rem] pt-1 px-3 w-full flex flex-col items-center gap-2 h-full">
+                <div className="lg:w-full pt-1 px-3 w-full flex flex-col items-center gap-2 h-full">
                     {Array(5).fill('').map((_, index) => (
                         <CodeComponent.Skeleton key={index} />
                     ))}

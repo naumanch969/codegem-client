@@ -8,7 +8,7 @@ const Settings = () => {
     return (
       <Accordion className="mb-8 rounded-lg shadow-md">
         <AccordionSummary className="bg-light-gray py-4">
-          <h2 className="text-xl font-semibold mb-0 text-dark-slate-blue">{title}</h2>
+          <h2 className="text-xl font-semibold mb-0 text-blackish">{title}</h2>
           <ExpandMore className="ml-auto text-cool-gray" />
         </AccordionSummary>
         <AccordionDetails>
@@ -35,7 +35,7 @@ const Settings = () => {
 
   return (
     <div className="w-full flex flex-col ">
-      <h2 className="text-3xl font-bold mb-6 text-dark-slate-blue">Settings</h2>
+      <h2 className="text-3xl font-bold mb-6 text-blackish">Settings</h2>
 
       {/* Account Settings */}
       <SettingsSection title="Account Settings">
@@ -90,7 +90,7 @@ const Settings = () => {
       </SettingsSection>
 
       {/* Log Out */}
-      <button className="mt-6 px-4 py-2 bg-teal-blue text-white rounded-lg hover:bg-teal-blue-dark transition duration-200">
+      <button className="mt-6 px-4 py-2 bg-copper text-white rounded-lg hover:bg-copper-dark transition duration-200">
         <Logout className="mr-2 w-5 h-5" />
         Log Out
       </button>

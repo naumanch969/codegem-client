@@ -79,7 +79,7 @@ const PeopleYouMayKnow = () => {
         <div className='w-full ' >
 
             <Card className="shadow-box rounded-[4px] p-[12px] ">
-                <h2 className="text-xl text-dark-slate-blue font-medium mb-4">People You May Know</h2>
+                <h2 className="text-xl text-blackish font-medium mb-4">People You May Know</h2>
                 <Swiper
                     slidesPerView={5}
                     spaceBetween={20}

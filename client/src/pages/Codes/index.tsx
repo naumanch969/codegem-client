@@ -54,7 +54,7 @@ const Codes = () => {
             searchedQuery={searchedQuery}
             setSearchedQuery={setSearchedQuery}
           />
-          <div className="w-full flex flex-col justify-center items-start gap-8 mt-4 " >
+          <div className="w-full flex flex-col justify-center items-start gap-6 mt-4 " >
             {
               isFetching
                 ?

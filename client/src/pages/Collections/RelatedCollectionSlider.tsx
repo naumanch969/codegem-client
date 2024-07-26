@@ -70,7 +70,7 @@ const RelatedCollectionSlider = () => {
                                                     <AvatarFallback className='capitalize' >{(collection?.owner as User)?.firstName?.charAt(0)}</AvatarFallback>
                                                 </Avatar>
                                                 <h3 className='flex flex-col items-start justify-center space-y-0 '>
-                                                    <Link to={`/user/${(collection?.owner as User)?._id}`} className='text-xs font-semibold capitalize hover:underline hover:text-teal-blue'>
+                                                    <Link to={`/user/${(collection?.owner as User)?._id}`} className='text-xs font-semibold capitalize hover:underline hover:text-copper'>
                                                         {(collection?.owner as User)?.firstName} {(collection?.owner as User)?.lastName}
                                                     </Link>
                                                 </h3>
@@ -78,19 +78,19 @@ const RelatedCollectionSlider = () => {
                                             <Button onClick={() => onStar(collection._id)} variant={starred ? 'default' : 'outline'} size='sm' className='p-1 w-7 h-7 ' ><Star className='w-4 h-4' /></Button>
                                         </CardHeader>
                                         <CardContent className='p-4 pt-0' >
-                                            <Link to={`/collections/${collection?._id}`} className='text-dark-slate-blue hover:text-dark-slate-blue-lighten hover:underline capitalize flex items-center text-base font-semibold '>
+                                            <Link to={`/collections/${collection?._id}`} className='text-blackish hover:text-blackish-lighten hover:underline capitalize flex items-center text-base font-semibold '>
                                                 <LucideGroup className='mr-2 w-5 h-5 ' />
                                                 {collection.name}
                                             </Link>
                                             <p className="text-cool-gray-dark max-lines-10 truncate text-sm ">
                                                 {collection.description.charAt(0).toUpperCase() + collection.description.slice(1)}
                                             </p>
-                                            {collection?.language && <span className='text-teal-blue italic hover:underline cursor-pointer lowercase '>#{collection?.language}</span>}
+                                            {collection?.language && <span className='text-copper italic hover:underline cursor-pointer lowercase '>#{collection?.language}</span>}
                                         </CardContent>
                                         <CardFooter className='p-4 pt-0' >
                                             <Link
                                                 to={`/collections/${collection._id}`}
-                                                className="cursor-pointer text-teal-blue hover:text-teal-blue-dark hover:underline transition-colors duration-300"
+                                                className="cursor-pointer text-copper hover:text-copper-dark hover:underline transition-colors duration-300"
                                             >
                                                 View Collection
                                             </Link>

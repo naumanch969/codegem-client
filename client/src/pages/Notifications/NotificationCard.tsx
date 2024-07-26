@@ -24,11 +24,11 @@ const NotificationCard = ({ notification }: { notification: Notification }) => {
             className={`p-4 border rounded shadow-lg ${notification.isRead ? 'bg-white' : 'bg-light-gray'
                 } hover:scale-105 transition-all duration-300`}
         >
-            <p className={`text-lg font-semibold ${notification.isRead ? 'text-gray-800' : 'text-teal-blue'
+            <p className={`text-lg font-semibold ${notification.isRead ? 'text-gray-800' : 'text-copper'
                 } mb-3`}>
                 {notification.title}
             </p>
-            <p className={`text-gray-500 ${notification.isRead ? 'text-gray-600' : 'text-teal-blue'
+            <p className={`text-gray-500 ${notification.isRead ? 'text-gray-600' : 'text-copper'
                 } mb-3`}>
                 {notification.description}
             </p>
@@ -37,11 +37,11 @@ const NotificationCard = ({ notification }: { notification: Notification }) => {
                     Delete
                 </button>
                 {!notification.isRead && (
-                    <button onClick={handleMarkAsRead} className="text-teal-blue hover:text-teal-blue-dark">
+                    <button onClick={handleMarkAsRead} className="text-copper hover:text-copper-dark">
                         Mark as Read
                     </button>
                 )}
-                <button className="text-teal-blue hover:text-teal-blue-dark">
+                <button className="text-copper hover:text-copper-dark">
                     <Visibility />
                 </button>
             </div>

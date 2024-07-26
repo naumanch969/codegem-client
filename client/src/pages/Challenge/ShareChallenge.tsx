@@ -64,7 +64,7 @@ const ShareChallenge = ({ open, setOpen, challenge }: { open: boolean, setOpen: 
                 <AvatarFallback className='capitalize' >{friend.username.charAt(0)}</AvatarFallback>
             </Avatar>
             <div className="">
-                <p className="text-teal-blue font-medium capitalize">
+                <p className="text-copper font-medium capitalize">
                     {friend.username}
                 </p>
                 <p className="text-cool-gray text-sm">
@@ -81,7 +81,7 @@ const ShareChallenge = ({ open, setOpen, challenge }: { open: boolean, setOpen: 
                 <AvatarFallback className='capitalize' >{group.name.charAt(0)}</AvatarFallback>
             </Avatar>
             <div className="">
-                <p className="text-teal-blue font-medium capitalize">
+                <p className="text-copper font-medium capitalize">
                     {group.name}
                 </p>
                 <p className="text-cool-gray text-sm">

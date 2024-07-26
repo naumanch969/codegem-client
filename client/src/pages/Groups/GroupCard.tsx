@@ -33,11 +33,11 @@ const GroupCard = ({ group }: { group: Group }) => {
             <CardContent className='p-4 pb-0 ' >
                 <Link to={`/groups/${group._id}`} className="block">
                     <div className="flex justify-between items-center mb-3">
-                        <CardTitle className={`text-lg font-semibold capitalize flex items-center w-full ${isJoined ? 'text-gray-800' : 'text-teal-blue'} `}>
+                        <CardTitle className={`text-lg font-semibold capitalize flex items-center w-full ${isJoined ? 'text-gray-800' : 'text-copper'} `}>
                             <GroupIcon className="mr-2" style={{ fontSize: '2rem' }} />
                             {group.name}
                         </CardTitle>
-                        <div className={`text-sm w-28 text-end ${isJoined ? 'text-muted-foreground' : 'text-teal-blue'
+                        <div className={`text-sm w-28 text-end ${isJoined ? 'text-muted-foreground' : 'text-copper'
                             }`}>
                             {group.members.length} Members
                         </div>
@@ -66,7 +66,7 @@ const GroupCard = ({ group }: { group: Group }) => {
                         (group.admin as User)?._id?.toString() != loggedUser?._id?.toString() &&
                         <>
                             {!isJoined &&
-                                <button onClick={handleJoinGroup} className={`text-teal-blue hover:text-teal-blue-dark ${isJoined ? 'text-muted-foreground cursor-default' : ''}`}>
+                                <button onClick={handleJoinGroup} className={`text-copper hover:text-copper-dark ${isJoined ? 'text-muted-foreground cursor-default' : ''}`}>
                                     {isJoined ? 'Joined' : 'Join Group'}{' '}
                                     {isJoined ? <CheckCircle className="ml-1" /> : null}
                                 </button>

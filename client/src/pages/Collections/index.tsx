@@ -16,7 +16,8 @@ import { programmingLanguages } from '@/constant';
 import { Combobox } from '@/components/ui/combobox';
 import { Input } from '@/components/ui/input';
 import { empty } from '@/assets';
- 
+import { Button } from '@/components/ui/button';
+
 const Collections: React.FC = () => {
     ////////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////////
     const dispatch = useDispatch()
@@ -82,16 +83,11 @@ const Collections: React.FC = () => {
                 <div className="flex justify-between items-center">
                     <div className="flex flex-col">
                         <Path segments={segments} />
-                        <h1 className="text-3xl font-bold mb-6 text-dark-slate-blue">Collections</h1>
+                        <h1 className="text-3xl font-bold mb-6 text-blackish">Collections</h1>
                     </div>
-                    <Tooltip title="Create Collection" placement="top">
-                        <button
-                            onClick={onOpen}
-                            className="bg-teal-blue text-white rounded-full px-3 py-3 hover:bg-teal-blue-dark transition-colors duration-300 flex items-center"
-                        >
-                            <Add />
-                        </button>
-                    </Tooltip>
+                    <Button onClick={onOpen} variant="default">
+                        <Add /> <span className="" >Add Collection</span>
+                    </Button>
                 </div>
 
                 <div className="flex flex-col mb-4 ">
@@ -177,7 +173,7 @@ const Collections: React.FC = () => {
                     <div className="flex flex-col">
                         {
                             userCollections.length != 0 &&
-                            <h2 className="text-2xl font-bold mb-4 text-dark-slate-blue">
+                            <h2 className="text-2xl font-bold mb-4 text-blackish">
                                 {(searchedQuery || languages.length > 0) ? 'Search Results' : 'Suggested To You'}
                             </h2>
                         }

@@ -19,7 +19,7 @@ const Saved = () => {
     <div className="w-full flex flex-col gap-8 ">
 
       {/* Heading */}
-      <h3 className="text-3xl font-bold mb-6 text-dark-slate-blue">Saved Snippets</h3>
+      <h3 className="text-3xl font-bold mb-6 text-blackish">Saved Snippets</h3>
 
       {/* Codes */}
       <div className="flex flex-col gap-6 ">

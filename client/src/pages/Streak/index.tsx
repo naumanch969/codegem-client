@@ -46,7 +46,7 @@ const Streaks = () => {
     <div className="flex w-full  ">
 
       <div className={`lg:w-[75%] w-full h-full p-4 flex justify-center `}>
-        <div className="lg:w-[48rem] pt-1 px-3 w-full flex flex-col h-full">
+        <div className="lg:w-full pt-1 px-3 w-full flex flex-col h-full">
           <Topbar
             activeMenu={activeMenu}
             setActiveMenu={setActiveMenu}

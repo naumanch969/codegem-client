@@ -39,13 +39,13 @@ const RightSidebar = () => {
                         className="w-full h-full object-cover"
                     />
                 ) : (
-                    <span className="w-10 h-10 rounded-full bg-teal-blue  text-white text-lg capitalize flex items-center justify-center">
+                    <span className="w-10 h-10 rounded-full bg-copper  text-white text-lg capitalize flex items-center justify-center">
                         {friend.username.charAt(0)}
                     </span>
                 )}
             </div>
             <div className="">
-                <p className="text-teal-blue font-medium capitalize">
+                <p className="text-copper font-medium capitalize">
                     {friend.username}
                 </p>
                 <p className="text-cool-gray text-sm">
@@ -82,7 +82,7 @@ const RightSidebar = () => {
             </div>
             {/* Suggested to You */}
             <div className="bg-white p-3 rounded-lg shadow-md w-full ">
-                <h2 className="text-lg font-semibold mb-2 text-dark-slate-blue">
+                <h2 className="text-lg font-semibold mb-2 text-blackish">
                     Suggested to You
                 </h2>
                 <ul >
@@ -101,7 +101,7 @@ const RightSidebar = () => {
             </div>
             {/* Your Friends */}
             <div className='bg-white p-3 rounded-lg shadow-md w-full ' >
-                <h2 className="text-lg font-semibold mb-2 text-dark-slate-blue">
+                <h2 className="text-lg font-semibold mb-2 text-blackish">
                     Your Friends
                 </h2>
                 <ul>

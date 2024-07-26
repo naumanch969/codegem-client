@@ -143,7 +143,7 @@ const ProfilePage = () => {
                         </div>
                     </div>
                     <div>
-                        <h1 className="text-2xl font-bold text-dark-slate-blue "><span className='capitalize' >{currentUser?.firstName} {currentUser?.lastName} </span>({currentUser?.username}) </h1>
+                        <h1 className="text-2xl font-bold text-blackish "><span className='capitalize' >{currentUser?.firstName} {currentUser?.lastName} </span>({currentUser?.username}) </h1>
                         <p className="text-gray-600">{currentUser?.email}</p>
                     </div>
                 </div>
