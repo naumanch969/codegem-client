@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useDispatch } from 'react-redux'
+import { SVG } from '@/components'
+import { contact } from '@/assets/svgs'
 
 const Contact = () => {
 
@@ -45,8 +47,8 @@ const Contact = () => {
                 <span className=' px-32 mt-4 text-center ' >For any inquiries or assistance, don't hesitate to reach out to us.</span>
             </div>
             <div className="bg-gray-100 grid grid-cols-2 justify-center gap-12 mt-20 w-full rounded-lg px-8 py-12 ">
-                <div className="col-span-1">
-                    <img src={contactImage} alt="" className='h-full px-12' />
+                <div className="col-span-1 mr-1 pr-12">
+                    <SVG  height='100%' svg={contact} />
                 </div>
                 <form onSubmit={onSubmit} className="col-span-1 flex flex-col gap-4 ">
                     <div className="flex flex-col gap-2">

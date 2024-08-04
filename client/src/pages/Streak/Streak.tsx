@@ -13,7 +13,7 @@ import { RootState } from '../../redux/store';
 import SaveStreak from './SaveStreak';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import { getComments } from '../../redux/actions/comment';
+import { getComments } from '../../redux/reducers/comment';
 import { Loader } from '../../utils/Components';
 import { useStreakModal } from '../../hooks/useStreakModal';
 import {
@@ -65,7 +65,8 @@ const StreakComponent = ({ streak }: { streak: Streak }) => {
     if (streak.comments.length == 0) return
     const refetch = streak.comments.every(comment => typeof comment == 'string')
     if (refetch) {
-      dispatch<any>(getComments(streak?._id!, 'streak', setCommentsLoading))
+      setCommentsLoading(true)
+      dispatch<any>(getComments({ postId: streak?._id!, postType: 'streak' })).finally(() => setCommentsLoading(false))
     }
   }, [showComments])
 
@@ -107,7 +108,7 @@ const StreakComponent = ({ streak }: { streak: Streak }) => {
   const handleComment = () => {
     if (!commentContent) return
     dispatch<any>(commentStreak(streak?._id!, commentContent, loggedUser!))
-    dispatch<any>(getComments(streak?._id!, 'streak', setCommentsLoading))
+    dispatch<any>(getComments({ postId: streak?._id!, postType: 'streak' }))
     setCommentContent('')
   }
 
@@ -125,7 +126,7 @@ const StreakComponent = ({ streak }: { streak: Streak }) => {
           <div className='flex gap-4'>
             <Avatar>
               <AvatarImage src={streak?.user?.profilePicture} alt="Profile" />
-              <AvatarFallback>{streak?.user?.firstName?.charAt(0) || 'X'}</AvatarFallback>
+              <AvatarFallback className='capitalize bg-blackish text-white'>{streak?.user?.firstName?.charAt(0) || 'X'}</AvatarFallback>
             </Avatar>
             <CardTitle className='flex flex-col items-start justify-center'>
               <Link to={`/user/${streak?.user?._id}`} className='text-sm font-semibold capitalize hover:underline hover:text-copper'>
@@ -179,7 +180,11 @@ const StreakComponent = ({ streak }: { streak: Streak }) => {
                           ?
                           <button className='w-16 h-8 rounded-full text-white absolute right-4 top-2' >Copied!</button>
                           :
-                          <Tooltip placement='top-start' title='Copy'  ><button onClick={() => hanldeCopy('streak?.streak')} className='w-8 h-8 rounded-full absolute right-4 top-2' ><CopyAllOutlined className='text-white' /></button></Tooltip>
+                          <Tooltip placement='top-start' title='Copy'  >
+                            <button title='copy' onClick={() => hanldeCopy('streak?.streak')} className='w-8 h-8 rounded-full absolute right-4 top-2' >
+                              <CopyAllOutlined className='text-white' />
+                            </button>
+                          </Tooltip>
                       }
                       <SyntaxHighlighter
                         style={atomOneDark}

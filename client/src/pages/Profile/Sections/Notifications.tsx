@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import NotificationCard from '../../Notifications/NotificationCard';
 import { useDispatch, useSelector } from 'react-redux';
-import { getNotifications } from '@/redux/actions/notification';
+import { getNotifications } from '@/redux/reducers/notification';
 import { Notification } from '@/interfaces';
 import { RootState } from '@/redux/store';
 

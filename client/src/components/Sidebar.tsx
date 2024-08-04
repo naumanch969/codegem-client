@@ -138,11 +138,11 @@ const Sidebar = () => {
                                         {
                                             item.active
                                                 ?
-                                                <button title='Active' className={`${item.active && 'font-extrabold bg-blackish-lighten text-copper '} hover:bg-blackish-lighten hover:text-white w-[40px] h-[40px] rounded-full `} >
+                                                <button title='Active' className={`${item.active && 'font-extrabold bg-blackish-lighten text-copper '} hover:bg-blackish-lighten hover:text-white w-[40px] h-[40px] rounded-full flex justify-center items-center `} >
                                                     <item.iconFilled className={``} />
                                                 </button>
                                                 :
-                                                <button title='Disactive' className={`${item.active && 'font-extrabold bg-blackish-lighten text-copper '} hover:bg-blackish-lighten hover:text-white w-[40px] h-[40px] rounded-full `} >
+                                                <button title='Disactive' className={`${item.active && 'font-extrabold bg-blackish-lighten text-copper '} hover:bg-blackish-lighten hover:text-white w-[40px] h-[40px] rounded-full flex justify-center items-center `} >
                                                     <item.iconOutlined className={``} />
                                                 </button>
                                         }

@@ -33,8 +33,8 @@ const Footer = () => {
         <div className='flex flex-col gap-24 border-t mt-28 pt-16 ' >
             <div className="grid grid-cols-2 gap-36 w-full ">
                 <div className="col-span-1 w-full flex flex-col gap-4">
-                    <Link to='/' ><img src={logo} alt="Image" className="w-36 z-10" /></Link>
-                    <h1>At EchoSign, we are driven by a singular mission: to empower individuals with special needs through innovative technology. We believe that effective communication is a fundamental right for all, and we're committed to breaking down barriers to ensure that everyone can express themselves freely.</h1>
+                    <Link to='/' ><img src={logo} alt="Image" className="w-48 z-10" /></Link>
+                    <h1>Discover a dedicated space for programmers on Codegem. Share your code, collaborate on exciting projects, and connect with like-minded individuals.</h1>
                 </div>
                 <div className="col-span-1 flex flex-col gap-10 w-full">
 

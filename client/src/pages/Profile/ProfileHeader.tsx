@@ -45,7 +45,7 @@ const ProfilePage = () => {
                                         alt="Profile"
                                     />
                                     :
-                                    <div className="font-dancing-script text-7xl flex justify-center items-center bg-gradient-to-r from-copper-darken via-black to-blackish w-full h-full rounded-full ">
+                                    <div className="font-dancing-script text-7xl flex justify-center items-center bg-gradient-to-tr from-blackish-darken via-blackish to-copper-darken w-full h-full rounded-full ">
                                         {loggedUser?.firstName.charAt(0)}{loggedUser?.lastName.charAt(0)}
                                     </div>
                             }

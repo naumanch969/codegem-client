@@ -19,7 +19,7 @@ const Menubar = ({ menuItems }: { menuItems: { label: string, value: string, onC
                     <span
                         key={index}
                         onClick={() => item.onClick()}
-                        className={`cursor-pointer rounded text-start py-3 px-2 text-cool-gray hover:bg-warm-gray-light hover:text-white transition-all duration-200 focus:outline-none
+                        className={`cursor-pointer rounded text-start py-3 px-2 text-cool-gray hover:bg-copper hover:text-white transition-all duration-200 focus:outline-none
                              ${false ? 'bg-warm-gray-light text-white' : ''
                             }`}
                     >

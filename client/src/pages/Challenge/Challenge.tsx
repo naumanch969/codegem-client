@@ -13,7 +13,7 @@ import { RootState } from '../../redux/store';
 import SaveChallenge from './SaveChallenge';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import { getComments } from '../../redux/actions/comment';
+import { getComments } from '../../redux/reducers/comment';
 import { Loader } from '../../utils/Components';
 import { useChallengeModal } from '../../hooks/useChallengeModal';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, } from "@/components/ui/card"
@@ -51,7 +51,7 @@ const ChallengeComponent = ({ challenge }: { challenge: Challenge }) => {
     if (challenge.comments.length == 0) return
     const refetch = challenge.comments.every(comment => typeof comment == 'string')
     if (refetch) {
-      dispatch<any>(getComments(challenge?._id!, 'challenge', setCommentsLoading))
+      dispatch<any>(getComments({ postId: challenge?._id!, postType: 'challenge' }))
     }
   }, [showComments])
 
@@ -93,7 +93,7 @@ const ChallengeComponent = ({ challenge }: { challenge: Challenge }) => {
   const handleComment = () => {
     if (!commentContent) return
     dispatch<any>(commentChallenge(challenge?._id!, commentContent, loggedUser!))
-    dispatch<any>(getComments(challenge?._id!, 'challenge', setCommentsLoading))
+    dispatch<any>(getComments({ postId: challenge?._id!, postType: 'challenge' }))
     setCommentContent('')
   }
 
@@ -110,7 +110,7 @@ const ChallengeComponent = ({ challenge }: { challenge: Challenge }) => {
           <div className='flex gap-4'>
             <Avatar>
               <AvatarImage src={challenge?.user?.profilePicture} alt="Profile" />
-              <AvatarFallback>{challenge?.user?.firstName?.charAt(0)}</AvatarFallback>
+              <AvatarFallback className='capitalize bg-blackish text-white'>{challenge?.user?.firstName?.charAt(0)}</AvatarFallback>
             </Avatar>
             <CardTitle className='flex flex-col items-start justify-center'>
               <Link to={`/user/${challenge?.user?._id}`} className='text-sm font-semibold capitalize hover:underline hover:text-copper'>

@@ -11,7 +11,7 @@ import { RootState } from '../../redux/store';
 import SaveCode from './SaveCode';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import { getComments } from '../../redux/actions/comment';
+import { getComments } from '../../redux/reducers/comment';
 import { Loader } from '../../utils/Components';
 import { useCodeModal } from '../../hooks/useCodeModal';
 import {
@@ -62,7 +62,8 @@ const CodeComponent = ({ code }: { code: Code }) => {
     if (code.comments.length == 0) return
     const refetch = code.comments.every(comment => typeof comment == 'string')
     if (refetch) {
-      dispatch<any>(getComments(code?._id!, 'code', setCommentsLoading))
+      setCommentsLoading(true)
+      dispatch<any>(getComments({ postId: code?._id!, postType: 'code' })).finally(() => setCommentsLoading(false))
     }
   }, [showComments])
 
@@ -104,7 +105,7 @@ const CodeComponent = ({ code }: { code: Code }) => {
   const handleComment = () => {
     if (!commentContent) return
     dispatch<any>(commentCode(code?._id!, commentContent, loggedUser!))
-    dispatch<any>(getComments(code?._id!, 'code', setCommentsLoading))
+    dispatch<any>(getComments({ postId: code?._id!, postType: 'code' }))
     setCommentContent('')
   }
 
@@ -114,7 +115,7 @@ const CodeComponent = ({ code }: { code: Code }) => {
       {openShareModal && <ShareCode open={openShareModal} setOpen={setOpenShareModal} code={code} />}
       {openSaveModal && <SaveCode open={openSaveModal} setOpen={setOpenSaveModal} code={code} />}
 
-      <Card className='w-full flex flex-col bg-light-gray text-cool-gray-dark'>
+      <Card className='w-full flex flex-col bg-copper-gray-light text-cool-gray-dark'>
 
         {/* username */}
         <CardHeader className='flex flex-row justify-between items-center w-full px-4 py-3 pb-2 '>
@@ -171,7 +172,7 @@ const CodeComponent = ({ code }: { code: Code }) => {
                   <button className='w-16 h-8 rounded-full text-white ' >Copied!</button>
                   :
                   <Tooltip placement='top-start' title='Copy'  >
-                    <button onClick={() => hanldeCopy(code?.code)} className='w-8 h-8 rounded-full ' >
+                    <button title='copy' onClick={() => hanldeCopy(code?.code)} className='w-8 h-8 rounded-full ' >
                       <CopyAllOutlined className='text-white' />
                     </button>
                   </Tooltip>

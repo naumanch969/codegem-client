@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Check, Delete, Visibility, Clear } from '@mui/icons-material';
 import NotificationCard from './NotificationCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { Notification as TNotification, User } from '../../interfaces';
-import { deleteNotifications, getNotifications, markAllAsRead } from '../../redux/actions/notification';
+import { deleteNotifications, getNotifications, markAllAsRead } from '../../redux/reducers/notification';
 import { empty } from '@/assets';
+import { Button } from '@/components/ui/button';
 
 const Notification = () => {
 
@@ -13,35 +13,35 @@ const Notification = () => {
     const { notifications, isFetching }: { notifications: TNotification[], isFetching: boolean } = useSelector((state: RootState) => state.notification)
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
 
+    const [loading, setLoading] = useState<'dismiss-all' | 'mark-all' | ''>('')
 
     useEffect(() => {
         dispatch<any>(getNotifications())
     }, [])
 
     const handleMarkAllAsRead = () => {
-        dispatch<any>(markAllAsRead(loggedUser?._id!))
+        setLoading('mark-all')
+        dispatch<any>(markAllAsRead(loggedUser?._id!)).finally(() => setLoading(''))
     };
 
     const handleDismissAll = () => {
-        dispatch<any>(deleteNotifications())
+        setLoading('dismiss-all')
+        dispatch<any>(deleteNotifications()).finally(() => setLoading(''))
     };
 
     return (
         <div className="container mx-auto p-4">
-            <h1 className="text-3xl font-bold mb-4 text-blackish">Notifications</h1>
-            <div className="flex justify-between items-center mb-4">
-                <button
-                    className="text-copper hover:text-copper-dark"
-                    onClick={handleMarkAllAsRead}
-                >
-                    Mark All as Read
-                </button>
-                <button
-                    className="text-copper hover:text-copper-dark"
-                    onClick={handleDismissAll}
-                >
-                    Dismiss All
-                </button>
+
+            <div className="flex justify-between items-center gap-4">
+                <h1 className="text-3xl font-bold mb-4 text-blackish">Notifications</h1>
+                <div className="flex items-center gap-4 mb-4">
+                    <Button variant='outline' onClick={handleMarkAllAsRead}>
+                        Mark All as Read
+                    </Button>
+                    <Button variant='destructive' onClick={handleDismissAll}>
+                        Dismiss All
+                    </Button>
+                </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {

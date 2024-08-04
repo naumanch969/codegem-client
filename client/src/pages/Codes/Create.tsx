@@ -32,22 +32,25 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import toast from 'react-hot-toast';
 import { Combobox } from '@/components/ui/combobox';
 import { programmingLanguages } from '@/constant';
+import { Required } from '@/utils/Components';
 
 
-const CreateCode = () => {    // handleSubmit is passed through collection create code
+const CreateCode = () => {
 
     // <---------------------------------------------------- VARIABLES ----------------------------------------------------------->
     const { loggedUser }: { loggedUser: User | null } = useSelector((state: RootState) => state.user)
     const { isOpen, onClose, code, collectionId, groupId } = useCodeModal()
     const { isFetching } = useSelector((state: RootState) => state.code)
     const formSchema = z.object({
-        title: z.string().min(1, { message: 'Title is required.' }).max(250, { message: 'Title can\' be longer than 250 characters.' }),
-        description: z.string().min(1, { message: 'Description is required.' }),
+        title: z.string().min(1, { message: 'Title is required.' }).max(250, { message: 'Title can\'t be longer than 250 characters.' }),
+        description: z.string().optional(),
         code: z.string().min(1, { message: 'Code is required.' }),
         language: z.string().min(1, { message: 'Language is required.' }),
-        hashTags: z.array(z.string({ required_error: "Hashtags are required." })),
+        hashTags: z.array(z.string()).optional(),
         visibility: z.string().min(1).max(50),
-    })
+    });
+
+
     const initialData: z.infer<typeof formSchema> = {
         title: "",
         description: "",
@@ -69,6 +72,7 @@ const CreateCode = () => {    // handleSubmit is passed through collection creat
     // <---------------------------------------------------- FUNCTIONS ----------------------------------------------------------->
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         // TODO: check format of data being sent to backend
+        console.log('values', values)
         if (Boolean(code)) { // update
             if (groupId)
                 dispatch<any>(updateCode(code?._id as string, { ...values, group: groupId }, onClose, toast))
@@ -126,7 +130,7 @@ const CreateCode = () => {    // handleSubmit is passed through collection creat
                     </div>
                     <Select onValueChange={(value: string) => form.setValue("visibility", value)} >
                         <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Visibility" defaultValue='public' />
+                            <SelectValue placeholder="Public" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="public">Public</SelectItem>
@@ -136,13 +140,13 @@ const CreateCode = () => {    // handleSubmit is passed through collection creat
                 </div>
 
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 ">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4 ">
                         <FormField
                             control={form.control}
                             name="title"
                             render={({ field }: { field: any }) => (
                                 <FormItem>
-                                    <FormLabel>Title</FormLabel>
+                                    <FormLabel className='flex gap-1 items-center' >Title <Required /></FormLabel>
                                     <FormControl>
                                         <Input className='bg-secondary' placeholder="Title" {...field} />
                                     </FormControl>
@@ -152,15 +156,15 @@ const CreateCode = () => {    // handleSubmit is passed through collection creat
                         />
                         <FormField
                             control={form.control}
-                            name="description"
+                            name="code"
                             render={({ field }: { field: any }) => (
                                 <FormItem>
-                                    <FormLabel>Description</FormLabel>
+                                    <FormLabel className='flex gap-1 items-center' >Code <Required /></FormLabel>
                                     <FormControl>
                                         <Textarea
-                                            rows={4}
+                                            rows={10}
                                             disabled={isFetching}
-                                            placeholder="Description"
+                                            placeholder="Paste your code here."
                                             className='bg-secondary'
                                             {...field}
                                         />
@@ -174,7 +178,7 @@ const CreateCode = () => {    // handleSubmit is passed through collection creat
                             name="language"
                             render={({ field }: { field: any }) => (
                                 <FormItem>
-                                    <FormLabel>Language</FormLabel>
+                                    <FormLabel className='flex gap-1 items-center' >Language <Required /></FormLabel>
                                     <FormControl>
                                         <Combobox
                                             items={programmingLanguages}
@@ -196,23 +200,21 @@ const CreateCode = () => {    // handleSubmit is passed through collection creat
                             control={form.control}
                             render={({ field }) => (
                                 <FormItem className="col-span-1 md:col-span-2 ">
-                                    <FormLabel>
-                                        Hash Tags
-                                    </FormLabel>
+                                    <FormLabel className='flex gap-1 items-center' >Hash Tags</FormLabel>
                                     <FormControl>
                                         <>
                                             <Input
                                                 placeholder="Text - separated by enter"
                                                 value={hashTag}
-                                                onChange={(e) => setHashTag(e.target.value)}
-                                                onKeyDown={(e) => { handleAddHashTag(e, field) }}
+                                                onChange={(e) => setHashTag(e.target.value!)}
+                                                onKeyDown={(e) => { handleAddHashTag(e, field!) }}
                                                 className='bg-secondary'
                                             />
                                             <div className="space-x-1">
                                                 {field.value?.map((text: string, index: number) => (
                                                     <Badge key={index}>
                                                         {text}{' '}
-                                                        <X onClick={() => onFilterHashTag(text, field)} className="w-4 h-4 rounded-full" />
+                                                        <X onClick={() => onFilterHashTag(text, field!)} className="w-4 h-4 rounded-full" />
                                                     </Badge>
                                                 ))}
                                             </div>
@@ -224,15 +226,15 @@ const CreateCode = () => {    // handleSubmit is passed through collection creat
                         />
                         <FormField
                             control={form.control}
-                            name="code"
+                            name="description"
                             render={({ field }: { field: any }) => (
                                 <FormItem>
-                                    <FormLabel>Code</FormLabel>
+                                    <FormLabel className='flex gap-1 items-center' >Description <span className='text-body' >(Optional but preferred)</span></FormLabel>
                                     <FormControl>
                                         <Textarea
-                                            rows={12}
+                                            rows={3}
                                             disabled={isFetching}
-                                            placeholder="Paste your code here."
+                                            placeholder="Description"
                                             className='bg-secondary'
                                             {...field}
                                         />

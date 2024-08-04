@@ -71,7 +71,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="hidden lg:block w-[25%] bg-cool-gray-light p-4 rounded shadow">
+      <div className="hidden lg:block w-[25%] bg-copper-gray-light p-4 rounded shadow">
         <Rightbar />
       </div>
     </div>

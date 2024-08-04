@@ -1,47 +1,95 @@
 import React from 'react'
-import { About1, About2, About3 } from '@/assets'
+import { SVG } from '@/components';
+import { code, streak, collection, friend, group, header, message, project } from '@/assets/svgs';
 
 const About = () => {
+
+    const contentSections = [
+        {
+            title: "Code Snippets",
+            subtitle: "Share and Shine",
+            description: "Showcase your innovative solutions and algorithms with the Codegem community. Share your code snippets to gain feedback, inspire others, and highlight your programming skills.",
+            svg: code,
+            imageAlt: '',
+        },
+        {
+            title: "Code Streaks",
+            subtitle: "Track Your Progress",
+            description: "Stay motivated and on track with your coding goals. Code Streaks helps you monitor your progress, celebrate milestones, and push your boundaries.",
+            svg: streak,
+            imageAlt: '',
+        },
+        {
+            title: "Project Collaboration",
+            subtitle: "Build Together",
+            description: "Work seamlessly on coding projects with friends and fellow developers. Collaborate in real-time, share updates, and build great things together.",
+            svg: project,
+            imageAlt: '',
+        },
+        {
+            title: "Collections",
+            subtitle: "Organize and Optimize",
+            description: "Keep your code snippets organized and easily accessible. Create collections to categorize your code, making it simpler to find and share your work.",
+            svg: collection,
+            imageAlt: '',
+        },
+        {
+            title: "Groups and Communities",
+            subtitle: "Connect and Engage",
+            description: "Join or create groups based on your interests and expertise. Engage in discussions, share knowledge, and grow your professional network within specialized communities.",
+            svg: group,
+            imageAlt: '',
+        },
+        {
+            title: "Messaging",
+            subtitle: "Real-Time Conversations",
+            description: "Stay connected with instant messaging. Engage in real-time conversations with friends, collaborators, and groups to exchange ideas and solve problems efficiently.",
+            svg: message,
+            imageAlt: '',
+        },
+        {
+            title: "Friend Discovery",
+            subtitle: "Expand Your Network",
+            description: "Find and connect with friends who share your coding interests. Discover new connections and broaden your network to enhance your collaborative opportunities.",
+            svg: friend,
+            imageAlt: '',
+        },
+    ];
+
+
+
     return (
         <div className="min-h-screen flex flex-col justify-start items-center py-12 pb-32 ">
 
-            <h2 className="text-5xl font-bold text-foreground ">About Codegem</h2>
-            <h4 className='text-xl text-accent-foreground mt-2 ' >Empowering Communication, One Gesture at a Time</h4>
+            <h2 className="text-5xl font-bold text-foreground text-center">Elevate Your Coding Experience</h2>
+            <h4 className='text-xl text-accent-foreground mt-2 ' >Connect, Collaborate, and Create with the Ultimate Coding Community</h4>
 
-            <span className=' px-32 mt-8 text-center ' >At EchoSign, we are driven by a singular mission: to empower individuals with special needs through innovative technology. We believe that effective communication is a fundamental right for all, and we're committed to breaking down barriers to ensure that everyone can express themselves freely.</span>
+            <span className=' px-32 mt-8 text-center ' >
+                Welcome to Codegem, where coding meets community. Codegem is a dedicated social platform for programmers, offering a dynamic space to share code snippets, track coding progress, and collaborate on projects. Designed for developers of all levels, Codegem transforms coding into a shared journey of discovery and growth. Join us to elevate your coding experience and connect with a network of like-minded professionals.
+            </span>
 
             <div className="flex flex-col justify-start items-start gap-32 mt-28 px-12">
-                <div className="grid grid-cols-2 gap-6 w-full ">
-                    <div className="cols-span-1 flex flex-col gap-4 ">
-                        <h3 className='text-foreground text-3xl font-semibold ' >Innovative Technology,
-                            <br />Inclusive Solutions</h3>
-                        <span className="text-muted-foreground mt-2 ">EchoSign harnesses the power of advanced technology to bridge communication gaps for individuals who use sign language as their primary mode of communication. Our platform utilizes state-of-the-art gesture recognition technology, powered by MediaPipe, to accurately translate American Sign Language (ASL) gestures into sound. By converting ASL into sound, we make communication accessible to everyone, regardless of their hearing abilities.</span>
+                {contentSections.map((section, index) => (
+                    <div
+                        key={index}
+                        className={`grid grid-cols-2 gap-6 w-full`}
+                    >
+                        <div className={`cols-span-1 flex flex-col gap-4 ${index % 2 === 0 ? 'order-1' : 'order-2'}`}>
+                            <h3 className='text-foreground text-3xl font-semibold'>
+                                {section.title}
+                                <br />{section.subtitle}
+                            </h3>
+                            <span className="text-muted-foreground mt-2">
+                                {section.description}
+                            </span>
+                        </div>
+                        <div className={`cols-span-1 flex justify-center ${index % 2 === 0 ? 'order-2' : 'order-1'}`}>
+                            <SVG width='20rem' svg={section.svg} />
+                        </div>
                     </div>
-                    <div className="cols-span-1 flex justify-center ">
-                        <img src={About2} alt='' className='w-[22rem] ' />
-                    </div>
-                </div>
-                <div className="grid grid-cols-2 gap-6 w-full ">
-                    <div className="cols-span-1 flex justify-center ">
-                        <img src={About1} alt='' className='w-[22rem] ' />
-                    </div>
-                    <div className="cols-span-1 flex flex-col gap-4 ">
-                        <h3 className='text-foreground text-3xl font-semibold ' >Seamless Interaction,
-                            <br />Effortless Communication</h3>
-                        <span className="text-muted-foreground mt-2 ">Whether it's expressing basic needs, sharing emotions, or engaging in everyday conversations, EchoSign is designed to facilitate seamless interaction. Our user-friendly interface ensures effortless communication, allowing users to convey their messages with clarity and ease. With support for a wide range of ASL gestures, including alphabets, digits, and common gestures, EchoSign empowers individuals to communicate effectively in any situation.</span>
-                    </div>
-                </div>
-                <div className="grid grid-cols-2 gap-6 w-full ">
-                    <div className="cols-span-1 flex flex-col gap-4 ">
-                        <h3 className='text-foreground text-3xl font-semibold ' >Promoting Inclusivity,
-                            <br />Fostering Empowerment</h3>
-                        <span className="text-muted-foreground mt-2 ">At EchoSign, we are committed to promoting inclusivity and fostering empowerment within our community. We believe that everyone deserves to be heard, and we're dedicated to creating a world where communication barriers are a thing of the past. By providing accessible solutions and championing the rights of individuals with special needs, we're paving the way for a more inclusive and equitable society.</span>
-                    </div>
-                    <div className="cols-span-1 flex justify-center ">
-                        <img src={About3} alt='' className='w-[26rem] ' />
-                    </div>
-                </div>
+                ))}
             </div>
+
 
         </div>
     )

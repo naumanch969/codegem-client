@@ -45,7 +45,7 @@ const ReceivedRequests = ({ searchValue }: { searchValue: string }) => {
 
   return (
     <div className='flex flex-col gap-y-8 w-full'>
-      <div className='w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
+      <div className='w-full flex flex-col gap-6'>
         {
           isFetching
             ?
@@ -55,7 +55,7 @@ const ReceivedRequests = ({ searchValue }: { searchValue: string }) => {
             :
             receivedRequests.length == 0
               ?
-              <div className='col-span-4 w-full flex flex-col justify-center items-center grayscale '>
+              <div className='w-full flex flex-col justify-center items-center grayscale '>
                 <img src={empty} alt='Empty' className='w-96 h-96 grayscale ' />
                 <span className='text-foreground text-center text-lg font-semibold ' >Nothing Found.</span>
                 <span className='text-muted-foreground text-center text-md ' >It's our fault not yours.</span>

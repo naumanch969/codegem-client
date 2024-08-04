@@ -218,6 +218,7 @@ export const createCode = async (req, res, next) => {
       );
     }
 
+    result.user = findedUser
     res.status(200).json(result);
   } catch (error) {
     next(createError(res, 500, error.message));

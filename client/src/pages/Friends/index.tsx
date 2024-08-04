@@ -63,15 +63,19 @@ const FriendsPage = () => {
                 </div>
             </div>
 
-            <div className="flex justify-center items-center w-full ">
-                <Menubar activeMenuItem={activeMenuItem} setActiveMenuItem={setActiveMenuItem} />
-            </div>
+            <div className="grid grid-cols-4 gap-4">
+                <div className="col-span-1 w-full ">
+                    <Menubar activeMenuItem={activeMenuItem} setActiveMenuItem={setActiveMenuItem} />
+                </div>
 
-            {activeMenuItem === 'find' && <Find searchValue={searchValue} />}
-            {activeMenuItem === 'friends' && <Friends searchValue={searchValue} />}
-            {activeMenuItem === 'suggested' && <SuggestedFriends searchValue={searchValue} />}
-            {activeMenuItem === 'sent' && <SentRequests searchValue={searchValue} />}
-            {activeMenuItem === 'received' && <ReceivedRequests searchValue={searchValue} />}
+                <div className="col-span-3">
+                    {activeMenuItem === 'find' && <Find searchValue={searchValue} />}
+                    {activeMenuItem === 'friends' && <Friends searchValue={searchValue} />}
+                    {activeMenuItem === 'suggested' && <SuggestedFriends searchValue={searchValue} />}
+                    {activeMenuItem === 'sent' && <SentRequests searchValue={searchValue} />}
+                    {activeMenuItem === 'received' && <ReceivedRequests searchValue={searchValue} />}
+                </div>
+            </div>
 
         </div>
     );

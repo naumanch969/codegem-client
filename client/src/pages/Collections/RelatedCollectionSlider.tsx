@@ -67,7 +67,7 @@ const RelatedCollectionSlider = () => {
                                             <div className="flex justify-start items-center gap-2 ">
                                                 <Avatar className='w-8 h-8 ' >
                                                     <AvatarImage src={(collection?.owner as User)?.profilePicture} alt="Profile" />
-                                                    <AvatarFallback className='capitalize' >{(collection?.owner as User)?.firstName?.charAt(0)}</AvatarFallback>
+                                                    <AvatarFallback className='capitalize bg-blackish text-white' >{(collection?.owner as User)?.firstName?.charAt(0)}</AvatarFallback>
                                                 </Avatar>
                                                 <h3 className='flex flex-col items-start justify-center space-y-0 '>
                                                     <Link to={`/user/${(collection?.owner as User)?._id}`} className='text-xs font-semibold capitalize hover:underline hover:text-copper'>
@@ -77,7 +77,7 @@ const RelatedCollectionSlider = () => {
                                             </div>
                                             <Button onClick={() => onStar(collection._id)} variant={starred ? 'default' : 'outline'} size='sm' className='p-1 w-7 h-7 ' ><Star className='w-4 h-4' /></Button>
                                         </CardHeader>
-                                        <CardContent className='p-4 pt-0' >
+                                        <CardContent className='p-4 pt-0 flex-1' >
                                             <Link to={`/collections/${collection?._id}`} className='text-blackish hover:text-blackish-lighten hover:underline capitalize flex items-center text-base font-semibold '>
                                                 <LucideGroup className='mr-2 w-5 h-5 ' />
                                                 {collection.name}

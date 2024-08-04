@@ -23,18 +23,33 @@ const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
         <div className="w-full flex flex-col gap-4 ">
 
             <div className="flex justify-between items-center gap-x-4 " >
-                <div className="relative w-full " >
+                <div className="relative w-full h-[48px] " >
+                    <div className="absolute left-[3px] top-[50%] transform translate-y-[-50%] h-fit ">
+                        <Select onValueChange={(value: string) => setFilters({ ...filters, language: value })} >
+                            <SelectTrigger className="w-32">
+                                <SelectValue placeholder="Filter By" defaultValue='all' />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="python">All</SelectItem>
+                                <SelectItem value="error">Error</SelectItem>
+                                <SelectItem value="algorithm">Algorithm</SelectItem>
+                                <SelectItem value="streak">Streak</SelectItem>
+                                <SelectItem value="challenge">Challenge</SelectItem>
+                                <SelectItem value="project">Project</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
                     <Input
                         type="text"
                         placeholder="Search here... "
                         value={searchValue}
                         onChange={(e) => setSearchValue(e.target.value)}
-                        className="w-full "
+                        className="w-full h-full focus:outline-1 pl-36 text-[17px]"
                     />
                     <Button
                         variant='default'
                         size='sm'
-                        className="absolute right-[2.52px] top-[50%] transform translate-y-[-50%]"
+                        className="bg-blackish-lighten hover:bg-blackish-lighten/90 absolute right-[3px] top-[50%] transform translate-y-[-50%] h-[42px] "
                     >
                         <Search className="text-white" />
                     </Button>

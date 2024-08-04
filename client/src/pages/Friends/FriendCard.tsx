@@ -3,6 +3,8 @@ import { User } from '../../interfaces';
 import { useDispatch } from 'react-redux';
 import { acceptFriendRequest, rejectFriendRequest, removeFriendRequest, sendFriendRequest } from '../../redux/reducers/friendSlice';
 import { useNavigate } from 'react-router-dom';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 
 const FriendCard = ({ friend, type }: { friend: User, type: string }) => {
 
@@ -29,54 +31,49 @@ const FriendCard = ({ friend, type }: { friend: User, type: string }) => {
 
   //////////////////////////////////////////////////////// RENDER ////////////////////////////////////////////////////////////
   return (
-    <div className="bg-secondary p-4 shadow-md rounded-md flex flex-col justify-between">
-      <div className='w-full ' >
-        {
-          friend?.profilePicture
-            ?
-            <img
-              src={friend?.profilePicture}
-              alt={friend?.username}
-              className="w-full h-[160px] object-cover rounded-md mb-2"
-            />
-            :
-            <div className='w-full h-[160px] rounded-md mb-2 capitalize flex justify-center items-center bg-black text-white font-semibold text-[5rem] '>{friend?.username?.charAt(0)}</div>
-        }
-        <p onClick={() => navigate(`/user/${friend._id}`)} className="cursor-pointer text-center text-sm font-medium text-blackish-darken capitalize ">
-          {friend?.firstName} {friend?.lastName}
-        </p>
-        <p onClick={() => navigate(`/user/${friend._id}`)} className="cursor-pointer text-center text-sm font-medium text-blackish-darken/50 capitalize ">
-          @{friend?.username}
-        </p>
+    <div className="bg-white p-4 shadow-md rounded-md flex w-full justify-between">
+      <div className='flex gap-2' >
+        <Avatar>
+          <AvatarImage src={friend?.profilePicture} alt="Profile" />
+          <AvatarFallback className='capitalize bg-blackish text-white' >{friend?.username?.charAt(0)}</AvatarFallback>
+        </Avatar>
+        <div className="flex flex-col justify-center gap-1">
+          <p onClick={() => navigate(`/user/${friend._id}`)} className="cursor-pointer text-center text-base font-semibold text-blackish-darken capitalize ">
+            {friend?.firstName} {friend?.lastName}
+          </p>
+          <p onClick={() => navigate(`/user/${friend._id}`)} className="cursor-pointer text-center text-sm font-medium text-blackish-darken/60 capitalize ">
+            @{friend?.username}
+          </p>
+        </div>
+        {/* <p className="text-cool-gray text-xs mb-1">
+          {friend?.mutualFriends as number > 0 ? `${friend?.mutualFriends} Mutual Friends` : 'No Mutual Friends'}
+        </p> */}
       </div>
       <div className="mt-2">
-        <p className="text-cool-gray text-xs mb-1">
-          {friend?.mutualFriends as number > 0 ? `${friend?.mutualFriends} Mutual Friends` : 'No Mutual Friends'}
-        </p>
         {type == 'friend' &&
-          <button onClick={() => navigate(`/user/${friend._id}`)} className="w-full py-2 bg-copper hover:bg-copper-lighten text-white rounded-md mb-1 text-xs">
+          <Button variant='default' onClick={() => navigate(`/user/${friend._id}`)} >
             View Profile
-          </button>
+          </Button>
         }
         {type == 'suggestedUser' &&
-          <button onClick={handleSendFriendRequest} className="w-full py-2 bg-copper hover:bg-copper-lighten text-white rounded-md text-xs">
+          <Button onClick={handleSendFriendRequest} >
             Add Friend
-          </button>
+          </Button>
         }
         {type == 'receivedRequest' &&
           <div className='flex justify-between gap-2 mt-1 ' >
-            <button onClick={handleRejectFriendRequest} className="w-1/2 py-2 bg-red-500 hover:bg-red-400 text-white rounded-md text-xs">
+            <Button variant='destructive' onClick={handleRejectFriendRequest} >
               Reject
-            </button>
-            <button onClick={handleAcceptFriendRequest} className="w-1/2 py-2 bg-copper hover:bg-copper-lighten text-white rounded-md text-xs">
+            </Button>
+            <Button onClick={handleAcceptFriendRequest} >
               Accept
-            </button>
+            </Button>
           </div>
         }
         {type == 'sentRequest' &&
-          <button onClick={handleRemoveFriendRequest} className="w-full py-2 bg-copper hover:bg-copper-lighten text-white rounded-md text-xs">
+          <Button onClick={handleRemoveFriendRequest} >
             Remove
-          </button>
+          </Button>
         }
       </div>
     </div>

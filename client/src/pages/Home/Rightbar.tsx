@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { PeopleAlt, Update, PersonAdd, Image } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { User } from '../../interfaces';
 import { getFriends, getSuggestedUsers } from '../../redux/reducers/friendSlice';
 import { Link, useNavigate } from 'react-router-dom';
-import { SampleProfileCoverImage, image1 } from '../../assets';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const RightSidebar = () => {
@@ -30,7 +28,7 @@ const RightSidebar = () => {
 
     //////////////////////////////////////////////////// COMPONENTS ///////////////////////////////////////////////
     const Friend = ({ friend }: { friend: User }) => (
-        <li onClick={() => navigate(`/user/${friend._id}`)} className="flex gap-2 items-center mb-4 hover:bg-gray-100 rounded-md p-2 cursor-pointer">
+        <li onClick={() => navigate(`/user/${friend._id}`)} className="flex gap-2 items-center mb-4 hover:bg-copper-gray-light rounded-md p-2 cursor-pointer">
             <div className="w-10 flex items-center rounded-full overflow-hidden">
                 {friend.profilePicture ? (
                     <img
@@ -39,13 +37,13 @@ const RightSidebar = () => {
                         className="w-full h-full object-cover"
                     />
                 ) : (
-                    <span className="w-10 h-10 rounded-full bg-copper  text-white text-lg capitalize flex items-center justify-center">
+                    <span className="w-10 h-10 rounded-full bg-blackish text-white text-lg capitalize flex items-center justify-center">
                         {friend.username.charAt(0)}
                     </span>
                 )}
             </div>
             <div className="">
-                <p className="text-copper font-medium capitalize">
+                <p className="text-blackish-darken font-medium capitalize">
                     {friend.username}
                 </p>
                 <p className="text-cool-gray text-sm">
@@ -70,15 +68,16 @@ const RightSidebar = () => {
 
     return (
         <div className="flex flex-col gap-4 w-full">
-            <div className="flex flex-col items-center mb-4 gap-y-2 ">
+            <div className="flex flex-col items-center gap-y-2 bg-white p-3 rounded-lg shadow-md w-full ">
                 <Avatar className='w-32 h-32' >
                     <AvatarImage src={loggedUser?.profilePicture} alt="Profile" />
-                    <AvatarFallback className='text-8xl text-center' >{loggedUser?.firstName.charAt(0)}</AvatarFallback>
+                    <AvatarFallback className='text-8xl text-center bg-blackish text-white flex justify-center items-center' >{loggedUser?.firstName.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className='flex flex-col items-center gap-y-0.5 ' >
                     <p className="capitalize text-xl font-semibold text-gray-800">{loggedUser?.firstName} {loggedUser?.lastName}</p>
                     <p className="text-lg text-gray-600">{loggedUser?.email}</p>
                 </div>
+                <Link to='/profile' className='hover:text-copper-lighten hover:underline' >Visit Profile</Link>
             </div>
             {/* Suggested to You */}
             <div className="bg-white p-3 rounded-lg shadow-md w-full ">

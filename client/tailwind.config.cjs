@@ -33,6 +33,10 @@ module.exports = {
         "copper-darken": "#8C5E28",
         "copper-lighten": "#D89B63",
 
+        "copper-gray-light": "#b9a79f4d",
+        "copper-gray": "#b9a79f",
+        "copper-gray-darken": "#8c6e5d",
+
         "cool-gray": "#9B9B9B",
         "cool-gray-light": "#D3D3D3",
         "cool-gray-dark": "#7D7D7D",
@@ -43,6 +47,11 @@ module.exports = {
 
         "light-gray": "#F5F5F5",
         white: "#FFFFFF",
+
+        body: '#64748B',
+        bodydark: '#AEB7C0',
+        bodydark1: '#DEE4EE',
+        bodydark2: '#8A99AF',
 
         "link-blue": "#0070F3",
 

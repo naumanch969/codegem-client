@@ -60,7 +60,7 @@ const CollectionCard = ({ collection }: { collection: Collection }) => {
                     <div className="flex justify-start items-center gap-2 ">
                         <Avatar className='w-8 h-8 ' >
                             <AvatarImage src={(collection?.owner as User)?.profilePicture} alt="Profile" />
-                            <AvatarFallback className='capitalize' >{(collection?.owner as User)?.firstName?.charAt(0)}</AvatarFallback>
+                            <AvatarFallback className='capitalize bg-blackish text-white'  >{(collection?.owner as User)?.firstName?.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <h3 className='flex flex-col items-start justify-center space-y-0 '>
                             <Link to={`/user/${(collection?.owner as User)?._id}`} className='text-xs font-semibold capitalize hover:underline hover:text-copper'>
