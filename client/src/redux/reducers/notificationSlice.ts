@@ -16,7 +16,7 @@ export const getNotification = createAsyncThunk<Notification, string>('notificat
     const { data } = await api.getNotification(notificationId);
     return data
   } catch (err: any) {
-    toast.error('Something went wrong!')
+    console.error(err)
   }
 });
 
@@ -25,7 +25,7 @@ export const getNotifications = createAsyncThunk<Notification[], undefined>('not
     const { data } = await api.getNotifications();
     return data
   } catch (err: any) {
-    toast.error('Something went wrong!')
+    console.error(err)
   }
 });
 

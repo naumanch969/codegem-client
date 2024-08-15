@@ -4,7 +4,7 @@ import { getProjects, getUserProjects, getSavedProjects, createProject, sharePro
 import { verifyToken } from "../middleware/auth.js"
 
 
-router.get('/get/all', verifyToken, getProjects)
+router.get('/get/all', getProjects)
 router.get('/get/user/:userId', verifyToken, getUserProjects)
 router.get('/get/saved', verifyToken, getSavedProjects)    // get logged user' saved projects
 router.get('/get/liked', verifyToken, getLikedProjects)    // get logged user' liked projects

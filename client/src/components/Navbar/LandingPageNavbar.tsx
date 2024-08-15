@@ -1,5 +1,5 @@
 import React from 'react'
-import { logo } from '@/assets'
+import { logo, logo_mini } from '@/assets'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
@@ -28,7 +28,12 @@ const LandingPageNavbar = () => {
     return (
         <div className="flex justify-between items-center h-[6rem] w-full ">
 
-            <Link to='/' ><img src={logo} alt="Image" className="w-48 z-10" /></Link>
+            <Link to='/' >
+                <div className='flex justify-center gap-1 w-full' >
+                    <img src={logo_mini} alt="Logo" className="h-12" />
+                    <img src={logo} alt="Logo" className="h-12" />
+                </div>
+            </Link>
 
 
             <ul className="flex justify-center items-center gap-6 mt-2">

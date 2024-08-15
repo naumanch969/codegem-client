@@ -23,6 +23,8 @@
     "nodemon": "^2.0.22",
     "ntp-client": "^0.5.3",
     "otp-generator": "^4.0.1",
+    "server": "file:",
+    "serverless-http": "^3.2.0",
     "validator": "^13.9.0"
   }
 }

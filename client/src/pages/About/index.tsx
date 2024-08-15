@@ -1,13 +1,14 @@
 import React from 'react'
+import About from '../LandingPage/About'
 
-const About = () => {
+const AboutPage = () => {
 
 
     return (
-        <>
-            About
-        </>
+        <div className='bg-white pt-8' >
+            <About />
+        </div>
     )
 }
 
-export default About
+export default AboutPage

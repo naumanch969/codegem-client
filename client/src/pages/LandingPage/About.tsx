@@ -61,7 +61,7 @@ const About = () => {
     return (
         <div className="min-h-screen flex flex-col justify-start items-center py-12 pb-32 ">
 
-            <h2 className="text-5xl font-bold text-foreground text-center">Elevate Your Coding Experience</h2>
+            <h2 className="text-5xl text-blackish-lighten font-bold text-foreground text-center">Elevate Your Coding Experience</h2>
             <h4 className='text-xl text-accent-foreground mt-2 ' >Connect, Collaborate, and Create with the Ultimate Coding Community</h4>
 
             <span className=' px-32 mt-8 text-center ' >
@@ -75,7 +75,7 @@ const About = () => {
                         className={`grid grid-cols-2 gap-6 w-full`}
                     >
                         <div className={`cols-span-1 flex flex-col gap-4 ${index % 2 === 0 ? 'order-1' : 'order-2'}`}>
-                            <h3 className='text-foreground text-3xl font-semibold'>
+                            <h3 className='text-foreground text-3xl font-semibold text-blackish-lighten'>
                                 {section.title}
                                 <br />{section.subtitle}
                             </h3>
@@ -84,7 +84,7 @@ const About = () => {
                             </span>
                         </div>
                         <div className={`cols-span-1 flex justify-center ${index % 2 === 0 ? 'order-2' : 'order-1'}`}>
-                            <SVG width='20rem' svg={section.svg} />
+                            <SVG width='17rem' svg={section.svg} />
                         </div>
                     </div>
                 ))}

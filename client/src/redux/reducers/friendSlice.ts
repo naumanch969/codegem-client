@@ -31,7 +31,6 @@ export const getSuggestedUsers = createAsyncThunk('friend/getSuggestedUsers', as
         return data
     } catch (error) {
         console.error(error)
-        toast.error('Something went wrong!')
     }
 })
 export const getFriends = createAsyncThunk('friend/getFriends', async (query: string) => {
@@ -40,7 +39,6 @@ export const getFriends = createAsyncThunk('friend/getFriends', async (query: st
         return { result: data.result, count: data.count }
     } catch (error) {
         console.error(error)
-        toast.error('Something went wrong!')
     }
 })
 export const searchFriends = createAsyncThunk('friend/searchFriends', async (query: string) => {
@@ -49,7 +47,6 @@ export const searchFriends = createAsyncThunk('friend/searchFriends', async (que
         return { result: data.result, count: data.count }
     } catch (error) {
         console.error(error)
-        toast.error('Something went wrong!')
     }
 })
 export const searchUsers = createAsyncThunk('friend/searchUsers', async (query: string, { dispatch }) => {
@@ -60,7 +57,6 @@ export const searchUsers = createAsyncThunk('friend/searchUsers', async (query: 
         return
     } catch (error) {
         console.error(error)
-        toast.error('Something went wrong!')
     }
 })
 export const getSentRequests = createAsyncThunk('friend/getSentRequests', async (query: string) => {
@@ -69,7 +65,6 @@ export const getSentRequests = createAsyncThunk('friend/getSentRequests', async 
         return data
     } catch (error) {
         console.error(error)
-        toast.error('Something went wrong!')
     }
 })
 export const getReceivedRequests = createAsyncThunk('friend/getReceivedRequests', async (query: string) => {
@@ -79,7 +74,6 @@ export const getReceivedRequests = createAsyncThunk('friend/getReceivedRequests'
     }
     catch (error) {
         console.error(error)
-        toast.error('Somethign went wrong!')
     }
 })
 export const sendFriendRequest = createAsyncThunk('friend/sendFriendRequest', async (receiverId: string) => {

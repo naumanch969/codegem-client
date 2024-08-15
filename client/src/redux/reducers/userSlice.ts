@@ -43,7 +43,6 @@ export const getUsers = createAsyncThunk<{ result: User[], count: number }, stri
         return data
     } catch (error) {
         console.error('Error getUsers', error)
-        toast.error('Something went wrong!')
     }
 })
 export const getUser = createAsyncThunk<User, string>('user/getUser', async (userId) => {
@@ -52,7 +51,6 @@ export const getUser = createAsyncThunk<User, string>('user/getUser', async (use
         return data
     } catch (error) {
         console.error('Error getUser', error)
-        toast.error('Something went wrong!')
     }
 })
 export const getProfile = createAsyncThunk<User, undefined>('user/getProfile', async () => {
@@ -61,7 +59,7 @@ export const getProfile = createAsyncThunk<User, undefined>('user/getProfile', a
         localStorage.setItem("profile", JSON.stringify(data));
         return data
     } catch (error) {
-        console.error('Error getProfile', error)
+        console.error(error)
     }
 })
 export const updateProfile = createAsyncThunk<any, any>('user/updateProfile', async (formData) => {

@@ -85,7 +85,6 @@ const InitiateChat = ({ open: isOpen, setOpen }: { open: boolean, setOpen: any }
             setIsFetching(true)
             dispatch<any>(setChat(input))
                 .then(({ payload }: { payload: Chat }) => {
-                    console.log('payload', payload)
                     localStorage.setItem('lastChat', payload?.id!);
                     setSelectedChat({ ...payload, otherUser: selectedFriend! });
                     dispatch(setCurrentChatSlice({ ...payload, otherUser: selectedFriend! }))

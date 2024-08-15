@@ -3,7 +3,7 @@ import NotificationCard from './NotificationCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { Notification as TNotification, User } from '../../interfaces';
-import { deleteNotifications, getNotifications, markAllAsRead } from '../../redux/reducers/notification';
+import { deleteNotifications, getNotifications, markAllAsRead } from '../../redux/reducers/notificationSlice';
 import { empty } from '@/assets';
 import { Button } from '@/components/ui/button';
 
@@ -51,7 +51,7 @@ const Notification = () => {
                             <NotificationCard.Skeleton key={index} />
                         ))
                         :
-                        notifications.length == 0
+                        notifications?.length == 0
                             ?
                             <div className='col-span-3 flex flex-col justify-center items-center grayscale '>
                                 <img src={empty} alt='Empty' className='w-96 h-96 grayscale ' />
@@ -59,7 +59,7 @@ const Notification = () => {
                                 <span className='text-muted-foreground text-center text-md ' >It's our fault not yours.</span>
                             </div>
                             :
-                            notifications.map((notification, index) => (
+                            notifications?.map((notification, index) => (
                                 <NotificationCard notification={notification} key={index} />
                             ))
                 }

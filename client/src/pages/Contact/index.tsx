@@ -1,13 +1,14 @@
 import React from 'react'
+import Contact from '../LandingPage/Contact'
 
-const Contact = () => {
+const ContactPage = () => {
 
 
     return (
-        <>
-            Contact
-        </>
+        <div className='' >
+            <Contact topPadding={false} />
+        </div>
     )
 }
 
-export default Contact
+export default ContactPage

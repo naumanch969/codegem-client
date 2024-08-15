@@ -1,5 +1,4 @@
 import React from 'react'
-import { Contact as contactImage } from '@/assets'
 import { Button } from '@/components/ui/button'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -7,7 +6,7 @@ import { useDispatch } from 'react-redux'
 import { SVG } from '@/components'
 import { contact } from '@/assets/svgs'
 
-const Contact = () => {
+const Contact = ({ topPadding }: { topPadding?: boolean }) => {
 
     ///////////////////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////////////////
     const dispatch = useDispatch()
@@ -41,14 +40,14 @@ const Contact = () => {
 
     ///////////////////////////////////////////////////////// RENDER ///////////////////////////////////////////////////////////
     return (
-        <div className="min-h-screen flex flex-col justify-start items-center py-32 ">
+        <div className={`min-h-screen flex flex-col justify-start items-center ${!topPadding ? 'py-8' : 'py-32'} `}>
             <div className="flex flex-col justify-center items-center w-full h-fit  ">
-                <h2 className="text-5xl font-bold text-foreground ">Contact Us</h2>
+                <h2 className="text-5xl font-bold text-foreground text-blackish-lighten">Contact Us</h2>
                 <span className=' px-32 mt-4 text-center ' >For any inquiries or assistance, don't hesitate to reach out to us.</span>
             </div>
             <div className="bg-gray-100 grid grid-cols-2 justify-center gap-12 mt-20 w-full rounded-lg px-8 py-12 ">
                 <div className="col-span-1 mr-1 pr-12">
-                    <SVG  height='100%' svg={contact} />
+                    <SVG height='100%' svg={contact} />
                 </div>
                 <form onSubmit={onSubmit} className="col-span-1 flex flex-col gap-4 ">
                     <div className="flex flex-col gap-2">

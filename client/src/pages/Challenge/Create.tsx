@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createChallenge, updateChallenge } from '../../redux/actions/challenge';
 import { RootState } from '../../redux/store';
 import { Challenge, User, } from '../../interfaces';
-import { image6 } from '../../assets';
 import { useChallengeModal } from '../../hooks/useChallengeModal';
 import { z } from "zod"
 import { useForm } from 'react-hook-form';

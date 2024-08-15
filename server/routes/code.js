@@ -18,7 +18,7 @@ import {
 } from "../controllers/code.js";
 import { verifyToken } from "../middleware/auth.js";
 
-router.get("/get/all", verifyToken, getCodes);
+router.get("/get/all", getCodes);
 router.get("/get/user/:userId", verifyToken, getUserCodes);
 router.get("/get/saved", verifyToken, getSavedCodes); // get logged user' saved codes
 router.get("/get/liked", verifyToken, getLikedCodes); // get logged user' liked codes

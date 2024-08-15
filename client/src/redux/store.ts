@@ -11,7 +11,7 @@ import groupReducer from "./reducers/group";
 import generalReducer from "./reducers/general";
 import streakReducer from "./reducers/streak";
 import challengeReducer from "./reducers/challenge";
-import notificationReducer from "./reducers/notification";
+import notificationReducer from "./reducers/notificationSlice";
 import settingReducer from "./reducers/settingSlice";
 import chatReducer from "./reducers/chatSlice";
 

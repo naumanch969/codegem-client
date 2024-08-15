@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { PeopleAlt, Update, PersonAdd, Image } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { User } from '../../interfaces';
 import { getFriends, getSuggestedUsers } from '../../redux/reducers/friendSlice';
 import { Link, useNavigate } from 'react-router-dom';
-import { SampleProfileCoverImage, image1 } from '../../assets';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const RightSidebar = () => {

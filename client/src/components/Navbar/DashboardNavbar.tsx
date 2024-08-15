@@ -50,11 +50,10 @@ const DashboardNavbar = () => {
                 <Button variant='ghost' size='sm' onClick={() => setShowSidebar(pre => !pre)} >
                     <Dehaze />
                 </Button>
-                <Link to='/' style={{ fontFamily: 'cursive' }} className="font-bolder text-2xl font-bold " >CodeGem</Link>
             </div>
 
             <div className="flex gap-4 " >
-                <Tooltip title='Notifications' placement='top' >
+                {/* <Tooltip title='Notifications' placement='top' >
                     <IconButton>
                         <Bell className='text-white' />
                     </IconButton>
@@ -67,12 +66,15 @@ const DashboardNavbar = () => {
                                 : <Moon className='text-white' />
                         }
                     </IconButton>
-                </Tooltip>
+                </Tooltip> */}
                 {
                     loggedUserToken ?
                         <DropdownMenu>
-                            <DropdownMenuTrigger className='flex items-center gap-1' >
-                                <h3 className="font-bolder text-[16px] " >Hey, {loggedUser?.username}</h3>
+                            <DropdownMenuTrigger className='flex items-center gap-2' >
+                                <div className="flex flex-col items-start">
+                                    <h3 className="font-bolder text-sm " >{loggedUser?.firstName} {loggedUser?.lastName}</h3>
+                                    <h4 className="font-bolder text-xs text-white/70" >@{loggedUser?.username}</h4>
+                                </div>
                                 <Avatar>
                                     <AvatarImage src={loggedUser?.profilePicture} alt={loggedUser?.username} />
                                     <AvatarFallback className='text-primary text-2xl font-semibold flex justify-center items-center' >

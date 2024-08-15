@@ -1,12 +1,13 @@
+import { InProgress } from '@/components'
 import React from 'react'
 
 const Features = () => {
 
 
     return (
-        <>
-            Features
-        </>
+        <div className='' >
+            <InProgress />
+        </div>
     )
 }
 

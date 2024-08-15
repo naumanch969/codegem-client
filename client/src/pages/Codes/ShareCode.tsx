@@ -4,7 +4,6 @@ import { IconButton, } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { getFriends } from '../../redux/reducers/friendSlice';
-import { Facebook, Instagram, Linkedin, Twitter, Whatsapp } from '../../assets';
 import { shareCode, shareCodeInGroups } from '../../redux/actions/code';
 import { Code, Group, User } from '../../interfaces';
 import { getGroups } from '../../redux/actions/group';

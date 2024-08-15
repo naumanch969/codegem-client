@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import NotificationCard from '../../Notifications/NotificationCard';
 import { useDispatch, useSelector } from 'react-redux';
-import { getNotifications } from '@/redux/reducers/notification';
+import { getNotifications } from '@/redux/reducers/notificationSlice';
 import { Notification } from '@/interfaces';
 import { RootState } from '@/redux/store';
 
@@ -54,11 +54,11 @@ const Notifications = () => {
         {
           isFetching
             ?
-            Array(6).fill('').map((_, index) => (
+            Array(6)?.fill('')?.map((_, index) => (
               <NotificationCard.Skeleton key={index} />
             ))
             :
-            notifications.map((notification, index) => (
+            notifications?.map((notification, index) => (
               <NotificationCard notification={notification} key={index} />
             ))
         }

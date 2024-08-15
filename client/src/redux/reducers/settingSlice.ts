@@ -15,7 +15,6 @@ export const getSettings = createAsyncThunk<Setting, undefined>('settings/getSet
         const { data } = await api.getSettings()
         return data
     } catch (error) {
-        toast.error('Something went wrong!')
         console.error('error getSettings', error)
     }
 })

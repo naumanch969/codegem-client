@@ -6,6 +6,7 @@ import validator from "validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import otpGenerator from "otp-generator";
+import { attachCookiesToResponse } from "../utils/jwt.js";
 
 export const register = async (req, res, next) => {
   try {
@@ -106,21 +107,16 @@ export const login = async (req, res, next) => {
 
     const token = jwt.sign({ _id: findedUser._id, role: findedUser.role }, process.env.JWT_SECRET);
 
-    const isDevelopment = process.env.NODE_ENV === "development";
-
     const findedSettingsObj = await Setting.findOne({ user: String(findedUser?._id) })
     if (!findedSettingsObj) {
       await Setting.create({ user: findedUser?._id })
     }
 
+    attachCookiesToResponse(res, { _id: findedUser._id, role: findedUser.role });
+
     res
-      .cookie("code.connect", token, {
-        httpOnly: true,
-        secure: !isDevelopment, // Enable secure cookie in production
-        // expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
-      })
       .status(200)
-      .json({ message: "Login successfully.", result: findedUser, token }); // token is being passed just for development version
+      .json({ message: "Login successfully.", result: findedUser, token });
   } catch (err) {
     next(createError(res, 500, err.message));
   }

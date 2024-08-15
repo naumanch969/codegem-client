@@ -72,7 +72,6 @@ const CreateCode = () => {
     // <---------------------------------------------------- FUNCTIONS ----------------------------------------------------------->
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         // TODO: check format of data being sent to backend
-        console.log('values', values)
         if (Boolean(code)) { // update
             if (groupId)
                 dispatch<any>(updateCode(code?._id as string, { ...values, group: groupId }, onClose, toast))

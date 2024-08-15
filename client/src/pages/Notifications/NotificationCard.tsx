@@ -1,7 +1,7 @@
 import React from 'react'
 import { Notification } from '../../interfaces';
 import { useDispatch } from 'react-redux';
-import { deleteNotification, markAsRead } from '../../redux/reducers/notification';
+import { deleteNotification, markAsRead } from '../../redux/reducers/notificationSlice';
 import { Button } from '@/components/ui/button';
 import { Trash, View } from 'lucide-react';
 import { Tooltip } from '@mui/material';

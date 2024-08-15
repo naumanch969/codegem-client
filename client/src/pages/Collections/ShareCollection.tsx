@@ -4,7 +4,7 @@ import { IconButton, Modal } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { getFriends } from '../../redux/reducers/friendSlice';
-import { Facebook, Instagram, Linkedin, Twitter, Whatsapp } from '../../assets';
+import { Instagram, Linkedin, Twitter, Facebook } from 'lucide-react'
 import { shareCollection, shareCollectionInGroups } from '../../redux/actions/collection';
 import { Collection, Group, User } from '../../interfaces';
 import { getGroups } from '../../redux/actions/group';
@@ -125,11 +125,10 @@ const ShareCollection = ({ open, setOpen, collection }: { open: boolean, setOpen
                         <div className="flex flex-col gap-4">
                             {/* social shares */}
                             <div className="flex justify-start items-center gap-4 p-2 bg-cool-gray-light rounded-md ">
-                                <button title='Whatsapp' className='flex justify-center items-center ' ><img src={Whatsapp} alt='Whatsapp Logo' className='object-cover rounded-full w-8 h-8 ' /></button>
-                                <button title='Facebook' className='flex justify-center items-center ' ><img src={Facebook} alt='Facebook Logo' className='object-cover rounded-full w-8 h-8 ' /></button>
-                                <button title='Linkedin' className='flex justify-center items-center ' ><img src={Linkedin} alt='Linkedin Logo' className='object-cover rounded-full w-8 h-8 ' /></button>
-                                <button title='Instagram' className='flex justify-center items-center ' ><img src={Instagram} alt='Instagram Logo' className='object-cover rounded-full w-8 h-8 ' /></button>
-                                <button title='Twitter' className='flex justify-center items-center ' ><img src={Twitter} alt='Twitter Logo' className='object-cover rounded-full w-8 h-8 ' /></button>
+                                <button title='Facebook' className='flex justify-center items-center ' ><Facebook className='w-8 h-8' /> </button>
+                                <button title='Linkedin' className='flex justify-center items-center ' ><Linkedin className='w-8 h-8' /> </button>
+                                <button title='Instagram' className='flex justify-center items-center ' ><Instagram className='w-8 h-8' /> </button>
+                                <button title='Twitter' className='flex justify-center items-center ' ><Twitter className='w-8 h-8' /> </button>
                             </div>
 
                             <div className="flex flex-col gap-4 ">

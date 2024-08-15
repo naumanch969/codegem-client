@@ -49,7 +49,7 @@ const Topbar = ({ filters, setFilters }: { filters: any, setFilters: any }) => {
                     <Button
                         variant='default'
                         size='sm'
-                        className="bg-blackish-lighten hover:bg-blackish-lighten/90 absolute right-[3px] top-[50%] transform translate-y-[-50%] h-[42px] "
+                        className="bg-copper hover:bg-copper-lighten absolute right-[3px] top-[50%] transform translate-y-[-50%] h-[42px] "
                     >
                         <Search className="text-white" />
                     </Button>

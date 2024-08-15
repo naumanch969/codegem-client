@@ -45,7 +45,7 @@ const ReceivedRequests = ({ searchValue }: { searchValue: string }) => {
 
   return (
     <div className='flex flex-col gap-y-8 w-full'>
-      <div className='w-full flex flex-col gap-6'>
+      <div className='w-full flex flex-col gap-2'>
         {
           isFetching
             ?

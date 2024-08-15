@@ -3,7 +3,9 @@ import { createError } from "../utils/functions.js";
 
 export const verifyToken = async (req, res, next) => {
   try {
-    const token = req.headers.authtoken; // Ensure it's of type string
+    const token = req.headers.authtoken;
+    const accessToken = req.headers.accessToken;
+    console.log('accessToken', accessToken)
 
     if (!token)
       return res

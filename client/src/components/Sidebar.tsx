@@ -14,13 +14,14 @@ import { Tooltip } from '@mui/material'
 import { Link, useLocation } from 'react-router-dom'
 import { useStateContext } from "../contexts/ContextProvider"
 import { MessageCircle, MessageCircleDashedIcon, MessageCircleIcon } from "lucide-react"
+import { logo, logo_mini } from "@/assets"
 
 
 const Sidebar = () => {
 
     ///////////////////////////////////////////////////////// VARIABLES /////////////////////////////////////////////////////////
     const location = useLocation()
-    const { showSidebar, setShowSidebar } = useStateContext()
+    const { showSidebar } = useStateContext()
     const { pathname } = useLocation()
     const sidebarLinks = [
         {
@@ -98,7 +99,23 @@ const Sidebar = () => {
     ///////////////////////////////////////////////////////// FUNCTIONS /////////////////////////////////////////////////////////
 
     return (
-        <div style={{ height: 'calc(100vh-4rem)' }} className={`h-full w-full flex gap-6 py-6 overflow-y-auto ${showSidebar ? 'px-3' : 'px-0 '} `}>
+        <div className={`h-full w-full flex flex-col gap-6 py-6 overflow-y-auto ${showSidebar ? 'px-3' : 'px-0 '} `}>
+
+            <div className="flex justify-center items-center w-full ">
+                <Link to='/' className='' >
+                    {
+                        showSidebar
+                            ?
+                            <div className='flex justify-center gap-1 w-full' >
+                                <img src={logo_mini} alt="Logo" className="h-12" />
+                                <img src={logo} alt="Logo" className="h-12" />
+                            </div>
+                            :
+                            <img src={logo_mini} alt="Logo" className="h-12" />
+                    }
+                </Link>
+            </div>
+
             {
                 showSidebar
                     ?

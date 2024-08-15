@@ -23,12 +23,12 @@ import commentRoutes from "./routes/comment.js";
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
-// const CONNECTION_URL = process.env.ATLAS_URL;
-const CONNECTION_URL = process.env.COMPASS_URL;
+const CONNECTION_URL = process.env.ATLAS_URL;
+// const CONNECTION_URL = process.env.COMPASS_URL;
 
 app.use(cors());
 app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser(process.env.JWT_SECRET));
 
 // serving static files | images
 const __filename = fileURLToPath(import.meta.url);

@@ -19,7 +19,7 @@ import {
 } from "../controllers/group.js";
 import { verifyToken } from "../middleware/auth.js";
 
-router.get("/get/all", verifyToken, getGroups);
+router.get("/get/all", getGroups);
 router.get("/get/user/:userId", verifyToken, getUserGroups);
 router.get("/get/single/:groupId", verifyToken, getGroup);
 router.get("/get/codes/:groupId", verifyToken, getGroupCodes);

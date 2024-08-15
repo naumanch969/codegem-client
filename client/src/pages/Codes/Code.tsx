@@ -172,7 +172,7 @@ const CodeComponent = ({ code }: { code: Code }) => {
                   <button className='w-16 h-8 rounded-full text-white ' >Copied!</button>
                   :
                   <Tooltip placement='top-start' title='Copy'  >
-                    <button title='copy' onClick={() => hanldeCopy(code?.code)} className='w-8 h-8 rounded-full ' >
+                    <button title='copy' onClick={() => hanldeCopy(code?.code)} className='hover:bg-copper-gray-light/20 w-9 h-9 rounded-full'  >
                       <CopyAllOutlined className='text-white' />
                     </button>
                   </Tooltip>
@@ -193,31 +193,33 @@ const CodeComponent = ({ code }: { code: Code }) => {
         {/* likes, share, comments */}
         <CardFooter className={`flex justify-between items-center px-4 pt-1 ${showComments ? 'pb-0' : 'pb-2'} `}>
           <div>
-            <IconButton onClick={handleLikeCode} size='medium' >
-              {code?.likes?.includes(loggedUser?._id as string) ? <ThumbUp fontSize="inherit" /> : <ThumbUpOutlined fontSize="inherit" />}
-            </IconButton>
+            <button onClick={handleLikeCode} className='hover:bg-copper-gray-light/20 w-9 h-9 rounded-full'   >
+              {code?.likes?.includes(loggedUser?._id as string) ? <ThumbUp fontSize="medium" className='text-copper' /> : <ThumbUpOutlined fontSize="medium" />}
+            </button>
             <span className='text-[14px]'>{code?.likes?.length} people</span>
           </div>
           <div className='flex gap-[4px]'>
-            <IconButton onClick={() => setOpenShareModal(true)} size='medium' className='relative'>
-              <Share fontSize="inherit" />
-              <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-copper-lighten text-white'>
+            <button onClick={() => setOpenShareModal(true)} className='hover:bg-copper-gray-light/20 w-9 h-9 rounded-full'>
+              <Share fontSize="medium" />
+              {code?.shares?.length > 0 && <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-copper-lighten text-white'>
                 {code?.shares?.length}
-              </span>
-            </IconButton>
-            <IconButton onClick={handleSave} size='medium' className='relative'>
+              </span>}
+            </button>
+            <button onClick={handleSave} className='hover:bg-copper-gray-light/20 w-9 h-9 rounded-full' >
               {
                 isCodeSaved
                   ?
-                  <Bookmark fontSize="inherit" />
+                  <Bookmark fontSize="medium" className='text-copper' />
                   :
-                  <BookmarkBorderOutlined fontSize="inherit" />
+                  <BookmarkBorderOutlined fontSize="medium" />
               }
-            </IconButton>
-            <IconButton size='medium' className='relative' onClick={() => setShowComments((pre) => !pre)}>
-              <Comment fontSize="inherit" />
-              <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-copper-lighten text-white'>{code?.comments?.length}</span>
-            </IconButton>
+            </button>
+            <button onClick={() => setShowComments((pre) => !pre)} className='hover:bg-copper-gray-light/20 w-9 h-9 rounded-full' >
+              <Comment fontSize="medium" />
+              {code?.comments?.length > 0 && <span className='w-[18px] h-[18px] rounded-full absolute top-0 right-0 flex justify-center items-center text-[12px] bg-copper-lighten text-white'>
+                {code?.comments?.length}
+              </span>}
+            </button>
           </div>
         </CardFooter>
 
@@ -252,7 +254,7 @@ const CodeComponent = ({ code }: { code: Code }) => {
                       code.comments.length == 0
                         ?
                         <div className="flex justify-center items-center w-full h-full ">
-                          <span className=''>No Comments to Show.</span>
+                          <span className=''>Be the first to share your thoughts.</span>
                         </div>
                         :
                         <>

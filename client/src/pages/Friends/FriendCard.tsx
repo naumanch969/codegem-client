@@ -45,9 +45,6 @@ const FriendCard = ({ friend, type }: { friend: User, type: string }) => {
             @{friend?.username}
           </p>
         </div>
-        {/* <p className="text-cool-gray text-xs mb-1">
-          {friend?.mutualFriends as number > 0 ? `${friend?.mutualFriends} Mutual Friends` : 'No Mutual Friends'}
-        </p> */}
       </div>
       <div className="mt-2">
         {type == 'friend' &&
@@ -84,14 +81,18 @@ export default FriendCard;
 
 FriendCard.Skeleton = function () {
   return (
-    <div className='w-full flex flex-col justify-start gap-x-2 p-4 bg-light-gray text-cool-gray-dark rounded-[6px] animate-pulse mb-4 '>
-      <div className="flex w-full justify-center ">
-        <div className="w-full h-40 rounded-lg bg-warm-gray-dark" />
+    <div className='w-full flex justify-between gap-x-2 p-4 bg-light-gray text-cool-gray-dark rounded-[6px] animate-pulse mb-4 '>
+      <div className="flex w-full justify-start items-center gap-1 ">
+        <Avatar>
+          <AvatarImage src={''} alt="Profile" />
+          <AvatarFallback className='capitalize bg-blackish text-white' ></AvatarFallback>
+        </Avatar>
+        <div className="flex flex-col gap-1" >
+          <div className="h-4 w-20 rounded bg-warm-gray-dark" />
+          <div className="h-3 w-12 rounded bg-warm-gray-dark" />
+        </div>
       </div>
-      <div className="w-full flex flex-col justify-start items-center gap-y-2 mt-2 ">
-        <p className="w-2/3 h-5 bg-warm-gray-dark rounded" />
-        <p className="w-1/3 h-4 bg-warm-gray-dark rounded" />
-      </div>
+
     </div>
   )
 }

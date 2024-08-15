@@ -18,7 +18,7 @@ const HowItWork = () => {
     return (
         <div className="min-h-screen flex flex-col justify-start items-center py-32 ">
             <div className="flex flex-col justify-center items-center w-full h-fit  ">
-                <h2 className="text-5xl font-bold text-foreground ">Get Started with Codegem in 3 Easy Steps</h2>
+                <h2 className="text-5xl font-bold text-foreground text-blackish-lighten">Get Started with Codegem in 3 Easy Steps</h2>
                 <span className=' px-32 mt-6 text-center ' >Follow these simple steps to seamlessly translate your ASL gestures into clear and concise audio.</span>
             </div>
             <div className="flex justify-center gap-12 mt-20 w-full ">

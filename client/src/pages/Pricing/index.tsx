@@ -1,12 +1,13 @@
+import { InProgress } from '@/components'
 import React from 'react'
 
 const Pricing = () => {
 
 
     return (
-        <>
-            Pricing
-        </>
+        <div className='' >
+            <InProgress/>
+        </div>
     )
 }
 

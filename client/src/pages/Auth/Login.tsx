@@ -4,7 +4,7 @@ import { Input } from "@mui/material";
 import { login } from '../../redux/reducers/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logo } from '../../assets';
+import { logo, logo_mini } from '../../assets';
 import { setLoggedUserSlice, setLoggedUserTokenSlice } from '@/redux/reducers/userSlice';
 import Cookies from 'js-cookie';
 import { User } from '@/interfaces';
@@ -51,7 +51,8 @@ const Login = () => {
 
             <div className="text-center">
                 <Link to='/' className="flex justify-center">
-                    <img className="h-32" src={logo} alt='Logo' />
+                    <img className="h-12" src={logo_mini} alt='Logo' />
+                    <img className="h-12" src={logo} alt='Logo' />
                 </Link>
             </div>
 
@@ -90,18 +91,18 @@ const Login = () => {
                                     style={{ fontFamily: "'Montserrat', sans-serif" }}
                                 />
                                 <div className="text-sm font-primary font-light text-slate-500 flex justify-end ">
-                                    <Link to="/auth/verify_email" className="text-sky-400 hover:text-sky-600">
+                                    <Link to="/auth/verify_email" className="text-copper hover:text-copper-lighten hover:underline">
                                         Forget Password?
                                     </Link>
                                 </div>
                             </div>
                         </div>
-                        <button onClick={handleSubmit} className={`w-[20rem] bg-blackish hover:bg-blackish-lighten p-2 rounded-lg transition-all text-white font-medium tracking-wider `}>
+                        <button onClick={handleSubmit} className={`w-[20rem] bg-copper hover:bg-copper-darken p-2 rounded-lg transition-all text-white font-medium tracking-wider `}>
                             {isFetching ? 'Loging In...' : 'Login'}
                         </button>
                         <div className="text-sm font-primary font-light text-slate-500 flex justify-center gap-2 p-2 pr-7">
                             Don't have account?
-                            <Link to="/auth/register" className="text-sky-400 hover:text-sky-600">
+                            <Link to="/auth/register" className="text-copper hover:text-copper-lighten hover:underline">
                                 Register
                             </Link>
                         </div>
