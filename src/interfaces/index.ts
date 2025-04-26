@@ -33,6 +33,8 @@ export interface User {
   notifications: Notification[];
   mutualFriends?: number; // for friends section
   createdAt?: Date | string;
+
+  subscription?: any
 }
 
 export interface Code {

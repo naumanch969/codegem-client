@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookie from "js-cookie";
-import { Challenge, Chat, Code, Collection, Group, ChatMessage, Setting, Streak, User, } from "../../interfaces";
+import { Challenge, Code, Collection, Group, Setting, Streak, User, } from "../../interfaces";
 import { baseURL } from "../../constant";
 
 // const API = axios.create({ baseURL: process.env.REACT_APP_BASEURL })

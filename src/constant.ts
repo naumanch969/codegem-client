@@ -1,10 +1,13 @@
 // export const baseURL = 'https://codegem.glitch.me'
 // export const baseURL = "https://codegem-orange.glitch.me";
 // export const baseURL = 'https://codegem-server.vercel.app'
-export const baseURL = "http://localhost:5000";
 export const adminEmail = 'naumanch969@gmail.com'
 export const SOCKET_URL = 'http://localhost:8900'
 
+export const getEnvironment = (): 'production' | 'development' => { return 'production' };
+
+
+export const baseURL = getEnvironment() == 'development' ? "http://localhost:5000" : 'https://codegem-server.vercel.app';
 
 export const programmingLanguages = [
     "HTML",

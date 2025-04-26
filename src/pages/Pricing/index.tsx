@@ -91,6 +91,7 @@ const page = () => {
         `}>
 
                 {
+                    // @ts-ignore
                     isPro && <FaCrown style={{ fontSize: '64px' }} className='text-orange rotate-[45deg] absolute top-[-2rem] right-[-2rem] ' />
                 }
                 <div className="flex justify-between items-center">
